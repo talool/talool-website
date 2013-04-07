@@ -1,0 +1,39 @@
+body {
+    font-family: verdana;
+    font-size:12px;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.content {
+	padding: 5px 10px 40px;
+	margin: 5px 20px;
+}
+
+h1.header {
+	background: orange;
+	color: white;
+	padding: 10px 15px;
+	margin: 0;
+	font-size: 36px;
+}
+
+h2 {
+	margin: 0 0 20px;
+}
+.menu {
+	background: #aaa;
+	color: white;
+	list-style: none;
+	margin: 0 0 25px 0;
+	padding: 0 10px;
+}
+.menu li {
+	display: inline-block;
+	padding: 5px;
+}
+
+
+
+

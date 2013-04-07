@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MerchantPage.html</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+    <link rel="stylesheet" type="text/css" href="./global.css">
+    <link rel="stylesheet" type="text/css" href="./newmerchant.css">
+
+  </head>
+  
+  <body>
+  	<!-- HEADER NAVIGATION PANEL -->
+  	<h1 class="header">Talool Admin</h1>
+  	<ol class="menu">
+  		<li><a href="MerchantPage.html">Merchants</a></li>
+  		<li>Deal Books</li>
+  		<li>Users</li>
+  	</ol>
+  	
+  	<div class="content">
+  	
+	  	<!-- NEW MERCHANT PANEL -->
+	  	<div class="newMerchant">
+	
+			<h2>Create|Edit Merchant</h2>
+			
+			<div class="panel descriptionPanel">
+				<form>
+					<h3>Merchant Description</h3>
+					<fieldset class="right">
+				    	<div><label>Name</label><input name="name" type="text"/></div>
+				    	<div><label>Tags</label><input name="tags" type="text"/></div>
+				    </fieldset>
+				    <fieldset class="selectContainer">
+						<div>
+					    	<label>Parent Merchant</label>
+							<select size="10">
+								<option>Burger King</option>
+							</select>
+						</div>
+					</fieldset>
+			    </form>
+			</div>
+				
+			<div class="panel locationPanel">
+				<form>
+					<h3>Merchant Location</h3>
+					<fieldset class="right">
+						<div><label>Location Name</label><input name="merchant_location_name"/></div>
+					    <div><label>Address</label><input name="address1" type="text"/></div>
+					    <div><label></label><input name="address2" type="text"/></div>
+					    <div><label>City</label><input name="city" type="text"/></div>
+					    <div><label>State</label><input name="state_province_county" type="text"/></div>
+					    <div><label>Zip</label><input name="zip" type="text"/></div>
+					    <div><label>Country</label><input name="country" type="text"/></div>
+						<div><label>Phone</label><input name="phone" type="text"/></div>
+				    	<div><label>Email</label><input name="email" type="text"/></div>
+				    	<div><label>Website</label><input name="web_url" type="text"/></div>
+				    	<div><label>Logo</label><input name="phone" type="file"/></div>
+				    </fieldset>
+				    <fieldset class="selectContainer">
+						<div>
+					    	<label>Existing Locations</label>
+							<select size="10">
+								<option>Denver</option>
+								<option>Boulder</option>
+								<option>Longmont</option>
+								<option>Niwot</option>
+							</select>
+						</div>
+					</fieldset>
+				    <div class="controls">
+						<button>add location</button>
+						<button>delete location</button>
+					</div>
+			    </form>
+			</div>
+			
+			<div class="panel userPanel">
+				<form>
+					<h3>Merchant User Account</h3>
+					<fieldset class="right">
+						<div>
+					    	<label>Title</label><input name="role_title" type="text"/>
+					    </div>
+					    <div>
+					    	<label>Email</label><input name="email" type="text"/>
+					    </div>
+					    <div>
+					    	<label>Password</label><input name="password" type="password"/>
+						</div>
+						<div>
+					    	<label>Confirm</label><input name="password2" type="password"/>
+					    </div>
+					    <div>
+				    		<label>Permissions</label>
+				    		<input class="chbx" name="allow_deal_create" type="checkbox">Can create deals?
+				    	</div>
+				    </fieldset>
+				    <fieldset class="selectContainer">
+						<div>
+					    	<label>Existing Users</label>
+							<select size="10">
+								<option>Doug</option>
+								<option>Chris</option>
+								<option>Vince</option>
+								<option>Ted</option>
+							</select>
+						</div>
+					</fieldset>
+				    <div class="controls">
+						<button>add user</button>
+						<button>delete user</button>
+					</div>
+				</form>
+			</div>
+			<div class="controls">
+				<button class="big">Save Merchant</button>
+			</div>
+		</div>	
+		
+    </div>
+  </body>
+</html>
