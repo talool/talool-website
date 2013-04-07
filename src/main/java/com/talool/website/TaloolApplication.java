@@ -20,6 +20,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.talool.website.pages.HomePage;
+import com.talool.website.pages.MerchantPage;
+import com.talool.website.pages.NewMerchantPage;
 
 /**
  * @author clintz
@@ -45,19 +47,25 @@ public class TaloolApplication extends WebApplication implements Serializable
 	@Override
 	protected void init()
 	{
-		final IPackageResourceGuard packageResourceGuard = getResourceSettings().getPackageResourceGuard();
+		final IPackageResourceGuard packageResourceGuard = getResourceSettings()
+				.getPackageResourceGuard();
 		if (packageResourceGuard instanceof SecurePackageResourceGuard)
 		{
 			final SecurePackageResourceGuard guard = (SecurePackageResourceGuard) packageResourceGuard;
 			guard.addPattern("+*.*");
 		}
 
-		getComponentInstantiationListeners().add(new SpringComponentInjector(this, getApplicationContext(), false));
+		getComponentInstantiationListeners().add(
+				new SpringComponentInjector(this, getApplicationContext(), false));
 
-		final ResourceReference faviconRef = new PackageResourceReference(this.getClass(), "favicon.ico");
+		final ResourceReference faviconRef = new PackageResourceReference(this.getClass(),
+				"favicon.ico");
 		mountResource("/favicon.ico", faviconRef);
 
 		getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
+
+		mountPage("/admin/merchant", MerchantPage.class);
+		mountPage("/admin/new-merchant", NewMerchantPage.class);
 
 		/*
 		 * We need a ONE_PASS_RENDER strategy because pages like search need
@@ -80,12 +88,11 @@ public class TaloolApplication extends WebApplication implements Serializable
 		// getSecuritySettings().setAuthorizationStrategy(authStrat);
 		// etSecuritySettings().setUnauthorizedComponentInstantiationListener(authStrat);
 
-		// mountPage("/login", LoginPage.class);
-
 		if (mode.equalsIgnoreCase("deployment"))
 		{
 			getDebugSettings().setAjaxDebugModeEnabled(false);
-			getExceptionSettings().setUnexpectedExceptionDisplay(IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
+			getExceptionSettings().setUnexpectedExceptionDisplay(
+					IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
 			getMarkupSettings().setStripWicketTags(true);
 		}
 		else
