@@ -1,4 +1,4 @@
-package com.talool.website.pages;
+package com.talool.website.pages.lists;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
@@ -9,6 +9,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.Merchant;
 import com.talool.website.models.MerchantListModel;
+import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminMenuPanel;
 
 /**
@@ -16,17 +17,17 @@ import com.talool.website.panel.AdminMenuPanel;
  * @author clintz
  * 
  */
-public class MerchantPage extends BasePage
+public class MerchantsPage extends BasePage
 {
 
 	private static final long serialVersionUID = 9023714664854633955L;
 
-	public MerchantPage()
+	public MerchantsPage()
 	{
 		super();
 	}
 
-	public MerchantPage(PageParameters parameters)
+	public MerchantsPage(PageParameters parameters)
 	{
 		super(parameters);
 	}

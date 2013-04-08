@@ -1,4 +1,4 @@
-package com.talool.website.pages;
+package com.talool.website.pages.define;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.talool.core.Merchant;
 import com.talool.core.service.ServiceException;
+import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminMenuPanel;
 
 /**
@@ -19,21 +20,21 @@ import com.talool.website.panel.AdminMenuPanel;
  * @author clintz
  * 
  */
-public class NewMerchantPage extends BasePage
+public class MerchantPage extends BasePage
 {
 	private static final long serialVersionUID = -7718256037209979704L;
-	private static final Logger LOG = LoggerFactory.getLogger(NewMerchantPage.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MerchantPage.class);
 
 	private Merchant merchant = domainFactory.newMerchant();
 
 	private String tags;
 
-	public NewMerchantPage()
+	public MerchantPage()
 	{
 		super();
 	}
 
-	public NewMerchantPage(PageParameters parameters)
+	public MerchantPage(PageParameters parameters)
 	{
 		super(parameters);
 	}

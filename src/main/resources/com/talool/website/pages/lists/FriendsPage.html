@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>DealPage.html</title>
+    <title>UsersPage.html</title>
 	
     <meta name="keywords" content="keyword1,keyword2,keyword3">
     <meta name="description" content="this is my page">
@@ -15,54 +15,46 @@
   <body>
   	<div wicket:id="adminMenuPanel"></div>
   	<div class="content">
-  		
-  		<!-- DEAL LIST PANEL -->
-	  	<div class="actions">
-		  	<wicket:link>
-			  	<a href="NewDealPage.html">
-			  		<button>Create New Deal</button>
-			    </a>
-		    </wicket:link>
-	  	</div>
-	  	<h2>Deals</h2>
+  		<!-- FRIEND LIST PANEL -->
+	  	
+	  	<h2>Friends</h2>
 	  	<table>
 	  		<thead>
 	  			<tr>
-	  				<th>Title</th>
-	  				<th>Summary</th>
-	  				<th>Is Active</th>
-	  				<th>Expires</th>
+	  				<th>First Name</th>
+	  				<th>Last Name</th>
+	  				<th>Email</th>
+	  				<th>Status</th>
 	  				<th>Actions</th>
 	  			</tr>
 	  		</thead>
 	  		<tbody>
 	  			<tr class="odd">
-	  				<td>$5 Off</td>
-	  				<td>Get $5 of your bill</td>
-	  				<td>Yes</td>
-	  				<td>08/01/2013</td>
+	  				<td>Doug</td>
+	  				<td>McCuen</td>
+	  				<td>doug@talool.com</td>
+	  				<td>Pending</td>
 	  				<td>
 	  					<wicket:link>
-		  					<a href="NewDealPage.html" class="edit">Edit</a> | 
+		  					<a href="../define/CustomerPage.html" class="edit">Customer Record</a> |  
 		  					<a href="#" class="delete">Delete</a>
 	  					</wicket:link>
 	  				</td>
 	  			</tr>
 	  			<tr class="">
-	  				<td>$5 Off</td>
-	  				<td>Get $5 of your bill</td>
-	  				<td>Yes</td>
-	  				<td>08/01/2013</td>
+	  				<td>Doug</td>
+	  				<td>McCuen</td>
+	  				<td>doug@talool.com</td>
+	  				<td>Pending</td>
 	  				<td>
 	  					<wicket:link>
-		  					<a href="NewDealPage.html" class="edit">Edit</a> | 
+		  					<a href="../define/CustomerPage.html" class="edit">Customer Record</a> |  
 		  					<a href="#" class="delete">Delete</a>
 	  					</wicket:link>
 	  				</td>
 	  			</tr>
 	  		</tbody>
 	  	</table>
-	  	
   	</div>
   </body>
 </html>

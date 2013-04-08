@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>UsersPage.html</title>
+    <title>BookPage.html</title>
 	
     <meta name="keywords" content="keyword1,keyword2,keyword3">
     <meta name="description" content="this is my page">
@@ -15,11 +15,12 @@
   <body>
   	<div wicket:id="adminMenuPanel"></div>
   	<div class="content">
-  		<!-- CUSTOMER LIST PANEL -->
+  	
+  		<!-- BOOK LIST PANEL -->
 	  	<div class="actions">
-	  		<wicket:link>
-			  	<a href="NewCustomerPage.html">
-			  		<button>Create New Customer</button>
+		  	<wicket:link>
+			  	<a href="/admin/book">
+			  		<button>Create New Book</button>
 			    </a>
 		    </wicket:link>
 	  	</div>
@@ -27,43 +28,49 @@
 	  	<table>
 	  		<thead>
 	  			<tr>
-	  				<th>First Name</th>
-	  				<th>Last Name</th>
-	  				<th>Email</th>
+	  				<th>Title</th>
+	  				<th>Merchant</th>
+	  				<th>Price</th>
+	  				<th>Purchases</th>
+	  				<th>Is Active</th>
+	  				<th>Expires</th>
 	  				<th>Actions</th>
 	  			</tr>
 	  		</thead>
 	  		<tbody>
 	  			<tr class="odd">
-	  				<td>Doug</td>
-	  				<td>McCuen</td>
-	  				<td>doug@talool.com</td>
+	  				<td>The Payback Book - Boulder</td>
+	  				<td>The Payback Book</td>
+	  				<td>$20.00</td>
+	  				<td>1000</td>
+	  				<td>Yes</td>
+	  				<td>08/01/2013</td>
 	  				<td>
 	  					<wicket:link>
-		  					<a href="NewCustomerPage.html" class="edit">Edit</a> | 
-		  					<a href="#" class="books">Purchased Books</a> | 
-		  					<a href="#" class="deals">Redeemed Deals</a> | 
-		  					<a href="#" class="friends">Friends</a> | 
+		  					<a href="../define/BookPage.html" class="edit">Edit</a> | 
+		  					<a href="DealsPage.html" class="deals">Deals</a> | 
 		  					<a href="#" class="delete">Delete</a>
 	  					</wicket:link>
 	  				</td>
 	  			</tr>
 	  			<tr class="">
-	  				<td>Doug</td>
-	  				<td>McCuen</td>
-	  				<td>doug@talool.com</td>
+	  				<td>The Payback Book - Boulder</td>
+	  				<td>The Payback Book</td>
+	  				<td>$20.00</td>
+	  				<td>1000</td>
+	  				<td>Yes</td>
+	  				<td>08/01/2013</td>
 	  				<td>
 	  					<wicket:link>
-		  					<a href="NewCustomerPage.html" class="edit">Edit</a> | 
-		  					<a href="#" class="books">Purchased Books</a> | 
-		  					<a href="#" class="deals">Redeemed Deals</a> | 
-		  					<a href="#" class="friends">Friends</a> | 
+		  					<a href="../define/BookPage.html" class="edit">Edit</a> | 
+		  					<a href="DealsPage.html" class="deals">Deals</a> | 
 		  					<a href="#" class="delete">Delete</a>
 	  					</wicket:link>
 	  				</td>
 	  			</tr>
 	  		</tbody>
 	  	</table>
+	  	
   	</div>
   </body>
 </html>

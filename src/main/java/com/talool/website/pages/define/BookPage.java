@@ -1,19 +1,22 @@
-package com.talool.website.pages;
+package com.talool.website.pages.define;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminMenuPanel;
 
-public class UsersPage extends BasePage {
-	
-	private static final long serialVersionUID = 2102415289760762365L;
+public class BookPage extends BasePage
+{
 
-	public UsersPage()
+	private static final long serialVersionUID = 8003537582321440596L;
+
+	public BookPage()
 	{
 		super();
+
 	}
 
-	public UsersPage(PageParameters parameters)
+	public BookPage(PageParameters parameters)
 	{
 		super(parameters);
 	}

@@ -20,14 +20,15 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.talool.website.pages.HomePage;
-import com.talool.website.pages.MerchantPage;
-import com.talool.website.pages.NewMerchantPage;
-import com.talool.website.pages.BookPage;
-import com.talool.website.pages.DealPage;
-import com.talool.website.pages.UsersPage;
-import com.talool.website.pages.NewBookPage;
-import com.talool.website.pages.NewCustomerPage;
-import com.talool.website.pages.NewDealPage;
+import com.talool.website.pages.define.BookPage;
+import com.talool.website.pages.define.CustomerPage;
+import com.talool.website.pages.define.DealPage;
+import com.talool.website.pages.define.MerchantPage;
+import com.talool.website.pages.lists.BooksPage;
+import com.talool.website.pages.lists.DealsPage;
+import com.talool.website.pages.lists.MerchantsPage;
+import com.talool.website.pages.lists.CustomersPage;
+import com.talool.website.pages.lists.FriendsPage;
 
 /**
  * @author clintz
@@ -70,14 +71,15 @@ public class TaloolApplication extends WebApplication implements Serializable
 
 		getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
 
+		mountPage("/admin/merchants", MerchantsPage.class);
 		mountPage("/admin/merchant", MerchantPage.class);
-		mountPage("/admin/new-merchant", NewMerchantPage.class);
-		mountPage("/admin/new-customer", NewCustomerPage.class);
-		mountPage("/admin/new-deal", NewDealPage.class);
-		mountPage("/admin/new-book", NewBookPage.class);
-		mountPage("/admin/merchant-deal", DealPage.class);
-		mountPage("/admin/user", UsersPage.class);
+		mountPage("/admin/customers", CustomersPage.class);
+		mountPage("/admin/customer", CustomerPage.class);
+		mountPage("/admin/deals", DealsPage.class);
+		mountPage("/admin/deal", DealPage.class);
+		mountPage("/admin/books", BooksPage.class);
 		mountPage("/admin/book", BookPage.class);
+		mountPage("/admin/friends", FriendsPage.class);
 
 		/*
 		 * We need a ONE_PASS_RENDER strategy because pages like search need
