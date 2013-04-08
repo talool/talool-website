@@ -55,17 +55,28 @@ fieldset.right {
 label {
 	display: inline-block;
 	padding: 0;
-	margin: 0 5px 0 0;
+	margin: 5px 5px 0 0;
 	width: 100px;
 	vertical-align: top;
 }
-input, select {
+input, select, textarea {
 	display: inline-block;
 	padding: 5px;
 	margin: 0 25px 0 0;
 	width: 200px;
 }
+textarea {
+	width: 200px;
+	height: 100px;
+}
 input.chbx {
 	width: auto;
 	margin-right: 5px;
+}
+optgroup {
+	color:red;
+}
+
+optgroup option {
+	color: black;
 }

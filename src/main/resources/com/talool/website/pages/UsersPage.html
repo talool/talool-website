@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>UsersPage.html</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+    <link rel="stylesheet" type="text/css" href="/css/global.css">
+    <link rel="stylesheet" type="text/css" href="/css/merchant.css">
+
+  </head>
+  
+  <body>
+  	<div wicket:id="adminMenuPanel"></div>
+  	<div class="content">
+  		<!-- CUSTOMER LIST PANEL -->
+	  	<div class="actions">
+	  		<wicket:link>
+			  	<a href="NewCustomerPage.html">
+			  		<button>Create New Customer</button>
+			    </a>
+		    </wicket:link>
+	  	</div>
+	  	<h2>Customers</h2>
+	  	<table>
+	  		<thead>
+	  			<tr>
+	  				<th>First Name</th>
+	  				<th>Last Name</th>
+	  				<th>Email</th>
+	  				<th>Actions</th>
+	  			</tr>
+	  		</thead>
+	  		<tbody>
+	  			<tr class="odd">
+	  				<td>Doug</td>
+	  				<td>McCuen</td>
+	  				<td>doug@talool.com</td>
+	  				<td>
+	  					<wicket:link>
+		  					<a href="NewCustomerPage.html" class="edit">Edit</a> | 
+		  					<a href="#" class="books">Purchased Books</a> | 
+		  					<a href="#" class="deals">Redeemed Deals</a> | 
+		  					<a href="#" class="friends">Friends</a> | 
+		  					<a href="#" class="delete">Delete</a>
+	  					</wicket:link>
+	  				</td>
+	  			</tr>
+	  			<tr class="">
+	  				<td>Doug</td>
+	  				<td>McCuen</td>
+	  				<td>doug@talool.com</td>
+	  				<td>
+	  					<wicket:link>
+		  					<a href="NewCustomerPage.html" class="edit">Edit</a> | 
+		  					<a href="#" class="books">Purchased Books</a> | 
+		  					<a href="#" class="deals">Redeemed Deals</a> | 
+		  					<a href="#" class="friends">Friends</a> | 
+		  					<a href="#" class="delete">Delete</a>
+	  					</wicket:link>
+	  				</td>
+	  			</tr>
+	  		</tbody>
+	  	</table>
+  	</div>
+  </body>
+</html>

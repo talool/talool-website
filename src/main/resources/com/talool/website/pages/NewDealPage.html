@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NewDealPage.html</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+    <link rel="stylesheet" type="text/css" href="/css/global.css">
+    <link rel="stylesheet" type="text/css" href="/css/newmerchant.css">
+
+  </head>
+  
+  <body>
+  	<div wicket:id="adminMenuPanel"></div>
+  	<div class="content">
+  	
+	  	<!-- NEW DEAL PANEL -->
+	  	<div class="newMerchant">
+	
+			<h2>Create|Edit Deal</h2>
+			
+			<div class="panel descriptionPanel">
+				<form method="post">
+					<input type="hidden" name="merchant_id" value="123"/>
+					<h3>Book Description</h3>
+					<fieldset class="right">
+				    	<div><label>Title</label><input name="title" type="text"/></div>
+				    	<div><label>Summary</label><input name="summary" type="text"/></div>
+				    	<div><label>Details</label><textarea name="details"></textarea></div>
+				    	<div><label>Code</label><input name="code" type="text"/></div>
+				    	<div><label>Image URL</label><input name="image_url" type="text"/></div>
+				    	<div><label>Expires</label><input name="expires" type="text"/></div>
+				    	<div><label>Is Active</label><input type="checkbox" name="is_active" class="chbx"> Yes</div>
+				    </fieldset>
+				    <fieldset class="">
+				    	<div class="note">TODO: put a preview of the deal here.</div>
+				    </fieldset>
+				    <div class="clear"></div>
+			    </form>
+			</div>
+			
+			<div class="controls">
+				<button class="big">Save Deal</button>
+			</div>
+		</div>	
+		
+    </div>
+  </body>
+</html>

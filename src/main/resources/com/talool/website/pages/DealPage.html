@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>DealPage.html</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+    <link rel="stylesheet" type="text/css" href="/css/global.css">
+    <link rel="stylesheet" type="text/css" href="/css/merchant.css">
+
+  </head>
+  
+  <body>
+  	<div wicket:id="adminMenuPanel"></div>
+  	<div class="content">
+  		
+  		<!-- DEAL LIST PANEL -->
+	  	<div class="actions">
+		  	<wicket:link>
+			  	<a href="NewDealPage.html">
+			  		<button>Create New Deal</button>
+			    </a>
+		    </wicket:link>
+	  	</div>
+	  	<h2>Deals</h2>
+	  	<table>
+	  		<thead>
+	  			<tr>
+	  				<th>Title</th>
+	  				<th>Summary</th>
+	  				<th>Is Active</th>
+	  				<th>Expires</th>
+	  				<th>Actions</th>
+	  			</tr>
+	  		</thead>
+	  		<tbody>
+	  			<tr class="odd">
+	  				<td>$5 Off</td>
+	  				<td>Get $5 of your bill</td>
+	  				<td>Yes</td>
+	  				<td>08/01/2013</td>
+	  				<td>
+	  					<wicket:link>
+		  					<a href="NewDealPage.html" class="edit">Edit</a> | 
+		  					<a href="#" class="delete">Delete</a>
+	  					</wicket:link>
+	  				</td>
+	  			</tr>
+	  			<tr class="">
+	  				<td>$5 Off</td>
+	  				<td>Get $5 of your bill</td>
+	  				<td>Yes</td>
+	  				<td>08/01/2013</td>
+	  				<td>
+	  					<wicket:link>
+		  					<a href="NewDealPage.html" class="edit">Edit</a> | 
+		  					<a href="#" class="delete">Delete</a>
+	  					</wicket:link>
+	  				</td>
+	  			</tr>
+	  		</tbody>
+	  	</table>
+	  	
+  	</div>
+  </body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BookPage.html</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+    <link rel="stylesheet" type="text/css" href="/css/global.css">
+    <link rel="stylesheet" type="text/css" href="/css/merchant.css">
+
+  </head>
+  
+  <body>
+  	<div wicket:id="adminMenuPanel"></div>
+  	<div class="content">
+  	
+  		<!-- BOOK LIST PANEL -->
+	  	<div class="actions">
+		  	<wicket:link>
+			  	<a href="NewBookPage.html">
+			  		<button>Create New Book</button>
+			    </a>
+		    </wicket:link>
+	  	</div>
+	  	<h2>Customers</h2>
+	  	<table>
+	  		<thead>
+	  			<tr>
+	  				<th>Title</th>
+	  				<th>Merchant</th>
+	  				<th>Price</th>
+	  				<th>Purchases</th>
+	  				<th>Is Active</th>
+	  				<th>Expires</th>
+	  				<th>Actions</th>
+	  			</tr>
+	  		</thead>
+	  		<tbody>
+	  			<tr class="odd">
+	  				<td>The Payback Book - Boulder</td>
+	  				<td>The Payback Book</td>
+	  				<td>$20.00</td>
+	  				<td>1000</td>
+	  				<td>Yes</td>
+	  				<td>08/01/2013</td>
+	  				<td>
+	  					<wicket:link>
+		  					<a href="NewBookPage.html" class="edit">Edit</a> | 
+		  					<a href="DealPage.html" class="deals">Deals</a> | 
+		  					<a href="#" class="delete">Delete</a>
+	  					</wicket:link>
+	  				</td>
+	  			</tr>
+	  			<tr class="">
+	  				<td>The Payback Book - Boulder</td>
+	  				<td>The Payback Book</td>
+	  				<td>$20.00</td>
+	  				<td>1000</td>
+	  				<td>Yes</td>
+	  				<td>08/01/2013</td>
+	  				<td>
+	  					<wicket:link>
+		  					<a href="NewBookPage.html" class="edit">Edit</a> | 
+		  					<a href="DealPage.html" class="deals">Deals</a> | 
+		  					<a href="#" class="delete">Delete</a>
+	  					</wicket:link>
+	  				</td>
+	  			</tr>
+	  		</tbody>
+	  	</table>
+	  	
+  	</div>
+  </body>
+</html>

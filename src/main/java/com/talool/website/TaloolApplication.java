@@ -22,6 +22,12 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.talool.website.pages.HomePage;
 import com.talool.website.pages.MerchantPage;
 import com.talool.website.pages.NewMerchantPage;
+import com.talool.website.pages.BookPage;
+import com.talool.website.pages.DealPage;
+import com.talool.website.pages.UsersPage;
+import com.talool.website.pages.NewBookPage;
+import com.talool.website.pages.NewCustomerPage;
+import com.talool.website.pages.NewDealPage;
 
 /**
  * @author clintz
@@ -66,6 +72,12 @@ public class TaloolApplication extends WebApplication implements Serializable
 
 		mountPage("/admin/merchant", MerchantPage.class);
 		mountPage("/admin/new-merchant", NewMerchantPage.class);
+		mountPage("/admin/new-customer", NewCustomerPage.class);
+		mountPage("/admin/new-deal", NewDealPage.class);
+		mountPage("/admin/new-book", NewBookPage.class);
+		mountPage("/admin/merchant-deal", DealPage.class);
+		mountPage("/admin/user", UsersPage.class);
+		mountPage("/admin/book", BookPage.class);
 
 		/*
 		 * We need a ONE_PASS_RENDER strategy because pages like search need
