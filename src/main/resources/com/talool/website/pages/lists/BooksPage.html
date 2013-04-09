@@ -24,7 +24,7 @@
 			    </a>
 		    </wicket:link>
 	  	</div>
-	  	<h2>Customers</h2>
+	  	<h2>Deal Books</h2>
 	  	<table>
 	  		<thead>
 	  			<tr>
@@ -38,28 +38,13 @@
 	  			</tr>
 	  		</thead>
 	  		<tbody>
-	  			<tr class="odd">
-	  				<td>The Payback Book - Boulder</td>
-	  				<td>The Payback Book</td>
-	  				<td>$20.00</td>
-	  				<td>1000</td>
-	  				<td>Yes</td>
-	  				<td>08/01/2013</td>
-	  				<td>
-	  					<wicket:link>
-		  					<a href="../define/BookPage.html" class="edit">Edit</a> | 
-		  					<a href="DealsPage.html" class="deals">Deals</a> | 
-		  					<a href="#" class="delete">Delete</a>
-	  					</wicket:link>
-	  				</td>
-	  			</tr>
-	  			<tr class="">
-	  				<td>The Payback Book - Boulder</td>
-	  				<td>The Payback Book</td>
-	  				<td>$20.00</td>
-	  				<td>1000</td>
-	  				<td>Yes</td>
-	  				<td>08/01/2013</td>
+	  			<tr class="odd" wicket:id="bookRptr">
+	  				<td wicket:id="title">The Payback Book - Boulder</td>
+	  				<td wicket:id="merchant.name">The Payback Book</td>
+	  				<td wicket:id="price">$20.00</td>
+	  				<td wicket:id="purchases">1000</td>
+	  				<td wicket:id="isActive">Yes</td>
+	  				<td wicket:id="expires">08/01/2013</td>
 	  				<td>
 	  					<wicket:link>
 		  					<a href="../define/BookPage.html" class="edit">Edit</a> | 
