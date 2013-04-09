@@ -14,7 +14,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import com.talool.core.Merchant;
 import com.talool.website.models.MerchantListModel;
 import com.talool.website.pages.BasePage;
-import com.talool.website.pages.define.MerchantPage;
 import com.talool.website.panel.AdminMenuPanel;
 import com.talool.website.panel.MerchantModalWindow;
 import com.talool.website.panel.MerchantPanel;
@@ -82,6 +81,7 @@ public class MerchantsPage extends BasePage
 			public void onClick(AjaxRequestTarget target)
 			{
 				getSession().getFeedbackMessages().clear();
+				merchantModal.setTitle("Create Merchant");
 				merchantModal.setContent(new MerchantPanel(merchantModal.getContentId(), callback));
 				merchantModal.show(target);
 			}
@@ -97,7 +97,7 @@ public class MerchantsPage extends BasePage
 			@Override
 			protected void populateItem(ListItem<Merchant> item)
 			{
-				Merchant merchant = item.getModelObject();
+				final Merchant merchant = item.getModelObject();
 
 				item.setModel(new CompoundPropertyModel<Merchant>(merchant));
 
@@ -114,10 +114,22 @@ public class MerchantsPage extends BasePage
 				item.add(new Label("primaryLocation.address.niceCityState"));
 				item.add(new Label("accounts", merchant.getNumberOfMerchantAccounts()));
 				
-				PageParameters editParams = new PageParameters();
-				editParams.set("id", merchant.getId());
-				BookmarkablePageLink<Void> editLink = new BookmarkablePageLink<Void>("editLink",MerchantPage.class,editParams);
-				item.add(editLink);
+				item.add(new AjaxLink<Void>("editLink")
+				{
+
+					private static final long serialVersionUID = 8817599057544892359L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target)
+					{
+						getSession().getFeedbackMessages().clear();
+						MerchantPanel panel = new MerchantPanel(merchantModal.getContentId(), callback);
+						panel.setMerchant(merchant);
+						merchantModal.setContent(panel);
+						merchantModal.setTitle("Edit Merchant");
+						merchantModal.show(target);
+					}
+				});
 				
 				PageParameters booksParams = new PageParameters();
 				booksParams.set("method", DealsPage.METHOD_MERCHANT);

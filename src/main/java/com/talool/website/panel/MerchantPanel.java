@@ -37,6 +37,11 @@ public class MerchantPanel extends BasePanel
 		super(id);
 		this.callback = callback;
 	}
+	
+	public void setMerchant(Merchant m)
+	{
+		merchant = m;
+	}
 
 	@Override
 	protected void onInitialize()

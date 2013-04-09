@@ -12,13 +12,14 @@ public class MerchantModalWindow extends ModalWindow
 	{
 		super(id);
 		this.setInitialWidth(840);
-
 		this.setInitialHeight(400);
+		this.setAutoSize(true);
 		this.setResizable(false);
 		this.setCssClassName(ModalWindow.CSS_CLASS_GRAY);
-		this.setTitle("Create/Edit Merchant");
+		
+		this.setTitle("Create Merchant");
 
-		this.setCookieName("m-modal");
+		this.setCookieName("merch-modal");
 
 		this.setCloseButtonCallback(new ModalWindow.CloseButtonCallback()
 		{

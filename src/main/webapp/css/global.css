@@ -38,7 +38,13 @@ h2 {
 	color: white;
 	text-decoration: none;
 }
+.right {
+	float:right;
+}
 
+.left {
+	float:left;
+}
 .menu em {
 	font-weight: bold;
 	font-style: normal;
@@ -77,5 +83,14 @@ div.info ul.feedbackPanel {
     border: 1px solid #090;
     background-color: #efe;
     color: #090;
-} 
+}
 
+/* Modal Window Overrides */
+body div.wicket-modal div.w_caption {
+	height: 2.4em
+} 
+body div.wicket-modal h3.w_captionText {
+	font-size: 1.6em;
+	color: orange;
+	top: 5px;
+}

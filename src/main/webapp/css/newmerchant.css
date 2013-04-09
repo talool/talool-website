@@ -14,7 +14,6 @@
 .newMerchant .panel {
 	padding: 0 15px 15px;
 	margin: 0 10px 35px;
-	border: 1px solid #aaa;
 }
 .newMerchant .controls {
 	margin: 20px 0 0;
@@ -49,9 +48,6 @@ fieldset {
 fieldset div {
 	margin-bottom: 5px;
 }
-fieldset.right {
-	float:right;
-}
 label {
 	display: inline-block;
 	padding: 0;
@@ -62,7 +58,7 @@ label {
 input, select, textarea {
 	display: inline-block;
 	padding: 5px;
-	margin: 0 25px 0 0;
+	margin: 0 0 0 0;
 	width: 200px;
 }
 textarea {
