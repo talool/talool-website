@@ -1,49 +1,34 @@
-package com.talool.website.pages.define;
+package com.talool.website.panel;
 
-import org.apache.wicket.PageReference;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Merchant;
 import com.talool.core.service.ServiceException;
-import com.talool.website.pages.BasePage;
-import com.talool.website.panel.AdminMenuPanel;
 
 /**
  * 
  * @author clintz
  * 
  */
-public class MerchantPage extends BasePage
+public class MerchantPanel extends BasePanel
 {
-	private static final long serialVersionUID = -7718256037209979704L;
-	private static final Logger LOG = LoggerFactory.getLogger(MerchantPage.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MerchantPanel.class);
+	private static final long serialVersionUID = -8074065320919062316L;
 
 	private Merchant merchant = domainFactory.newMerchant();
 
 	private String tags;
 
-	public MerchantPage()
+	public MerchantPanel(String id)
 	{
-		super();
-	}
-
-	public MerchantPage(PageParameters parameters)
-	{
-		super(parameters);
-	}
-
-	public MerchantPage(PageReference pageReference, ModalWindow modal2)
-	{
-
+		super(id);
 	}
 
 	@Override
@@ -56,8 +41,6 @@ public class MerchantPage extends BasePage
 		merchant.getPrimaryLocation().setLogoUrl("");
 
 		add(new FeedbackPanel("feedback"));
-
-		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
 
 		Form<Void> form = new Form<Void>("form")
 		{

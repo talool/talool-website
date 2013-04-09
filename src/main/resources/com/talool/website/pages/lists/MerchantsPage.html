@@ -9,15 +9,15 @@
     
     <link rel="stylesheet" type="text/css" href="/css/global.css">
     <link rel="stylesheet" type="text/css" href="/css/merchant.css">
+    <link rel="stylesheet" type="text/css" href="/css/newmerchant.css">
 
   </head>
   
   <body>
   	<div wicket:id="adminMenuPanel"></div>
   	<div class="content">
-  	
-	  	<!-- MERCHANT LIST PANEL -->
 	  	<div class="actions">
+	  	<a wicket:id="merchantLink">Create New Merchant</a>
 	  		<wicket:link>
 			  	<a href="../define/MerchantPage.html">
 			  		<button>Create New Merchant</button>
@@ -51,8 +51,7 @@
 	  			</tr>
 	  		</tbody>
 	  	</table>
-	  		
-		
+	  	<div wicket:id="modal"/>
     </div>
   </body>
 </html>
