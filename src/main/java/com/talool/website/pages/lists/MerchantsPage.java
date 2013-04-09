@@ -1,6 +1,9 @@
 package com.talool.website.pages.lists;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -11,6 +14,7 @@ import com.talool.core.Merchant;
 import com.talool.website.models.MerchantListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminMenuPanel;
+import com.talool.website.panel.MerchantPanel;
 
 /**
  * 
@@ -19,7 +23,6 @@ import com.talool.website.panel.AdminMenuPanel;
  */
 public class MerchantsPage extends BasePage
 {
-
 	private static final long serialVersionUID = 9023714664854633955L;
 
 	public MerchantsPage()
@@ -36,6 +39,50 @@ public class MerchantsPage extends BasePage
 	protected void onInitialize()
 	{
 		super.onInitialize();
+
+		final ModalWindow merchantModal;
+		add(merchantModal = new ModalWindow("modal"));
+		merchantModal.setInitialWidth(840);
+		merchantModal.setInitialHeight(800);
+		merchantModal.setResizable(false);
+		merchantModal.setCssClassName(ModalWindow.CSS_CLASS_GRAY);
+		merchantModal.setTitle("Create/Edit Merchant");
+		merchantModal.setContent(new MerchantPanel(merchantModal.getContentId()));
+
+		merchantModal.setCookieName("m-modal");
+
+		merchantModal.setCloseButtonCallback(new ModalWindow.CloseButtonCallback()
+		{
+
+			private static final long serialVersionUID = 1421735013059613512L;
+
+			public boolean onCloseButtonClicked(AjaxRequestTarget target)
+			{
+				// setResult("Modal window 2 - close button");
+				return true;
+			}
+		});
+
+		merchantModal.setWindowClosedCallback(new ModalWindow.WindowClosedCallback()
+		{
+			private static final long serialVersionUID = 8961311909740932319L;
+
+			public void onClose(AjaxRequestTarget target)
+			{
+				// target.addComponent(result);
+			}
+		});
+
+		add(new AjaxLink<Void>("merchantLink")
+		{
+			private static final long serialVersionUID = 8539856864609166L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				merchantModal.show(target);
+			}
+		});
 
 		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
 
