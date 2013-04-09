@@ -72,14 +72,14 @@ public class TaloolApplication extends WebApplication implements Serializable
 		getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
 
 		mountPage("/admin/merchants", MerchantsPage.class);
-		mountPage("/admin/merchant", MerchantPage.class);
+		mountPage("/admin/merchant/#{id}", MerchantPage.class);
 		mountPage("/admin/customers", CustomersPage.class);
-		mountPage("/admin/customer", CustomerPage.class);
-		mountPage("/admin/deals", DealsPage.class);
-		mountPage("/admin/deal", DealPage.class);
-		mountPage("/admin/books", BooksPage.class);
-		mountPage("/admin/book", BookPage.class);
-		mountPage("/admin/friends", FriendsPage.class);
+		mountPage("/admin/customer/#{id}", CustomerPage.class);
+		mountPage("/admin/deals/${method}/${id}", DealsPage.class);
+		mountPage("/admin/deal/#{id}", DealPage.class);
+		mountPage("/admin/books/${method}/#{id}", BooksPage.class);
+		mountPage("/admin/book/#{id}", BookPage.class);
+		mountPage("/admin/friends/${id}", FriendsPage.class);
 
 		/*
 		 * We need a ONE_PASS_RENDER strategy because pages like search need

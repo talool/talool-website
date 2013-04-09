@@ -14,9 +14,8 @@ public class DealListModel extends LoadableDetachableModel<List<Deal>> {
 
 	private static final long serialVersionUID = -6415448310988721401L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealListModel.class);
-	private static enum LOAD_METHOD {MERHCANT, CUSTOMER, DEAL_OFFER}
+	private static enum LOAD_METHOD {MERHCANT, DEAL_OFFER}
 	private long _merchantId;
-	private long _customerId;
 	private long _dealOfferId;
 	private LOAD_METHOD _method;
 
@@ -30,10 +29,6 @@ public class DealListModel extends LoadableDetachableModel<List<Deal>> {
 			if (_method == LOAD_METHOD.MERHCANT) 
 			{
 				deals = ServiceFactory.get().getTaloolService().getDealsByMerchantId(_merchantId);
-			}
-			else if (_method == LOAD_METHOD.CUSTOMER)
-			{
-				deals = ServiceFactory.get().getTaloolService().getDealsByCustomerId(_customerId);
 			}
 			else if (_method == LOAD_METHOD.DEAL_OFFER)
 			{
@@ -52,11 +47,6 @@ public class DealListModel extends LoadableDetachableModel<List<Deal>> {
 	{
 		_merchantId = id;
 		_method = LOAD_METHOD.MERHCANT;
-	}
-	public void setCustomerId(long id)
-	{
-		_customerId = id;
-		_method = LOAD_METHOD.CUSTOMER;
 	}
 	public void setDealOfferId(long id)
 	{

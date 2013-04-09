@@ -24,7 +24,7 @@
 			    </a>
 		    </wicket:link>
 	  	</div>
-	  	<h2>Deal Books</h2>
+	  	<h2 wicket:id="pageTitle">Deal Books</h2>
 	  	<table>
 	  		<thead>
 	  			<tr>
@@ -46,11 +46,9 @@
 	  				<td wicket:id="isActive">Yes</td>
 	  				<td wicket:id="expires">08/01/2013</td>
 	  				<td>
-	  					<wicket:link>
-		  					<a href="../define/BookPage.html" class="edit">Edit</a> | 
-		  					<a href="DealsPage.html" class="deals">Deals</a> | 
-		  					<a href="#" class="delete">Delete</a>
-	  					</wicket:link>
+	  					<a wickete:id="editLink" href="../define/BookPage.html" class="edit">Edit</a> | 
+	  					<a wickete:id="dealsLink" href="DealsPage.html" class="deals">Deals</a> | 
+	  					<a href="#" class="delete">Delete</a>
 	  				</td>
 	  			</tr>
 	  		</tbody>

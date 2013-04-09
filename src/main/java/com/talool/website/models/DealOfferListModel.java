@@ -14,6 +14,9 @@ public class DealOfferListModel extends LoadableDetachableModel<List<DealOffer>>
 
 	private static final long serialVersionUID = -4489553425426553445L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealOfferListModel.class);
+	private static enum LOAD_METHOD {MERHCANT, ALL}
+	private long _merchantId;
+	private LOAD_METHOD _method;
 	
 	@Override
 	protected List<DealOffer> load() {
@@ -22,7 +25,16 @@ public class DealOfferListModel extends LoadableDetachableModel<List<DealOffer>>
 
 		try
 		{
-			books = ServiceFactory.get().getTaloolService().getDealOffers();
+			if (_method == LOAD_METHOD.MERHCANT) 
+			{
+				books = ServiceFactory.get().getTaloolService().getDealOffersByMerchantId(_merchantId);
+			}
+			else
+			{
+				books = ServiceFactory.get().getTaloolService().getDealOffers();
+			}
+			
+			
 		}
 		catch (ServiceException e)
 		{
@@ -30,6 +42,12 @@ public class DealOfferListModel extends LoadableDetachableModel<List<DealOffer>>
 		}
 		
 		return books;
+	}
+	
+	public void setMerchantId(long id)
+	{
+		_merchantId = id;
+		_method = LOAD_METHOD.MERHCANT;
 	}
 
 }
