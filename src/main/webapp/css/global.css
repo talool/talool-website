@@ -61,3 +61,21 @@ h2 {
 	margin-right: 20px;
 }
 
+.feedbackPanel {                          
+    border: 1px solid #099;
+    background-color: #eff;
+    color: #099;
+}
+
+div.error ul.feedbackPanel {         
+    background-color: #fee;
+    border: 1px solid #900;
+    color: #900;
+}
+
+div.info ul.feedbackPanel {           
+    border: 1px solid #090;
+    background-color: #efe;
+    color: #090;
+} 
+

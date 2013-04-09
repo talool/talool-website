@@ -1,9 +1,6 @@
 package com.talool.website;
 
-import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.wicket.markup.html.IPackageResourceGuard;
 import org.apache.wicket.markup.html.SecurePackageResourceGuard;
@@ -12,10 +9,6 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.settings.IExceptionSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.apache.wicket.util.file.IResourceFinder;
-import org.apache.wicket.util.file.Path;
-import org.apache.wicket.util.resource.FileResourceStream;
-import org.apache.wicket.util.resource.IResourceStream;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -25,10 +18,10 @@ import com.talool.website.pages.define.CustomerPage;
 import com.talool.website.pages.define.DealPage;
 import com.talool.website.pages.define.MerchantPage;
 import com.talool.website.pages.lists.BooksPage;
-import com.talool.website.pages.lists.DealsPage;
-import com.talool.website.pages.lists.MerchantsPage;
 import com.talool.website.pages.lists.CustomersPage;
+import com.talool.website.pages.lists.DealsPage;
 import com.talool.website.pages.lists.FriendsPage;
+import com.talool.website.pages.lists.MerchantsPage;
 
 /**
  * @author clintz
@@ -36,7 +29,7 @@ import com.talool.website.pages.lists.FriendsPage;
  */
 public class TaloolApplication extends WebApplication implements Serializable
 {
-	private final String mode = "deployment";
+	private final String mode = "development";
 
 	private static final long serialVersionUID = 1954532829422211028L;
 
@@ -107,38 +100,45 @@ public class TaloolApplication extends WebApplication implements Serializable
 			getDebugSettings().setAjaxDebugModeEnabled(false);
 			getExceptionSettings().setUnexpectedExceptionDisplay(
 					IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
-			getMarkupSettings().setStripWicketTags(true);
+			getMarkupSettings().setStripWicketTags(false);
 		}
 		else
 		{
-			// love this hack for working locally and changing HTML and have it
-			// reload immediately
-			// because it is outside the WAR
-			final Path path = new Path("src/main/resources");
-
-			List<Path> resourceFinders = new ArrayList<Path>();
-			resourceFinders.add(path);
-
-			IResourceFinder finder = new IResourceFinder()
-			{
-
-				@Override
-				public IResourceStream find(Class<?> arg0, String arg1)
-				{
-					File f = new File("src/main/resources");
-					if (f.exists())
-					{
-						return new FileResourceStream(f);
-					}
-					return null;
-				}
-			};
-
-			final List<IResourceFinder> finders = new ArrayList<IResourceFinder>();
-			finders.add(finder);
-			getResourceSettings().setResourceFinders(finders);
-
+			getDebugSettings().setAjaxDebugModeEnabled(true);
+			getExceptionSettings().setUnexpectedExceptionDisplay(
+					IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
 			getMarkupSettings().setStripWicketTags(false);
 		}
+		// else
+		// {
+		// // love this hack for working locally and changing HTML and have it
+		// // reload immediately
+		// // because it is outside the WAR
+		// final Path path = new Path("src/main/resources");
+		//
+		// List<Path> resourceFinders = new ArrayList<Path>();
+		// resourceFinders.add(path);
+		//
+		// IResourceFinder finder = new IResourceFinder()
+		// {
+		//
+		// @Override
+		// public IResourceStream find(Class<?> arg0, String arg1)
+		// {
+		// File f = new File("src/main/resources");
+		// if (f.exists())
+		// {
+		// return new FileResourceStream(f);
+		// }
+		// return null;
+		// }
+		// };
+		//
+		// final List<IResourceFinder> finders = new ArrayList<IResourceFinder>();
+		// finders.add(finder);
+		// getResourceSettings().setResourceFinders(finders);
+		//
+		// getMarkupSettings().setStripWicketTags(false);
+		// }
 	}
 }

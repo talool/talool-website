@@ -10,19 +10,19 @@
     <link rel="stylesheet" type="text/css" href="/css/global.css">
     <link rel="stylesheet" type="text/css" href="/css/merchant.css">
     <link rel="stylesheet" type="text/css" href="/css/newmerchant.css">
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
+     <script>Wicket.Window.unloadConfirmation = false;</script>
   </head>
   
   <body>
+
   	<div wicket:id="adminMenuPanel"></div>
   	<div class="content">
+  		<div wicket:id="feedback"/>
 	  	<div class="actions">
-	  	<a wicket:id="merchantLink">Create New Merchant</a>
-	  		<wicket:link>
-			  	<a href="../define/MerchantPage.html">
-			  		<button>Create New Merchant</button>
-			    </a>
-		    </wicket:link>
+	  	<a wicket:id="merchantLink"><button>Create New Merchant</button></a>
 	  	</div>
 	  	<h2>Merchants</h2>
 	  	<table>

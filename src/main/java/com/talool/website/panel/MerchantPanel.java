@@ -1,9 +1,11 @@
 package com.talool.website.panel;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 import org.slf4j.Logger;
@@ -26,9 +28,14 @@ public class MerchantPanel extends BasePanel
 
 	private String tags;
 
-	public MerchantPanel(String id)
+	private ModalWindow window;
+
+	private SubmitCallBack callback;
+
+	public MerchantPanel(String id, SubmitCallBack callback)
 	{
 		super(id);
+		this.callback = callback;
 	}
 
 	@Override
@@ -40,37 +47,49 @@ public class MerchantPanel extends BasePanel
 		merchant.getPrimaryLocation().setAddress(domainFactory.newAddress());
 		merchant.getPrimaryLocation().setLogoUrl("");
 
-		add(new FeedbackPanel("feedback"));
+		final NiceFeedbackPanel feedback = new NiceFeedbackPanel("feedback");
 
-		Form<Void> form = new Form<Void>("form")
-		{
-			private static final long serialVersionUID = 2388954745106388617L;
+		add(feedback.setOutputMarkupId(true));
 
-			@Override
-			protected void onSubmit()
-			{
-				super.onSubmit();
-
-				try
-				{
-					taloolService.save(merchant);
-					getSession().error("Successfully created '" + merchant.getName() + "'");
-				}
-				catch (ServiceException e)
-				{
-					String errMsg = "Problem saving merchant: " + e.getLocalizedMessage();
-					getSession().error(errMsg);
-					LOG.error(errMsg);
-				}
-			}
-
-		};
+		Form<Void> form = new Form<Void>("form");
 
 		add(form);
 
 		form.add(new TextField<String>("name", new PropertyModel<String>(merchant, "name"))
 				.setRequired(true));
 		form.add(new TextField<String>("tags", new PropertyModel<String>(this, "tags")));
+
+		form.add(new AjaxButton("submitButton", form)
+		{
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form)
+			{
+				target.add(feedback);
+				target.appendJavaScript("$('.content').scrollTop();");
+			}
+
+			private static final long serialVersionUID = 6708205247945526171L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form)
+			{
+				try
+				{
+					taloolService.save(merchant);
+					target.add(feedback);
+					getSession().info("Successfully created '" + merchant.getName() + "'");
+					callback.submitSuccess(target);
+				}
+				catch (ServiceException e)
+				{
+					String errMsg = "Problem saving merchant: " + e.getLocalizedMessage();
+					getSession().error(errMsg);
+					LOG.error(errMsg);
+					callback.submitFailure(target);
+				}
+			}
+
+		});
 
 		WebMarkupContainer locationPanel = new WebMarkupContainer("locationPanel");
 		form.add(locationPanel);
@@ -93,4 +112,5 @@ public class MerchantPanel extends BasePanel
 		locationPanel.add(new TextField<String>("primaryLocation.websiteUrl"));
 
 	}
+
 }
