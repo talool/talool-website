@@ -24,7 +24,7 @@ public class MerchantPanel extends BasePanel
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantPanel.class);
 	private static final long serialVersionUID = -8074065320919062316L;
 
-	private Merchant merchant = domainFactory.newMerchant();
+	private Merchant merchant;
 
 	private String tags;
 
@@ -32,25 +32,27 @@ public class MerchantPanel extends BasePanel
 
 	private SubmitCallBack callback;
 
-	public MerchantPanel(String id, SubmitCallBack callback)
+	public MerchantPanel(final String id, final SubmitCallBack callback)
 	{
 		super(id);
 		this.callback = callback;
+		merchant = domainFactory.newMerchant();
+		merchant.setPrimaryLocation(domainFactory.newMerchantLocation());
+		merchant.getPrimaryLocation().setAddress(domainFactory.newAddress());
+		merchant.getPrimaryLocation().setLogoUrl("");
 	}
-	
-	public void setMerchant(Merchant m)
+
+	public MerchantPanel(final String id, final SubmitCallBack callback, final Merchant merchant)
 	{
-		merchant = m;
+		super(id);
+		this.callback = callback;
+		this.merchant = merchant;
 	}
 
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
-
-		merchant.setPrimaryLocation(domainFactory.newMerchantLocation());
-		merchant.getPrimaryLocation().setAddress(domainFactory.newAddress());
-		merchant.getPrimaryLocation().setLogoUrl("");
 
 		final NiceFeedbackPanel feedback = new NiceFeedbackPanel("feedback");
 
@@ -70,6 +72,7 @@ public class MerchantPanel extends BasePanel
 			protected void onError(AjaxRequestTarget target, Form<?> form)
 			{
 				target.add(feedback);
+				// attempting to scroll to top
 				target.appendJavaScript("$('.content').scrollTop();");
 			}
 
