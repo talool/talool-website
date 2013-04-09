@@ -7,12 +7,15 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Merchant;
 import com.talool.core.service.ServiceException;
+import com.talool.website.models.MerchantModel;
 
 /**
  * 
@@ -24,31 +27,35 @@ public class MerchantPanel extends BasePanel
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantPanel.class);
 	private static final long serialVersionUID = -8074065320919062316L;
 
-	private Merchant merchant;
-
 	private String tags;
 
 	private ModalWindow window;
 
 	private SubmitCallBack callback;
 
+	private boolean isNew = false;
+
 	public MerchantPanel(final String id, final SubmitCallBack callback)
 	{
 		super(id);
 		this.callback = callback;
-		merchant = domainFactory.newMerchant();
+
+		Merchant merchant = domainFactory.newMerchant();
 		merchant.setPrimaryLocation(domainFactory.newMerchantLocation());
 		merchant.getPrimaryLocation().setAddress(domainFactory.newAddress());
 		merchant.getPrimaryLocation().setLogoUrl("");
+		isNew = true;
+		setDefaultModel(Model.of(merchant));
 	}
 
-	public MerchantPanel(final String id, final SubmitCallBack callback, final Merchant merchant)
+	public MerchantPanel(final String id, final SubmitCallBack callback, final Long merchantId)
 	{
 		super(id);
 		this.callback = callback;
-		this.merchant = merchant;
+		setDefaultModel(new MerchantModel(merchantId));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onInitialize()
 	{
@@ -56,14 +63,21 @@ public class MerchantPanel extends BasePanel
 
 		final NiceFeedbackPanel feedback = new NiceFeedbackPanel("feedback");
 
-		add(feedback.setOutputMarkupId(true));
-
 		Form<Void> form = new Form<Void>("form");
 
 		add(form);
 
-		form.add(new TextField<String>("name", new PropertyModel<String>(merchant, "name"))
-				.setRequired(true));
+		WebMarkupContainer locationPanel = new WebMarkupContainer("locationPanel");
+		form.add(locationPanel);
+
+		CompoundPropertyModel<Merchant> merchLocModel = new CompoundPropertyModel<Merchant>(
+				(IModel<Merchant>) getDefaultModel());
+
+		form.setDefaultModel(merchLocModel);
+
+		add(feedback.setOutputMarkupId(true));
+
+		form.add(new TextField<String>("name").setRequired(true));
 		form.add(new TextField<String>("tags", new PropertyModel<String>(this, "tags")));
 
 		form.add(new AjaxButton("submitButton", form)
@@ -81,30 +95,28 @@ public class MerchantPanel extends BasePanel
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form)
 			{
+				StringBuilder sb = new StringBuilder();
+
 				try
 				{
+					Merchant merchant = (Merchant) form.getDefaultModelObject();
 					taloolService.save(merchant);
 					target.add(feedback);
-					getSession().info("Successfully created '" + merchant.getName() + "'");
+					sb.append("Successfully ").append(isNew ? "created '" : "updated '")
+							.append(merchant.getName()).append("'");
+					getSession().info(sb.toString());
 					callback.submitSuccess(target);
 				}
 				catch (ServiceException e)
 				{
-					String errMsg = "Problem saving merchant: " + e.getLocalizedMessage();
-					getSession().error(errMsg);
-					LOG.error(errMsg);
+					sb.append("Problem saving merchant: ").append(e.getLocalizedMessage());
+					getSession().error(sb.toString());
+					LOG.error(sb.toString());
 					callback.submitFailure(target);
 				}
 			}
 
 		});
-
-		WebMarkupContainer locationPanel = new WebMarkupContainer("locationPanel");
-		form.add(locationPanel);
-
-		CompoundPropertyModel<Merchant> merchLocModel = new CompoundPropertyModel<Merchant>(merchant);
-
-		locationPanel.setDefaultModel(merchLocModel);
 
 		locationPanel.add(new TextField<String>("primaryLocation.address.address1").setRequired(true));
 
@@ -120,5 +132,4 @@ public class MerchantPanel extends BasePanel
 		locationPanel.add(new TextField<String>("primaryLocation.websiteUrl"));
 
 	}
-
 }

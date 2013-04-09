@@ -97,7 +97,8 @@ public class MerchantsPage extends BasePage
 			@Override
 			protected void populateItem(ListItem<Merchant> item)
 			{
-				final Merchant merchant = item.getModelObject();
+				Merchant merchant = item.getModelObject();
+				final Long merchantId = merchant.getId();
 
 				item.setModel(new CompoundPropertyModel<Merchant>(merchant));
 
@@ -124,7 +125,7 @@ public class MerchantsPage extends BasePage
 					{
 						getSession().getFeedbackMessages().clear();
 						MerchantPanel panel = new MerchantPanel(merchantModal.getContentId(), callback,
-								merchant);
+								merchantId);
 						merchantModal.setContent(panel);
 						merchantModal.setTitle("Edit Merchant");
 						merchantModal.show(target);
