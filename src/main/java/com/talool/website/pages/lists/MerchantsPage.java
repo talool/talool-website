@@ -3,18 +3,21 @@ package com.talool.website.pages.lists;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.Merchant;
 import com.talool.website.models.MerchantListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminMenuPanel;
+import com.talool.website.panel.MerchantModalWindow;
 import com.talool.website.panel.MerchantPanel;
+import com.talool.website.panel.NiceFeedbackPanel;
+import com.talool.website.panel.SubmitCallBack;
 
 /**
  * 
@@ -40,38 +43,34 @@ public class MerchantsPage extends BasePage
 	{
 		super.onInitialize();
 
-		final ModalWindow merchantModal;
-		add(merchantModal = new ModalWindow("modal"));
-		merchantModal.setInitialWidth(840);
-		merchantModal.setInitialHeight(800);
-		merchantModal.setResizable(false);
-		merchantModal.setCssClassName(ModalWindow.CSS_CLASS_GRAY);
-		merchantModal.setTitle("Create/Edit Merchant");
-		merchantModal.setContent(new MerchantPanel(merchantModal.getContentId()));
+		final NiceFeedbackPanel feedback = new NiceFeedbackPanel("feedback");
 
-		merchantModal.setCookieName("m-modal");
+		add(feedback.setOutputMarkupId(true));
 
-		merchantModal.setCloseButtonCallback(new ModalWindow.CloseButtonCallback()
+		final MerchantModalWindow merchantModal;
+		add(merchantModal = new MerchantModalWindow("modal"));
+
+		final SubmitCallBack callback = new SubmitCallBack()
 		{
+			private static final long serialVersionUID = -1459177645080455211L;
 
-			private static final long serialVersionUID = 1421735013059613512L;
-
-			public boolean onCloseButtonClicked(AjaxRequestTarget target)
+			@Override
+			public void submitSuccess(AjaxRequestTarget target)
 			{
-				// setResult("Modal window 2 - close button");
-				return true;
+				merchantModal.close(target);
+				target.add(MerchantsPage.this);
 			}
-		});
 
-		merchantModal.setWindowClosedCallback(new ModalWindow.WindowClosedCallback()
-		{
-			private static final long serialVersionUID = 8961311909740932319L;
-
-			public void onClose(AjaxRequestTarget target)
+			@Override
+			public void submitFailure(AjaxRequestTarget target)
 			{
-				// target.addComponent(result);
+
 			}
-		});
+		};
+
+		final MerchantPanel merchantPanel = new MerchantPanel(merchantModal.getContentId(), callback);
+
+		merchantModal.setContent(merchantPanel);
 
 		add(new AjaxLink<Void>("merchantLink")
 		{
@@ -80,6 +79,8 @@ public class MerchantsPage extends BasePage
 			@Override
 			public void onClick(AjaxRequestTarget target)
 			{
+				getSession().getFeedbackMessages().clear();
+				merchantModal.setContent(new MerchantPanel(merchantModal.getContentId(), callback));
 				merchantModal.show(target);
 			}
 		});
@@ -116,5 +117,12 @@ public class MerchantsPage extends BasePage
 
 		add(mechants);
 
+	}
+
+	@Override
+	protected void setHeaders(WebResponse response)
+	{
+		// TODO Auto-generated method stub
+		super.setHeaders(response);
 	}
 }
