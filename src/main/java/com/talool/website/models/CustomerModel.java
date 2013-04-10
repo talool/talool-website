@@ -22,8 +22,6 @@ public class CustomerModel extends LoadableDetachableModel<Customer>
 
 	private Long customerId;
 
-	private Customer customer;
-
 	public CustomerModel(final Long customerId)
 	{
 		this.customerId = customerId;
@@ -33,10 +31,7 @@ public class CustomerModel extends LoadableDetachableModel<Customer>
 	protected Customer load()
 	{
 
-		if (customer != null)
-		{
-			return customer;
-		}
+		Customer customer = null;
 
 		try
 		{

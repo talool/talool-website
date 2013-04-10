@@ -71,7 +71,9 @@ public class CustomerPanel extends BasePanel {
 		form.add(new TextField<String>("email").setRequired(true));
 		// validate the passwords match
 		FormComponent<String> pw1 = new PasswordTextField("password").setRequired(true);
-		FormComponent<String> pw2 = new PasswordTextField("confirm").setRequired(true);
+		PasswordModel confirmModel = new PasswordModel();
+		confirmModel.setPassword(cModel.getObject().getPassword());
+		FormComponent<String> pw2 = new PasswordTextField("confirm",confirmModel).setRequired(true);
 		EqualPasswordInputValidator pwv = new EqualPasswordInputValidator(pw1,pw2);
 		form.add(pw1);
 		form.add(pw2);
@@ -119,6 +121,23 @@ public class CustomerPanel extends BasePanel {
 			}
 
 		});
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private class PasswordModel extends Model {
+
+		private static final long serialVersionUID = 4382728555047201756L;
+		public String password = null;
+
+		@SuppressWarnings("unused")
+		public String getPassword() {
+			return password;
+		}
+
+		public void setPassword(String password) {
+			this.password = password;
+		}
+		
 	}
 
 }
