@@ -21,8 +21,6 @@ public class MerchantModel extends LoadableDetachableModel<Merchant>
 
 	private Long merchantId;
 
-	private Merchant merchant;
-
 	public MerchantModel(final Long merchantId)
 	{
 		this.merchantId = merchantId;
@@ -31,11 +29,7 @@ public class MerchantModel extends LoadableDetachableModel<Merchant>
 	@Override
 	protected Merchant load()
 	{
-
-		if (merchant != null)
-		{
-			return merchant;
-		}
+		Merchant merchant = null;
 
 		try
 		{
