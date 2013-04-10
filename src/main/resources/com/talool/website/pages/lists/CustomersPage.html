@@ -9,20 +9,21 @@
     
     <link rel="stylesheet" type="text/css" href="/css/global.css">
     <link rel="stylesheet" type="text/css" href="/css/merchant.css">
+    <link rel="stylesheet" type="text/css" href="/css/newmerchant.css">
 
   </head>
   
   <body>
   	<div wicket:id="adminMenuPanel"></div>
   	<div class="content">
-  		<!-- CUSTOMER LIST PANEL -->
+  		<div wicket:id="feedback"/>
+
 	  	<div class="actions">
-	  		<wicket:link>
-			  	<a href="../define/CustomerPage.html">
-			  		<button>Create New Customer</button>
-			    </a>
-		    </wicket:link>
+		  	<a  wicket:id="customerLink">
+		  		<button>Create New Customer</button>
+		    </a>
 	  	</div>
+	  	
 	  	<h2>Customers</h2>
 	  	<table>
 	  		<thead>
@@ -48,6 +49,7 @@
 	  			</tr>
 	  		</tbody>
 	  	</table>
+	  	<div wicket:id="modal"/>
   	</div>
   </body>
 </html>

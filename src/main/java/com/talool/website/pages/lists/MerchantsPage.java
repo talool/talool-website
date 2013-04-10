@@ -15,7 +15,7 @@ import com.talool.core.Merchant;
 import com.talool.website.models.MerchantListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminMenuPanel;
-import com.talool.website.panel.MerchantModalWindow;
+import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.MerchantPanel;
 import com.talool.website.panel.NiceFeedbackPanel;
 import com.talool.website.panel.SubmitCallBack;
@@ -48,8 +48,8 @@ public class MerchantsPage extends BasePage
 
 		add(feedback.setOutputMarkupId(true));
 
-		final MerchantModalWindow merchantModal;
-		add(merchantModal = new MerchantModalWindow("modal"));
+		final AdminModalWindow merchantModal;
+		add(merchantModal = new AdminModalWindow("modal"));
 
 		final SubmitCallBack callback = new SubmitCallBack()
 		{

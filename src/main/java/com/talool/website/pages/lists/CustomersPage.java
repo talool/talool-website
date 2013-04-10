@@ -1,6 +1,8 @@
 package com.talool.website.pages.lists;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -11,8 +13,11 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import com.talool.core.Customer;
 import com.talool.website.models.CustomerListModel;
 import com.talool.website.pages.BasePage;
-import com.talool.website.pages.define.CustomerPage;
 import com.talool.website.panel.AdminMenuPanel;
+import com.talool.website.panel.AdminModalWindow;
+import com.talool.website.panel.CustomerPanel;
+import com.talool.website.panel.NiceFeedbackPanel;
+import com.talool.website.panel.SubmitCallBack;
 
 public class CustomersPage extends BasePage {
 	
@@ -32,6 +37,47 @@ public class CustomersPage extends BasePage {
 	protected void onInitialize()
 	{
 		super.onInitialize();
+		
+		final NiceFeedbackPanel feedback = new NiceFeedbackPanel("feedback");
+		add(feedback.setOutputMarkupId(true));
+		
+		final AdminModalWindow customerModal;
+		add(customerModal = new AdminModalWindow("modal"));
+		
+		final SubmitCallBack callback = new SubmitCallBack()
+		{
+			private static final long serialVersionUID = -1459177645080455211L;
+
+			@Override
+			public void submitSuccess(AjaxRequestTarget target)
+			{
+				customerModal.close(target);
+				target.add(CustomersPage.this);
+			}
+
+			@Override
+			public void submitFailure(AjaxRequestTarget target)
+			{
+
+			}
+		};
+		
+		final CustomerPanel customerPanel = new CustomerPanel(customerModal.getContentId(), callback);
+		customerModal.setContent(customerPanel);
+		
+		add(new AjaxLink<Void>("customerLink")
+				{
+					private static final long serialVersionUID = 8539856864609166L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target)
+					{
+						getSession().getFeedbackMessages().clear();
+						customerModal.setTitle("Create Customer");
+						customerModal.setContent(new CustomerPanel(customerModal.getContentId(), callback));
+						customerModal.show(target);
+					}
+				});
 
 		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
 		
@@ -43,7 +89,7 @@ public class CustomersPage extends BasePage {
 			@Override
 			protected void populateItem(ListItem<Customer> item)
 			{
-				Customer customer = item.getModelObject();
+				final Customer customer = item.getModelObject();
 
 				item.setModel(new CompoundPropertyModel<Customer>(customer));
 
@@ -60,10 +106,22 @@ public class CustomersPage extends BasePage {
 				item.add(new Label("lastName"));
 				item.add(new Label("email"));
 				
-				PageParameters editParams = new PageParameters();
-				editParams.set("id", customer.getId());
-				BookmarkablePageLink<Void> editLink = new BookmarkablePageLink<Void>("editLink",CustomerPage.class,editParams);
-				item.add(editLink);
+				item.add(new AjaxLink<Void>("editLink")
+					{
+
+						private static final long serialVersionUID = 8817599057544892359L;
+
+						@Override
+						public void onClick(AjaxRequestTarget target)
+						{
+							getSession().getFeedbackMessages().clear();
+							CustomerPanel panel = new CustomerPanel(customerModal.getContentId(), callback);
+							panel.setCustomer(customer);
+							customerModal.setContent(panel);
+							customerModal.setTitle("Edit Customer");
+							customerModal.show(target);
+						}
+					});
 				
 				// TODO change the link to point to a deal offer purchase list
 				PageParameters booksParams = new PageParameters();

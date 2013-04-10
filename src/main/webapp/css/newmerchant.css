@@ -76,3 +76,18 @@ optgroup {
 optgroup option {
 	color: black;
 }
+.radioGroupContainer {
+	margin: 15px 0 0;
+}
+.radioGroup {
+	display: inline-block;
+	margin: 5px 0 0 0;
+}
+.radioGroup input {
+	width: auto;
+	margin-right: 5px;
+}
+.radioGroup label {
+	width: auto;
+	margin: 0 15px 0 0;
+}

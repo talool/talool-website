@@ -3,12 +3,12 @@ package com.talool.website.panel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 
-public class MerchantModalWindow extends ModalWindow
+public class AdminModalWindow extends ModalWindow
 {
 
 	private static final long serialVersionUID = 1L;
 
-	public MerchantModalWindow(String id)
+	public AdminModalWindow(String id)
 	{
 		super(id);
 		this.setInitialWidth(840);
@@ -17,7 +17,7 @@ public class MerchantModalWindow extends ModalWindow
 		this.setResizable(false);
 		this.setCssClassName(ModalWindow.CSS_CLASS_GRAY);
 		
-		this.setTitle("Create Merchant");
+		this.setTitle("Crud");
 
 		this.setCookieName("merch-modal");
 
