@@ -1,5 +1,8 @@
 package com.talool.website.panel;
 
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
@@ -14,8 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Merchant;
+import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
 import com.talool.website.models.MerchantModel;
+import com.talool.website.models.ModelUtil;
 
 /**
  * 
@@ -53,6 +58,17 @@ public class MerchantPanel extends BasePanel
 		super(id);
 		this.callback = callback;
 		setDefaultModel(new MerchantModel(merchantId));
+	}
+
+	public String getTags()
+	{
+		final Merchant merch = (Merchant) getDefaultModelObject();
+		return ModelUtil.getCommaSeperatedTags(merch);
+	}
+
+	public void setTags(String tags)
+	{
+		this.tags = tags;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -99,7 +115,19 @@ public class MerchantPanel extends BasePanel
 
 				try
 				{
+
 					Merchant merchant = (Merchant) form.getDefaultModelObject();
+
+					if (StringUtils.isNotEmpty(tags))
+					{
+						Set<Tag> selectedTags = taloolService.getOrCreateTags(tags.split(","));
+						merchant.setTags(selectedTags);
+					}
+					else
+					{
+						merchant.clearTags();
+					}
+
 					taloolService.save(merchant);
 					target.add(feedback);
 					sb.append("Successfully ").append(isNew ? "created '" : "updated '")

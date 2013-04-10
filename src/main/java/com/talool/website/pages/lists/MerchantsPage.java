@@ -13,6 +13,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.Merchant;
 import com.talool.website.models.MerchantListModel;
+import com.talool.website.models.ModelUtil;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminMenuPanel;
 import com.talool.website.panel.MerchantModalWindow;
@@ -114,6 +115,9 @@ public class MerchantsPage extends BasePage
 				item.add(new Label("name"));
 				item.add(new Label("primaryLocation.address.niceCityState"));
 				item.add(new Label("accounts", merchant.getNumberOfMerchantAccounts()));
+
+				// TODO - at some point, this tags label can be based on a model
+				item.add(new Label("tags", ModelUtil.geTagSummary(merchant)));
 
 				item.add(new AjaxLink<Void>("editLink")
 				{
