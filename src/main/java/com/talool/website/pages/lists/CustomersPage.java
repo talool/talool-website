@@ -46,7 +46,8 @@ public class CustomersPage extends BasePage {
 		
 		final SubmitCallBack callback = new SubmitCallBack()
 		{
-			private static final long serialVersionUID = -1459177645080455211L;
+
+			private static final long serialVersionUID = -3623444036634424930L;
 
 			@Override
 			public void submitSuccess(AjaxRequestTarget target)
@@ -66,18 +67,19 @@ public class CustomersPage extends BasePage {
 		customerModal.setContent(customerPanel);
 		
 		add(new AjaxLink<Void>("customerLink")
-				{
-					private static final long serialVersionUID = 8539856864609166L;
+		{
 
-					@Override
-					public void onClick(AjaxRequestTarget target)
-					{
-						getSession().getFeedbackMessages().clear();
-						customerModal.setTitle("Create Customer");
-						customerModal.setContent(new CustomerPanel(customerModal.getContentId(), callback));
-						customerModal.show(target);
-					}
-				});
+			private static final long serialVersionUID = -150543962841890063L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				getSession().getFeedbackMessages().clear();
+				customerModal.setTitle("Create Customer");
+				customerModal.setContent(new CustomerPanel(customerModal.getContentId(), callback));
+				customerModal.show(target);
+			}
+		});
 
 		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
 		
@@ -89,8 +91,9 @@ public class CustomersPage extends BasePage {
 			@Override
 			protected void populateItem(ListItem<Customer> item)
 			{
-				final Customer customer = item.getModelObject();
-
+				Customer customer = item.getModelObject();
+				final Long customerId = customer.getId();
+				
 				item.setModel(new CompoundPropertyModel<Customer>(customer));
 
 				if (item.getIndex() % 2 == 0)
@@ -107,21 +110,20 @@ public class CustomersPage extends BasePage {
 				item.add(new Label("email"));
 				
 				item.add(new AjaxLink<Void>("editLink")
+				{
+
+					private static final long serialVersionUID = -4592149231430681542L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target)
 					{
-
-						private static final long serialVersionUID = 8817599057544892359L;
-
-						@Override
-						public void onClick(AjaxRequestTarget target)
-						{
-							getSession().getFeedbackMessages().clear();
-							CustomerPanel panel = new CustomerPanel(customerModal.getContentId(), callback);
-							panel.setCustomer(customer);
-							customerModal.setContent(panel);
-							customerModal.setTitle("Edit Customer");
-							customerModal.show(target);
-						}
-					});
+						getSession().getFeedbackMessages().clear();
+						CustomerPanel panel = new CustomerPanel(customerModal.getContentId(), callback, customerId);
+						customerModal.setContent(panel);
+						customerModal.setTitle("Edit Customer");
+						customerModal.show(target);
+					}
+				});
 				
 				// TODO change the link to point to a deal offer purchase list
 				PageParameters booksParams = new PageParameters();

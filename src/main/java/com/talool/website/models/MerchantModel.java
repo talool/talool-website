@@ -15,7 +15,7 @@ import com.talool.service.ServiceFactory;
  */
 public class MerchantModel extends LoadableDetachableModel<Merchant>
 {
-	private static final Logger LOG = LoggerFactory.getLogger(MerchantListModel.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MerchantModel.class);
 
 	private static final long serialVersionUID = -1571731014724589519L;
 
