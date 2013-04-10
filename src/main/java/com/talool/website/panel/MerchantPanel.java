@@ -13,6 +13,8 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -149,15 +151,24 @@ public class MerchantPanel extends BasePanel
 		locationPanel.add(new TextField<String>("primaryLocation.address.address1").setRequired(true));
 
 		locationPanel.add(new TextField<String>("primaryLocation.address.address2"));
+
 		locationPanel.add(new TextField<String>("primaryLocation.address.city").setRequired(true));
+
 		locationPanel.add(new TextField<String>("primaryLocation.address.stateProvinceCounty")
 				.setRequired(true));
+
 		locationPanel.add(new TextField<String>("primaryLocation.address.zip").setRequired(true));
+
 		locationPanel.add(new TextField<String>("primaryLocation.address.country").setRequired(true));
+
 		locationPanel.add(new TextField<String>("primaryLocation.locationName"));
+
 		locationPanel.add(new TextField<String>("primaryLocation.phone").setRequired(true));
-		locationPanel.add(new TextField<String>("primaryLocation.email").setRequired(true));
-		locationPanel.add(new TextField<String>("primaryLocation.websiteUrl"));
+
+		locationPanel.add(new TextField<String>("primaryLocation.email").setRequired(true).add(
+				EmailAddressValidator.getInstance()));
+
+		locationPanel.add(new TextField<String>("primaryLocation.websiteUrl").add(new UrlValidator()));
 
 	}
 }
