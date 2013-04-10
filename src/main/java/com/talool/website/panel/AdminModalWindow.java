@@ -12,14 +12,13 @@ public class AdminModalWindow extends ModalWindow
 	{
 		super(id);
 		this.setInitialWidth(840);
-		this.setInitialHeight(400);
 		this.setAutoSize(true);
 		this.setResizable(false);
 		this.setCssClassName(ModalWindow.CSS_CLASS_GRAY);
 		
 		this.setTitle("Crud");
 
-		this.setCookieName("merch-modal");
+		this.setCookieName(null);
 
 		this.setCloseButtonCallback(new ModalWindow.CloseButtonCallback()
 		{
