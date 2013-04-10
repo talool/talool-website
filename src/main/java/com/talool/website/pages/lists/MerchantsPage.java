@@ -97,7 +97,8 @@ public class MerchantsPage extends BasePage
 			@Override
 			protected void populateItem(ListItem<Merchant> item)
 			{
-				final Merchant merchant = item.getModelObject();
+				Merchant merchant = item.getModelObject();
+				final Long merchantId = merchant.getId();
 
 				item.setModel(new CompoundPropertyModel<Merchant>(merchant));
 
@@ -113,7 +114,7 @@ public class MerchantsPage extends BasePage
 				item.add(new Label("name"));
 				item.add(new Label("primaryLocation.address.niceCityState"));
 				item.add(new Label("accounts", merchant.getNumberOfMerchantAccounts()));
-				
+
 				item.add(new AjaxLink<Void>("editLink")
 				{
 
@@ -123,24 +124,26 @@ public class MerchantsPage extends BasePage
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						MerchantPanel panel = new MerchantPanel(merchantModal.getContentId(), callback);
-						panel.setMerchant(merchant);
+						MerchantPanel panel = new MerchantPanel(merchantModal.getContentId(), callback,
+								merchantId);
 						merchantModal.setContent(panel);
 						merchantModal.setTitle("Edit Merchant");
 						merchantModal.show(target);
 					}
 				});
-				
+
 				PageParameters booksParams = new PageParameters();
 				booksParams.set("method", DealsPage.METHOD_MERCHANT);
 				booksParams.set("id", merchant.getId());
-				BookmarkablePageLink<Void> booksLink = new BookmarkablePageLink<Void>("booksLink",BooksPage.class,booksParams);
+				BookmarkablePageLink<Void> booksLink = new BookmarkablePageLink<Void>("booksLink",
+						BooksPage.class, booksParams);
 				item.add(booksLink);
-				
+
 				PageParameters dealsParams = new PageParameters();
 				dealsParams.set("method", DealsPage.METHOD_MERCHANT);
 				dealsParams.set("id", merchant.getId());
-				BookmarkablePageLink<Void> dealsLink = new BookmarkablePageLink<Void>("dealsLink",DealsPage.class,dealsParams);
+				BookmarkablePageLink<Void> dealsLink = new BookmarkablePageLink<Void>("dealsLink",
+						DealsPage.class, dealsParams);
 				item.add(dealsLink);
 			}
 
