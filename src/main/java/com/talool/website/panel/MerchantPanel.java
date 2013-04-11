@@ -57,6 +57,11 @@ public class MerchantPanel extends BasePanel
 	public StateOption getStateOption()
 	{
 		final Merchant merch = (Merchant) getDefaultModelObject();
+		if (merch.getPrimaryLocation().getAddress().getStateProvinceCounty() == null)
+		{
+			return null;
+		}
+
 		return StateDropDownChoice.getStateOptionByCode(merch.getPrimaryLocation().getAddress()
 				.getStateProvinceCounty());
 
