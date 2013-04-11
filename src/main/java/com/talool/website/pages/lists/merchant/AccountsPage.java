@@ -78,7 +78,7 @@ public class AccountsPage extends BasePage {
 			}
 		};
 
-		final MerchantAccountPanel accountPanel = new MerchantAccountPanel(accountModal.getContentId(), callback, merchant);
+		final MerchantAccountPanel accountPanel = new MerchantAccountPanel(accountModal.getContentId(), _merchantId, callback);
 		accountModal.setContent(accountPanel);
 		add(new AjaxLink<Void>("accountLink")
 		{
@@ -90,7 +90,7 @@ public class AccountsPage extends BasePage {
 			{
 				getSession().getFeedbackMessages().clear();
 				accountModal.setTitle("Create Merchant Account");
-				accountModal.setContent(accountPanel);
+				accountModal.setContent(new MerchantAccountPanel(accountModal.getContentId(), _merchantId, callback));
 				accountModal.show(target);
 			}
 		});

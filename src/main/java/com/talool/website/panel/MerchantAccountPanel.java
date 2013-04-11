@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
 import com.talool.core.service.ServiceException;
+import com.talool.service.ServiceFactory;
 import com.talool.website.models.MerchantAccountModel;
 
 /**
@@ -45,10 +46,17 @@ public class MerchantAccountPanel extends BasePanel
 		this.confirm = confirm;
 	}
 
-	public MerchantAccountPanel(final String id, final SubmitCallBack callback, final Merchant merchant)
+	public MerchantAccountPanel(final String id, final Long merchantId, final SubmitCallBack callback)
 	{
 		super(id);
 		this.callback = callback;
+		
+		Merchant merchant = null;
+		try {
+			merchant = ServiceFactory.get().getTaloolService().getMerchantById(merchantId);
+		} catch (ServiceException se) {
+			LOG.error("problem loading merchant", se);
+		}
 
 		MerchantAccount account = domainFactory.newMerchantAccount(merchant);
 		isNew = true;
