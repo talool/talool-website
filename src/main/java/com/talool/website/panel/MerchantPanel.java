@@ -21,6 +21,8 @@ import org.slf4j.LoggerFactory;
 import com.talool.core.Merchant;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
+import com.talool.website.component.StateDropDownChoice;
+import com.talool.website.component.StateOption;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.models.ModelUtil;
 
@@ -35,11 +37,8 @@ public class MerchantPanel extends BasePanel
 	private static final long serialVersionUID = -8074065320919062316L;
 
 	private String tags;
-
 	private ModalWindow window;
-
 	private SubmitCallBack callback;
-
 	private boolean isNew = false;
 
 	public MerchantPanel(final String id, final SubmitCallBack callback)
@@ -53,6 +52,20 @@ public class MerchantPanel extends BasePanel
 		merchant.getPrimaryLocation().setLogoUrl("");
 		isNew = true;
 		setDefaultModel(Model.of(merchant));
+	}
+
+	public StateOption getStateOption()
+	{
+		final Merchant merch = (Merchant) getDefaultModelObject();
+		return StateDropDownChoice.getStateOptionByCode(merch.getPrimaryLocation().getAddress()
+				.getStateProvinceCounty());
+
+	}
+
+	public void setStateOption(final StateOption stateOption)
+	{
+		final Merchant merch = (Merchant) getDefaultModelObject();
+		merch.getPrimaryLocation().getAddress().setStateProvinceCounty(stateOption.getCode());
 	}
 
 	public MerchantPanel(final String id, final SubmitCallBack callback, final Long merchantId)
@@ -117,7 +130,6 @@ public class MerchantPanel extends BasePanel
 
 				try
 				{
-
 					Merchant merchant = (Merchant) form.getDefaultModelObject();
 
 					if (StringUtils.isNotEmpty(tags))
@@ -154,8 +166,8 @@ public class MerchantPanel extends BasePanel
 
 		locationPanel.add(new TextField<String>("primaryLocation.address.city").setRequired(true));
 
-		locationPanel.add(new TextField<String>("primaryLocation.address.stateProvinceCounty")
-				.setRequired(true));
+		locationPanel.add(new StateDropDownChoice("primaryLocation.address.stateProvinceCounty",
+				new PropertyModel<StateOption>(this, "stateOption")).setRequired(true));
 
 		locationPanel.add(new TextField<String>("primaryLocation.address.zip").setRequired(true));
 
