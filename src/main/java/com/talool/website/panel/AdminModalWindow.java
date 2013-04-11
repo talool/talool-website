@@ -11,8 +11,8 @@ public class AdminModalWindow extends ModalWindow
 	public AdminModalWindow(String id)
 	{
 		super(id);
-		this.setInitialWidth(840);
 		this.setAutoSize(true);
+		this.setInitialWidth(840);
 		this.setResizable(false);
 		this.setCssClassName(ModalWindow.CSS_CLASS_GRAY);
 		

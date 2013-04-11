@@ -15,6 +15,9 @@ import com.talool.core.Merchant;
 import com.talool.website.models.MerchantListModel;
 import com.talool.website.models.ModelUtil;
 import com.talool.website.pages.BasePage;
+import com.talool.website.pages.lists.merchant.AccountsPage;
+import com.talool.website.pages.lists.merchant.LocationsPage;
+import com.talool.website.pages.lists.merchant.MerchantBooksPage;
 import com.talool.website.panel.AdminMenuPanel;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.MerchantPanel;
@@ -137,10 +140,9 @@ public class MerchantsPage extends BasePage
 				});
 
 				PageParameters booksParams = new PageParameters();
-				booksParams.set("method", DealsPage.METHOD_MERCHANT);
 				booksParams.set("id", merchant.getId());
 				BookmarkablePageLink<Void> booksLink = new BookmarkablePageLink<Void>("booksLink",
-						BooksPage.class, booksParams);
+						MerchantBooksPage.class, booksParams);
 				item.add(booksLink);
 
 				PageParameters dealsParams = new PageParameters();
@@ -149,6 +151,18 @@ public class MerchantsPage extends BasePage
 				BookmarkablePageLink<Void> dealsLink = new BookmarkablePageLink<Void>("dealsLink",
 						DealsPage.class, dealsParams);
 				item.add(dealsLink);
+				
+				PageParameters locationsParams = new PageParameters();
+				locationsParams.set("id", merchant.getId());
+				BookmarkablePageLink<Void> locationsLink = new BookmarkablePageLink<Void>("locationsLink",
+						LocationsPage.class, locationsParams);
+				item.add(locationsLink);
+				
+				PageParameters accountsParams = new PageParameters();
+				accountsParams.set("id", merchant.getId());
+				BookmarkablePageLink<Void> accountsLink = new BookmarkablePageLink<Void>("accountsLink",
+						AccountsPage.class, accountsParams);
+				item.add(accountsLink);
 			}
 
 		};

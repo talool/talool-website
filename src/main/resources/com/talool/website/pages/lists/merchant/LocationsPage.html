@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>MerchantPage.html</title>
+    <title>Merchant Locations</title>
 	
     <meta name="keywords" content="keyword1,keyword2,keyword3">
     <meta name="description" content="this is my page">
@@ -14,45 +14,48 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
      <script>Wicket.Window.unloadConfirmation = false;</script>
+
   </head>
   
   <body>
-
   	<div wicket:id="adminMenuPanel"></div>
   	<div class="content">
   		<div wicket:id="feedback"/>
+  		<!-- MERCHANT LOCATION LIST PANEL -->
 	  	<div class="actions">
-	  	<a wicket:id="merchantLink"><button>Create New Merchant</button></a>
+		  	<a wicket:id="locationLink" href="#">
+		  		<button>Create New Location</button>
+		    </a>
 	  	</div>
-	  	<h2>Merchants</h2>
+	  	<h2 wicket:id="pageTitle">Deal Books</h2>
 	  	<table>
 	  		<thead>
 	  			<tr>
 	  				<th>Name</th>
-	  				<th>Tag(s)</th>
-	  				<th>Location(s)</th>
-	  				<th>Admins</th>
+	  				<th>Email</th>
+	  				<th>Website</th>
+	  				<th>Phone</th>
+	  				<th>City</th>
+	  				<th>State</th>
 	  				<th>Actions</th>
 	  			</tr>
 	  		</thead>
 	  		<tbody>
-	  			<tr class="odd" wicket:id="merchRptr">
-	  				<td wicket:id="name">The Kitchen</td>
-	  				<td wicket:id="tags">Fine Dining</td>
-					<td wicket:id="primaryLocation.address.niceCityState">Boulder, Denver</td>
-	  				<td wicket:id="accounts">0</td>
+	  			<tr class="odd" wicket:id="locationRptr">
+	  				<td wicket:id="locationName">North Boulder</td>
+	  				<td wicket:id="email">name@website.com</td>
+	  				<td wicket:id="websiteUrl">http://www.website.com</td>
+	  				<td wicket:id="phone">111-222-3333</td>
+	  				<td wicket:id="address.city">Boulder</td>
+	  				<td wicket:id="address.stateProvinceCounty">Colorado</td>
 	  				<td>
-	  					<a wicket:id="editLink" href="../define/MerchantPage.html" class="edit">Edit</a> | 
-	  					<a wicket:id="dealsLink" href="DealsPage.html" class="deals">Deals</a> | 
-	  					<a wicket:id="booksLink" href="BooksPage.html" class="books">Deal Offers</a> | 
-	  					<a wicket:id="locationsLink" href="#" class="locations">Locations</a> | 
-	  					<a wicket:id="accountsLink" href="#" class="accounts">Accounts</a> | 
+	  					<a wicket:id="editLink" href="#" class="edit">Edit</a> | 
 	  					<a href="#" class="delete">Delete</a>
 	  				</td>
 	  			</tr>
 	  		</tbody>
 	  	</table>
 	  	<div wicket:id="modal"/>
-    </div>
+  	</div>
   </body>
 </html>

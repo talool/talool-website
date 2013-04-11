@@ -22,6 +22,9 @@ import com.talool.website.pages.lists.CustomersPage;
 import com.talool.website.pages.lists.DealsPage;
 import com.talool.website.pages.lists.FriendsPage;
 import com.talool.website.pages.lists.MerchantsPage;
+import com.talool.website.pages.lists.merchant.AccountsPage;
+import com.talool.website.pages.lists.merchant.LocationsPage;
+import com.talool.website.pages.lists.merchant.MerchantBooksPage;
 
 /**
  * @author clintz
@@ -64,15 +67,18 @@ public class TaloolApplication extends WebApplication implements Serializable
 
 		getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
 
-		mountPage("/admin/merchants", MerchantsPage.class);
-		mountPage("/admin/merchant/#{id}", MerchantPage.class);
+		mountPage("/admin/books", BooksPage.class);
 		mountPage("/admin/customers", CustomersPage.class);
 		mountPage("/admin/customer/#{id}", CustomerPage.class);
-		mountPage("/admin/deals/${method}/${id}", DealsPage.class);
-		mountPage("/admin/deal/#{id}", DealPage.class);
-		mountPage("/admin/books/${method}/#{id}", BooksPage.class);
-		mountPage("/admin/book/#{id}", BookPage.class);
-		mountPage("/admin/friends/${id}", FriendsPage.class);
+		mountPage("/admin/customer/${id}/friends", FriendsPage.class);
+		mountPage("/admin/merchants", MerchantsPage.class);
+		mountPage("/admin/merchant/#{id}", MerchantPage.class);
+		mountPage("/admin/merchant/${id}/books", MerchantBooksPage.class);
+		mountPage("/admin/merchant/${id}/book/#{bookId}", BookPage.class);
+		mountPage("/admin/merchant/${id}/accounts", AccountsPage.class);
+		mountPage("/admin/merchant/${id}/locations", LocationsPage.class);
+		mountPage("/admin/${method}/${id}/deals", DealsPage.class);
+		mountPage("/admin/merchant/${id}/deal/#{dealId}", DealPage.class);
 
 		/*
 		 * We need a ONE_PASS_RENDER strategy because pages like search need

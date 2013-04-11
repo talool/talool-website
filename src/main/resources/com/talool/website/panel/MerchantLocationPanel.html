@@ -1,0 +1,39 @@
+<wicket:panel>
+	<div>
+	  	<!-- NEW MERCHANT PANEL -->
+	  	<div class="newMerchant">
+			<div wicket:id="feedback"/>
+			<form wicket:id="form">
+				<div = wicket:id="locationPanel">
+					<div class="panel locationPanel left">
+						<h3>Address</h3>
+						<fieldset>
+						    <div><label>Address1</label><input wicket:id="address.address1" name="address1" type="text"/></div>
+						    <div><label>Address2</label><input wicket:id="address.address2" name="address2" type="text"/></div>
+						    <div><label>City</label><input wicket:id="address.city" name="city" type="text"/></div>
+						    <div><label>State</label><input wicket:id="address.stateProvinceCounty" name="state_province_county" type="text"/></div>
+						    <div><label>Zip</label><input wicket:id="address.zip"  name="zip" type="text"/></div>
+						    <div><label>Country</label><input wicket:id="address.country"  name="country" type="text"/></div>
+					    </fieldset>
+					</div>
+					
+					<div class="panel locationPanel right">
+						<h3>Additional Information</h3>
+						<fieldset>
+							<div><label>Location Name</label><input wicket:id="locationName" name="merchant_location_name"/></div>
+							<div><label>Phone</label><input wicket:id="phone"  name="phone" type="text"/></div>
+					    	<div><label>Email</label><input wicket:id="email"  name="email" type="text"/></div>
+					    	<div><label>Website</label><input wicket:id="websiteUrl"  name="web_url" type="text"/></div>
+					    	<div><label>Logo</label><input name="phone" type="file"/></div>
+					    </fieldset>
+					</div>
+				</div>
+		
+				<div class="controls">
+					<input type="submit" wicket:id="submitButton" value="Save Merchant Location" class="big">
+				</div>
+			
+			</form>
+		</div>	
+	</div>
+</wicket:panel>

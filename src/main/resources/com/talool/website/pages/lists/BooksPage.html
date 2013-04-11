@@ -18,11 +18,9 @@
   	
   		<!-- BOOK LIST PANEL -->
 	  	<div class="actions">
-		  	<wicket:link>
-			  	<a href="/admin/book">
-			  		<button>Create New Book</button>
-			    </a>
-		    </wicket:link>
+		  	<a wicket:id="createLink" href="/admin/book">
+		  		<button>Create New Book</button>
+		    </a>
 	  	</div>
 	  	<h2 wicket:id="pageTitle">Deal Books</h2>
 	  	<table>

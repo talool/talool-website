@@ -7,14 +7,8 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.StringValue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.talool.core.DealOffer;
-import com.talool.core.Merchant;
-import com.talool.core.service.ServiceException;
-import com.talool.service.ServiceFactory;
 import com.talool.website.models.DealOfferListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.define.BookPage;
@@ -23,26 +17,32 @@ import com.talool.website.panel.AdminMenuPanel;
 public class BooksPage extends BasePage {
 	
 	private static final long serialVersionUID = 4465255303084700956L;
-	private static final Logger LOG = LoggerFactory.getLogger(BooksPage.class);
-	private String _method;
-	private Long _id;
-	
-	public static final String METHOD_MERCHANT = "merchant";
-	public static final String METHOD_ALL = "all";
 
 	public BooksPage()
 	{
 		super();
 	}
-
+	
 	public BooksPage(PageParameters parameters)
 	{
 		super(parameters);
-		_method = parameters.get("method").toString();
-		StringValue id = parameters.get("id");
-		if (!id.isNull()) {
-			_id = parameters.get("id").toLongObject();
-		}
+	}
+	
+	public DealOfferListModel getDealOfferListModel()
+	{
+		return new DealOfferListModel();
+	}
+	
+	public String getPageTitle()
+	{
+		return new String("Deal Offers");
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public BookmarkablePageLink getCreateLink() {
+		BookmarkablePageLink<Void> link = new BookmarkablePageLink<Void>("createLink",BooksPage.class);
+		link.setVisible(false);
+		return link;
 	}
 	
 	@Override
@@ -51,22 +51,10 @@ public class BooksPage extends BasePage {
 		super.onInitialize();
 
 		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
+		add(new Label("pageTitle",getPageTitle()));
+		add(getCreateLink());
 		
-		StringBuffer pageTitle = new StringBuffer("Deal Books");
-		
-		DealOfferListModel model = new DealOfferListModel();
-		if (_method.equalsIgnoreCase(METHOD_MERCHANT)) {
-			model.setMerchantId(_id);
-			try {
-				Merchant merchant = ServiceFactory.get().getTaloolService().getMerchantById(_id);
-				pageTitle.append(" for ").append(merchant.getName());
-			} catch (ServiceException se) {
-				LOG.error("problem loading merchant", se);
-			}
-		}
-		
-		add(new Label("pageTitle",pageTitle.toString()));
-		
+		DealOfferListModel model = getDealOfferListModel();
 		final ListView<DealOffer> books = new ListView<DealOffer>("bookRptr", model)
 		{
 

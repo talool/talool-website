@@ -39,7 +39,7 @@ public class CustomerModel extends LoadableDetachableModel<Customer>
 		}
 		catch (ServiceException e)
 		{
-			LOG.error("problem loading merchant", e);
+			LOG.error("problem loading customer", e);
 		}
 
 		return customer;
