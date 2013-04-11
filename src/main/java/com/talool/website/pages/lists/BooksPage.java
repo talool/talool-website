@@ -12,48 +12,48 @@ import com.talool.core.DealOffer;
 import com.talool.website.models.DealOfferListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.define.BookPage;
-import com.talool.website.panel.AdminMenuPanel;
 
-public class BooksPage extends BasePage {
-	
+public class BooksPage extends BasePage
+{
+
 	private static final long serialVersionUID = 4465255303084700956L;
 
 	public BooksPage()
 	{
 		super();
 	}
-	
+
 	public BooksPage(PageParameters parameters)
 	{
 		super(parameters);
 	}
-	
+
 	public DealOfferListModel getDealOfferListModel()
 	{
 		return new DealOfferListModel();
 	}
-	
+
 	public String getPageTitle()
 	{
 		return new String("Deal Offers");
 	}
-	
+
 	@SuppressWarnings("rawtypes")
-	public BookmarkablePageLink getCreateLink() {
-		BookmarkablePageLink<Void> link = new BookmarkablePageLink<Void>("createLink",BooksPage.class);
+	public BookmarkablePageLink getCreateLink()
+	{
+		BookmarkablePageLink<Void> link = new BookmarkablePageLink<Void>("createLink", BooksPage.class);
 		link.setVisible(false);
 		return link;
 	}
-	
+
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
 
-		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
-		add(new Label("pageTitle",getPageTitle()));
+		add(new Label("pageTitle", getPageTitle()));
 		add(getCreateLink());
-		
+
 		DealOfferListModel model = getDealOfferListModel();
 		final ListView<DealOffer> books = new ListView<DealOffer>("bookRptr", model)
 		{
@@ -82,24 +82,26 @@ public class BooksPage extends BasePage {
 				item.add(new Label("isActive"));
 				item.add(new Label("expires"));
 				item.add(new Label("purchaces", 10));
-				//item.add(new Label("purchaces", book.getNumberOfPurchases()));
-				
+				// item.add(new Label("purchaces", book.getNumberOfPurchases()));
+
 				PageParameters editParams = new PageParameters();
 				editParams.set("id", book.getId());
-				BookmarkablePageLink<Void> editLink = new BookmarkablePageLink<Void>("editLink",BookPage.class,editParams);
+				BookmarkablePageLink<Void> editLink = new BookmarkablePageLink<Void>("editLink",
+						BookPage.class, editParams);
 				item.add(editLink);
-				
+
 				PageParameters dealsParams = new PageParameters();
 				dealsParams.set("method", DealsPage.METHOD_BOOK);
 				dealsParams.set("id", book.getId());
-				BookmarkablePageLink<Void> dealsLink = new BookmarkablePageLink<Void>("dealsLink",DealsPage.class,dealsParams);
+				BookmarkablePageLink<Void> dealsLink = new BookmarkablePageLink<Void>("dealsLink",
+						DealsPage.class, dealsParams);
 				item.add(dealsLink);
 			}
 
 		};
 
 		add(books);
-		
+
 	}
 
 }

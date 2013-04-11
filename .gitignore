@@ -10,3 +10,4 @@ bin*
 target*
 *.classpath
 *.mymetadata
+*.DS_Store

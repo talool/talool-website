@@ -11,13 +11,12 @@ import org.slf4j.LoggerFactory;
 
 import com.talool.core.Customer;
 import com.talool.core.service.ServiceException;
-import com.talool.service.ServiceFactory;
 import com.talool.website.models.FriendListModel;
 import com.talool.website.pages.BasePage;
-import com.talool.website.panel.AdminMenuPanel;
 
-public class FriendsPage extends BasePage {
-	
+public class FriendsPage extends BasePage
+{
+
 	private static final long serialVersionUID = 3634980968241854373L;
 	private static final Logger LOG = LoggerFactory.getLogger(FriendsPage.class);
 	private Long _customerId;
@@ -32,27 +31,28 @@ public class FriendsPage extends BasePage {
 		super(parameters);
 		_customerId = parameters.get("id").toLongObject();
 	}
-	
+
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
 
-		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
-		
-		StringBuffer pageTitle = new StringBuffer("Friends of ");
+		StringBuilder pageTitle = new StringBuilder("Friends of ");
 		FriendListModel model = new FriendListModel();
-		
-		try {
-			Customer customer = ServiceFactory.get().getTaloolService().getCustomerById(_customerId);
+
+		try
+		{
+			Customer customer = taloolService.getCustomerById(_customerId);
 			pageTitle.append(customer.getFirstName()).append(" ").append(customer.getLastName());
 			model.setCustomerId(customer.getId());
-		} catch (ServiceException se) {
+		}
+		catch (ServiceException se)
+		{
 			LOG.error("problem loading customer", se);
 		}
-		
-		add(new Label("pageTitle",pageTitle.toString()));
-		
+
+		add(new Label("pageTitle", pageTitle.toString()));
+
 		final ListView<Customer> customers = new ListView<Customer>("customerRptr", model)
 		{
 

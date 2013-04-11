@@ -5,9 +5,12 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -15,13 +18,12 @@ import com.talool.core.Merchant;
 import com.talool.website.models.MerchantListModel;
 import com.talool.website.models.ModelUtil;
 import com.talool.website.pages.BasePage;
+import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.pages.lists.merchant.AccountsPage;
 import com.talool.website.pages.lists.merchant.LocationsPage;
 import com.talool.website.pages.lists.merchant.MerchantBooksPage;
-import com.talool.website.panel.AdminMenuPanel;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.MerchantPanel;
-import com.talool.website.panel.NiceFeedbackPanel;
 import com.talool.website.panel.SubmitCallBack;
 
 /**
@@ -47,10 +49,6 @@ public class MerchantsPage extends BasePage
 	protected void onInitialize()
 	{
 		super.onInitialize();
-
-		final NiceFeedbackPanel feedback = new NiceFeedbackPanel("feedback");
-
-		add(feedback.setOutputMarkupId(true));
 
 		final AdminModalWindow merchantModal;
 		add(merchantModal = new AdminModalWindow("modal"));
@@ -91,8 +89,6 @@ public class MerchantsPage extends BasePage
 			}
 		});
 
-		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
-
 		final ListView<Merchant> mechants = new ListView<Merchant>("merchRptr", new MerchantListModel())
 		{
 
@@ -115,7 +111,18 @@ public class MerchantsPage extends BasePage
 					item.add(new AttributeModifier("class", "even"));
 				}
 
-				item.add(new Label("name"));
+				// item.add(new Label("name"));
+
+				PageParameters booksParams = new PageParameters();
+				booksParams.set("id", merchant.getId());
+				booksParams.set("name", merchant.getName());
+
+				String url = (String) urlFor(MerchantManagementPage.class, booksParams);
+				ExternalLink namelLink = new ExternalLink("nameLink", Model.of(url),
+						new PropertyModel<String>(merchant, "name"));
+
+				item.add(namelLink);
+
 				item.add(new Label("primaryLocation.address.niceCityState"));
 				item.add(new Label("accounts", merchant.getNumberOfMerchantAccounts()));
 
@@ -139,8 +146,6 @@ public class MerchantsPage extends BasePage
 					}
 				});
 
-				PageParameters booksParams = new PageParameters();
-				booksParams.set("id", merchant.getId());
 				BookmarkablePageLink<Void> booksLink = new BookmarkablePageLink<Void>("booksLink",
 						MerchantBooksPage.class, booksParams);
 				item.add(booksLink);
@@ -151,13 +156,13 @@ public class MerchantsPage extends BasePage
 				BookmarkablePageLink<Void> dealsLink = new BookmarkablePageLink<Void>("dealsLink",
 						DealsPage.class, dealsParams);
 				item.add(dealsLink);
-				
+
 				PageParameters locationsParams = new PageParameters();
 				locationsParams.set("id", merchant.getId());
 				BookmarkablePageLink<Void> locationsLink = new BookmarkablePageLink<Void>("locationsLink",
 						LocationsPage.class, locationsParams);
 				item.add(locationsLink);
-				
+
 				PageParameters accountsParams = new PageParameters();
 				accountsParams.set("id", merchant.getId());
 				BookmarkablePageLink<Void> accountsLink = new BookmarkablePageLink<Void>("accountsLink",
@@ -174,7 +179,6 @@ public class MerchantsPage extends BasePage
 	@Override
 	protected void setHeaders(WebResponse response)
 	{
-		// TODO Auto-generated method stub
 		super.setHeaders(response);
 	}
 }

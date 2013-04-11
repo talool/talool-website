@@ -1,22 +1,4 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>BookPage.html</title>
-	
-    <meta name="keywords" content="keyword1,keyword2,keyword3">
-    <meta name="description" content="this is my page">
-    <meta name="content-type" content="text/html; charset=UTF-8">
-    
-    <link rel="stylesheet" type="text/css" href="/css/global.css">
-    <link rel="stylesheet" type="text/css" href="/css/merchant.css">
-
-  </head>
-  
-  <body>
-  	<div wicket:id="adminMenuPanel"></div>
-  	<div class="content">
-  	
-  		<!-- BOOK LIST PANEL -->
+<wicket:extend>
 	  	<div class="actions">
 		  	<a wicket:id="createLink" href="/admin/book">
 		  		<button>Create New Book</button>
@@ -51,7 +33,4 @@
 	  			</tr>
 	  		</tbody>
 	  	</table>
-	  	
-  	</div>
-  </body>
-</html>
+</wicket:extend>

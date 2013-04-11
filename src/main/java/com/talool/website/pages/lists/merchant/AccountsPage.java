@@ -17,14 +17,13 @@ import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 import com.talool.website.models.MerchantAccountListModel;
 import com.talool.website.pages.BasePage;
-import com.talool.website.panel.AdminMenuPanel;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.MerchantAccountPanel;
-import com.talool.website.panel.NiceFeedbackPanel;
 import com.talool.website.panel.SubmitCallBack;
 
-public class AccountsPage extends BasePage {
-	
+public class AccountsPage extends BasePage
+{
+
 	private static final long serialVersionUID = 3634980968241854373L;
 	private static final Logger LOG = LoggerFactory.getLogger(AccountsPage.class);
 	private Long _merchantId;
@@ -34,29 +33,27 @@ public class AccountsPage extends BasePage {
 		super(parameters);
 		_merchantId = parameters.get("id").toLongObject();
 	}
-	
+
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
 
-		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
-		
-		final NiceFeedbackPanel feedback = new NiceFeedbackPanel("feedback");
-		add(feedback.setOutputMarkupId(true));
-		
 		MerchantAccountListModel model = new MerchantAccountListModel();
 		StringBuffer pageTitle = new StringBuffer("Merchant Accounts for ");
 		Merchant merchant = null;
-		try {
+		try
+		{
 			merchant = ServiceFactory.get().getTaloolService().getMerchantById(_merchantId);
 			pageTitle.append(merchant.getName());
 			model.setMerchantId(merchant.getId());
-		} catch (ServiceException se) {
+		}
+		catch (ServiceException se)
+		{
 			LOG.error("problem loading merchant", se);
 		}
-		add(new Label("pageTitle",pageTitle.toString()));
-		
+		add(new Label("pageTitle", pageTitle.toString()));
+
 		final AdminModalWindow accountModal;
 		add(accountModal = new AdminModalWindow("modal"));
 		final SubmitCallBack callback = new SubmitCallBack()
@@ -78,7 +75,8 @@ public class AccountsPage extends BasePage {
 			}
 		};
 
-		final MerchantAccountPanel accountPanel = new MerchantAccountPanel(accountModal.getContentId(), _merchantId, callback);
+		final MerchantAccountPanel accountPanel = new MerchantAccountPanel(accountModal.getContentId(),
+				_merchantId, callback);
 		accountModal.setContent(accountPanel);
 		add(new AjaxLink<Void>("accountLink")
 		{
@@ -90,11 +88,12 @@ public class AccountsPage extends BasePage {
 			{
 				getSession().getFeedbackMessages().clear();
 				accountModal.setTitle("Create Merchant Account");
-				accountModal.setContent(new MerchantAccountPanel(accountModal.getContentId(), _merchantId, callback));
+				accountModal.setContent(new MerchantAccountPanel(accountModal.getContentId(), _merchantId,
+						callback));
 				accountModal.show(target);
 			}
 		});
-		
+
 		final ListView<MerchantAccount> customers = new ListView<MerchantAccount>("accountRptr", model)
 		{
 
@@ -120,7 +119,7 @@ public class AccountsPage extends BasePage {
 				item.add(new Label("roleTitle"));
 				item.add(new Label("email"));
 				item.add(new Label("allowDealCreation"));
-				
+
 				item.add(new AjaxLink<Void>("editLink")
 				{
 					private static final long serialVersionUID = 268692101349122303L;
@@ -129,8 +128,8 @@ public class AccountsPage extends BasePage {
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						MerchantAccountPanel panel = new MerchantAccountPanel(accountModal.getContentId(), callback,
-								merchantaccountId);
+						MerchantAccountPanel panel = new MerchantAccountPanel(accountModal.getContentId(),
+								callback, merchantaccountId);
 						accountModal.setContent(panel);
 						accountModal.setTitle("Edit Merchant Account");
 						accountModal.show(target);

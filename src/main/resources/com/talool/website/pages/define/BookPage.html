@@ -1,26 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>NewBookPage.html</title>
-	
-    <meta name="keywords" content="keyword1,keyword2,keyword3">
-    <meta name="description" content="this is my page">
-    <meta name="content-type" content="text/html; charset=UTF-8">
-    
-    <link rel="stylesheet" type="text/css" href="/css/global.css">
-    <link rel="stylesheet" type="text/css" href="/css/newmerchant.css">
-
-  </head>
-  
-  <body>
-  	<div wicket:id="adminMenuPanel"></div>
-  	<div class="content">
-  	
-	  	<!-- NEW BOOK PANEL -->
+<wicket:extend>
 	  	<div class="newMerchant">
-	
-			<h2>Create|Edit Book</h2>
-			
+		<h2>Create|Edit Book</h2>
 			<div class="panel descriptionPanel">
 				<form method="post">
 					<h3>Book Description</h3>
@@ -45,7 +25,6 @@
 				    <div class="clear"></div>
 			    </form>
 			</div>
-			
 			<div class="panel dealPanel">
 				<form method="post">
 					<h3>Book Deals</h3>
@@ -112,12 +91,8 @@
 				    <div class="clear"></div>
 			    </form>
 			</div>
-			
 			<div class="controls">
 				<button class="big">Save Book</button>
 			</div>
 		</div>	
-		
-    </div>
-  </body>
-</html>
+</wicket:extend>

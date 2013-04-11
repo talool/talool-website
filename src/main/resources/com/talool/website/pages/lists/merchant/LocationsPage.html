@@ -1,27 +1,4 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Merchant Locations</title>
-	
-    <meta name="keywords" content="keyword1,keyword2,keyword3">
-    <meta name="description" content="this is my page">
-    <meta name="content-type" content="text/html; charset=UTF-8">
-    
-    <link rel="stylesheet" type="text/css" href="/css/global.css">
-    <link rel="stylesheet" type="text/css" href="/css/merchant.css">
-    <link rel="stylesheet" type="text/css" href="/css/newmerchant.css">
-    
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
-     <script>Wicket.Window.unloadConfirmation = false;</script>
-
-  </head>
-  
-  <body>
-  	<div wicket:id="adminMenuPanel"></div>
-  	<div class="content">
-  		<div wicket:id="feedback"/>
-  		<!-- MERCHANT LOCATION LIST PANEL -->
+<wicket:extend>
 	  	<div class="actions">
 		  	<a wicket:id="locationLink" href="#">
 		  		<button>Create New Location</button>
@@ -56,6 +33,4 @@
 	  		</tbody>
 	  	</table>
 	  	<div wicket:id="modal"/>
-  	</div>
-  </body>
-</html>
+</wicket:extend>

@@ -14,12 +14,15 @@
 		<filter-class>com.talool.website.filters.StaticResourceFilter</filter-class>
 	</filter>
 
-
 	<filter-mapping>
 		<filter-name>StaticFilter</filter-name>
 		<url-pattern>/css</url-pattern>
 	</filter-mapping>
 	
+   <filter-mapping>
+		<filter-name>StaticFilter</filter-name>
+		<url-pattern>/css</url-pattern>
+	</filter-mapping>
 
 
 	<filter>

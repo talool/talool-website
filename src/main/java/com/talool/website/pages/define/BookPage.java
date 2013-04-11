@@ -3,7 +3,6 @@ package com.talool.website.pages.define;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.website.pages.BasePage;
-import com.talool.website.panel.AdminMenuPanel;
 
 public class BookPage extends BasePage
 {
@@ -20,13 +19,12 @@ public class BookPage extends BasePage
 	{
 		super(parameters);
 	}
-	
+
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
 
-		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
 	}
 
 }

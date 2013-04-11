@@ -1,4 +1,4 @@
-package com.talool.website.pages.lists.merchant;
+package com.talool.website.panel;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -14,28 +14,24 @@ import org.slf4j.LoggerFactory;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantManagedLocation;
 import com.talool.core.service.ServiceException;
-import com.talool.service.ServiceFactory;
 import com.talool.website.models.MerchantManagedLocationListModel;
-import com.talool.website.pages.BasePage;
-import com.talool.website.panel.AdminModalWindow;
-import com.talool.website.panel.MerchantLocationPanel;
-import com.talool.website.panel.SubmitCallBack;
 
-public class LocationsPage extends BasePage
+/**
+ * DEMO PANEL - LETS SEE WHAT WE FEEL . THIS IS TEH SAME CONTENT AS
+ * LOCATIONSPAGE.JAVA
+ * 
+ * @author clintz
+ * 
+ */
+public class MerchantLocationsPanelDemo extends BasePanel
 {
-
 	private static final long serialVersionUID = 3634980968241854373L;
-	private static final Logger LOG = LoggerFactory.getLogger(LocationsPage.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocationsPanelDemo.class);
 	private Long _merchantId;
 
-	public LocationsPage()
+	public MerchantLocationsPanelDemo(String id, PageParameters parameters)
 	{
-		super();
-	}
-
-	public LocationsPage(PageParameters parameters)
-	{
-		super(parameters);
+		super(id);
 		_merchantId = parameters.get("id").toLongObject();
 	}
 
@@ -55,7 +51,7 @@ public class LocationsPage extends BasePage
 			public void submitSuccess(AjaxRequestTarget target)
 			{
 				locationModal.close(target);
-				target.add(LocationsPage.this);
+				// target.add(LocationsPage.this);
 			}
 
 			@Override
@@ -83,19 +79,16 @@ public class LocationsPage extends BasePage
 			}
 		});
 
-		StringBuffer pageTitle = new StringBuffer("Merchant Locations for ");
 		MerchantManagedLocationListModel model = new MerchantManagedLocationListModel();
 		try
 		{
-			Merchant merchant = ServiceFactory.get().getTaloolService().getMerchantById(_merchantId);
-			pageTitle.append(merchant.getName());
+			Merchant merchant = taloolService.getMerchantById(_merchantId);
 			model.setMerchantId(merchant.getId());
 		}
 		catch (ServiceException se)
 		{
 			LOG.error("problem loading merchant", se);
 		}
-		add(new Label("pageTitle", pageTitle.toString()));
 
 		final ListView<MerchantManagedLocation> locations = new ListView<MerchantManagedLocation>(
 				"locationRptr", model)
@@ -121,6 +114,7 @@ public class LocationsPage extends BasePage
 				}
 
 				item.add(new Label("merchantLocation.locationName"));
+
 				item.add(new Label("merchantLocation.websiteUrl"));
 				item.add(new Label("merchantLocation.email"));
 				item.add(new Label("merchantLocation.phone"));
@@ -149,5 +143,4 @@ public class LocationsPage extends BasePage
 
 		add(locations);
 	}
-
 }

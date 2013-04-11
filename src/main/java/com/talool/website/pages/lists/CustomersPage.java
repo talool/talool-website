@@ -13,14 +13,12 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import com.talool.core.Customer;
 import com.talool.website.models.CustomerListModel;
 import com.talool.website.pages.BasePage;
-import com.talool.website.panel.AdminMenuPanel;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.CustomerPanel;
-import com.talool.website.panel.NiceFeedbackPanel;
 import com.talool.website.panel.SubmitCallBack;
 
-public class CustomersPage extends BasePage {
-	
+public class CustomersPage extends BasePage
+{
 	private static final long serialVersionUID = 2102415289760762365L;
 
 	public CustomersPage()
@@ -32,18 +30,15 @@ public class CustomersPage extends BasePage {
 	{
 		super(parameters);
 	}
-	
+
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		
-		final NiceFeedbackPanel feedback = new NiceFeedbackPanel("feedback");
-		add(feedback.setOutputMarkupId(true));
-		
+
 		final AdminModalWindow customerModal;
 		add(customerModal = new AdminModalWindow("modal"));
-		
+
 		final SubmitCallBack callback = new SubmitCallBack()
 		{
 
@@ -62,10 +57,10 @@ public class CustomersPage extends BasePage {
 
 			}
 		};
-		
+
 		final CustomerPanel customerPanel = new CustomerPanel(customerModal.getContentId(), callback);
 		customerModal.setContent(customerPanel);
-		
+
 		add(new AjaxLink<Void>("customerLink")
 		{
 
@@ -81,9 +76,8 @@ public class CustomersPage extends BasePage {
 			}
 		});
 
-		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
-		
-		final ListView<Customer> customers = new ListView<Customer>("customerRptr", new CustomerListModel())
+		final ListView<Customer> customers = new ListView<Customer>("customerRptr",
+				new CustomerListModel())
 		{
 
 			private static final long serialVersionUID = 4104816505968727445L;
@@ -93,7 +87,7 @@ public class CustomersPage extends BasePage {
 			{
 				Customer customer = item.getModelObject();
 				final Long customerId = customer.getId();
-				
+
 				item.setModel(new CompoundPropertyModel<Customer>(customer));
 
 				if (item.getIndex() % 2 == 0)
@@ -108,7 +102,7 @@ public class CustomersPage extends BasePage {
 				item.add(new Label("firstName"));
 				item.add(new Label("lastName"));
 				item.add(new Label("email"));
-				
+
 				item.add(new AjaxLink<Void>("editLink")
 				{
 
@@ -118,30 +112,34 @@ public class CustomersPage extends BasePage {
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						CustomerPanel panel = new CustomerPanel(customerModal.getContentId(), callback, customerId);
+						CustomerPanel panel = new CustomerPanel(customerModal.getContentId(), callback,
+								customerId);
 						customerModal.setContent(panel);
 						customerModal.setTitle("Edit Customer");
 						customerModal.show(target);
 					}
 				});
-				
+
 				// TODO change the link to point to a deal offer purchase list
 				PageParameters booksParams = new PageParameters();
 				booksParams.set("method", "customer");
 				booksParams.set("id", customer.getId());
-				BookmarkablePageLink<Void> booksLink = new BookmarkablePageLink<Void>("booksLink",BooksPage.class,booksParams);
+				BookmarkablePageLink<Void> booksLink = new BookmarkablePageLink<Void>("booksLink",
+						BooksPage.class, booksParams);
 				item.add(booksLink);
-				
+
 				// TODO change the link to point to a deal acquire list
 				PageParameters dealsParams = new PageParameters();
 				dealsParams.set("method", "customer");
 				dealsParams.set("id", customer.getId());
-				BookmarkablePageLink<Void> dealsLink = new BookmarkablePageLink<Void>("dealsLink",DealsPage.class,dealsParams);
+				BookmarkablePageLink<Void> dealsLink = new BookmarkablePageLink<Void>("dealsLink",
+						DealsPage.class, dealsParams);
 				item.add(dealsLink);
-				
+
 				PageParameters friendsParams = new PageParameters();
 				friendsParams.set("id", customer.getId());
-				BookmarkablePageLink<Void> friendsLink = new BookmarkablePageLink<Void>("friendsLink",FriendsPage.class,friendsParams);
+				BookmarkablePageLink<Void> friendsLink = new BookmarkablePageLink<Void>("friendsLink",
+						FriendsPage.class, friendsParams);
 				item.add(friendsLink);
 			}
 

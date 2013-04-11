@@ -9,23 +9,20 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.talool.core.Customer;
 import com.talool.core.Deal;
 import com.talool.core.DealOffer;
 import com.talool.core.Merchant;
 import com.talool.core.service.ServiceException;
-import com.talool.service.ServiceFactory;
 import com.talool.website.models.DealListModel;
 import com.talool.website.pages.BasePage;
-import com.talool.website.panel.AdminMenuPanel;
 
-public class DealsPage extends BasePage {
-
+public class DealsPage extends BasePage
+{
 	private static final long serialVersionUID = 1133795226226645331L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealsPage.class);
 	private String _method;
 	private Long _id;
-	
+
 	public static final String METHOD_MERCHANT = "merchant";
 	public static final String METHOD_BOOK = "book";
 
@@ -40,37 +37,44 @@ public class DealsPage extends BasePage {
 		_method = parameters.get("method").toString();
 		_id = parameters.get("id").toLongObject();
 	}
-	
+
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
 
-		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
-		
-		StringBuffer pageTitle = new StringBuffer("Deals");
-		
+		StringBuilder pageTitle = new StringBuilder("Deals");
+
 		DealListModel model = new DealListModel();
-		if (_method.equalsIgnoreCase(METHOD_MERCHANT)) {
+		if (_method.equalsIgnoreCase(METHOD_MERCHANT))
+		{
 			model.setMerchantId(_id);
-			try {
-				Merchant merchant = ServiceFactory.get().getTaloolService().getMerchantById(_id);
+			try
+			{
+				Merchant merchant = taloolService.getMerchantById(_id);
 				pageTitle.append(" for ").append(merchant.getName());
-			} catch (ServiceException se) {
+			}
+			catch (ServiceException se)
+			{
 				LOG.error("problem loading merchant", se);
 			}
-		} else if (_method.equalsIgnoreCase(METHOD_BOOK)) {
+		}
+		else if (_method.equalsIgnoreCase(METHOD_BOOK))
+		{
 			model.setDealOfferId(_id);
-			try {
-				DealOffer book = ServiceFactory.get().getTaloolService().getDealOffer(_id);
+			try
+			{
+				DealOffer book = taloolService.getDealOffer(_id);
 				pageTitle.append(" in ").append(book.getTitle());
-			} catch (ServiceException se) {
+			}
+			catch (ServiceException se)
+			{
 				LOG.error("problem loading deal offer", se);
 			}
 		}
-		
-		add(new Label("pageTitle",pageTitle.toString()));
-		
+
+		add(new Label("pageTitle", pageTitle.toString()));
+
 		final ListView<Deal> deals = new ListView<Deal>("dealRptr", model)
 		{
 
