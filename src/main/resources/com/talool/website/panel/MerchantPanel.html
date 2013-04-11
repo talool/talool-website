@@ -8,7 +8,7 @@
 				<div class="panel descriptionPanel left">
 					<h3>Merchant Description</h3>
 					<fieldset>
-				    	<div><label>Name</label><input wicket:id="name" name="name" type="text"/></div>
+				    	<div><label>*Name</label><input wicket:id="name" name="name" type="text"/></div>
 				    	<div><label>Tags</label><input wicket:id="tags" name="tags" type="text"/></div>
 				    </fieldset>
 				</div>
@@ -17,14 +17,18 @@
 					<h3>Merchant Location</h3>
 					<fieldset>
 						<div><label>Location Name</label><input wicket:id="primaryLocation.locationName" name="merchant_location_name"/></div>
-					    <div><label>Address1</label><input wicket:id="primaryLocation.address.address1" name="address1" type="text"/></div>
+					    <div><label>*Address1</label><input wicket:id="primaryLocation.address.address1" name="address1" type="text"/></div>
 					    <div><label>Address2</label><input wicket:id="primaryLocation.address.address2" name="address2" type="text"/></div>
-					    <div><label>City</label><input wicket:id="primaryLocation.address.city" name="city" type="text"/></div>
-					    <div><label>State</label><input wicket:id="primaryLocation.address.stateProvinceCounty" name="state_province_county" type="text"/></div>
-					    <div><label>Zip</label><input wicket:id="primaryLocation.address.zip"  name="zip" type="text"/></div>
-					    <div><label>Country</label><input wicket:id="primaryLocation.address.country"  name="country" type="text"/></div>
-						<div><label>Phone</label><input wicket:id="primaryLocation.phone"  name="phone" type="text"/></div>
-				    	<div><label>Email</label><input wicket:id="primaryLocation.email"  name="email" type="text"/></div>
+					    <div><label>*City</label><input wicket:id="primaryLocation.address.city" name="city" type="text"/></div>
+					    <div><label>*State</label>
+					      <select wicket:id="primaryLocation.address.stateProvinceCounty">
+					       <option>CO</option>
+					       <option>NV</option>
+					      </select></div>
+					    <div><label>*Zip</label><input wicket:id="primaryLocation.address.zip"  name="zip" type="text"/></div>
+					    <div><label>*Country</label><input wicket:id="primaryLocation.address.country"  name="country" type="text"/></div>
+						<div><label>*Phone</label><input wicket:id="primaryLocation.phone"  name="phone" type="text"/></div>
+				    	<div><label>*Email</label><input wicket:id="primaryLocation.email"  name="email" type="text"/></div>
 				    	<div><label>Website</label><input wicket:id="primaryLocation.websiteUrl"  name="web_url" type="text"/></div>
 				    	<div><label>Logo</label><input name="primaryLocation.phone" type="file"/></div>
 				    </fieldset>

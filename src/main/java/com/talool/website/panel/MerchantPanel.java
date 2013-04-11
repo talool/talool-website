@@ -13,12 +13,16 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Merchant;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
+import com.talool.website.component.StateDropDownChoice;
+import com.talool.website.component.StateOption;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.models.ModelUtil;
 
@@ -33,11 +37,8 @@ public class MerchantPanel extends BasePanel
 	private static final long serialVersionUID = -8074065320919062316L;
 
 	private String tags;
-
 	private ModalWindow window;
-
 	private SubmitCallBack callback;
-
 	private boolean isNew = false;
 
 	public MerchantPanel(final String id, final SubmitCallBack callback)
@@ -51,6 +52,25 @@ public class MerchantPanel extends BasePanel
 		merchant.getPrimaryLocation().setLogoUrl("");
 		isNew = true;
 		setDefaultModel(Model.of(merchant));
+	}
+
+	public StateOption getStateOption()
+	{
+		final Merchant merch = (Merchant) getDefaultModelObject();
+		if (merch.getPrimaryLocation().getAddress().getStateProvinceCounty() == null)
+		{
+			return null;
+		}
+
+		return StateDropDownChoice.getStateOptionByCode(merch.getPrimaryLocation().getAddress()
+				.getStateProvinceCounty());
+
+	}
+
+	public void setStateOption(final StateOption stateOption)
+	{
+		final Merchant merch = (Merchant) getDefaultModelObject();
+		merch.getPrimaryLocation().getAddress().setStateProvinceCounty(stateOption.getCode());
 	}
 
 	public MerchantPanel(final String id, final SubmitCallBack callback, final Long merchantId)
@@ -115,7 +135,6 @@ public class MerchantPanel extends BasePanel
 
 				try
 				{
-
 					Merchant merchant = (Merchant) form.getDefaultModelObject();
 
 					if (StringUtils.isNotEmpty(tags))
@@ -149,15 +168,24 @@ public class MerchantPanel extends BasePanel
 		locationPanel.add(new TextField<String>("primaryLocation.address.address1").setRequired(true));
 
 		locationPanel.add(new TextField<String>("primaryLocation.address.address2"));
+
 		locationPanel.add(new TextField<String>("primaryLocation.address.city").setRequired(true));
-		locationPanel.add(new TextField<String>("primaryLocation.address.stateProvinceCounty")
-				.setRequired(true));
+
+		locationPanel.add(new StateDropDownChoice("primaryLocation.address.stateProvinceCounty",
+				new PropertyModel<StateOption>(this, "stateOption")).setRequired(true));
+
 		locationPanel.add(new TextField<String>("primaryLocation.address.zip").setRequired(true));
+
 		locationPanel.add(new TextField<String>("primaryLocation.address.country").setRequired(true));
+
 		locationPanel.add(new TextField<String>("primaryLocation.locationName"));
+
 		locationPanel.add(new TextField<String>("primaryLocation.phone").setRequired(true));
-		locationPanel.add(new TextField<String>("primaryLocation.email").setRequired(true));
-		locationPanel.add(new TextField<String>("primaryLocation.websiteUrl"));
+
+		locationPanel.add(new TextField<String>("primaryLocation.email").setRequired(true).add(
+				EmailAddressValidator.getInstance()));
+
+		locationPanel.add(new TextField<String>("primaryLocation.websiteUrl").add(new UrlValidator()));
 
 	}
 }
