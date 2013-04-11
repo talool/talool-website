@@ -12,9 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Merchant;
-import com.talool.core.MerchantLocation;
+import com.talool.core.MerchantManagedLocation;
 import com.talool.core.service.ServiceException;
-import com.talool.website.models.MerchantLocationModel;
+import com.talool.service.ServiceFactory;
+import com.talool.website.models.MerchantManagedLocationModel;
 
 /**
  * 
@@ -32,23 +33,30 @@ public class MerchantLocationPanel extends BasePanel
 
 	private boolean isNew = false;
 
-	public MerchantLocationPanel(final String id, final SubmitCallBack callback)
+	public MerchantLocationPanel(final String id, final Long merchantId, final SubmitCallBack callback)
 	{
 		super(id);
 		this.callback = callback;
+		
+		Merchant merchant = null;
+		try {
+			merchant = ServiceFactory.get().getTaloolService().getMerchantById(merchantId);
+		} catch (ServiceException se) {
+			LOG.error("problem loading merchant", se);
+		}
 
-		MerchantLocation location = domainFactory.newMerchantLocation();
-		location.setAddress(domainFactory.newAddress());
-		location.setLogoUrl("");
+		MerchantManagedLocation managedLocation = domainFactory.newMerchantManagedLocation(merchant);
+		managedLocation.getMerchantLocation().setAddress(domainFactory.newAddress());
+		managedLocation.getMerchantLocation().setLogoUrl("");
 		isNew = true;
-		setDefaultModel(Model.of(location));
+		setDefaultModel(Model.of(managedLocation));
 	}
 
-	public MerchantLocationPanel(final String id, final SubmitCallBack callback, final Long merchantLocationId)
+	public MerchantLocationPanel(final String id, final SubmitCallBack callback, final Long merchantManagedLocationId)
 	{
 		super(id);
 		this.callback = callback;
-		setDefaultModel(new MerchantLocationModel(merchantLocationId));
+		setDefaultModel(new MerchantManagedLocationModel(merchantManagedLocationId));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -66,8 +74,8 @@ public class MerchantLocationPanel extends BasePanel
 		WebMarkupContainer locationPanel = new WebMarkupContainer("locationPanel");
 		form.add(locationPanel);
 
-		CompoundPropertyModel<MerchantLocation> merchLocModel = new CompoundPropertyModel<MerchantLocation>(
-				(IModel<MerchantLocation>) getDefaultModel());
+		CompoundPropertyModel<MerchantManagedLocation> merchLocModel = new CompoundPropertyModel<MerchantManagedLocation>(
+				(IModel<MerchantManagedLocation>) getDefaultModel());
 		form.setDefaultModel(merchLocModel);
 
 		form.add(new AjaxButton("submitButton", form)
@@ -90,12 +98,12 @@ public class MerchantLocationPanel extends BasePanel
 				try
 				{
 
-					MerchantLocation location = (MerchantLocation) form.getDefaultModelObject();
+					MerchantManagedLocation managedLocation = (MerchantManagedLocation) form.getDefaultModelObject();
 					
-					taloolService.save(location);
+					taloolService.save(managedLocation);
 					target.add(feedback);
 					sb.append("Successfully ").append(isNew ? "created '" : "updated '")
-							.append(location.getLocationName()).append("'");
+							.append(managedLocation.getMerchantLocation().getLocationName()).append("'");
 					getSession().info(sb.toString());
 					callback.submitSuccess(target);
 				}
@@ -110,18 +118,18 @@ public class MerchantLocationPanel extends BasePanel
 
 		});
 
-		locationPanel.add(new TextField<String>("address.address1").setRequired(true));
+		locationPanel.add(new TextField<String>("merchantLocation.address.address1").setRequired(true));
 
-		locationPanel.add(new TextField<String>("address.address2"));
-		locationPanel.add(new TextField<String>("address.city").setRequired(true));
-		locationPanel.add(new TextField<String>("address.stateProvinceCounty")
+		locationPanel.add(new TextField<String>("merchantLocation.address.address2"));
+		locationPanel.add(new TextField<String>("merchantLocation.address.city").setRequired(true));
+		locationPanel.add(new TextField<String>("merchantLocation.address.stateProvinceCounty")
 				.setRequired(true));
-		locationPanel.add(new TextField<String>("address.zip").setRequired(true));
-		locationPanel.add(new TextField<String>("address.country").setRequired(true));
-		locationPanel.add(new TextField<String>("locationName"));
-		locationPanel.add(new TextField<String>("phone").setRequired(true));
-		locationPanel.add(new TextField<String>("email").setRequired(true));
-		locationPanel.add(new TextField<String>("websiteUrl"));
+		locationPanel.add(new TextField<String>("merchantLocation.address.zip").setRequired(true));
+		locationPanel.add(new TextField<String>("merchantLocation.address.country").setRequired(true));
+		locationPanel.add(new TextField<String>("merchantLocation.locationName"));
+		locationPanel.add(new TextField<String>("merchantLocation.phone").setRequired(true));
+		locationPanel.add(new TextField<String>("merchantLocation.email").setRequired(true));
+		locationPanel.add(new TextField<String>("merchantLocation.websiteUrl"));
 
 	}
 }

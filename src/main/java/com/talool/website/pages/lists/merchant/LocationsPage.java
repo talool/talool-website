@@ -12,15 +12,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Merchant;
-import com.talool.core.MerchantLocation;
+import com.talool.core.MerchantManagedLocation;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
-import com.talool.website.models.MerchantLocationListModel;
+import com.talool.website.models.MerchantManagedLocationListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminMenuPanel;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.MerchantLocationPanel;
-import com.talool.website.panel.MerchantPanel;
 import com.talool.website.panel.NiceFeedbackPanel;
 import com.talool.website.panel.SubmitCallBack;
 
@@ -72,7 +71,7 @@ public class LocationsPage extends BasePage {
 			}
 		};
 
-		final MerchantLocationPanel locationPanel = new MerchantLocationPanel(locationModal.getContentId(), callback);
+		final MerchantLocationPanel locationPanel = new MerchantLocationPanel(locationModal.getContentId(), _merchantId, callback);
 		locationModal.setContent(locationPanel);
 		add(new AjaxLink<Void>("locationLink")
 		{
@@ -83,13 +82,13 @@ public class LocationsPage extends BasePage {
 			{
 				getSession().getFeedbackMessages().clear();
 				locationModal.setTitle("Create Merchant Location");
-				locationModal.setContent(new MerchantLocationPanel(locationModal.getContentId(), callback));
+				locationModal.setContent(new MerchantLocationPanel(locationModal.getContentId(), _merchantId, callback));
 				locationModal.show(target);
 			}
 		});
 		
 		StringBuffer pageTitle = new StringBuffer("Merchant Locations for ");
-		MerchantLocationListModel model = new MerchantLocationListModel();
+		MerchantManagedLocationListModel model = new MerchantManagedLocationListModel();
 		try {
 			Merchant merchant = ServiceFactory.get().getTaloolService().getMerchantById(_merchantId);
 			pageTitle.append(merchant.getName());
@@ -99,18 +98,18 @@ public class LocationsPage extends BasePage {
 		}
 		add(new Label("pageTitle",pageTitle.toString()));
 		
-		final ListView<MerchantLocation> locations = new ListView<MerchantLocation>("locationRptr", model)
+		final ListView<MerchantManagedLocation> locations = new ListView<MerchantManagedLocation>("locationRptr", model)
 		{
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<MerchantLocation> item)
+			protected void populateItem(ListItem<MerchantManagedLocation> item)
 			{
-				MerchantLocation location = item.getModelObject();
-				final Long merchantLocationId = location.getId();
+				MerchantManagedLocation managedLocation = item.getModelObject();
+				final Long merchantLocationId = managedLocation.getId();
 				
-				item.setModel(new CompoundPropertyModel<MerchantLocation>(location));
+				item.setModel(new CompoundPropertyModel<MerchantManagedLocation>(managedLocation));
 
 				if (item.getIndex() % 2 == 0)
 				{
@@ -121,12 +120,12 @@ public class LocationsPage extends BasePage {
 					item.add(new AttributeModifier("class", "even"));
 				}
 				
-				item.add(new Label("locationName"));
-				item.add(new Label("websiteUrl"));
-				item.add(new Label("email"));
-				item.add(new Label("phone"));
-				item.add(new Label("address.city"));
-				item.add(new Label("address.stateProvinceCounty"));
+				item.add(new Label("merchantLocation.locationName"));
+				item.add(new Label("merchantLocation.websiteUrl"));
+				item.add(new Label("merchantLocation.email"));
+				item.add(new Label("merchantLocation.phone"));
+				item.add(new Label("merchantLocation.address.city"));
+				item.add(new Label("merchantLocation.address.stateProvinceCounty"));
 				
 				item.add(new AjaxLink<Void>("editLink")
 				{

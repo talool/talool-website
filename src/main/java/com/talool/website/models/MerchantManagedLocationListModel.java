@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.MerchantLocation;
+import com.talool.core.MerchantManagedLocation;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 
@@ -15,17 +16,17 @@ import com.talool.service.ServiceFactory;
  * @author dmccuen
  * 
  */
-public class MerchantLocationListModel extends LoadableDetachableModel<List<MerchantLocation>>
+public class MerchantManagedLocationListModel extends LoadableDetachableModel<List<MerchantManagedLocation>>
 {
 
 	private static final long serialVersionUID = -6377845043575682681L;
-	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocationListModel.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MerchantManagedLocationListModel.class);
 	private Long _merchantId = null;
 
 	@Override
-	protected List<MerchantLocation> load()
+	protected List<MerchantManagedLocation> load()
 	{
-		List<MerchantLocation> locations = null;
+		List<MerchantManagedLocation> locations = null;
 
 		try
 		{
