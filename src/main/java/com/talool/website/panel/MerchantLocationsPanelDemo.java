@@ -3,6 +3,7 @@ package com.talool.website.panel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -40,8 +41,11 @@ public class MerchantLocationsPanelDemo extends BasePanel
 	{
 		super.onInitialize();
 
+		final WebMarkupContainer container = new WebMarkupContainer("container");
+		add(container.setOutputMarkupId(true));
+
 		final AdminModalWindow locationModal;
-		add(locationModal = new AdminModalWindow("modal"));
+		container.add(locationModal = new AdminModalWindow("modal"));
 		final SubmitCallBack callback = new SubmitCallBack()
 		{
 
@@ -51,7 +55,7 @@ public class MerchantLocationsPanelDemo extends BasePanel
 			public void submitSuccess(AjaxRequestTarget target)
 			{
 				locationModal.close(target);
-				// target.add(LocationsPage.this);
+				target.add(container);
 			}
 
 			@Override
@@ -64,7 +68,7 @@ public class MerchantLocationsPanelDemo extends BasePanel
 		final MerchantLocationPanel locationPanel = new MerchantLocationPanel(
 				locationModal.getContentId(), _merchantId, callback);
 		locationModal.setContent(locationPanel);
-		add(new AjaxLink<Void>("locationLink")
+		container.add(new AjaxLink<Void>("locationLink")
 		{
 			private static final long serialVersionUID = 721835854434485151L;
 
@@ -141,6 +145,6 @@ public class MerchantLocationsPanelDemo extends BasePanel
 
 		};
 
-		add(locations);
+		container.add(locations);
 	}
 }
