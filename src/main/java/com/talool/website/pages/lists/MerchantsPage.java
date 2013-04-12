@@ -23,8 +23,8 @@ import com.talool.website.pages.lists.merchant.AccountsPage;
 import com.talool.website.pages.lists.merchant.LocationsPage;
 import com.talool.website.pages.lists.merchant.MerchantBooksPage;
 import com.talool.website.panel.AdminModalWindow;
-import com.talool.website.panel.MerchantPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.merchant.MerchantPanel;
 
 /**
  * 
@@ -104,11 +104,7 @@ public class MerchantsPage extends BasePage
 
 				if (item.getIndex() % 2 == 0)
 				{
-					item.add(new AttributeModifier("class", "odd"));
-				}
-				else
-				{
-					item.add(new AttributeModifier("class", "even"));
+					item.add(new AttributeModifier("class", "gray0-bg"));
 				}
 
 				// item.add(new Label("name"));
@@ -146,28 +142,6 @@ public class MerchantsPage extends BasePage
 					}
 				});
 
-				BookmarkablePageLink<Void> booksLink = new BookmarkablePageLink<Void>("booksLink",
-						MerchantBooksPage.class, booksParams);
-				item.add(booksLink);
-
-				PageParameters dealsParams = new PageParameters();
-				dealsParams.set("method", DealsPage.METHOD_MERCHANT);
-				dealsParams.set("id", merchant.getId());
-				BookmarkablePageLink<Void> dealsLink = new BookmarkablePageLink<Void>("dealsLink",
-						DealsPage.class, dealsParams);
-				item.add(dealsLink);
-
-				PageParameters locationsParams = new PageParameters();
-				locationsParams.set("id", merchant.getId());
-				BookmarkablePageLink<Void> locationsLink = new BookmarkablePageLink<Void>("locationsLink",
-						LocationsPage.class, locationsParams);
-				item.add(locationsLink);
-
-				PageParameters accountsParams = new PageParameters();
-				accountsParams.set("id", merchant.getId());
-				BookmarkablePageLink<Void> accountsLink = new BookmarkablePageLink<Void>("accountsLink",
-						AccountsPage.class, accountsParams);
-				item.add(accountsLink);
 			}
 
 		};
@@ -180,5 +154,11 @@ public class MerchantsPage extends BasePage
 	protected void setHeaders(WebResponse response)
 	{
 		super.setHeaders(response);
+	}
+	
+	@Override
+	public String getHeaderTitle()
+	{
+		return "Merchants";
 	}
 }

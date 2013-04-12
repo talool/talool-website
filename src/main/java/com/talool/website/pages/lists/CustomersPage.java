@@ -5,14 +5,18 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.Customer;
 import com.talool.website.models.CustomerListModel;
 import com.talool.website.pages.BasePage;
+import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.CustomerPanel;
 import com.talool.website.panel.SubmitCallBack;
@@ -92,16 +96,20 @@ public class CustomersPage extends BasePage
 
 				if (item.getIndex() % 2 == 0)
 				{
-					item.add(new AttributeModifier("class", "odd"));
-				}
-				else
-				{
-					item.add(new AttributeModifier("class", "even"));
+					item.add(new AttributeModifier("class", "gray0-bg"));
 				}
 
 				item.add(new Label("firstName"));
 				item.add(new Label("lastName"));
-				item.add(new Label("email"));
+				//item.add(new Label("email"));
+				
+				PageParameters customerParams = new PageParameters();
+				customerParams.set("id", customer.getId());
+				customerParams.set("email", customer.getEmail());
+				String url = (String) urlFor(CustomerManagementPage.class, customerParams);
+				ExternalLink emailLink = new ExternalLink("emailLink", Model.of(url),
+						new PropertyModel<String>(customer, "email"));
+				item.add(emailLink);
 
 				item.add(new AjaxLink<Void>("editLink")
 				{
@@ -146,6 +154,12 @@ public class CustomersPage extends BasePage
 		};
 
 		add(customers);
+	}
+	
+	@Override
+	public String getHeaderTitle()
+	{
+		return "Customers";
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.talool.website.pages;
 
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -50,6 +51,7 @@ public abstract class BasePage extends WebPage
 	private void init()
 	{
 		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
+		add(new Label("headerTitle", getHeaderTitle()));
 
 		final NiceFeedbackPanel feedback = new NiceFeedbackPanel("feedback");
 		add(feedback.setOutputMarkupId(true));
@@ -58,6 +60,11 @@ public abstract class BasePage extends WebPage
 	public FeedbackPanel getFeedback()
 	{
 		return feedback;
+	}
+	
+	public String getHeaderTitle()
+	{
+		return "You need to override getHeaderTitle()";
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.talool.website.panel;
+package com.talool.website.panel.merchant;
 
 import java.util.Set;
 
@@ -25,6 +25,9 @@ import com.talool.website.component.StateDropDownChoice;
 import com.talool.website.component.StateOption;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.models.ModelUtil;
+import com.talool.website.panel.BasePanel;
+import com.talool.website.panel.NiceFeedbackPanel;
+import com.talool.website.panel.SubmitCallBack;
 
 /**
  * 

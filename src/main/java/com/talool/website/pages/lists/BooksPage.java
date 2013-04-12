@@ -33,7 +33,8 @@ public class BooksPage extends BasePage
 		return new DealOfferListModel();
 	}
 
-	public String getPageTitle()
+	@Override
+	public String getHeaderTitle()
 	{
 		return new String("Deal Offers");
 	}
@@ -51,7 +52,6 @@ public class BooksPage extends BasePage
 	{
 		super.onInitialize();
 
-		add(new Label("pageTitle", getPageTitle()));
 		add(getCreateLink());
 
 		DealOfferListModel model = getDealOfferListModel();

@@ -18,8 +18,8 @@ import com.talool.service.ServiceFactory;
 import com.talool.website.models.MerchantAccountListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminModalWindow;
-import com.talool.website.panel.MerchantAccountPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.merchant.MerchantAccountPanel;
 
 public class AccountsPage extends BasePage
 {

@@ -6,39 +6,37 @@ import java.util.List;
 import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.talool.website.panel.MerchantLocationsPanelDemo;
+import com.talool.website.panel.merchant.MerchantAccountsPanel;
+import com.talool.website.panel.merchant.MerchantLocationsPanel;
 
 /**
  * 
  * @author clintz
  * 
  */
-public class MerchantManagementPage extends BasePage
+public class MerchantManagementPage extends BaseManagementPage
 {
 	private static final long serialVersionUID = -6214364791355264043L;
-
-	public MerchantManagementPage()
-	{
-		super();
-	}
 
 	public MerchantManagementPage(PageParameters parameters)
 	{
 		super(parameters);
+	}
+	
+	@Override
+	public String getHeaderTitle()
+	{
+		return "Merchants > " + getPageParameters().get("name");
 	}
 
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
-
-		// TODO Replace with model, no need to pass in name
-		add(new Label("headerTitle", "Merchants > " + getPageParameters().get("name")));
 
 		List<ITab> tabs = new ArrayList<ITab>();
 		tabs.add(new AbstractTab(new Model<String>("Deals"))
@@ -49,7 +47,7 @@ public class MerchantManagementPage extends BasePage
 			@Override
 			public Panel getPanel(String panelId)
 			{
-				return new MerchantLocationsPanelDemo(panelId, getPageParameters());
+				return new MerchantLocationsPanel(panelId, getPageParameters());
 			}
 		});
 
@@ -61,7 +59,7 @@ public class MerchantManagementPage extends BasePage
 			@Override
 			public Panel getPanel(String panelId)
 			{
-				return new MerchantLocationsPanelDemo(panelId, getPageParameters());
+				return new MerchantLocationsPanel(panelId, getPageParameters());
 			}
 		});
 
@@ -73,7 +71,7 @@ public class MerchantManagementPage extends BasePage
 			@Override
 			public Panel getPanel(String panelId)
 			{
-				return new MerchantLocationsPanelDemo(panelId, getPageParameters());
+				return new MerchantLocationsPanel(panelId, getPageParameters());
 			}
 		});
 
@@ -85,7 +83,7 @@ public class MerchantManagementPage extends BasePage
 			@Override
 			public Panel getPanel(String panelId)
 			{
-				return new MerchantLocationsPanelDemo(panelId, getPageParameters());
+				return new MerchantAccountsPanel(panelId, getPageParameters());
 			}
 		});
 

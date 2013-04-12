@@ -12,7 +12,6 @@ body {
 }
 
 h1.header {
-	background: orange;
 	color: white;
 	padding: 10px 15px;
 	margin: 0;
@@ -22,12 +21,14 @@ h1.header {
 h2 {
 	margin: 0 0 20px;
 }
+
+/* GLOBAL MENU BAR */
 .menu {
-	background: #aaa;
 	color: white;
 	list-style: none;
 	margin: 0 0 25px 0;
-	padding: 0 10px;
+	padding: 2px 10px;
+	border-top: 1px solid;
 }
 .menu li {
 	display: inline-block;
@@ -38,35 +39,89 @@ h2 {
 	color: white;
 	text-decoration: none;
 }
-.right {
-	float:right;
-}
-
-.left {
-	float:left;
-}
 .menu em {
 	font-weight: bold;
 	font-style: normal;
-	background: #ddd;
-	border: 1px solid #ddd;
+	background: rgb(185, 172, 151);
+	border: 1px solid rgb(185, 172, 151);
 	padding: 0 10px;
 	border-radius: 10px;
-	color: black;
+	color: rgb(83, 71, 65);
 }
 
-.clear {
-	clear: right;
+
+/* COLORS */
+.orange-font, .orange-font a, .orange-font a:visited {
+	color: rgb(241, 90, 36);
+}
+.orange-bg {
+	background-color: rgb(241, 90, 36);
+}
+.red-font, .red-font a, .red-font a:visited {
+	color: rgb(237, 28, 36);
+}
+.red-bg {
+	background-color: rgb(237, 28, 36);
+}
+.teal-font, .teal-font, .teal-font a:visited {
+	color: rgb(25, 188, 185);
+}
+.teal-bg {
+	background-color: rgb(25, 188, 185);
+}
+.green-font, .green-font, .green-font a:visited {
+	color: rgb(80, 185, 72);
+}
+.green-bg {
+	background-color: rgb(80, 185, 72);
+}
+.gray0-font, .gray0-font a, .gray0-font a:visited {
+	color: #ddd;
+}
+.gray0-border {
+	border-color:  #ddd;
+}
+.gray0-bg {
+	background-color: #ddd;
+}
+.gray1-font, .gray1-font a, .gray1-font a:visited {
+	color: rgb(185, 172, 151);
+}
+.gray1-border {
+	border-color:  rgb(185, 172, 151);
+}
+.gray1-bg {
+	background-color: rgb(185, 172, 151);
+}
+.gray2-font, .gray2-font a, .gray2-font a:visited {
+	color: rgb(153, 134, 117);
+}
+.gray2-border {
+	border-color:  rgb(153, 134, 117);
+}
+.gray2-bg {
+	background-color: rgb(153, 134, 117);
+}
+.gray3-font, .gray3-font a, .gray3-font a:visited {
+	color: rgb(115, 99, 81);
+}
+.gray3-border {
+	border-color:  rgb(115, 99, 81);
+}
+.gray3-bg {
+	background-color: rgb(115, 99, 81);
+}
+.gray4-font, .gray4-font a, .gray4-font a:visited {
+	color: rgb(83, 71, 65);
+}
+.gray4-border {
+	border-color:  rgb(83, 71, 65);
+}
+.gray4-bg {
+	background-color: rgb(83, 71, 65);
 }
 
-.note {
-	text-align: left;
-	background: yellow;
-	border: 1px solid;
-	padding: 15px;
-	margin-right: 20px;
-}
-
+/* FEEDBACK PANEL */
 .feedbackPanel {                          
     border: 1px solid #099;
     background-color: #eff;
@@ -91,11 +146,11 @@ body div.wicket-modal div.w_caption {
 } 
 body div.wicket-modal h3.w_captionText {
 	font-size: 1.6em;
-	color: orange;
+	color: rgb(241, 90, 36);
 	top: 5px;
 }
 
-
+/* TAB PANEL */
 div.tabpanel div.tab-row ul {
     background: url("/img/tab_bottom.gif") repeat-x scroll center bottom transparent; 
     height: 20px;
@@ -132,4 +187,28 @@ div.tabpanel div.tab-row li.selected a:link {
 }
 div.tabpanel div.tab-row a:hover {
     background: none repeat scroll 0 0 #FFFFFF;
+}
+
+/* RANDOM STUFF */
+
+.clear {
+	clear: right;
+}
+.right {
+	float:right;
+}
+
+.left {
+	float:left;
+}
+.icon {
+	display: inline-block;
+	margin-right: 10px;
+}
+.note {
+	text-align: left;
+	background: yellow;
+	border: 1px solid;
+	padding: 15px;
+	margin-right: 20px;
 }

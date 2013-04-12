@@ -41,7 +41,7 @@ public class MerchantBooksPage extends BooksPage
 	}
 
 	@Override
-	public String getPageTitle()
+	public String getHeaderTitle()
 	{
 		StringBuilder sb = new StringBuilder("Deal Offers for ");
 		Merchant merchant;

@@ -2,7 +2,6 @@
 	  	<div class="actions">
 	  	<a wicket:id="merchantLink"><button>Create New Merchant</button></a>
 	  	</div>
-	  	<h2>Merchants</h2>
 	  	<table>
 	  		<thead>
 	  			<tr>
@@ -19,13 +18,9 @@
 	  				<td wicket:id="tags">Fine Dining</td>
 					<td wicket:id="primaryLocation.address.niceCityState">Boulder, Denver</td>
 	  				<td wicket:id="accounts">0</td>
-	  				<td>
-	  					<a wicket:id="editLink" href="../define/MerchantPage.html" class="edit">Edit</a> | 
-	  					<a wicket:id="dealsLink" href="DealsPage.html" class="deals">Deals</a> | 
-	  					<a wicket:id="booksLink" href="BooksPage.html" class="books">Deal Offers</a> | 
-	  					<a wicket:id="locationsLink" href="#" class="locations">Locations</a> | 
-	  					<a wicket:id="accountsLink" href="#" class="accounts">Accounts</a> | 
-	  					<a href="#" class="delete">Delete</a>
+	  				<td class="orange-font">
+	  					<a wicket:id="editLink" class="icon icon-2x icon-pencil" title="Edit Merchant"></a>
+	  					<a href="#" class="icon icon-2x icon-remove" title="Delete Merchant"></a>
 	  				</td>
 	  			</tr>
 	  		</tbody>

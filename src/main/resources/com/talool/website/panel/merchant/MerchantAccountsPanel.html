@@ -1,0 +1,23 @@
+<wicket:extend>
+  	<table>
+  		<thead>
+  			<tr class="gray2-bg">
+  				<th>Title</th>
+  				<th>Email</th>
+  				<th>Allow Deal Creation</th>
+  				<th>Actions</th>
+  			</tr>
+  		</thead>
+  		<tbody>
+  			<tr wicket:id="accountRptr">
+  				<td wicket:id="roleTitle"></td>
+  				<td wicket:id="email"></td>
+  				<td wicket:id="allowDealCreation"></td>
+  				<td class="orange-font">
+  					<a wicket:id="editLink" href="#" class="icon icon-2x icon-pencil"></a>
+  					<a href="#" class="icon icon-2x icon-remove"></a>
+  				</td>
+  			</tr>
+  		</tbody>
+  	</table>
+</wicket:extend>

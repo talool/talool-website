@@ -9,12 +9,12 @@ table {
 }
 
 thead {
-	background: #ccc;
 	text-align: left;
 }
 
 th {
 	padding: 5px 10px;
+	color: white;
 }
 
 tbody td {
@@ -22,9 +22,15 @@ tbody td {
 	margin: 0;
 }
 
-tbody .odd td {
-	background: #eee;
+.tabPanelContainer {
+	position: relative;
+	padding: 5px;
 }
 .actions {
-	float: right;
+	position: absolute;
+	right: 10px;
+	top: -30px;
 }
+
+
+

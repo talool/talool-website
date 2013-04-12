@@ -1,36 +1,37 @@
-package com.talool.website.panel;
+package com.talool.website.panel.merchant;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.talool.core.Merchant;
 import com.talool.core.MerchantManagedLocation;
-import com.talool.core.service.ServiceException;
 import com.talool.website.models.MerchantManagedLocationListModel;
+import com.talool.website.panel.AdminModalWindow;
+import com.talool.website.panel.BaseTabPanel;
+import com.talool.website.panel.SubmitCallBack;
 
 /**
- * DEMO PANEL - LETS SEE WHAT WE FEEL . THIS IS TEH SAME CONTENT AS
- * LOCATIONSPAGE.JAVA
  * 
  * @author clintz
  * 
  */
-public class MerchantLocationsPanelDemo extends BasePanel
+public class MerchantLocationsPanel extends BaseTabPanel
 {
 	private static final long serialVersionUID = 3634980968241854373L;
-	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocationsPanelDemo.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocationsPanel.class);
 	private Long _merchantId;
 
-	public MerchantLocationsPanelDemo(String id, PageParameters parameters)
+	public MerchantLocationsPanel(String id, PageParameters parameters)
 	{
 		super(id);
 		_merchantId = parameters.get("id").toLongObject();
@@ -41,59 +42,10 @@ public class MerchantLocationsPanelDemo extends BasePanel
 	{
 		super.onInitialize();
 
-		final WebMarkupContainer container = new WebMarkupContainer("container");
-		add(container.setOutputMarkupId(true));
-
-		final AdminModalWindow locationModal;
-		container.add(locationModal = new AdminModalWindow("modal"));
-		final SubmitCallBack callback = new SubmitCallBack()
-		{
-
-			private static final long serialVersionUID = 6743167793934938733L;
-
-			@Override
-			public void submitSuccess(AjaxRequestTarget target)
-			{
-				locationModal.close(target);
-				target.add(container);
-			}
-
-			@Override
-			public void submitFailure(AjaxRequestTarget target)
-			{
-
-			}
-		};
-
-		final MerchantLocationPanel locationPanel = new MerchantLocationPanel(
-				locationModal.getContentId(), _merchantId, callback);
-		locationModal.setContent(locationPanel);
-		container.add(new AjaxLink<Void>("locationLink")
-		{
-			private static final long serialVersionUID = 721835854434485151L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				getSession().getFeedbackMessages().clear();
-				locationModal.setTitle("Create Merchant Location");
-				locationModal.setContent(new MerchantLocationPanel(locationModal.getContentId(),
-						_merchantId, callback));
-				locationModal.show(target);
-			}
-		});
+		final WebMarkupContainer container = getContainer();
 
 		MerchantManagedLocationListModel model = new MerchantManagedLocationListModel();
-		try
-		{
-			Merchant merchant = taloolService.getMerchantById(_merchantId);
-			model.setMerchantId(merchant.getId());
-		}
-		catch (ServiceException se)
-		{
-			LOG.error("problem loading merchant", se);
-		}
-
+		model.setMerchantId(_merchantId);
 		final ListView<MerchantManagedLocation> locations = new ListView<MerchantManagedLocation>(
 				"locationRptr", model)
 		{
@@ -110,21 +62,18 @@ public class MerchantLocationsPanelDemo extends BasePanel
 
 				if (item.getIndex() % 2 == 0)
 				{
-					item.add(new AttributeModifier("class", "odd"));
-				}
-				else
-				{
-					item.add(new AttributeModifier("class", "even"));
+					item.add(new AttributeModifier("class", "gray0-bg"));
 				}
 
 				item.add(new Label("merchantLocation.locationName"));
-
 				item.add(new Label("merchantLocation.websiteUrl"));
 				item.add(new Label("merchantLocation.email"));
 				item.add(new Label("merchantLocation.phone"));
 				item.add(new Label("merchantLocation.address.city"));
 				item.add(new Label("merchantLocation.address.stateProvinceCounty"));
 
+				final AdminModalWindow modal = getModal();
+				final SubmitCallBack callback = getCallback(container, modal);
 				item.add(new AjaxLink<Void>("editLink")
 				{
 
@@ -134,11 +83,11 @@ public class MerchantLocationsPanelDemo extends BasePanel
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						MerchantLocationPanel panel = new MerchantLocationPanel(locationModal.getContentId(),
+						MerchantLocationPanel panel = new MerchantLocationPanel(modal.getContentId(),
 								callback, merchantLocationId);
-						locationModal.setContent(panel);
-						locationModal.setTitle("Edit Merchant Location");
-						locationModal.show(target);
+						modal.setContent(panel);
+						modal.setTitle("Edit Merchant Location");
+						modal.show(target);
 					}
 				});
 			}
@@ -147,4 +96,17 @@ public class MerchantLocationsPanelDemo extends BasePanel
 
 		container.add(locations);
 	}
+	
+
+	@Override
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
+		return new MerchantLocationPanel(contentId, _merchantId, callback);
+	}
+
+	@Override
+	public String getNewDefinitionPanelTitle() {
+		return "Create Merchant Location";
+	}
+
+
 }

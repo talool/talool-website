@@ -1,4 +1,4 @@
-package com.talool.website.panel;
+package com.talool.website.panel.merchant;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -16,6 +16,9 @@ import com.talool.core.MerchantManagedLocation;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 import com.talool.website.models.MerchantManagedLocationModel;
+import com.talool.website.panel.BasePanel;
+import com.talool.website.panel.NiceFeedbackPanel;
+import com.talool.website.panel.SubmitCallBack;
 
 /**
  * 

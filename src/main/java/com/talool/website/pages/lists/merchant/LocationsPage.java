@@ -18,8 +18,8 @@ import com.talool.service.ServiceFactory;
 import com.talool.website.models.MerchantManagedLocationListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminModalWindow;
-import com.talool.website.panel.MerchantLocationPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.merchant.MerchantLocationPanel;
 
 public class LocationsPage extends BasePage
 {
