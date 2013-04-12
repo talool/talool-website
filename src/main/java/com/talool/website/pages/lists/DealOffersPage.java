@@ -21,16 +21,16 @@ import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.customer.CustomerPanel;
 
-public class CustomersPage extends BasePage
+public class DealOffersPage extends BasePage
 {
 	private static final long serialVersionUID = 2102415289760762365L;
 
-	public CustomersPage()
+	public DealOffersPage()
 	{
 		super();
 	}
 
-	public CustomersPage(PageParameters parameters)
+	public DealOffersPage(PageParameters parameters)
 	{
 		super(parameters);
 	}

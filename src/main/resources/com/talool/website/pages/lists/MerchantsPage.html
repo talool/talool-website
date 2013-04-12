@@ -1,29 +1,25 @@
 <wicket:extend>
-	  	<div class="actions">
-	  	<a wicket:id="merchantLink"><button>Create New Merchant</button></a>
-	  	</div>
-	  	<table>
-	  		<thead>
-	  			<tr class="gray2-bg">
-	  				<th>Name</th>
-	  				<th>Tag(s)</th>
-	  				<th>Location(s)</th>
-	  				<th>Admins</th>
-	  				<th>Actions</th>
-	  			</tr>
-	  		</thead>
-	  		<tbody>
-	  			<tr class="odd" wicket:id="merchRptr">
-	  				<td><a href="#" wicket:id="nameLink"></a></td>
-	  				<td wicket:id="tags">Fine Dining</td>
-					<td wicket:id="primaryLocation.address.niceCityState">Boulder, Denver</td>
-	  				<td wicket:id="accounts">0</td>
-	  				<td class="orange-font">
-	  					<a wicket:id="editLink" class="icon icon-2x icon-pencil" title="Edit Merchant"></a>
-	  					<a href="#" class="icon icon-2x icon-remove" title="Delete Merchant"></a>
-	  				</td>
-	  			</tr>
-	  		</tbody>
-	  	</table>
-	  	<div wicket:id="modal"/>
+  	<table>
+  		<thead>
+  			<tr class="gray2-bg">
+  				<th>Name</th>
+  				<th>Tag(s)</th>
+  				<th>Location(s)</th>
+  				<th>Admins</th>
+  				<th>Actions</th>
+  			</tr>
+  		</thead>
+  		<tbody>
+  			<tr class="odd" wicket:id="merchRptr">
+  				<td><a href="#" wicket:id="nameLink"></a></td>
+  				<td wicket:id="tags">Fine Dining</td>
+				<td wicket:id="primaryLocation.address.niceCityState">Boulder, Denver</td>
+  				<td wicket:id="accounts">0</td>
+  				<td class="orange-font">
+  					<a wicket:id="editLink" class="icon icon-2x icon-pencil" title="Edit Merchant"></a>
+  					<a href="#" class="icon icon-2x icon-remove" title="Delete Merchant"></a>
+  				</td>
+  			</tr>
+  		</tbody>
+  	</table>
 </wicket:extend>

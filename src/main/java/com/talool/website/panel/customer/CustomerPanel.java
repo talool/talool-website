@@ -1,4 +1,4 @@
-package com.talool.website.panel;
+package com.talool.website.panel.customer;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +17,7 @@ import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +25,9 @@ import com.talool.core.Customer;
 import com.talool.core.Sex;
 import com.talool.core.service.ServiceException;
 import com.talool.website.models.CustomerModel;
+import com.talool.website.panel.BasePanel;
+import com.talool.website.panel.NiceFeedbackPanel;
+import com.talool.website.panel.SubmitCallBack;
 
 public class CustomerPanel extends BasePanel {
 
@@ -33,6 +37,12 @@ public class CustomerPanel extends BasePanel {
 	private SubmitCallBack callback;
 	
 	private boolean isNew = false;
+	
+	private String confirm;
+
+	public String getConfirm() {
+		return confirm;
+	}
 
 	public CustomerPanel(String id, SubmitCallBack callback) {
 		super(id);
@@ -71,9 +81,7 @@ public class CustomerPanel extends BasePanel {
 		form.add(new TextField<String>("email").setRequired(true));
 		// validate the passwords match
 		FormComponent<String> pw1 = new PasswordTextField("password").setRequired(true);
-		PasswordModel confirmModel = new PasswordModel();
-		confirmModel.setPassword(cModel.getObject().getPassword());
-		FormComponent<String> pw2 = new PasswordTextField("confirm",confirmModel).setRequired(true);
+		FormComponent<String> pw2 = new PasswordTextField("confirm",new PropertyModel<String>(this,"confirm")).setRequired(true);
 		EqualPasswordInputValidator pwv = new EqualPasswordInputValidator(pw1,pw2);
 		form.add(pw1);
 		form.add(pw2);
@@ -121,23 +129,6 @@ public class CustomerPanel extends BasePanel {
 			}
 
 		});
-	}
-	
-	@SuppressWarnings("rawtypes")
-	private class PasswordModel extends Model {
-
-		private static final long serialVersionUID = 4382728555047201756L;
-		public String password = null;
-
-		@SuppressWarnings("unused")
-		public String getPassword() {
-			return password;
-		}
-
-		public void setPassword(String password) {
-			this.password = password;
-		}
-		
 	}
 
 }

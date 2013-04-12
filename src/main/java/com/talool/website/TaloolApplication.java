@@ -12,19 +12,12 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.pages.HomePage;
-import com.talool.website.pages.define.BookPage;
-import com.talool.website.pages.define.CustomerPage;
-import com.talool.website.pages.define.DealPage;
-import com.talool.website.pages.define.MerchantPage;
-import com.talool.website.pages.lists.BooksPage;
+import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.pages.lists.CustomersPage;
-import com.talool.website.pages.lists.DealsPage;
-import com.talool.website.pages.lists.FriendsPage;
+import com.talool.website.pages.lists.DealOffersPage;
 import com.talool.website.pages.lists.MerchantsPage;
-import com.talool.website.pages.lists.merchant.AccountsPage;
-import com.talool.website.pages.lists.merchant.LocationsPage;
-import com.talool.website.pages.lists.merchant.MerchantBooksPage;
 
 /**
  * @author clintz
@@ -67,18 +60,9 @@ public class TaloolApplication extends WebApplication implements Serializable
 
 		getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
 
-		mountPage("/admin/books", BooksPage.class);
+		mountPage("/admin/books", DealOffersPage.class);
 		mountPage("/admin/customers", CustomersPage.class);
-		mountPage("/admin/customer/#{id}", CustomerPage.class);
-		mountPage("/admin/customer/${id}/friends", FriendsPage.class);
 		mountPage("/admin/merchants", MerchantsPage.class);
-		mountPage("/admin/merchant/#{id}", MerchantPage.class);
-		mountPage("/admin/merchant/${id}/books", MerchantBooksPage.class);
-		mountPage("/admin/merchant/${id}/book/#{bookId}", BookPage.class);
-		mountPage("/admin/merchant/${id}/accounts", AccountsPage.class);
-		mountPage("/admin/merchant/${id}/locations", LocationsPage.class);
-		mountPage("/admin/${method}/${id}/deals", DealsPage.class);
-		mountPage("/admin/merchant/${id}/deal/#{dealId}", DealPage.class);
 
 		/*
 		 * We need a ONE_PASS_RENDER strategy because pages like search need

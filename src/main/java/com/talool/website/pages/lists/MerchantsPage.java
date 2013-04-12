@@ -4,10 +4,10 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -19,9 +19,6 @@ import com.talool.website.models.MerchantListModel;
 import com.talool.website.models.ModelUtil;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.MerchantManagementPage;
-import com.talool.website.pages.lists.merchant.AccountsPage;
-import com.talool.website.pages.lists.merchant.LocationsPage;
-import com.talool.website.pages.lists.merchant.MerchantBooksPage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.MerchantPanel;
@@ -50,45 +47,6 @@ public class MerchantsPage extends BasePage
 	{
 		super.onInitialize();
 
-		final AdminModalWindow merchantModal;
-		add(merchantModal = new AdminModalWindow("modal"));
-
-		final SubmitCallBack callback = new SubmitCallBack()
-		{
-			private static final long serialVersionUID = -1459177645080455211L;
-
-			@Override
-			public void submitSuccess(AjaxRequestTarget target)
-			{
-				merchantModal.close(target);
-				target.add(MerchantsPage.this);
-			}
-
-			@Override
-			public void submitFailure(AjaxRequestTarget target)
-			{
-
-			}
-		};
-
-		final MerchantPanel merchantPanel = new MerchantPanel(merchantModal.getContentId(), callback);
-
-		merchantModal.setContent(merchantPanel);
-
-		add(new AjaxLink<Void>("merchantLink")
-		{
-			private static final long serialVersionUID = 8539856864609166L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				getSession().getFeedbackMessages().clear();
-				merchantModal.setTitle("Create Merchant");
-				merchantModal.setContent(new MerchantPanel(merchantModal.getContentId(), callback));
-				merchantModal.show(target);
-			}
-		});
-
 		final ListView<Merchant> mechants = new ListView<Merchant>("merchRptr", new MerchantListModel())
 		{
 
@@ -107,12 +65,9 @@ public class MerchantsPage extends BasePage
 					item.add(new AttributeModifier("class", "gray0-bg"));
 				}
 
-				// item.add(new Label("name"));
-
 				PageParameters booksParams = new PageParameters();
 				booksParams.set("id", merchant.getId());
 				booksParams.set("name", merchant.getName());
-
 				String url = (String) urlFor(MerchantManagementPage.class, booksParams);
 				ExternalLink namelLink = new ExternalLink("nameLink", Model.of(url),
 						new PropertyModel<String>(merchant, "name"));
@@ -125,6 +80,8 @@ public class MerchantsPage extends BasePage
 				// TODO - at some point, this tags label can be based on a model
 				item.add(new Label("tags", ModelUtil.geTagSummary(merchant)));
 
+				final AdminModalWindow definitionModal = getModal();
+				final SubmitCallBack callback = getCallback(definitionModal);
 				item.add(new AjaxLink<Void>("editLink")
 				{
 
@@ -134,11 +91,11 @@ public class MerchantsPage extends BasePage
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						MerchantPanel panel = new MerchantPanel(merchantModal.getContentId(), callback,
+						MerchantPanel panel = new MerchantPanel(definitionModal.getContentId(), callback,
 								merchantId);
-						merchantModal.setContent(panel);
-						merchantModal.setTitle("Edit Merchant");
-						merchantModal.show(target);
+						definitionModal.setContent(panel);
+						definitionModal.setTitle("Edit Merchant");
+						definitionModal.show(target);
 					}
 				});
 
@@ -160,5 +117,15 @@ public class MerchantsPage extends BasePage
 	public String getHeaderTitle()
 	{
 		return "Merchants";
+	}
+
+	@Override
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
+		return new MerchantPanel(contentId, callback);
+	}
+
+	@Override
+	public String getNewDefinitionPanelTitle() {
+		return "Create New Merchant";
 	}
 }

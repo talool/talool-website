@@ -1,21 +1,18 @@
 package com.talool.website.panel.merchant;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.talool.core.MerchantManagedLocation;
 import com.talool.website.models.MerchantManagedLocationListModel;
+import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
@@ -28,7 +25,6 @@ import com.talool.website.panel.SubmitCallBack;
 public class MerchantLocationsPanel extends BaseTabPanel
 {
 	private static final long serialVersionUID = 3634980968241854373L;
-	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocationsPanel.class);
 	private Long _merchantId;
 
 	public MerchantLocationsPanel(String id, PageParameters parameters)
@@ -41,8 +37,6 @@ public class MerchantLocationsPanel extends BaseTabPanel
 	protected void onInitialize()
 	{
 		super.onInitialize();
-
-		final WebMarkupContainer container = getContainer();
 
 		MerchantManagedLocationListModel model = new MerchantManagedLocationListModel();
 		model.setMerchantId(_merchantId);
@@ -72,8 +66,9 @@ public class MerchantLocationsPanel extends BaseTabPanel
 				item.add(new Label("merchantLocation.address.city"));
 				item.add(new Label("merchantLocation.address.stateProvinceCounty"));
 
-				final AdminModalWindow modal = getModal();
-				final SubmitCallBack callback = getCallback(container, modal);
+				BasePage page = (BasePage) this.getPage();
+				final AdminModalWindow modal = page.getModal();
+				final SubmitCallBack callback = page.getCallback(modal);
 				item.add(new AjaxLink<Void>("editLink")
 				{
 
@@ -94,18 +89,17 @@ public class MerchantLocationsPanel extends BaseTabPanel
 
 		};
 
-		container.add(locations);
+		add(locations);
+	}
+
+	@Override
+	public String getActionLabel() {
+		return "Create Merchant Location";
 	}
 	
-
 	@Override
 	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
 		return new MerchantLocationPanel(contentId, _merchantId, callback);
-	}
-
-	@Override
-	public String getNewDefinitionPanelTitle() {
-		return "Create Merchant Location";
 	}
 
 

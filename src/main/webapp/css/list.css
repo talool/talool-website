@@ -23,13 +23,16 @@ tbody td {
 }
 
 .tabPanelContainer {
+	padding: 5px;
+}
+.content {
 	position: relative;
 	padding: 5px;
 }
 .actions {
 	position: absolute;
 	right: 10px;
-	top: -30px;
+	top: 5px;
 }
 
 
