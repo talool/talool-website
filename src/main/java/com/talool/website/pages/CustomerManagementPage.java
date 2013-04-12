@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.customer.CustomerFriendsPanel;
 
 /**
@@ -79,6 +80,22 @@ public class CustomerManagementPage extends BaseManagementPage
 		final AjaxTabbedPanel<ITab> tabbedPanel = new AjaxTabbedPanel<ITab>("tabs", tabs);
 		tabbedPanel.setSelectedTab(2);
 		add(tabbedPanel);
+		
+		// hide the action link for these tabs
+		BasePage page = (BasePage) getPage();
+		page.getActionLink().setVisible(false);
 
+	}
+
+	@Override
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
+		// Returning null because these will be handled by the tab panels, if at all
+		return null;
+	}
+
+	@Override
+	public String getNewDefinitionPanelTitle() {
+		// Returning null because these will be handled by the tab panels, if at all
+		return null;
 	}
 }
