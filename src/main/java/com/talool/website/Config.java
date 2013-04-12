@@ -9,13 +9,20 @@ import org.apache.commons.configuration.PropertiesConfiguration;
  * @author clintz
  * 
  */
-public class Config extends PropertiesConfiguration
+public final class Config extends PropertiesConfiguration
 {
 	private static Config instance;
 
-	public Config(String file) throws ConfigurationException
+	private static final String UPLOAD_DIR = "upload.dir";
+
+	private Config(String file) throws ConfigurationException
 	{
 		super(file);
+	}
+
+	public static Config get()
+	{
+		return instance;
 	}
 
 	public static synchronized Configuration createInstance(final String propertyFile)
@@ -36,6 +43,11 @@ public class Config extends PropertiesConfiguration
 		}
 
 		return instance;
+	}
+
+	public String getUploadDir()
+	{
+		return getString(UPLOAD_DIR);
 	}
 
 }

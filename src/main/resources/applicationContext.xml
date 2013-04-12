@@ -12,9 +12,22 @@
             http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
             http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
-	<import resource="./dataSource.xml"/>
-	<import resource="./taloolService.xml"/>
+	<import resource="./dataSource.xml" />
+	<import resource="./taloolService.xml" />
 
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>file:/etc/talool/website.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="config" class="com.talool.website.Config"
+		factory-method="createInstance">
+		<constructor-arg value="/etc/talool/website.properties" />
+	</bean>
 
 </beans>
 	

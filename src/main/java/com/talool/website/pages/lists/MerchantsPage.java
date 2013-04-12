@@ -15,6 +15,7 @@ import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.Merchant;
+import com.talool.website.Config;
 import com.talool.website.models.MerchantListModel;
 import com.talool.website.models.ModelUtil;
 import com.talool.website.pages.BasePage;
@@ -46,6 +47,7 @@ public class MerchantsPage extends BasePage
 	protected void onInitialize()
 	{
 		super.onInitialize();
+		Config.get().getUploadDir();
 
 		final ListView<Merchant> mechants = new ListView<Merchant>("merchRptr", new MerchantListModel())
 		{
@@ -112,7 +114,7 @@ public class MerchantsPage extends BasePage
 	{
 		super.setHeaders(response);
 	}
-	
+
 	@Override
 	public String getHeaderTitle()
 	{
