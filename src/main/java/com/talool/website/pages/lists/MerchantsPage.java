@@ -4,7 +4,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -15,13 +14,11 @@ import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.Merchant;
+import com.talool.website.Config;
 import com.talool.website.models.MerchantListModel;
 import com.talool.website.models.ModelUtil;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.MerchantManagementPage;
-import com.talool.website.pages.lists.merchant.AccountsPage;
-import com.talool.website.pages.lists.merchant.LocationsPage;
-import com.talool.website.pages.lists.merchant.MerchantBooksPage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.MerchantPanel;
@@ -49,6 +46,7 @@ public class MerchantsPage extends BasePage
 	protected void onInitialize()
 	{
 		super.onInitialize();
+		Config.get().getUploadDir();
 
 		final AdminModalWindow merchantModal;
 		add(merchantModal = new AdminModalWindow("modal"));
@@ -155,7 +153,7 @@ public class MerchantsPage extends BasePage
 	{
 		super.setHeaders(response);
 	}
-	
+
 	@Override
 	public String getHeaderTitle()
 	{
