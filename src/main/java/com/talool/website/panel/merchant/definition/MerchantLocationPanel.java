@@ -1,9 +1,6 @@
-package com.talool.website.panel.merchant;
+package com.talool.website.panel.merchant.definition;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -16,8 +13,7 @@ import com.talool.core.MerchantManagedLocation;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 import com.talool.website.models.MerchantManagedLocationModel;
-import com.talool.website.panel.BasePanel;
-import com.talool.website.panel.NiceFeedbackPanel;
+import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
 
 /**
@@ -25,21 +21,16 @@ import com.talool.website.panel.SubmitCallBack;
  * @author dmccuen
  * 
  */
-public class MerchantLocationPanel extends BasePanel
+public class MerchantLocationPanel extends BaseDefinitionPanel
 {
 
 	private static final long serialVersionUID = 661849211369766802L;
-
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocationPanel.class);
 
-	private SubmitCallBack callback;
-
-	private boolean isNew = false;
 
 	public MerchantLocationPanel(final String id, final Long merchantId, final SubmitCallBack callback)
 	{
-		super(id);
-		this.callback = callback;
+		super(id, callback, true);
 		
 		Merchant merchant = null;
 		try {
@@ -51,75 +42,22 @@ public class MerchantLocationPanel extends BasePanel
 		MerchantManagedLocation managedLocation = domainFactory.newMerchantManagedLocation(merchant);
 		managedLocation.getMerchantLocation().setAddress(domainFactory.newAddress());
 		managedLocation.getMerchantLocation().setLogoUrl("");
-		isNew = true;
 		setDefaultModel(Model.of(managedLocation));
 	}
 
 	public MerchantLocationPanel(final String id, final SubmitCallBack callback, final Long merchantManagedLocationId)
 	{
-		super(id);
-		this.callback = callback;
+		super(id, callback, false);;
 		setDefaultModel(new MerchantManagedLocationModel(merchantManagedLocationId));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
 
-		final NiceFeedbackPanel feedback = new NiceFeedbackPanel("feedback");
-		add(feedback.setOutputMarkupId(true));
-		
-		Form<Void> form = new Form<Void>("form");
-		add(form);
-
 		WebMarkupContainer locationPanel = new WebMarkupContainer("locationPanel");
 		form.add(locationPanel);
-
-		CompoundPropertyModel<MerchantManagedLocation> merchLocModel = new CompoundPropertyModel<MerchantManagedLocation>(
-				(IModel<MerchantManagedLocation>) getDefaultModel());
-		form.setDefaultModel(merchLocModel);
-
-		form.add(new AjaxButton("submitButton", form)
-		{
-			private static final long serialVersionUID = 1756620552045829235L;
-
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form)
-			{
-				target.add(feedback);
-				// attempting to scroll to top
-				target.appendJavaScript("$('.content').scrollTop();");
-			}
-
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form)
-			{
-				StringBuilder sb = new StringBuilder();
-
-				try
-				{
-
-					MerchantManagedLocation managedLocation = (MerchantManagedLocation) form.getDefaultModelObject();
-					
-					taloolService.save(managedLocation);
-					target.add(feedback);
-					sb.append("Successfully ").append(isNew ? "created '" : "updated '")
-							.append(managedLocation.getMerchantLocation().getLocationName()).append("'");
-					getSession().info(sb.toString());
-					callback.submitSuccess(target);
-				}
-				catch (ServiceException e)
-				{
-					sb.append("Problem saving location: ").append(e.getLocalizedMessage());
-					getSession().error(sb.toString());
-					LOG.error(sb.toString());
-					callback.submitFailure(target);
-				}
-			}
-
-		});
 
 		locationPanel.add(new TextField<String>("merchantLocation.address.address1").setRequired(true));
 
@@ -134,5 +72,28 @@ public class MerchantLocationPanel extends BasePanel
 		locationPanel.add(new TextField<String>("merchantLocation.email").setRequired(true));
 		locationPanel.add(new TextField<String>("merchantLocation.websiteUrl"));
 
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public CompoundPropertyModel<MerchantManagedLocation> getDefaultCompoundPropertyModel() {
+		return new CompoundPropertyModel<MerchantManagedLocation>((IModel<MerchantManagedLocation>) getDefaultModel());
+	}
+
+	@Override
+	public String getObjectIdentifier() {
+		MerchantManagedLocation managedLocation = (MerchantManagedLocation) form.getDefaultModelObject();
+		return managedLocation.getMerchantLocation().getLocationName();
+	}
+
+	@Override
+	public void save() throws ServiceException {
+		MerchantManagedLocation managedLocation = (MerchantManagedLocation) form.getDefaultModelObject();
+		taloolService.save(managedLocation);
+	}
+
+	@Override
+	public String getSaveButtonLabel() {
+		return "Save Merchant Location";
 	}
 }

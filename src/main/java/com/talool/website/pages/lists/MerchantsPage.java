@@ -22,7 +22,7 @@ import com.talool.website.pages.BasePage;
 import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.merchant.MerchantPanel;
+import com.talool.website.panel.merchant.definition.MerchantPanel;
 
 /**
  * 

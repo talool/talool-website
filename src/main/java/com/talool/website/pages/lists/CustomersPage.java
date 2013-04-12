@@ -19,7 +19,7 @@ import com.talool.website.pages.BasePage;
 import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.customer.CustomerPanel;
+import com.talool.website.panel.customer.definition.CustomerPanel;
 
 public class CustomersPage extends BasePage
 {

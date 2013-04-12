@@ -16,6 +16,7 @@ import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.merchant.definition.MerchantAccountPanel;
 
 public class MerchantAccountsPanel extends BaseTabPanel
 {

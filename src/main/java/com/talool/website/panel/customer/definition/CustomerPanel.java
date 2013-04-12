@@ -1,14 +1,11 @@
-package com.talool.website.panel.customer;
+package com.talool.website.panel.customer.definition;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RadioChoice;
@@ -18,64 +15,36 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.talool.core.Customer;
 import com.talool.core.Sex;
 import com.talool.core.service.ServiceException;
 import com.talool.website.models.CustomerModel;
-import com.talool.website.panel.BasePanel;
-import com.talool.website.panel.NiceFeedbackPanel;
+import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
 
-public class CustomerPanel extends BasePanel {
+public class CustomerPanel extends BaseDefinitionPanel {
 
 	private static final long serialVersionUID = 2870193702212159884L;
-	private static final Logger LOG = LoggerFactory.getLogger(CustomerPanel.class);
-	
-	private SubmitCallBack callback;
-	
-	private boolean isNew = false;
-	
-	private String confirm;
-
-	public String getConfirm() {
-		return confirm;
-	}
 
 	public CustomerPanel(String id, SubmitCallBack callback) {
-		super(id);
-		this.callback = callback;
-		
+		super(id, callback, true);
+
 		Customer customer = domainFactory.newCustomer();
-		isNew = true;
 		setDefaultModel(Model.of(customer));
 	}
 	
 	public CustomerPanel(final String id, final SubmitCallBack callback, final Long customerId)
 	{
-		super(id);
-		this.callback = callback;
+		super(id, callback, false);
 		setDefaultModel(new CustomerModel(customerId));
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		
-		final NiceFeedbackPanel feedback = new NiceFeedbackPanel("feedback");
-		add(feedback.setOutputMarkupId(true));
 
-		Form<Void> form = new Form<Void>("form");
-		add(form);
-		
-		CompoundPropertyModel<Customer> cModel = new CompoundPropertyModel<Customer>(
-				(IModel<Customer>) getDefaultModel());
-		form.setDefaultModel(cModel);
-		
 		form.add(new TextField<String>("firstName").setRequired(true));
 		form.add(new TextField<String>("lastName").setRequired(true));
 		form.add(new TextField<String>("email").setRequired(true));
@@ -93,42 +62,39 @@ public class CustomerPanel extends BasePanel {
 		List<Sex> SEX = Arrays.asList(new Sex[] { Sex.Male, Sex.Female });
 		form.add(new RadioChoice<Sex>("sex", SEX).setSuffix("").setRequired(true));
 		
-		form.add(new AjaxButton("submitButton", form)
-		{
+	}
 
-			private static final long serialVersionUID = 6751242687978273755L;
+	@SuppressWarnings("unchecked")
+	@Override
+	public CompoundPropertyModel<Customer> getDefaultCompoundPropertyModel() {
+		return new CompoundPropertyModel<Customer>((IModel<Customer>) getDefaultModel());
+	}
 
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form)
-			{
-				target.add(feedback);
-				target.appendJavaScript("$('.content').scrollTop();");
-			}
+	@Override
+	public String getObjectIdentifier() {
+		Customer customer = (Customer) form.getDefaultModelObject();
+		return customer.getEmail();
+	}
 
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form)
-			{
-				StringBuilder sb = new StringBuilder();
-				try
-				{
-					Customer customer = (Customer) form.getDefaultModelObject();
-					taloolService.save(customer);
-					target.add(feedback);
-					sb.append("Successfully ").append(isNew ? "created '" : "updated '")
-					.append(customer.getEmail()).append("'");
-					getSession().info(sb.toString());
-					callback.submitSuccess(target);
-				}
-				catch (ServiceException e)
-				{
-					sb.append("Problem saving customer: ").append(e.getLocalizedMessage());
-					getSession().error(sb.toString());
-					LOG.error(sb.toString());
-					callback.submitFailure(target);
-				}
-			}
+	@Override
+	public void save() throws ServiceException {
+		Customer customer = (Customer) form.getDefaultModelObject();
+		taloolService.save(customer);
+	}
 
-		});
+	@Override
+	public String getSaveButtonLabel() {
+		return "Save Customer";
+	}
+	
+	private String confirm;
+
+	public String getConfirm() {
+		return confirm;
+	}
+
+	public void setConfirm(String confirm) {
+		this.confirm = confirm;
 	}
 
 }
