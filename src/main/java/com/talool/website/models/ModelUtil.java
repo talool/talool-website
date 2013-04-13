@@ -1,7 +1,10 @@
 package com.talool.website.models;
 
+import java.util.Set;
+
 import org.apache.commons.collections.CollectionUtils;
 
+import com.talool.core.Deal;
 import com.talool.core.Merchant;
 import com.talool.core.Tag;
 
@@ -14,14 +17,14 @@ public final class ModelUtil
 {
 	private static final String NO_TAG_SUMMARY = "(0)";
 
-	public static String geTagSummary(Merchant merchant)
+	private static String getCommaSepTags(final Set<Tag> tags)
 	{
-		if (CollectionUtils.isNotEmpty(merchant.getTags()))
+		if (CollectionUtils.isNotEmpty(tags))
 		{
 			final StringBuilder sb = new StringBuilder();
-			final int size = merchant.getTags().size();
+			final int size = tags.size();
 
-			for (final Tag tag : merchant.getTags())
+			for (final Tag tag : tags)
 			{
 				sb.append("(").append(size).append(") ").append(tag.getName());
 				return sb.toString();
@@ -29,6 +32,16 @@ public final class ModelUtil
 		}
 
 		return NO_TAG_SUMMARY;
+	}
+
+	public static String geTagSummary(final Deal deal)
+	{
+		return getCommaSepTags(deal.getTags());
+	}
+
+	public static String geTagSummary(final Merchant merchant)
+	{
+		return getCommaSepTags(merchant.getTags());
 	}
 
 	public static String getCommaSeperatedTags(Merchant merchant)
