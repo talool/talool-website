@@ -20,7 +20,9 @@ import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.customer.definition.CustomerPanel;
+import com.talool.website.util.SecuredPage;
 
+@SecuredPage
 public class CustomersPage extends BasePage
 {
 	private static final long serialVersionUID = 2102415289760762365L;
@@ -61,7 +63,7 @@ public class CustomersPage extends BasePage
 
 				item.add(new Label("firstName"));
 				item.add(new Label("lastName"));
-				
+
 				PageParameters customerParams = new PageParameters();
 				customerParams.set("id", customer.getId());
 				customerParams.set("email", customer.getEmail());
@@ -95,7 +97,7 @@ public class CustomersPage extends BasePage
 
 		add(customers);
 	}
-	
+
 	@Override
 	public String getHeaderTitle()
 	{
@@ -103,12 +105,14 @@ public class CustomersPage extends BasePage
 	}
 
 	@Override
-	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
+	{
 		return new CustomerPanel(contentId, callback);
 	}
 
 	@Override
-	public String getNewDefinitionPanelTitle() {
+	public String getNewDefinitionPanelTitle()
+	{
 		return "Create New Customer";
 	}
 

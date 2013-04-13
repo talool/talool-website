@@ -23,12 +23,14 @@ import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.definition.MerchantPanel;
+import com.talool.website.util.SecuredPage;
 
 /**
  * 
  * @author clintz
  * 
  */
+@SecuredPage
 public class MerchantsPage extends BasePage
 {
 	private static final long serialVersionUID = 9023714664854633955L;
@@ -122,12 +124,14 @@ public class MerchantsPage extends BasePage
 	}
 
 	@Override
-	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
+	{
 		return new MerchantPanel(contentId, callback);
 	}
 
 	@Override
-	public String getNewDefinitionPanelTitle() {
+	public String getNewDefinitionPanelTitle()
+	{
 		return "Create New Merchant";
 	}
 }

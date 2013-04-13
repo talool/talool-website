@@ -12,15 +12,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.DealOffer;
-import com.talool.core.DealType;
 import com.talool.core.Merchant;
-import com.talool.core.MerchantAccount;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 import com.talool.website.component.DealTypeDropDownChoice;
 import com.talool.website.models.DealOfferModel;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.util.SessionUtils;
 
 /**
  * 
@@ -47,17 +46,10 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		{
 			LOG.error("problem loading merchant", se);
 		}
-		MerchantAccount merchantAccount = null;
-		try
-		{
-			merchantAccount = ServiceFactory.get().getTaloolService().getMerchantAccountById(merchantId);
-		}
-		catch (ServiceException se)
-		{
-			LOG.error("problem loading merchant account", se);
-		}
 
-		DealOffer dealOffer = domainFactory.newDealOffer(merchant, merchantAccount);
+		final DealOffer dealOffer = domainFactory.newDealOffer(merchant, SessionUtils.getSession()
+				.getMerchantAccount());
+
 		setDefaultModel(Model.of(dealOffer));
 	}
 
@@ -100,8 +92,6 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 	public void save() throws ServiceException
 	{
 		DealOffer dealOffer = (DealOffer) form.getDefaultModelObject();
-		// TODO mak this a form element
-		dealOffer.setDealType(DealType.PAID_BOOK);
 		taloolService.save(dealOffer);
 	}
 

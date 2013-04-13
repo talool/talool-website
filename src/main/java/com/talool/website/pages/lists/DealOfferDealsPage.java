@@ -16,18 +16,20 @@ import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.definition.DealOfferDealPanel;
+import com.talool.website.util.SecuredPage;
 
-public class DealOfferDealsPage extends BasePage {
-
+@SecuredPage
+public class DealOfferDealsPage extends BasePage
+{
 	private static final long serialVersionUID = 6008230892463177176L;
 	private Long _dealOfferId;
-	
+
 	public DealOfferDealsPage(PageParameters parameters)
 	{
 		super(parameters);
 		_dealOfferId = parameters.get("id").toLong();
 	}
-	
+
 	@Override
 	protected void onInitialize()
 	{
@@ -55,7 +57,7 @@ public class DealOfferDealsPage extends BasePage {
 
 				item.add(new Label("title"));
 				item.add(new Label("summary"));
-				
+
 				final AdminModalWindow definitionModal = getModal();
 				final SubmitCallBack callback = getCallback(definitionModal);
 				item.add(new AjaxLink<Void>("editLink")
@@ -67,8 +69,8 @@ public class DealOfferDealsPage extends BasePage {
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						DealOfferDealPanel panel = new DealOfferDealPanel(definitionModal.getContentId(), callback,
-								dealId);
+						DealOfferDealPanel panel = new DealOfferDealPanel(definitionModal.getContentId(),
+								callback, dealId);
 						definitionModal.setContent(panel);
 						definitionModal.setTitle("Edit Deal");
 						definitionModal.show(target);
@@ -82,7 +84,7 @@ public class DealOfferDealsPage extends BasePage {
 		add(deals);
 
 	}
-	
+
 	@Override
 	public String getHeaderTitle()
 	{
@@ -92,14 +94,17 @@ public class DealOfferDealsPage extends BasePage {
 	}
 
 	@Override
-	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
-		// NOTE: this is called via the super constructor, so can't way for _dealOfferId to be set in this constructor.
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
+	{
+		// NOTE: this is called via the super constructor, so can't way for
+		// _dealOfferId to be set in this constructor.
 		_dealOfferId = getPageParameters().get("id").toLong();
 		return new DealOfferDealPanel(contentId, _dealOfferId, callback);
 	}
 
 	@Override
-	public String getNewDefinitionPanelTitle() {
+	public String getNewDefinitionPanelTitle()
+	{
 		return "Create New Deal";
 	}
 }

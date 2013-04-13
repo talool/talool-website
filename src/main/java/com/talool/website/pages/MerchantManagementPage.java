@@ -15,12 +15,14 @@ import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.MerchantAccountsPanel;
 import com.talool.website.panel.merchant.MerchantDealOffersPanel;
 import com.talool.website.panel.merchant.MerchantLocationsPanel;
+import com.talool.website.util.SecuredPage;
 
 /**
  * 
  * @author clintz
  * 
  */
+@SecuredPage
 public class MerchantManagementPage extends BaseManagementPage
 {
 	private static final long serialVersionUID = -6214364791355264043L;
@@ -29,7 +31,7 @@ public class MerchantManagementPage extends BaseManagementPage
 	{
 		super(parameters);
 	}
-	
+
 	@Override
 	public String getHeaderTitle()
 	{
@@ -79,17 +81,19 @@ public class MerchantManagementPage extends BaseManagementPage
 			}
 		});
 
-		final AjaxTabbedPanel<ITab> tabbedPanel = new AjaxTabbedPanel<ITab>("tabs", tabs) {
+		final AjaxTabbedPanel<ITab> tabbedPanel = new AjaxTabbedPanel<ITab>("tabs", tabs)
+		{
 
 			private static final long serialVersionUID = -9186300115065742114L;
 
 			@Override
-			protected void onAjaxUpdate(AjaxRequestTarget target) {
+			protected void onAjaxUpdate(AjaxRequestTarget target)
+			{
 				super.onAjaxUpdate(target);
 				BasePage page = (BasePage) this.getPage();
 				target.add(page.getActionLink());
 			}
-			
+
 		};
 		tabbedPanel.setSelectedTab(2);
 		add(tabbedPanel);
@@ -97,13 +101,15 @@ public class MerchantManagementPage extends BaseManagementPage
 	}
 
 	@Override
-	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
+	{
 		// Returning null because these will be handled by the tab panels
 		return null;
 	}
 
 	@Override
-	public String getNewDefinitionPanelTitle() {
+	public String getNewDefinitionPanelTitle()
+	{
 		// Returning null because these will be handled by the tab panels
 		return null;
 	}
