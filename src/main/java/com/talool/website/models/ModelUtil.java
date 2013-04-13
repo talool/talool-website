@@ -17,7 +17,7 @@ public final class ModelUtil
 {
 	private static final String NO_TAG_SUMMARY = "(0)";
 
-	private static String getCommaSepTags(final Set<Tag> tags)
+	private static String getTagsSummary(final Set<Tag> tags)
 	{
 		if (CollectionUtils.isNotEmpty(tags))
 		{
@@ -36,21 +36,26 @@ public final class ModelUtil
 
 	public static String geTagSummary(final Deal deal)
 	{
-		return getCommaSepTags(deal.getTags());
+		return getTagsSummary(deal.getTags());
 	}
 
 	public static String geTagSummary(final Merchant merchant)
 	{
-		return getCommaSepTags(merchant.getTags());
+		return getTagsSummary(merchant.getTags());
 	}
 
 	public static String getCommaSeperatedTags(Merchant merchant)
 	{
-		if (CollectionUtils.isNotEmpty(merchant.getTags()))
+		return getCommaSeperatedTags(merchant.getTags());
+	}
+
+	private static String getCommaSeperatedTags(Set<Tag> tags)
+	{
+		if (CollectionUtils.isNotEmpty(tags))
 		{
 			final StringBuilder sb = new StringBuilder();
 
-			for (final Tag tag : merchant.getTags())
+			for (final Tag tag : tags)
 			{
 				if (sb.length() == 0)
 				{
@@ -66,5 +71,10 @@ public final class ModelUtil
 		}
 
 		return null;
+	}
+
+	public static String getCommaSeperatedTags(final Deal deal)
+	{
+		return getCommaSeperatedTags(deal.getTags());
 	}
 }
