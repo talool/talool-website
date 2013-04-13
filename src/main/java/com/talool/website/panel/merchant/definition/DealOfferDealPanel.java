@@ -21,6 +21,7 @@ import com.talool.core.DealOffer;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
+import com.talool.website.component.DealTypeDropDownChoice;
 import com.talool.website.models.DealModel;
 import com.talool.website.models.ModelUtil;
 import com.talool.website.panel.BaseDefinitionPanel;
@@ -68,6 +69,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	{
 		super.onInitialize();
 
+		//form.add(new DealTypeDropDownChoice("merchant").setRequired(true));
 		form.add(new TextField<String>("title").setRequired(true));
 		form.add(new TextArea<String>("summary").setRequired(true));
 		form.add(new TextArea<String>("details").setRequired(true));
