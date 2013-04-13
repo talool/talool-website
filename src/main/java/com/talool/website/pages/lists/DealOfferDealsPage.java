@@ -86,7 +86,8 @@ public class DealOfferDealsPage extends BasePage {
 	@Override
 	public String getHeaderTitle()
 	{
-		StringBuilder sb = new StringBuilder("");
+		// TODO add another param to the url or just hit the db and pull out the details from the id?  Hit the DB...
+		StringBuilder sb = new StringBuilder("Merchants > {Merchant Name} >");
 		sb.append(getPageParameters().get("name")).append(" > Deals");
 		return sb.toString();
 	}

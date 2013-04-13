@@ -91,7 +91,7 @@ public class MerchantManagementPage extends BaseManagementPage
 			}
 			
 		};
-		tabbedPanel.setSelectedTab(2);
+		tabbedPanel.setSelectedTab(0);
 		add(tabbedPanel);
 
 	}
