@@ -30,15 +30,17 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	private static final long serialVersionUID = 661849211369766802L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealOfferDealPanel.class);
 
-
 	public DealOfferDealPanel(final String id, final Long dealOfferId, final SubmitCallBack callback)
 	{
 		super(id, callback, true);
-		
+
 		DealOffer dealOffer = null;
-		try {
+		try
+		{
 			dealOffer = ServiceFactory.get().getTaloolService().getDealOffer(dealOfferId);
-		} catch (ServiceException se) {
+		}
+		catch (ServiceException se)
+		{
 			LOG.error("problem loading deal offer", se);
 		}
 
@@ -48,7 +50,8 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 
 	public DealOfferDealPanel(final String id, final SubmitCallBack callback, final Long dealId)
 	{
-		super(id, callback, false);;
+		super(id, callback, false);
+		;
 		setDefaultModel(new DealModel(dealId));
 	}
 
@@ -60,32 +63,36 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		form.add(new TextField<String>("title").setRequired(true));
 		form.add(new TextField<String>("summary"));
 		form.add(new TextField<String>("details"));
-		DateConverter converter = new PatternDateConverter("MM/dd/yyyy",false);
+		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
 		form.add(new DateTextField("expires", converter).setRequired(true));
 		form.add(new CheckBox("isActive"));
-		
+
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public CompoundPropertyModel<Deal> getDefaultCompoundPropertyModel() {
+	public CompoundPropertyModel<Deal> getDefaultCompoundPropertyModel()
+	{
 		return new CompoundPropertyModel<Deal>((IModel<Deal>) getDefaultModel());
 	}
 
 	@Override
-	public String getObjectIdentifier() {
+	public String getObjectIdentifier()
+	{
 		Deal deal = (Deal) form.getDefaultModelObject();
 		return deal.getTitle();
 	}
 
 	@Override
-	public void save() throws ServiceException {
+	public void save() throws ServiceException
+	{
 		Deal deal = (Deal) form.getDefaultModelObject();
 		taloolService.save(deal);
 	}
 
 	@Override
-	public String getSaveButtonLabel() {
+	public String getSaveButtonLabel()
+	{
 		return "Save Deal";
 	}
 }
