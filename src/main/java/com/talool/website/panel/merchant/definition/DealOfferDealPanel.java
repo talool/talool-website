@@ -18,13 +18,17 @@ import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
 import com.talool.core.DealOffer;
+import com.talool.core.MerchantIdentity;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
+import com.talool.website.component.MerchantIdentitySelect;
+import com.talool.website.models.AvailableMerchantsListModel;
 import com.talool.website.models.DealModel;
 import com.talool.website.models.ModelUtil;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.util.SessionUtils;
 
 /**
  * 
@@ -37,6 +41,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	private static final long serialVersionUID = 661849211369766802L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealOfferDealPanel.class);
 	private String tags;
+	private MerchantIdentity merchantIdentity;
 
 	public DealOfferDealPanel(final String id, final SubmitCallBack callback)
 	{
@@ -45,7 +50,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		Deal deal = domainFactory.newDeal();
 		setDefaultModel(Model.of(deal));
 	}
-	
+
 	public DealOfferDealPanel(final String id, final Long dealOfferId, final SubmitCallBack callback)
 	{
 		super(id, callback, true);
@@ -75,15 +80,29 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	{
 		super.onInitialize();
 
-		//form.add(new DealTypeDropDownChoice("merchant").setRequired(true));
+		// form.add(new DealTypeDropDownChoice("merchant").setRequired(true));
+
+		form.add(new MerchantIdentitySelect("availableMerchants", new PropertyModel<MerchantIdentity>(
+				this, "merchantIdentity"), new AvailableMerchantsListModel(SessionUtils.getSession()
+				.getMerchantAccount().getId())).setRequired(true));
+
 		form.add(new TextField<String>("title").setRequired(true));
 		form.add(new TextArea<String>("summary").setRequired(true));
 		form.add(new TextArea<String>("details").setRequired(true));
 		form.add(new TextField<String>("tags", new PropertyModel<String>(this, "tags")));
-		form.add(new TextField<String>("code")); //TODO we need a validator on this
-		form.add(new TextField<String>("imageUrl").setRequired(true)); //TODO we need a validator on this
+		form.add(new TextField<String>("code")); // TODO we need a validator on this
+		form.add(new TextField<String>("imageUrl").setRequired(true)); // TODO we
+																																		// need a
+																																		// validator
+																																		// on this
 		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
-		form.add(new DateTextField("expires", converter).setRequired(true)); //TODO we need a date picker widget
+		form.add(new DateTextField("expires", converter).setRequired(true)); // TODO
+																																					// we
+																																					// need
+																																					// a
+																																					// date
+																																					// picker
+																																					// widget
 		form.add(new CheckBox("isActive"));
 
 	}
@@ -106,7 +125,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	public void save() throws ServiceException
 	{
 		Deal deal = (Deal) form.getDefaultModelObject();
-		
+
 		if (StringUtils.isNotEmpty(tags))
 		{
 			Set<Tag> selectedTags = taloolService.getOrCreateTags(tags.split(","));
@@ -116,7 +135,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		{
 			deal.clearTags();
 		}
-		
+
 		taloolService.save(deal);
 	}
 
@@ -125,12 +144,13 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	{
 		return "Save Deal";
 	}
-	
+
 	public String getTags()
 	{
 		final Deal deal = (Deal) getDefaultModelObject();
 		return ModelUtil.getCommaSeperatedTags(deal);
 	}
+
 	public void setTags(String tags)
 	{
 		this.tags = tags;

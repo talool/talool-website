@@ -18,7 +18,7 @@ import org.apache.wicket.model.IModel;
  * 
  */
 @SuppressWarnings("unchecked")
-public class StateDropDownChoice extends DropDownChoice<StateOption>
+public class StateSelect extends DropDownChoice<StateOption>
 {
 	private static final long serialVersionUID = 6639221585443609156L;
 	private static Map<String, StateOption> stateMap = new HashMap<String, StateOption>();
@@ -103,12 +103,12 @@ public class StateDropDownChoice extends DropDownChoice<StateOption>
 		return so == null ? OTHER : so;
 	}
 
-	public StateDropDownChoice(String id)
+	public StateSelect(String id)
 	{
 		super(id, stateOptions, cr);
 	}
 
-	public StateDropDownChoice(String id, IModel<StateOption> model)
+	public StateSelect(String id, IModel<StateOption> model)
 	{
 		super(id, model, stateOptions, cr);
 	}

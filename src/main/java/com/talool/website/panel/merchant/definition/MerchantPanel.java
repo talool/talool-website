@@ -15,7 +15,7 @@ import org.apache.wicket.validation.validator.UrlValidator;
 import com.talool.core.Merchant;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
-import com.talool.website.component.StateDropDownChoice;
+import com.talool.website.component.StateSelect;
 import com.talool.website.component.StateOption;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.models.ModelUtil;
@@ -57,7 +57,7 @@ public class MerchantPanel extends BaseDefinitionPanel
 			return null;
 		}
 
-		return StateDropDownChoice.getStateOptionByCode(merch.getPrimaryLocation().getAddress()
+		return StateSelect.getStateOptionByCode(merch.getPrimaryLocation().getAddress()
 				.getStateProvinceCounty());
 
 	}
@@ -96,7 +96,7 @@ public class MerchantPanel extends BaseDefinitionPanel
 
 		locationPanel.add(new TextField<String>("primaryLocation.address.city").setRequired(true));
 
-		locationPanel.add(new StateDropDownChoice("primaryLocation.address.stateProvinceCounty",
+		locationPanel.add(new StateSelect("primaryLocation.address.stateProvinceCounty",
 				new PropertyModel<StateOption>(this, "stateOption")).setRequired(true));
 
 		locationPanel.add(new TextField<String>("primaryLocation.address.zip").setRequired(true));
