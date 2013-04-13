@@ -13,7 +13,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.MerchantAccountsPanel;
-import com.talool.website.panel.merchant.MerchantDealOffersPanel;
+import com.talool.website.panel.merchant.MerchantDealsPanel;
 import com.talool.website.panel.merchant.MerchantLocationsPanel;
 import com.talool.website.util.SecuredPage;
 
@@ -45,7 +45,7 @@ public class MerchantManagementPage extends BaseManagementPage
 
 		List<ITab> tabs = new ArrayList<ITab>();
 
-		tabs.add(new AbstractTab(new Model<String>("Deal Offers"))
+		tabs.add(new AbstractTab(new Model<String>("Deals"))
 		{
 
 			private static final long serialVersionUID = 6405610365875810783L;
@@ -53,7 +53,7 @@ public class MerchantManagementPage extends BaseManagementPage
 			@Override
 			public Panel getPanel(String panelId)
 			{
-				return new MerchantDealOffersPanel(panelId, getPageParameters());
+				return new MerchantDealsPanel(panelId, getPageParameters());
 			}
 		});
 

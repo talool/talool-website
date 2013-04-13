@@ -21,7 +21,6 @@ import com.talool.core.DealOffer;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
-import com.talool.website.component.DealTypeDropDownChoice;
 import com.talool.website.models.DealModel;
 import com.talool.website.models.ModelUtil;
 import com.talool.website.panel.BaseDefinitionPanel;
@@ -39,6 +38,14 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	private static final Logger LOG = LoggerFactory.getLogger(DealOfferDealPanel.class);
 	private String tags;
 
+	public DealOfferDealPanel(final String id, final SubmitCallBack callback)
+	{
+		super(id, callback, true);
+
+		Deal deal = domainFactory.newDeal();
+		setDefaultModel(Model.of(deal));
+	}
+	
 	public DealOfferDealPanel(final String id, final Long dealOfferId, final SubmitCallBack callback)
 	{
 		super(id, callback, true);
@@ -60,7 +67,6 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	public DealOfferDealPanel(final String id, final SubmitCallBack callback, final Long dealId)
 	{
 		super(id, callback, false);
-		;
 		setDefaultModel(new DealModel(dealId));
 	}
 
@@ -104,11 +110,11 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		if (StringUtils.isNotEmpty(tags))
 		{
 			Set<Tag> selectedTags = taloolService.getOrCreateTags(tags.split(","));
-			//deal.setTags(selectedTags);
+			deal.setTags(selectedTags);
 		}
 		else
 		{
-			//deal.clearTags();
+			deal.clearTags();
 		}
 		
 		taloolService.save(deal);
@@ -123,7 +129,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	public String getTags()
 	{
 		final Deal deal = (Deal) getDefaultModelObject();
-		return "";//ModelUtil.getCommaSeperatedTags(deal);
+		return ModelUtil.getCommaSeperatedTags(deal);
 	}
 	public void setTags(String tags)
 	{
