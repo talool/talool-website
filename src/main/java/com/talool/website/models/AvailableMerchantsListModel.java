@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.talool.core.MerchantIdentity;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
+import com.talool.website.util.SessionUtils;
 
 /**
  * 
@@ -19,26 +20,22 @@ public class AvailableMerchantsListModel extends LoadableDetachableModel<List<Me
 {
 	private static final Logger LOG = LoggerFactory.getLogger(AvailableMerchantsListModel.class);
 	private static final long serialVersionUID = 3057667212077774497L;
-	private Long merchantAccountId;
-
-	public AvailableMerchantsListModel(final Long merchantAccountId)
-	{
-		this.merchantAccountId = merchantAccountId;
-	}
 
 	@Override
 	protected List<MerchantIdentity> load()
 	{
 		List<MerchantIdentity> mIds = null;
 
+		final Long merchantId = SessionUtils.getSession().getMerchantAccount().getId();
+
 		try
 		{
 			mIds = ServiceFactory.get().getTaloolService()
-					.getAuthorizedMerchantIdentities(merchantAccountId);
+					.getAuthorizedMerchantIdentities(SessionUtils.getSession().getMerchantAccount().getId());
 		}
 		catch (ServiceException e)
 		{
-			LOG.error("problem loading merchant identities for merchantAccountId " + merchantAccountId, e);
+			LOG.error("problem loading merchant identities for merchantAccountId " + merchantId, e);
 		}
 
 		return mIds;

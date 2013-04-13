@@ -28,7 +28,6 @@ import com.talool.website.models.DealModel;
 import com.talool.website.models.ModelUtil;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.util.SessionUtils;
 
 /**
  * 
@@ -83,8 +82,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		// form.add(new DealTypeDropDownChoice("merchant").setRequired(true));
 
 		form.add(new MerchantIdentitySelect("availableMerchants", new PropertyModel<MerchantIdentity>(
-				this, "merchantIdentity"), new AvailableMerchantsListModel(SessionUtils.getSession()
-				.getMerchantAccount().getId())).setRequired(true));
+				this, "merchantIdentity"), new AvailableMerchantsListModel()).setRequired(true));
 
 		form.add(new TextField<String>("title").setRequired(true));
 		form.add(new TextArea<String>("summary").setRequired(true));
