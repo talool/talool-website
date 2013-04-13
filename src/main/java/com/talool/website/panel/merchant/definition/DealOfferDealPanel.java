@@ -24,14 +24,14 @@ import com.talool.website.panel.SubmitCallBack;
  * @author dmccuen
  * 
  */
-public class MerchantDealPanel extends BaseDefinitionPanel
+public class DealOfferDealPanel extends BaseDefinitionPanel
 {
 
 	private static final long serialVersionUID = 661849211369766802L;
-	private static final Logger LOG = LoggerFactory.getLogger(MerchantDealPanel.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DealOfferDealPanel.class);
 
 
-	public MerchantDealPanel(final String id, final Long dealOfferId, final SubmitCallBack callback)
+	public DealOfferDealPanel(final String id, final Long dealOfferId, final SubmitCallBack callback)
 	{
 		super(id, callback, true);
 		
@@ -46,7 +46,7 @@ public class MerchantDealPanel extends BaseDefinitionPanel
 		setDefaultModel(Model.of(deal));
 	}
 
-	public MerchantDealPanel(final String id, final SubmitCallBack callback, final Long dealId)
+	public DealOfferDealPanel(final String id, final SubmitCallBack callback, final Long dealId)
 	{
 		super(id, callback, false);;
 		setDefaultModel(new DealModel(dealId));

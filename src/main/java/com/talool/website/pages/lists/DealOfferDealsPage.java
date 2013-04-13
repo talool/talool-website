@@ -15,7 +15,7 @@ import com.talool.website.models.DealListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.merchant.definition.MerchantDealPanel;
+import com.talool.website.panel.merchant.definition.DealOfferDealPanel;
 
 public class DealOfferDealsPage extends BasePage {
 
@@ -67,7 +67,7 @@ public class DealOfferDealsPage extends BasePage {
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						MerchantDealPanel panel = new MerchantDealPanel(definitionModal.getContentId(), callback,
+						DealOfferDealPanel panel = new DealOfferDealPanel(definitionModal.getContentId(), callback,
 								dealId);
 						definitionModal.setContent(panel);
 						definitionModal.setTitle("Edit Deal");
@@ -95,7 +95,7 @@ public class DealOfferDealsPage extends BasePage {
 	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
 		// NOTE: this is called via the super constructor, so can't way for _dealOfferId to be set in this constructor.
 		_dealOfferId = getPageParameters().get("id").toLong();
-		return new MerchantDealPanel(contentId, _dealOfferId, callback);
+		return new DealOfferDealPanel(contentId, _dealOfferId, callback);
 	}
 
 	@Override
