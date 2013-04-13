@@ -1,0 +1,33 @@
+<html>
+<head>
+<title>Talool Administration</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<style>
+.cmain {
+    width: 270px;
+    height: 100px;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    font-family: Arial,Helvetica,Utkal,sans-serif;
+    font-size:62px;
+ }
+</style>
+</head>
+<body>
+<div class="cmain">
+<form wicket:id="loginForm">
+<table>
+<tr><td>Email:</td><td><input wicket:id="email" id="email" type="text"></td></tr>
+<tr><td>Passord:</td><td><input wicket:id="pass" type="password"></td></tr>
+<tr><td colspan="2" align="center"><input type="submit" value="Login"></td></tr>
+</table>
+</form>
+</div>
+<script type="text/javascript">$("#email").focus();</script>
+ 
+</body>
+</html>

@@ -2,9 +2,12 @@ package com.talool.website;
 
 import java.io.Serializable;
 
+import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.IPackageResourceGuard;
 import org.apache.wicket.markup.html.SecurePackageResourceGuard;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.settings.IExceptionSettings;
@@ -12,9 +15,8 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.talool.website.pages.CustomerManagementPage;
+import com.talool.website.pages.AdminLoginPage;
 import com.talool.website.pages.HomePage;
-import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.pages.lists.CustomersPage;
 import com.talool.website.pages.lists.DealOffersPage;
 import com.talool.website.pages.lists.MerchantsPage;
@@ -26,9 +28,15 @@ import com.talool.website.pages.lists.MerchantsPage;
 public class TaloolApplication extends WebApplication implements Serializable
 {
 	private final String mode = "development";
-
 	private static final long serialVersionUID = 1954532829422211028L;
 
+	@Override
+	public Session newSession(Request request, Response response)
+	{
+		return new TaloolSession(request);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Class getHomePage()
 	{
@@ -60,6 +68,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 
 		getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
 
+		mountPage("/admin", AdminLoginPage.class);
 		mountPage("/admin/books", DealOffersPage.class);
 		mountPage("/admin/customers", CustomersPage.class);
 		mountPage("/admin/merchants", MerchantsPage.class);
@@ -80,10 +89,9 @@ public class TaloolApplication extends WebApplication implements Serializable
 
 		// getApplicationSettings().setInternalErrorPage(ErrorPage.class);
 
-		// final ReportingAuthorizationStrategy authStrat = new
-		// ReportingAuthorizationStrategy(config);
-		// getSecuritySettings().setAuthorizationStrategy(authStrat);
-		// etSecuritySettings().setUnauthorizedComponentInstantiationListener(authStrat);
+		final AuthStrategy authStrat = new AuthStrategy();
+		getSecuritySettings().setAuthorizationStrategy(authStrat);
+		getSecuritySettings().setUnauthorizedComponentInstantiationListener(authStrat);
 
 		if (mode.equalsIgnoreCase("deployment"))
 		{
