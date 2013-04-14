@@ -56,12 +56,12 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		form.add(new TextField<String>("title").setRequired(true));
 		form.add(new TextField<String>("summary"));
 		form.add(new TextField<String>("price").setRequired(true));
-		
+
 		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
 		DateTextField expires = new DateTextField("expires", converter);
 		expires.add(new DatePicker());
 		form.add(expires);
-		
+
 		form.add(new CheckBox("isActive"));
 
 	}
@@ -84,6 +84,7 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 	public void save() throws ServiceException
 	{
 		DealOffer dealOffer = (DealOffer) form.getDefaultModelObject();
+		dealOffer.setUpdatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
 		taloolService.save(dealOffer);
 	}
 

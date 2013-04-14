@@ -56,7 +56,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	{
 		super(id, callback, true);
 		setMerchantContext(SessionUtils.getSession().getMerchantAccount().getMerchant());
-		Deal deal = domainFactory.newDeal();
+		Deal deal = domainFactory.newDeal(SessionUtils.getSession().getMerchantAccount());
 		setDefaultModel(Model.of(deal));
 	}
 
@@ -66,7 +66,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 
 		try
 		{
-			dealOffer = ServiceFactory.get().getTaloolService().getDealOffer(dealOfferId);
+			dealOffer = taloolService.getDealOffer(dealOfferId);
 			setMerchantContext(SessionUtils.getSession().getMerchantAccount().getMerchant());
 		}
 		catch (ServiceException se)
@@ -202,10 +202,11 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 			deal.clearTags();
 		}
 
-		Merchant merchant = taloolService.getMerchantById(merchantIdentity.getId());
+		final Merchant merchant = taloolService.getMerchantById(merchantIdentity.getId());
 
 		deal.setDealOffer(dealOffer);
 		deal.setMerchant(merchant);
+		deal.setUpdatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
 
 		taloolService.save(deal);
 	}
