@@ -45,7 +45,7 @@ public class MerchantManagementPage extends BaseManagementPage
 
 		List<ITab> tabs = new ArrayList<ITab>();
 
-		tabs.add(new AbstractTab(new Model<String>("Deals"))
+		tabs.add(new AbstractTab(new Model<String>("My Deals"))
 		{
 
 			private static final long serialVersionUID = 6405610365875810783L;
