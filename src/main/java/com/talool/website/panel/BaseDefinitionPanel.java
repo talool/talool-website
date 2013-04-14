@@ -24,7 +24,6 @@ abstract public class BaseDefinitionPanel extends BasePanel
 	protected Form<Void> form;
 	private boolean isNew = false;
 
-
 	public BaseDefinitionPanel(final String id, final SubmitCallBack callback, boolean isNew)
 	{
 		super(id);
@@ -39,10 +38,10 @@ abstract public class BaseDefinitionPanel extends BasePanel
 
 		final NiceFeedbackPanel feedback = new NiceFeedbackPanel("feedback");
 		add(feedback.setOutputMarkupId(true));
-		
+
 		form = new Form<Void>("form");
 		add(form);
-		
+
 		form.setDefaultModel(getDefaultCompoundPropertyModel());
 
 		AjaxButton submit = new AjaxButton("submitButton", form)
@@ -68,7 +67,7 @@ abstract public class BaseDefinitionPanel extends BasePanel
 					save();
 					target.add(feedback);
 					sb.append("Successfully ").append(isNew ? "created '" : "updated '")
-							.append(getObjectIdentifier());
+							.append(getObjectIdentifier()).append("'");
 					getSession().info(sb.toString());
 					callback.submitSuccess(target);
 				}
@@ -82,15 +81,18 @@ abstract public class BaseDefinitionPanel extends BasePanel
 			}
 
 		};
-		
+
 		form.add(submit);
 		submit.add(new AttributeModifier("value", getSaveButtonLabel()));
-		
+
 	}
-	
+
 	abstract public CompoundPropertyModel<?> getDefaultCompoundPropertyModel();
+
 	abstract public String getObjectIdentifier();
+
 	abstract public void save() throws ServiceException;
+
 	abstract public String getSaveButtonLabel();
 
 }

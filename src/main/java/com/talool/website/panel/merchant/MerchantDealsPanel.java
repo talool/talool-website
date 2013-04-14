@@ -34,7 +34,7 @@ public class MerchantDealsPanel extends BaseTabPanel
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		
+
 		DealListModel model = new DealListModel();
 		model.setMerchantId(_merchantId);
 		final ListView<Deal> customers = new ListView<Deal>("dealRptr", model)
@@ -45,7 +45,7 @@ public class MerchantDealsPanel extends BaseTabPanel
 			@Override
 			protected void populateItem(ListItem<Deal> item)
 			{
-				
+
 				Deal deal = item.getModelObject();
 				final Long dealId = deal.getId();
 
@@ -62,6 +62,8 @@ public class MerchantDealsPanel extends BaseTabPanel
 				item.add(new Label("isActive"));
 				item.add(new Label("merchant.name"));
 				item.add(new Label("dealOffer.title"));
+				item.add(new Label("createdBy", deal.getCreatedByEmail() + " / "
+						+ deal.getCreatedByMerchantName()));
 
 				BasePage page = (BasePage) this.getPage();
 				final AdminModalWindow modal = page.getModal();
@@ -74,7 +76,8 @@ public class MerchantDealsPanel extends BaseTabPanel
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						DealOfferDealPanel panel = new DealOfferDealPanel(modal.getContentId(), callback, dealId);
+						DealOfferDealPanel panel = new DealOfferDealPanel(modal.getContentId(), callback,
+								dealId);
 						modal.setContent(panel);
 						modal.setTitle("Edit Merchant Deal");
 						modal.show(target);
@@ -88,15 +91,16 @@ public class MerchantDealsPanel extends BaseTabPanel
 	}
 
 	@Override
-	public String getActionLabel() {
+	public String getActionLabel()
+	{
 		return "Create Merchant Deal";
 	}
 
 	@Override
-	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
-		
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
+	{
+
 		return new DealOfferDealPanel(contentId, callback);
 	}
-
 
 }

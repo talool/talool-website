@@ -82,21 +82,21 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	{
 		super(id, callback, false);
 		setDefaultModel(new DealModel(dealId));
-		
+
 		try
 		{
 			Deal deal = ServiceFactory.get().getTaloolService().getDeal(dealId);
 			dealOffer = deal.getDealOffer();
-			setMerchantContext(deal.getMerchant()); 
+			setMerchantContext(deal.getMerchant());
 		}
 		catch (ServiceException se)
 		{
 			LOG.error("problem loading deal offer", se);
 		}
-		
+
 	}
-	
-	private void setMerchantContext(Merchant merchant) 
+
+	private void setMerchantContext(Merchant merchant)
 	{
 		merchantIdentity = domainFactory.newMerchantIdentity(merchant.getId(), merchant.getName());
 	}
@@ -110,10 +110,10 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 
 		form.add(new MerchantIdentitySelect("availableMerchants", new PropertyModel<MerchantIdentity>(
 				this, "merchantIdentity"), new AvailableMerchantsListModel()).setRequired(true));
-		
-		form.add(new DealOfferSelect("availableDealOffers", new PropertyModel<DealOffer>(
-				this, "dealOffer"), new AvailableDealOffersListModel()).setRequired(true));
-		
+
+		form.add(new DealOfferSelect("availableDealOffers", new PropertyModel<DealOffer>(this,
+				"dealOffer"), new AvailableDealOffersListModel()).setRequired(true));
+
 		form.add(new AjaxLink<Void>("newDealLink")
 		{
 
@@ -123,7 +123,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 			public void onClick(AjaxRequestTarget target)
 			{
 				getSession().getFeedbackMessages().clear();
-				BasePage page = (BasePage)getPage();
+				BasePage page = (BasePage) getPage();
 				final AdminModalWindow modal = page.getModal();
 
 				SubmitCallBack callback = new SubmitCallBack()
@@ -137,7 +137,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 						modal.close(target);
 
 						// TODO reopen the original modal
-						//target.add(oModal);
+						// target.add(oModal);
 					}
 
 					@Override
@@ -146,7 +146,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 
 					}
 				};
-				
+
 				// TODO probably need a different callback
 				MerchantDealOfferPanel panel = new MerchantDealOfferPanel(modal.getContentId(), callback);
 				modal.setContent(panel);
@@ -160,15 +160,15 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		form.add(new TextArea<String>("details").setRequired(true));
 		form.add(new TextField<String>("tags", new PropertyModel<String>(this, "tags")));
 		// TODO we need a validator on this
-		form.add(new TextField<String>("code")); 
+		form.add(new TextField<String>("code"));
 		// TODO we need a validator=on this
-		form.add(new TextField<String>("imageUrl").setRequired(true)); 
-		
+		form.add(new TextField<String>("imageUrl"));
+
 		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
 		DateTextField expires = new DateTextField("expires", converter);
 		expires.add(new DatePicker());
 		form.add(expires);
-		
+
 		form.add(new CheckBox("isActive"));
 
 	}
@@ -227,19 +227,23 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		this.tags = tags;
 	}
 
-	public MerchantIdentity getMerchantIdentity() {
+	public MerchantIdentity getMerchantIdentity()
+	{
 		return merchantIdentity;
 	}
 
-	public void setMerchantIdentity(MerchantIdentity merchantIdentity) {
+	public void setMerchantIdentity(MerchantIdentity merchantIdentity)
+	{
 		this.merchantIdentity = merchantIdentity;
 	}
 
-	public DealOffer getDealOffer() {
+	public DealOffer getDealOffer()
+	{
 		return dealOffer;
 	}
 
-	public void setDealOffer(DealOffer dealOffer) {
+	public void setDealOffer(DealOffer dealOffer)
+	{
 		this.dealOffer = dealOffer;
 	}
 }

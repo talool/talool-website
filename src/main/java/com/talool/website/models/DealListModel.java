@@ -10,44 +10,54 @@ import com.talool.core.Deal;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 
-public class DealListModel extends LoadableDetachableModel<List<Deal>> {
+public class DealListModel extends LoadableDetachableModel<List<Deal>>
+{
 
 	private static final long serialVersionUID = -6415448310988721401L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealListModel.class);
-	private static enum LOAD_METHOD {MERHCANT, DEAL_OFFER}
+	private static enum LOAD_METHOD
+	{
+		MERHCANT, DEAL_OFFER
+	}
 	private long _merchantId;
 	private long _dealOfferId;
 	private LOAD_METHOD _method;
 
 	@Override
-	protected List<Deal> load() {
-		
+	protected List<Deal> load()
+	{
+
 		List<Deal> deals = null;
-		
-		try 
+
+		try
 		{
-			if (_method == LOAD_METHOD.MERHCANT) 
+			if (_method == LOAD_METHOD.MERHCANT)
 			{
-				deals = ServiceFactory.get().getTaloolService().getDealsByMerchantId(_merchantId);
+				// deals =
+				// ServiceFactory.get().getTaloolService().getDealsByMerchantId(_merchantId);
+				deals = ServiceFactory.get().getTaloolService()
+						.getAllRelatedDealsForMerchantId(_merchantId);
+
 			}
 			else if (_method == LOAD_METHOD.DEAL_OFFER)
 			{
 				deals = ServiceFactory.get().getTaloolService().getDealsByDealOfferId(_dealOfferId);
 			}
-		} 
-		catch (ServiceException se) 
+		}
+		catch (ServiceException se)
 		{
 			LOG.error("problem loading deals", se);
 		}
-		
+
 		return deals;
 	}
-	
+
 	public void setMerchantId(long id)
 	{
 		_merchantId = id;
 		_method = LOAD_METHOD.MERHCANT;
 	}
+
 	public void setDealOfferId(long id)
 	{
 		_dealOfferId = id;
