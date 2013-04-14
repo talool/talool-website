@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import com.talool.core.Deal;
 import com.talool.core.DealOffer;
 import com.talool.core.Merchant;
-import com.talool.core.MerchantAccount;
 import com.talool.core.MerchantIdentity;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;

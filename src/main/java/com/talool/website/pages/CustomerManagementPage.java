@@ -11,6 +11,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.customer.CustomerDealAcquiresPanel;
+import com.talool.website.panel.customer.CustomerDealOfferPurchasesPanel;
 import com.talool.website.panel.customer.CustomerFriendsPanel;
 import com.talool.website.util.SecuredPage;
 
@@ -41,20 +43,7 @@ public class CustomerManagementPage extends BaseManagementPage
 		super.onInitialize();
 
 		List<ITab> tabs = new ArrayList<ITab>();
-		tabs.add(new AbstractTab(new Model<String>("Purchased Deal Offers"))
-		{
-
-			private static final long serialVersionUID = 6987956481004749921L;
-
-			@Override
-			public Panel getPanel(String panelId)
-			{
-				// return new CustomerDealOfferPurchasePanel(panelId,
-				// getPageParameters());
-				return new CustomerFriendsPanel(panelId, getPageParameters());
-			}
-		});
-
+		
 		tabs.add(new AbstractTab(new Model<String>("Redeemed Deals"))
 		{
 
@@ -63,8 +52,19 @@ public class CustomerManagementPage extends BaseManagementPage
 			@Override
 			public Panel getPanel(String panelId)
 			{
-				// return new CustomerDealAcquirePanel(panelId, getPageParameters());
-				return new CustomerFriendsPanel(panelId, getPageParameters());
+				return new CustomerDealAcquiresPanel(panelId, getPageParameters());
+			}
+		});
+		
+		tabs.add(new AbstractTab(new Model<String>("Purchased Deal Offers"))
+		{
+
+			private static final long serialVersionUID = 6987956481004749921L;
+
+			@Override
+			public Panel getPanel(String panelId)
+			{
+				return new CustomerDealOfferPurchasesPanel(panelId, getPageParameters());
 			}
 		});
 
@@ -81,7 +81,7 @@ public class CustomerManagementPage extends BaseManagementPage
 		});
 
 		final AjaxTabbedPanel<ITab> tabbedPanel = new AjaxTabbedPanel<ITab>("tabs", tabs);
-		tabbedPanel.setSelectedTab(2);
+		tabbedPanel.setSelectedTab(0);
 		add(tabbedPanel);
 
 		// hide the action link for these tabs
