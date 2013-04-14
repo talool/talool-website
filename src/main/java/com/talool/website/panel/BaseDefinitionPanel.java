@@ -69,6 +69,7 @@ abstract public class BaseDefinitionPanel extends BasePanel
 					sb.append("Successfully ").append(isNew ? "created '" : "updated '")
 							.append(getObjectIdentifier()).append("'");
 					getSession().info(sb.toString());
+
 					callback.submitSuccess(target);
 				}
 				catch (ServiceException e)

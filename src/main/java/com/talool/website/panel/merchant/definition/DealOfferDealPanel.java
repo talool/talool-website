@@ -149,9 +149,14 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 
 				// TODO probably need a different callback
 				MerchantDealOfferPanel panel = new MerchantDealOfferPanel(modal.getContentId(), callback);
-				modal.setContent(panel);
+
+				modal.getCurrentContent().replaceWith(panel.setOutputMarkupId(true));
+
 				modal.setTitle("New Deal Offer");
-				modal.show(target);
+
+				// modal.show(target);
+				target.add(panel);
+
 			}
 		});
 

@@ -25,7 +25,6 @@ import com.talool.website.panel.SubmitCallBack;
  */
 public abstract class BasePage extends WebPage
 {
-
 	private static final long serialVersionUID = -7463278066879672957L;
 
 	protected transient static final TaloolService taloolService = FactoryManager.get()
@@ -35,9 +34,9 @@ public abstract class BasePage extends WebPage
 			.getDomainFactory();
 
 	public FeedbackPanel feedback;
-	
+
 	private AdminModalWindow _modal;
-	
+
 	private WebMarkupContainer _action;
 	private AjaxLink<Void> _actionLink;
 	private Label _actionLabel;
@@ -69,17 +68,19 @@ public abstract class BasePage extends WebPage
 		add(feedback.setOutputMarkupId(true));
 
 		final AdminModalWindow definitionModal = new AdminModalWindow("modal");
-		add(definitionModal);
+		add(definitionModal.setOutputMarkupId(true));
 		final SubmitCallBack callback = getCallback(definitionModal);
-		
-		// Get the definition panel from the subclass and add it to the definition modal
+
+		// Get the definition panel from the subclass and add it to the definition
+		// modal
 		final Panel definitionPanel = getNewDefinitionPanel(definitionModal.getContentId(), callback);
-		if (definitionPanel != null) {
-			definitionModal.setContent(definitionPanel);
+		if (definitionPanel != null)
+		{
+			definitionModal.setContent(definitionPanel.setOutputMarkupId(true));
 		}
 
 		_modal = definitionModal;
-		
+
 		_actionLink = new AjaxLink<Void>("actionLink")
 		{
 
@@ -94,9 +95,9 @@ public abstract class BasePage extends WebPage
 				definitionModal.show(target);
 			}
 		};
-		
+
 		_action = new WebMarkupContainer("action");
-		_actionLabel = new Label("actionLabel",getNewDefinitionPanelTitle());
+		_actionLabel = new Label("actionLabel", getNewDefinitionPanelTitle());
 		_actionLabel.setOutputMarkupId(true);
 		_actionLink.add(_actionLabel);
 		_actionLink.setOutputMarkupId(true);
@@ -131,26 +132,30 @@ public abstract class BasePage extends WebPage
 	{
 		return feedback;
 	}
-	
-	public AdminModalWindow getModal() {
+
+	public AdminModalWindow getModal()
+	{
 		return _modal;
 	}
-	
+
 	public String getHeaderTitle()
 	{
 		return "You need to override getHeaderTitle()";
 	}
-	
-	public AjaxLink<Void> getActionLink() {
+
+	public AjaxLink<Void> getActionLink()
+	{
 		return _actionLink;
 	}
-	
-	public void setActionLink(AjaxLink<Void> link) {
+
+	public void setActionLink(AjaxLink<Void> link)
+	{
 		_actionLink.replaceWith(link);
 		_actionLink = link;
 	}
 
 	abstract public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback);
+
 	abstract public String getNewDefinitionPanelTitle();
 
 }

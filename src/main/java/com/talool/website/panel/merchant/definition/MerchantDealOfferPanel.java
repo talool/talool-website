@@ -85,7 +85,9 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 	{
 		DealOffer dealOffer = (DealOffer) form.getDefaultModelObject();
 		dealOffer.setUpdatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
+
 		taloolService.save(dealOffer);
+		getSession().info("Successfully created '" + dealOffer.getTitle() + "'");
 	}
 
 	@Override
