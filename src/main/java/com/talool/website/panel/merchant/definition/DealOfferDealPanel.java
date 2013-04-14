@@ -80,6 +80,17 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	{
 		super(id, callback, false);
 		setDefaultModel(new DealModel(dealId));
+		
+		try
+		{
+			Deal deal = ServiceFactory.get().getTaloolService().getDeal(dealId);
+			dealOffer = deal.getDealOffer();
+		}
+		catch (ServiceException se)
+		{
+			LOG.error("problem loading deal offer", se);
+		}
+		
 	}
 
 	@Override
