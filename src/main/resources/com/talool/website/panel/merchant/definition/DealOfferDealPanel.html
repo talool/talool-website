@@ -7,7 +7,10 @@
 	    		<label>Merchant</label><select wicket:id="availableMerchants"><option>Default Merchant</option></select>
 	    	</div>
 	    	<div>
-	    		<label>Deal Offer</label><select ><option>Default Deal Offer</option></select>
+	    		<label>Deal Offer</label><select wicket:id="availableDealOffers"><option>Default Deal Offer</option></select>
+	    		<div class="selectBoxEdit">
+	    			<a wicket:id="newDealLink">create new deal offer</a>
+	    		</div>
 	    	</div>
 			<div>
 		    	<label>Title</label><input wicket:id="title" type="text"/>
@@ -19,6 +22,13 @@
 		    	<label>Detail</label><textarea wicket:id="details" type="text"/>
 			</div>
 			<div>
+		    	<label>Expires</label><input wicket:id="expires" type="text"/>
+		    </div>
+		    <div>
+	    		<label></label>
+	    		<input wicket:id="isActive" class="chbx" type="checkbox">Is Active
+	    	</div>
+			<div>
 		    	<label>Tags</label><input wicket:id="tags" type="text"/>
 			</div>
 			<div>
@@ -27,22 +37,13 @@
 			<div>
 		    	<label>Image Url</label><input wicket:id="imageUrl" type="text"/>
 			</div>
-			<div>
-		    	<label>Expires</label><input wicket:id="expires" type="text"/>
-		    </div>
-		    <div>
-	    		<label></label>
-	    		<input wicket:id="isActive" class="chbx" type="checkbox">Is Active
-	    	</div>
 	    </fieldset>
 	</div>
 	<div class="panel right">
 		<h3>Deal Preview</h3>
 		<fieldset class="dealBuilder">
 			[create deal builder here]
-			<br/><br/><br/>
-			<b>Question:</b> <br/>
-			How can Ted put other merchant's Deals <br/>in HIS DealOffer?
+			
 	    </fieldset>
 	</div>
 	

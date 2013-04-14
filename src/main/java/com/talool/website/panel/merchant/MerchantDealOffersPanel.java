@@ -27,15 +27,11 @@ public class MerchantDealOffersPanel extends BaseTabPanel
 
 	private static final long serialVersionUID = 3634980968241854373L;
 	private Long _merchantId;
-	private Long _merchantAccountId;
 
 	public MerchantDealOffersPanel(String id, PageParameters parameters)
 	{
 		super(id);
 		_merchantId = parameters.get("id").toLongObject();
-		
-		// TODO we need to be able to get the logged in user or default to a Talool Account
-		_merchantAccountId = (long) 1;
 	}
 
 	@Override
@@ -110,7 +106,7 @@ public class MerchantDealOffersPanel extends BaseTabPanel
 	@Override
 	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
 		
-		return new MerchantDealOfferPanel(contentId, _merchantId, _merchantAccountId, callback);
+		return new MerchantDealOfferPanel(contentId, callback);
 	}
 
 

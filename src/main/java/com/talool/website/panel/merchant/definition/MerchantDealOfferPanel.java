@@ -9,13 +9,10 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.talool.core.DealOffer;
 import com.talool.core.Merchant;
 import com.talool.core.service.ServiceException;
-import com.talool.service.ServiceFactory;
 import com.talool.website.component.DealTypeDropDownChoice;
 import com.talool.website.models.DealOfferModel;
 import com.talool.website.panel.BaseDefinitionPanel;
@@ -31,22 +28,12 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 {
 
 	private static final long serialVersionUID = 661849211369766802L;
-	private static final Logger LOG = LoggerFactory.getLogger(MerchantDealOfferPanel.class);
 
-	public MerchantDealOfferPanel(final String id, final Long merchantId,
-			final Long merchantAccountId, final SubmitCallBack callback)
+	public MerchantDealOfferPanel(final String id, final SubmitCallBack callback)
 	{
 		super(id, callback, true);
 
-		Merchant merchant = null;
-		try
-		{
-			merchant = ServiceFactory.get().getTaloolService().getMerchantById(merchantId);
-		}
-		catch (ServiceException se)
-		{
-			LOG.error("problem loading merchant", se);
-		}
+		Merchant merchant = SessionUtils.getSession().getMerchantAccount().getMerchant();
 
 		final DealOffer dealOffer = domainFactory.newDealOffer(merchant, SessionUtils.getSession()
 				.getMerchantAccount());
@@ -69,12 +56,12 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		form.add(new TextField<String>("title").setRequired(true));
 		form.add(new TextField<String>("summary"));
 		form.add(new TextField<String>("price").setRequired(true));
+		
 		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
-
 		DateTextField expires = new DateTextField("expires", converter);
 		expires.add(new DatePicker());
 		form.add(expires);
-		// form.add(new DateTextField("expires", converter).setRequired(true));
+		
 		form.add(new CheckBox("isActive"));
 
 	}

@@ -64,6 +64,8 @@ public class MerchantDealsPanel extends BaseTabPanel
 				item.add(new Label("summary"));
 				item.add(new Label("expires"));
 				item.add(new Label("isActive"));
+				item.add(new Label("merchant.name"));
+				item.add(new Label("dealOffer.title"));
 
 				BasePage page = (BasePage) this.getPage();
 				final AdminModalWindow modal = page.getModal();

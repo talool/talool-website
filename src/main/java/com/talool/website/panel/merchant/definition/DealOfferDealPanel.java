@@ -3,9 +3,12 @@ package com.talool.website.panel.merchant.definition;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
+import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
@@ -18,14 +21,19 @@ import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
 import com.talool.core.DealOffer;
+import com.talool.core.Merchant;
 import com.talool.core.MerchantIdentity;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
+import com.talool.website.component.DealOfferSelect;
 import com.talool.website.component.MerchantIdentitySelect;
+import com.talool.website.models.AvailableDealOffersListModel;
 import com.talool.website.models.AvailableMerchantsListModel;
 import com.talool.website.models.DealModel;
 import com.talool.website.models.ModelUtil;
+import com.talool.website.pages.BasePage;
+import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
 
@@ -41,6 +49,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	private static final Logger LOG = LoggerFactory.getLogger(DealOfferDealPanel.class);
 	private String tags;
 	private MerchantIdentity merchantIdentity;
+	private DealOffer dealOffer;
 
 	public DealOfferDealPanel(final String id, final SubmitCallBack callback)
 	{
@@ -54,7 +63,6 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	{
 		super(id, callback, true);
 
-		DealOffer dealOffer = null;
 		try
 		{
 			dealOffer = ServiceFactory.get().getTaloolService().getDealOffer(dealOfferId);
@@ -83,24 +91,65 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 
 		form.add(new MerchantIdentitySelect("availableMerchants", new PropertyModel<MerchantIdentity>(
 				this, "merchantIdentity"), new AvailableMerchantsListModel()).setRequired(true));
+		
+		form.add(new DealOfferSelect("availableDealOffers", new PropertyModel<DealOffer>(
+				this, "dealOffer"), new AvailableDealOffersListModel()).setRequired(true));
+		
+		form.add(new AjaxLink<Void>("newDealLink")
+		{
+
+			private static final long serialVersionUID = -2124601710236716290L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				getSession().getFeedbackMessages().clear();
+				BasePage page = (BasePage)getPage();
+				final AdminModalWindow modal = page.getModal();
+
+				SubmitCallBack callback = new SubmitCallBack()
+				{
+
+					private static final long serialVersionUID = 6420614586937543567L;
+
+					@Override
+					public void submitSuccess(AjaxRequestTarget target)
+					{
+						modal.close(target);
+
+						// TODO reopen the original modal
+						//target.add(oModal);
+					}
+
+					@Override
+					public void submitFailure(AjaxRequestTarget target)
+					{
+
+					}
+				};
+				
+				// TODO probably need a different callback
+				MerchantDealOfferPanel panel = new MerchantDealOfferPanel(modal.getContentId(), callback);
+				modal.setContent(panel);
+				modal.setTitle("New Deal Offer");
+				modal.show(target);
+			}
+		});
 
 		form.add(new TextField<String>("title").setRequired(true));
 		form.add(new TextArea<String>("summary").setRequired(true));
 		form.add(new TextArea<String>("details").setRequired(true));
 		form.add(new TextField<String>("tags", new PropertyModel<String>(this, "tags")));
-		form.add(new TextField<String>("code")); // TODO we need a validator on this
-		form.add(new TextField<String>("imageUrl").setRequired(true)); // TODO we
-																																		// need a
-																																		// validator
-																																		// on this
+		// TODO we need a validator on this
+		form.add(new TextField<String>("code")); 
+		// TODO we need a validator=on this
+		form.add(new TextField<String>("imageUrl").setRequired(true)); 
+		
 		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
-		form.add(new DateTextField("expires", converter).setRequired(true)); // TODO
-																																					// we
-																																					// need
-																																					// a
-																																					// date
-																																					// picker
-																																					// widget
+		DateTextField expires = new DateTextField("expires", converter);
+		expires.add(new DatePicker());
+		form.add(expires);
+		
 		form.add(new CheckBox("isActive"));
 
 	}
@@ -134,6 +183,11 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 			deal.clearTags();
 		}
 
+		Merchant merchant = taloolService.getMerchantById(merchantIdentity.getId());
+
+		deal.setDealOffer(dealOffer);
+		deal.setMerchant(merchant);
+
 		taloolService.save(deal);
 	}
 
@@ -152,5 +206,21 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	public void setTags(String tags)
 	{
 		this.tags = tags;
+	}
+
+	public MerchantIdentity getMerchantIdentity() {
+		return merchantIdentity;
+	}
+
+	public void setMerchantIdentity(MerchantIdentity merchantIdentity) {
+		this.merchantIdentity = merchantIdentity;
+	}
+
+	public DealOffer getDealOffer() {
+		return dealOffer;
+	}
+
+	public void setDealOffer(DealOffer dealOffer) {
+		this.dealOffer = dealOffer;
 	}
 }
