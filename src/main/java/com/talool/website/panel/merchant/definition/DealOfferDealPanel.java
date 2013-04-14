@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.talool.core.Deal;
 import com.talool.core.DealOffer;
 import com.talool.core.Merchant;
+import com.talool.core.MerchantAccount;
 import com.talool.core.MerchantIdentity;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
@@ -36,6 +37,7 @@ import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.util.SessionUtils;
 
 /**
  * 
@@ -54,7 +56,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	public DealOfferDealPanel(final String id, final SubmitCallBack callback)
 	{
 		super(id, callback, true);
-
+		setMerchantContext(SessionUtils.getSession().getMerchantAccount().getMerchant());
 		Deal deal = domainFactory.newDeal();
 		setDefaultModel(Model.of(deal));
 	}
@@ -66,6 +68,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		try
 		{
 			dealOffer = ServiceFactory.get().getTaloolService().getDealOffer(dealOfferId);
+			setMerchantContext(SessionUtils.getSession().getMerchantAccount().getMerchant());
 		}
 		catch (ServiceException se)
 		{
@@ -85,12 +88,18 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		{
 			Deal deal = ServiceFactory.get().getTaloolService().getDeal(dealId);
 			dealOffer = deal.getDealOffer();
+			setMerchantContext(deal.getMerchant()); 
 		}
 		catch (ServiceException se)
 		{
 			LOG.error("problem loading deal offer", se);
 		}
 		
+	}
+	
+	private void setMerchantContext(Merchant merchant) 
+	{
+		merchantIdentity = domainFactory.newMerchantIdentity(merchant.getId(), merchant.getName());
 	}
 
 	@Override
