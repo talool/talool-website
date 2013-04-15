@@ -65,6 +65,9 @@ public class MerchantDealsPanel extends BaseTabPanel
 				item.add(new Label("createdBy", deal.getCreatedByEmail() + " / "
 						+ deal.getCreatedByMerchantName()));
 
+				item.add(new Label("lastUpdatedBy", deal.getUpdatedByEmail() + " / "
+						+ deal.getUpdatedByMerchantName()));
+
 				BasePage page = (BasePage) this.getPage();
 				final AdminModalWindow modal = page.getModal();
 				final SubmitCallBack callback = page.getCallback(modal);

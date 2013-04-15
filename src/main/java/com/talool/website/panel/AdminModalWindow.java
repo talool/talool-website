@@ -1,10 +1,29 @@
 package com.talool.website.panel;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 
 public class AdminModalWindow extends ModalWindow
 {
+	public Component getCurrentContent()
+	{
+		return currentContent;
+	}
+
+	public void setCurrentContent(Component currentContent)
+	{
+		this.currentContent = currentContent;
+	}
+
+	private Component currentContent;
+
+	@Override
+	public ModalWindow setContent(Component component)
+	{
+		currentContent = component;
+		return super.setContent(component.setOutputMarkupId(true));
+	}
 
 	private static final long serialVersionUID = 1L;
 
@@ -15,7 +34,7 @@ public class AdminModalWindow extends ModalWindow
 		this.setInitialWidth(840);
 		this.setResizable(false);
 		this.setCssClassName(ModalWindow.CSS_CLASS_GRAY);
-		
+
 		this.setTitle("Crud");
 
 		this.setCookieName(null);
