@@ -1,12 +1,15 @@
 package com.talool.website.models;
 
+import java.io.File;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
 
 import com.talool.core.Deal;
 import com.talool.core.Merchant;
 import com.talool.core.Tag;
+import com.talool.website.Config;
 
 /**
  * 
@@ -76,5 +79,32 @@ public final class ModelUtil
 	public static String getCommaSeperatedTags(final Deal deal)
 	{
 		return getCommaSeperatedTags(deal.getTags());
+	}
+
+	// TODO - generate and return a unique image name!
+	public static String saveUploadImage(final FileUpload fileUpload) throws Exception
+	{
+		if (fileUpload != null)
+		{
+			final File newFile = new File(Config.get().getUploadDir() + fileUpload.getClientFileName());
+
+			if (newFile.exists())
+			{
+				newFile.delete();
+			}
+
+			try
+			{
+				newFile.createNewFile();
+				fileUpload.writeTo(newFile);
+				return fileUpload.getClientFileName();
+
+			}
+			catch (Exception e)
+			{
+				throw new IllegalStateException("Problem saving upload: " + e.getLocalizedMessage(), e);
+			}
+		}
+		return null;
 	}
 }
