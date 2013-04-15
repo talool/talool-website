@@ -195,14 +195,12 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		
 		form.add(new TextField<String>("tags", new PropertyModel<String>(this, "tags")));
 
-		// TODO we need a validator=on this
+		/* TODO we need a validator=on this
 		TextField<String> imageField = new TextField<String>("imageUrl");
 		imageField.setRequired(true);
 		imageField.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.IMAGE, "onBlur"));
 		form.add(imageField);
-		
-		// TODO we need a validator on this
-		form.add(new TextField<String>("code"));
+		*/
 
 		// TODO fix this to be a proper model
 		form.add(new Label("imageUrl"));
