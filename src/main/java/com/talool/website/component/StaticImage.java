@@ -1,6 +1,7 @@
 package com.talool.website.component;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.model.IModel;
@@ -29,6 +30,7 @@ public class StaticImage extends WebComponent
 	{
 		super(id, model);
 		this.cacheBust = cacheBust;
+		setOutputMarkupId(true);
 	}
 
 	public StaticImage(String id, boolean cacheBust, String url)
@@ -46,6 +48,9 @@ public class StaticImage extends WebComponent
 			url = url + "?" + System.currentTimeMillis();
 		}
 		tag.put("src", url);
+		
+		// TODO: Need to update the image, but wicket wants you to use setMarkupId... but that doesn't work.
+		tag.put("id",getMarkupId(true));
 	}
 
 	@Override
@@ -53,4 +58,5 @@ public class StaticImage extends WebComponent
 	{
 		return StringUtils.isNotEmpty(getDefaultModelObjectAsString());
 	}
+	
 }

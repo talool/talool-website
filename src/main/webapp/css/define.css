@@ -48,6 +48,7 @@ input, select, textarea {
 }
 select {
 	width: 215px;
+	margin-top: 5px;
 }
 textarea {
 	width: 200px;

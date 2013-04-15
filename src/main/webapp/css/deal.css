@@ -9,8 +9,9 @@
 
 .deal .image {
 	height: 160px;
+	width: 320px;
 	margin-bottom: 20px;
-	background-image: url(http://i567.photobucket.com/albums/ss116/alphabetabeta/bg_test2.png);
+	overflow: hidden;
 }
 
 .deal .title,

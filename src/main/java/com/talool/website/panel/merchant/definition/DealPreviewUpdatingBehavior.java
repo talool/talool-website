@@ -34,7 +34,7 @@ public class DealPreviewUpdatingBehavior extends AjaxFormComponentUpdatingBehavi
 			break;
 		case IMAGE:
 			preview.imageUrl = getFormComponent().getValue();
-			target.add(preview.imageLabel);
+			target.add(preview.image);
 			break;
 		case EXPIRES:
 			preview.expires = getFormComponent().getValue();
