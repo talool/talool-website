@@ -32,7 +32,7 @@ public class AvailableDealOffersListModel extends LoadableDetachableModel<List<D
 		try
 		{
 			dealOffers = ServiceFactory.get().getTaloolService()
-					.getDealOffersByMerchantId(merchantId);
+					.getAllRelatedDealsOffersForMerchantId(merchantId);
 		}
 		catch (ServiceException e)
 		{
