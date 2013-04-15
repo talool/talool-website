@@ -1,9 +1,7 @@
 package com.talool.website.panel.merchant.definition;
 
-import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -12,11 +10,10 @@ import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -32,10 +29,8 @@ import com.talool.core.MerchantIdentity;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
 import com.talool.website.Config;
-import com.talool.website.component.DealImageSelect;
 import com.talool.website.component.DealOfferSelect;
 import com.talool.website.component.MerchantIdentitySelect;
-import com.talool.website.models.AvailableDealImagesListModel;
 import com.talool.website.models.AvailableDealOffersListModel;
 import com.talool.website.models.AvailableMerchantsListModel;
 import com.talool.website.models.DealModel;
@@ -58,9 +53,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	private String tags;
 	private MerchantIdentity merchantIdentity;
 	private DealOffer dealOffer;
-	private Image image;
-	private FileUploadField fileUploadField;
-	private List<FileUpload> fileUploads;
+	
 
 	public DealOfferDealPanel(final String id, final SubmitCallBack callback)
 	{
@@ -211,42 +204,18 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		
 		form.add(new TextField<String>("tags", new PropertyModel<String>(this, "tags")));
 
-		/* TODO we need a validator=on this
-		TextField<String> imageField = new TextField<String>("imageUrl");
-		imageField.setRequired(true);
-		imageField.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.IMAGE, "onBlur"));
-		form.add(imageField);
-		*/
-
-		/* TODO fix this to be a proper model
-		form.add(new Label("imageUrl"));
-		form.add(new StaticImage("imagePreview", true, getDefaultCompoundPropertyModel().getObject()
-				.getImageUrl()));
-		*/
-
-		DealImageSelect images = new DealImageSelect("availableImages", new PropertyModel<Image>(this,
-				"image"), new AvailableDealImagesListModel());
-		images.setRequired(true);
-		images.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.IMAGE, "onChange"));
-		form.add(images);
+		final WebMarkupContainer imageSelect = new WebMarkupContainer("imageSelectContainer");
+		imageSelect.setOutputMarkupId(true);
+		form.add(imageSelect);
 		
-		form.add(new AjaxLink<Void>("newImageLink")
-		{
-			private static final long serialVersionUID = -8398298854016035306L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				// TODO show the upload form
-
-			}
-		});
+		ImageSelectPanel images = new ImageSelectPanel("imageSelectPanel", dealPreview);
+		images.setOutputMarkupId(true);
+		imageSelect.add(images);
 		
+		// TODO consider moving this to the ImageUploadPanel
 		// multi-part for image uploads
 		form.setMultiPart(true);
 		form.setMaxSize(Config.get().getLogoUploadMaxBytes());
-		form.add(new FileUploadField("fileUploads", new PropertyModel<List<FileUpload>>(this,
-				"fileUploads")));
 
 		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
 		DateTextField expires = new DateTextField("expires", converter);
@@ -286,29 +255,14 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 			deal.clearTags();
 		}
 
-		if (CollectionUtils.isNotEmpty(fileUploads))
-		{
-			try
-			{
-				final String imageName = ModelUtil.saveUploadImage(fileUploads.get(0));
-				if (imageName != null)
-				{
-					deal.setImageUrl(Config.get().getStaticLogoBaseUrl() + imageName);
-				}
-			}
-			catch (Exception e)
-			{
-				LOG.error("Problem with logo upload:" + e.getLocalizedMessage(), e);
-				getSession().error("There was a problem with logo upload");
-			}
-		}
-
 		final Merchant merchant = taloolService.getMerchantById(merchantIdentity.getId());
 
 		deal.setDealOffer(dealOffer);
 		deal.setMerchant(merchant);
 		deal.setUpdatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
-		deal.setImageUrl(image.getUrl());
+		
+		// TODO get the image from the ImageSelectPanel
+		//deal.setImageUrl(image.getUrl());
 
 		taloolService.save(deal);
 	}
@@ -350,12 +304,6 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		this.dealOffer = dealOffer;
 	}
 
-	public Image getImage() {
-		return image;
-	}
-
-	public void setImage(Image image) {
-		this.image = image;
-	}
+	
 
 }

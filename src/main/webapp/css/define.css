@@ -81,7 +81,7 @@ optgroup option {
 	margin: 0 15px 0 0;
 }
 .selectBoxEdit {
-	padding: 0 5px 10px 110px;
+	padding: 10px 5px 10px 110px;
 }
 .selectBoxEdit a {
 	display:inline-block;
