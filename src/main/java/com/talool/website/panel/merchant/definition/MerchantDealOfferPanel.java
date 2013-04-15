@@ -9,9 +9,12 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.talool.core.DealOffer;
 import com.talool.core.Merchant;
+import com.talool.core.MerchantIdentity;
 import com.talool.core.service.ServiceException;
 import com.talool.website.component.DealTypeDropDownChoice;
 import com.talool.website.models.DealOfferModel;
@@ -26,19 +29,29 @@ import com.talool.website.util.SessionUtils;
  */
 public class MerchantDealOfferPanel extends BaseDefinitionPanel
 {
-
+	private static final Logger LOG = LoggerFactory.getLogger(MerchantDealOfferPanel.class);
 	private static final long serialVersionUID = 661849211369766802L;
 
-	public MerchantDealOfferPanel(final String id, final SubmitCallBack callback)
+	public MerchantDealOfferPanel(final String id, final MerchantIdentity merchantIdentity,
+			final SubmitCallBack callback)
 	{
 		super(id, callback, true);
 
-		Merchant merchant = SessionUtils.getSession().getMerchantAccount().getMerchant();
+		Merchant merchant;
+		try
+		{
+			merchant = taloolService.getMerchantById(merchantIdentity.getId());
+			final DealOffer dealOffer = domainFactory.newDealOffer(merchant, SessionUtils.getSession()
+					.getMerchantAccount());
 
-		final DealOffer dealOffer = domainFactory.newDealOffer(merchant, SessionUtils.getSession()
-				.getMerchantAccount());
+			setDefaultModel(Model.of(dealOffer));
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("Problem getting merchant " + merchantIdentity);
+			getSession().error("Problem getting merchant for Deal Offer create");
+		}
 
-		setDefaultModel(Model.of(dealOffer));
 	}
 
 	public MerchantDealOfferPanel(final String id, final SubmitCallBack callback,
