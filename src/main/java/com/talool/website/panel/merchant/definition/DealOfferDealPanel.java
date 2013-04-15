@@ -6,6 +6,7 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.PatternDateConverter;
@@ -30,7 +31,6 @@ import com.talool.core.Merchant;
 import com.talool.core.MerchantIdentity;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
-import com.talool.service.ServiceFactory;
 import com.talool.website.Config;
 import com.talool.website.component.DealOfferSelect;
 import com.talool.website.component.MerchantIdentitySelect;
@@ -93,7 +93,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 
 		try
 		{
-			Deal deal = ServiceFactory.get().getTaloolService().getDeal(dealId);
+			Deal deal = taloolService.getDeal(dealId);
 			dealOffer = deal.getDealOffer();
 			setMerchantContext(deal.getMerchant());
 		}
@@ -118,10 +118,24 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		dealPreview.setOutputMarkupId(true);
 		form.add(dealPreview);
 		
-		// form.add(new DealTypeDropDownChoice("merchant").setRequired(true));
+		MerchantIdentitySelect merchantSelect = new MerchantIdentitySelect("availableMerchants",
+				new PropertyModel<MerchantIdentity>(this, "merchantIdentity"),
+				new AvailableMerchantsListModel());
 
-		form.add(new MerchantIdentitySelect("availableMerchants", new PropertyModel<MerchantIdentity>(
-				this, "merchantIdentity"), new AvailableMerchantsListModel()).setRequired(true));
+		merchantSelect.add(new AjaxFormComponentUpdatingBehavior("onchange")
+		{
+			private static final long serialVersionUID = 4010213739823884089L;
+
+			@Override
+			protected void onUpdate(final AjaxRequestTarget target)
+			{
+				// needed for clean set of MerchantIdentity (so new Deal Offer can set
+				// the right merchant)
+			}
+
+		});
+
+		form.add(merchantSelect.setRequired(true).setOutputMarkupId(true));
 
 		form.add(new DealOfferSelect("availableDealOffers", new PropertyModel<DealOffer>(this,
 				"dealOffer"), new AvailableDealOffersListModel()).setRequired(true));
@@ -160,7 +174,8 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 				};
 
 				// TODO probably need a different callback
-				MerchantDealOfferPanel panel = new MerchantDealOfferPanel(modal.getContentId(), callback);
+				MerchantDealOfferPanel panel = new MerchantDealOfferPanel(modal.getContentId(),
+						getMerchantIdentity(), callback);
 
 				modal.getCurrentContent().replaceWith(panel.setOutputMarkupId(true));
 

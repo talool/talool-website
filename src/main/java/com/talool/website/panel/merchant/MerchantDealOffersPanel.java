@@ -12,8 +12,12 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.talool.core.DealOffer;
+import com.talool.core.Merchant;
+import com.talool.core.service.ServiceException;
 import com.talool.website.models.DealOfferListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.lists.DealOfferDealsPage;
@@ -22,9 +26,14 @@ import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.definition.MerchantDealOfferPanel;
 
+/**
+ * 
+ * @author clintz,dmccuen
+ * 
+ */
 public class MerchantDealOffersPanel extends BaseTabPanel
 {
-
+	private static final Logger LOG = LoggerFactory.getLogger(MerchantDealOffersPanel.class);
 	private static final long serialVersionUID = 3634980968241854373L;
 	private Long _merchantId;
 
@@ -38,7 +47,7 @@ public class MerchantDealOffersPanel extends BaseTabPanel
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		
+
 		DealOfferListModel model = new DealOfferListModel();
 		model.setMerchantId(_merchantId);
 		final ListView<DealOffer> customers = new ListView<DealOffer>("offerRptr", model)
@@ -49,7 +58,7 @@ public class MerchantDealOffersPanel extends BaseTabPanel
 			@Override
 			protected void populateItem(ListItem<DealOffer> item)
 			{
-				
+
 				DealOffer dealOffer = item.getModelObject();
 				final Long dealOfferId = dealOffer.getId();
 
@@ -67,7 +76,7 @@ public class MerchantDealOffersPanel extends BaseTabPanel
 				ExternalLink titleLink = new ExternalLink("titleLink", Model.of(url),
 						new PropertyModel<String>(dealOffer, "title"));
 				item.add(titleLink);
-				
+
 				item.add(new Label("summary"));
 				item.add(new Label("price"));
 				item.add(new Label("dealType"));
@@ -85,7 +94,8 @@ public class MerchantDealOffersPanel extends BaseTabPanel
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						MerchantDealOfferPanel panel = new MerchantDealOfferPanel(modal.getContentId(), callback, dealOfferId);
+						MerchantDealOfferPanel panel = new MerchantDealOfferPanel(modal.getContentId(),
+								callback, dealOfferId);
 						modal.setContent(panel);
 						modal.setTitle("Edit Merchant Deal Offer");
 						modal.show(target);
@@ -99,15 +109,27 @@ public class MerchantDealOffersPanel extends BaseTabPanel
 	}
 
 	@Override
-	public String getActionLabel() {
+	public String getActionLabel()
+	{
 		return "Create Merchant Deal Offer";
 	}
 
 	@Override
-	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
-		
-		return new MerchantDealOfferPanel(contentId, callback);
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
+	{
+		Merchant merch;
+		try
+		{
+			merch = taloolService.getMerchantById(_merchantId);
+			return new MerchantDealOfferPanel(contentId, domainFactory.newMerchantIdentity(merch.getId(),
+					merch.getName()), callback);
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("Problem getting merchant " + _merchantId, e);
+		}
+
+		return null;
+
 	}
-
-
 }
