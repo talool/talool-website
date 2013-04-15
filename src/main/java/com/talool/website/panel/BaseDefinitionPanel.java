@@ -1,8 +1,8 @@
 package com.talool.website.panel;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.slf4j.Logger;
@@ -44,7 +44,7 @@ abstract public class BaseDefinitionPanel extends BasePanel
 
 		form.setDefaultModel(getDefaultCompoundPropertyModel());
 
-		AjaxButton submit = new AjaxButton("submitButton", form)
+		AjaxSubmitLink submit = new AjaxSubmitLink("submitButton", form)
 		{
 
 			private static final long serialVersionUID = -6562989540935949813L;
@@ -84,7 +84,7 @@ abstract public class BaseDefinitionPanel extends BasePanel
 		};
 
 		form.add(submit);
-		submit.add(new AttributeModifier("value", getSaveButtonLabel()));
+		submit.add(new Label("submitLabel",getSaveButtonLabel()));
 
 	}
 
