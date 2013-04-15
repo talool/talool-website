@@ -35,7 +35,7 @@
 		    	<label>Code</label><input wicket:id="code" type="text"/>
 			</div>
 			<div>
-		    	<label>Image Url</label><input wicket:id="imageUrl" type="text"/>
+		    	<label>Image Url</label><input wicket:id="fileUploads" type="file"/>
 			</div>
 	    </fieldset>
 	</div>
@@ -45,5 +45,14 @@
 			<div wicket:id="dealBuilder"></div>
 	    </fieldset>
 	</div>
+	<wicket:enclosure child="imageUrl">
+	<div class="panel right">
+		<h3>Deal Image Preview</h3>
+		<fieldset class="dealBuilder">
+		 <div wicket:id="imageUrl"></div>
+		 <img wicket:id="imagePreview" src="http://localhost:8080/static/images/chipotle.jpg" width=100 height=100>
+	    </fieldset>
+	</div>
+	</wicket:enclosure>
 	
 </wicket:extend>
