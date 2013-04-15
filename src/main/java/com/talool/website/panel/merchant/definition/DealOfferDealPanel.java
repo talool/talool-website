@@ -106,6 +106,10 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	{
 		super.onInitialize();
 
+		final DealPreview dealPreview = new DealPreview("dealBuilder", getDefaultCompoundPropertyModel().getObject());
+		dealPreview.setOutputMarkupId(true);
+		form.add(dealPreview);
+		
 		// form.add(new DealTypeDropDownChoice("merchant").setRequired(true));
 
 		form.add(new MerchantIdentitySelect("availableMerchants", new PropertyModel<MerchantIdentity>(
@@ -155,22 +159,42 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 			}
 		});
 
-		form.add(new TextField<String>("title").setRequired(true));
-		form.add(new TextArea<String>("summary").setRequired(true));
-		form.add(new TextArea<String>("details").setRequired(true));
-		form.add(new TextField<String>("tags", new PropertyModel<String>(this, "tags")));
+		TextField<String> titleField = new TextField<String>("title");
+		titleField.setRequired(true);
+		titleField.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.TITLE, "onBlur"));
+		form.add(titleField);
+		
+		TextArea<String> summaryField = new TextArea<String>("summary");
+		summaryField.setRequired(true);
+		summaryField.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.SUMMARY, "onBlur"));
+		form.add(summaryField);
+		
+		TextArea<String> detailsField = new TextArea<String>("details");
+		detailsField.setRequired(true);
+		detailsField.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.DETAILS, "onBlur"));
+		form.add(detailsField);
+		
 		// TODO we need a validator on this
-		form.add(new TextField<String>("code"));
+		TextField<String> codeField = new TextField<String>("code");
+		codeField.setRequired(true);
+		codeField.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.CODE, "onBlur"));
+		form.add(codeField);
+		
+		form.add(new TextField<String>("tags", new PropertyModel<String>(this, "tags")));
+
 		// TODO we need a validator=on this
-		form.add(new TextField<String>("imageUrl"));
+		TextField<String> imageField = new TextField<String>("imageUrl");
+		imageField.setRequired(true);
+		imageField.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.IMAGE, "onBlur"));
+		form.add(imageField);
 
 		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
 		DateTextField expires = new DateTextField("expires", converter);
 		expires.add(new DatePicker());
 		form.add(expires);
+		expires.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.EXPIRES, "onChange"));
 
 		form.add(new CheckBox("isActive"));
-
 	}
 
 	@SuppressWarnings("unchecked")

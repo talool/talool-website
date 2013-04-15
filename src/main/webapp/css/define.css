@@ -1,7 +1,7 @@
 .newMerchant {
 	padding: 0;
 	border: 1px solid;
-	width: 800px;
+	width: 850px;
 	margin: 0 auto;
 	background: #ebebeb;
 }
@@ -13,7 +13,7 @@
 }
 .newMerchant .panel {
 	padding: 0 15px 15px;
-	margin: 0 10px 35px;
+	margin: 0 10px 5px;
 }
 .newMerchant .controls {
 	margin: 20px 0 0;
