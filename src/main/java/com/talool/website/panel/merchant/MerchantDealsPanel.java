@@ -81,7 +81,7 @@ public class MerchantDealsPanel extends BaseTabPanel
 						getSession().getFeedbackMessages().clear();
 						DealOfferDealPanel panel = new DealOfferDealPanel(modal.getContentId(), callback,
 								dealId);
-						modal.setContent(panel);
+						modal.setContent(panel.setOutputMarkupId(true));
 						modal.setTitle("Edit Merchant Deal");
 						modal.show(target);
 					}

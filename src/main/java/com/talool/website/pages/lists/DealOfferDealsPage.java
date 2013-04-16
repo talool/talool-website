@@ -71,7 +71,7 @@ public class DealOfferDealsPage extends BasePage
 						getSession().getFeedbackMessages().clear();
 						DealOfferDealPanel panel = new DealOfferDealPanel(definitionModal.getContentId(),
 								callback, dealId);
-						definitionModal.setContent(panel);
+						definitionModal.setContent(panel.setOutputMarkupId(true));
 						definitionModal.setTitle("Edit Deal");
 						definitionModal.show(target);
 					}
@@ -88,7 +88,8 @@ public class DealOfferDealsPage extends BasePage
 	@Override
 	public String getHeaderTitle()
 	{
-		// TODO add another param to the url or just hit the db and pull out the details from the id?  Hit the DB...
+		// TODO add another param to the url or just hit the db and pull out the
+		// details from the id? Hit the DB...
 		StringBuilder sb = new StringBuilder("Merchants > {Merchant Name} >");
 		sb.append(getPageParameters().get("name")).append(" > Deals");
 		return sb.toString();

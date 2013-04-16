@@ -18,7 +18,6 @@ import com.talool.website.util.SessionUtils;
  */
 public class AvailableDealOffersListModel extends LoadableDetachableModel<List<DealOffer>>
 {
-
 	private static final long serialVersionUID = -1840804920962326496L;
 	private static final Logger LOG = LoggerFactory.getLogger(AvailableDealOffersListModel.class);
 
