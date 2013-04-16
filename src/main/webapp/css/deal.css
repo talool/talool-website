@@ -1,7 +1,16 @@
+.panel.iPhonePanel {
+	padding-bottom:0;
+	margin-bottom:0;
+}
+.iphone {
+	background-image: url(/img/iPhone5.png);
+	background-position-y: -70px;
+	padding: 70px 33px 30px;
+}
 .deal {
 	width: 320px;
-	height: 480px;
-	border:1px solid;
+	height: 543px;
+	border:1px solid black;
 	color: white;
 	position: relative;
 	overflow:hidden;
