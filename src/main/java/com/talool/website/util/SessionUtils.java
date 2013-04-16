@@ -12,27 +12,6 @@ import com.talool.website.TaloolSession;
  */
 public final class SessionUtils
 {
-	private enum MLevel
-	{
-		Info, Success, Error, Warning, Fatal
-	};
-
-	private static String sessionMessage(final String... parts)
-	{
-		if (parts != null && parts.length == 1)
-		{
-			return parts[0];
-		}
-		final StringBuilder sb = new StringBuilder();
-		for (String part : parts)
-		{
-			sb.append(part);
-		}
-
-		return sb.toString();
-
-	}
-
 	public static void infoMessage(final String... parts)
 	{
 		getSession().info(sessionMessage(parts));
@@ -61,6 +40,21 @@ public final class SessionUtils
 	public static TaloolSession getSession()
 	{
 		return (TaloolSession) Session.get();
+	}
+
+	private static String sessionMessage(final String... parts)
+	{
+		if (parts != null && parts.length == 1)
+		{
+			return parts[0];
+		}
+		final StringBuilder sb = new StringBuilder();
+		for (String part : parts)
+		{
+			sb.append(part);
+		}
+
+		return sb.toString();
 	}
 
 }
