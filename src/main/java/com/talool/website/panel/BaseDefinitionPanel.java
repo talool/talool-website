@@ -70,21 +70,29 @@ abstract public class BaseDefinitionPanel extends BasePanel
 							.append(getObjectIdentifier()).append("'");
 					getSession().info(sb.toString());
 
-					callback.submitSuccess(target);
+					if (callback != null)
+					{
+						callback.submitSuccess(target);
+					}
+
 				}
 				catch (ServiceException e)
 				{
 					sb.append("Problem saving account: ").append(e.getLocalizedMessage());
 					getSession().error(sb.toString());
 					LOG.error(sb.toString());
-					callback.submitFailure(target);
+					if (callback != null)
+					{
+						callback.submitFailure(target);
+					}
+
 				}
 			}
 
 		};
 
 		form.add(submit);
-		submit.add(new Label("submitLabel",getSaveButtonLabel()));
+		submit.add(new Label("submitLabel", getSaveButtonLabel()));
 
 	}
 

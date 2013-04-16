@@ -4,6 +4,7 @@ import org.apache.wicket.Session;
 import org.apache.wicket.core.request.ClientInfo;
 import org.apache.wicket.request.Request;
 
+import com.talool.core.DealOffer;
 import com.talool.core.MerchantAccount;
 
 /**
@@ -14,6 +15,7 @@ import com.talool.core.MerchantAccount;
 public class TaloolSession extends Session
 {
 	private static final long serialVersionUID = 5796824961553926305L;
+	private DealOffer lastDealOffer;
 
 	@Override
 	public ClientInfo getClientInfo()
@@ -41,6 +43,16 @@ public class TaloolSession extends Session
 	public boolean isSignedOn()
 	{
 		return merchantAccount == null ? false : true;
+	}
+
+	public DealOffer getLastDealOffer()
+	{
+		return lastDealOffer;
+	}
+
+	public void setLastDealOffer(DealOffer lastDealOffer)
+	{
+		this.lastDealOffer = lastDealOffer;
 	}
 
 }

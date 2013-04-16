@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
 import com.talool.core.DealOffer;
-import com.talool.core.Image;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantIdentity;
 import com.talool.core.Tag;
@@ -53,7 +52,6 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	private String tags;
 	private MerchantIdentity merchantIdentity;
 	private DealOffer dealOffer;
-	
 
 	public DealOfferDealPanel(final String id, final SubmitCallBack callback)
 	{
@@ -109,10 +107,11 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	{
 		super.onInitialize();
 
-		final DealPreview dealPreview = new DealPreview("dealBuilder", getDefaultCompoundPropertyModel().getObject());
+		final DealPreview dealPreview = new DealPreview("dealBuilder",
+				getDefaultCompoundPropertyModel().getObject());
 		dealPreview.setOutputMarkupId(true);
 		form.add(dealPreview);
-		
+
 		MerchantIdentitySelect merchantSelect = new MerchantIdentitySelect("availableMerchants",
 				new PropertyModel<MerchantIdentity>(this, "merchantIdentity"),
 				new AvailableMerchantsListModel());
@@ -147,36 +146,35 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 				BasePage page = (BasePage) getPage();
 				final AdminModalWindow modal = page.getModal();
 
-				SubmitCallBack callback = new SubmitCallBack()
+				final SubmitCallBack callback = new SubmitCallBack()
 				{
-
 					private static final long serialVersionUID = 6420614586937543567L;
 
 					@Override
-					public void submitSuccess(AjaxRequestTarget target)
+					public void submitSuccess(final AjaxRequestTarget target)
 					{
-						modal.close(target);
-
-						// TODO reopen the original modal
-						// target.add(oModal);
+						if (SessionUtils.getSession().getLastDealOffer() != null)
+						{
+							setDealOffer(SessionUtils.getSession().getLastDealOffer());
+						}
+						modal.replace(DealOfferDealPanel.this);
+						target.add(DealOfferDealPanel.this.setOutputMarkupId(true));
 					}
 
 					@Override
 					public void submitFailure(AjaxRequestTarget target)
 					{
-
+						// intentionally void
 					}
 				};
 
-				// TODO probably need a different callback
 				MerchantDealOfferPanel panel = new MerchantDealOfferPanel(modal.getContentId(),
 						getMerchantIdentity(), callback);
 
-				modal.getCurrentContent().replaceWith(panel.setOutputMarkupId(true));
+				modal.replace(panel.setOutputMarkupId(true));
 
 				modal.setTitle("New Deal Offer");
 
-				// modal.show(target);
 				target.add(panel);
 
 			}
@@ -184,34 +182,38 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 
 		TextField<String> titleField = new TextField<String>("title");
 		titleField.setRequired(true);
-		titleField.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.TITLE, "onBlur"));
+		titleField.add(new DealPreviewUpdatingBehavior(dealPreview,
+				DealPreviewUpdatingBehavior.DealComponent.TITLE, "onBlur"));
 		form.add(titleField);
-		
+
 		TextArea<String> summaryField = new TextArea<String>("summary");
 		summaryField.setRequired(true);
-		summaryField.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.SUMMARY, "onBlur"));
+		summaryField.add(new DealPreviewUpdatingBehavior(dealPreview,
+				DealPreviewUpdatingBehavior.DealComponent.SUMMARY, "onBlur"));
 		form.add(summaryField);
-		
+
 		TextArea<String> detailsField = new TextArea<String>("details");
 		detailsField.setRequired(true);
-		detailsField.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.DETAILS, "onBlur"));
+		detailsField.add(new DealPreviewUpdatingBehavior(dealPreview,
+				DealPreviewUpdatingBehavior.DealComponent.DETAILS, "onBlur"));
 		form.add(detailsField);
-		
+
 		// TODO we need a validator on this
 		TextField<String> codeField = new TextField<String>("code");
-		codeField.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.CODE, "onBlur"));
+		codeField.add(new DealPreviewUpdatingBehavior(dealPreview,
+				DealPreviewUpdatingBehavior.DealComponent.CODE, "onBlur"));
 		form.add(codeField);
-		
+
 		form.add(new TextField<String>("tags", new PropertyModel<String>(this, "tags")));
 
 		final WebMarkupContainer imageSelect = new WebMarkupContainer("imageSelectContainer");
 		imageSelect.setOutputMarkupId(true);
 		form.add(imageSelect);
-		
+
 		ImageSelectPanel images = new ImageSelectPanel("imageSelectPanel", dealPreview);
 		images.setOutputMarkupId(true);
 		imageSelect.add(images);
-		
+
 		// TODO consider moving this to the ImageUploadPanel
 		// multi-part for image uploads
 		form.setMultiPart(true);
@@ -221,7 +223,8 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		DateTextField expires = new DateTextField("expires", converter);
 		expires.add(new DatePicker());
 		form.add(expires);
-		expires.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.EXPIRES, "onChange"));
+		expires.add(new DealPreviewUpdatingBehavior(dealPreview,
+				DealPreviewUpdatingBehavior.DealComponent.EXPIRES, "onChange"));
 
 		form.add(new CheckBox("isActive"));
 	}
@@ -260,9 +263,9 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		deal.setDealOffer(dealOffer);
 		deal.setMerchant(merchant);
 		deal.setUpdatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
-		
+
 		// TODO get the image from the ImageSelectPanel
-		//deal.setImageUrl(image.getUrl());
+		// deal.setImageUrl(image.getUrl());
 
 		taloolService.save(deal);
 	}
@@ -303,7 +306,5 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	{
 		this.dealOffer = dealOffer;
 	}
-
-	
 
 }

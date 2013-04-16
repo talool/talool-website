@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +18,8 @@ import com.talool.core.Merchant;
 import com.talool.core.MerchantIdentity;
 import com.talool.core.service.ServiceException;
 import com.talool.website.component.DealTypeDropDownChoice;
+import com.talool.website.component.MerchantIdentitySelect;
+import com.talool.website.models.AvailableMerchantsListModel;
 import com.talool.website.models.DealOfferModel;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
@@ -32,6 +35,8 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantDealOfferPanel.class);
 	private static final long serialVersionUID = 661849211369766802L;
 
+	private MerchantIdentity owningMerchant;
+
 	public MerchantDealOfferPanel(final String id, final MerchantIdentity merchantIdentity,
 			final SubmitCallBack callback)
 	{
@@ -40,6 +45,7 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		Merchant merchant;
 		try
 		{
+			this.owningMerchant = merchantIdentity;
 			merchant = taloolService.getMerchantById(merchantIdentity.getId());
 			final DealOffer dealOffer = domainFactory.newDealOffer(merchant, SessionUtils.getSession()
 					.getMerchantAccount());
@@ -65,6 +71,12 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 	protected void onInitialize()
 	{
 		super.onInitialize();
+		MerchantIdentitySelect merchantSelect = new MerchantIdentitySelect("owningMerchant",
+				new PropertyModel<MerchantIdentity>(this, "owningMerchant"),
+				new AvailableMerchantsListModel());
+
+		form.add(merchantSelect.setRequired(true));
+
 		form.add(new DealTypeDropDownChoice("dealType").setRequired(true));
 		form.add(new TextField<String>("title").setRequired(true));
 		form.add(new TextField<String>("summary"));
@@ -96,10 +108,11 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 	@Override
 	public void save() throws ServiceException
 	{
-		DealOffer dealOffer = (DealOffer) form.getDefaultModelObject();
+		final DealOffer dealOffer = (DealOffer) form.getDefaultModelObject();
 		dealOffer.setUpdatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
 
 		taloolService.save(dealOffer);
+		SessionUtils.getSession().setLastDealOffer(dealOffer);
 		getSession().info("Successfully created '" + dealOffer.getTitle() + "'");
 	}
 
