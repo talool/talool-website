@@ -13,6 +13,7 @@ body {
 
 .header {
 	padding: 10px 25px;
+	position: relative;
 }
 .header canvas {
 	display:block;
@@ -35,11 +36,15 @@ h2 {
 	padding: 8px 5px;
 	margin-right: 20px;
 }
-.menu li.userInfo {
-	float: right;
+
+/* USER INFO BUTTON */
+.userInfo {
 	text-align: right;
 	margin-right: 0;
 	padding: 0;
+	position: absolute;
+	top: 17px;
+	right: 25px;
 }
 a {
 	text-decoration: none;
@@ -276,18 +281,22 @@ body div.wicket-modal h3.w_captionText {
 	-webkit-background-clip: padding-box;
 	-moz-background-clip: padding;
 	background-clip: padding-box;
+	text-align: left;
 }
 .open .dropdown-menu {
 	display: block;
-	text-align: left;
 }
-.open .dropdown-menu li {
+.dropdown-menu li {
 	display: block;
 	color: black;
+	padding: 5px 20px 5px 10px;
 }
 .open .dropdown-menu li a {
 	color: rgba(0,0,0,.8);
 	display: block;
+}
+.open .dropdown-menu li a i {
+	margin-right: 5px;
 }
 .open .dropdown-menu li a:hover {
 	color: black;
