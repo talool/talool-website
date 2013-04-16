@@ -7,16 +7,18 @@
 		 		<li><a href="/com/talool/website/pages/lists/DealOffersPage.html"><i class="icon-money icon-large"></i> Deal Offers</a></li>
 		  		<li><a href="/com/talool/website/pages/lists/CustomersPage.html"><i class="icon-user icon-large"></i> Customers</a></li>
 	  		</wicket:link>
-	  		<li class="userInfo btn-group open">
-	  			<a class="btn btn-primary" href="#"><i class="icon-user"></i> <span wicket:id="signedInAs">Signed in as {email}</span></a>
-	  			<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="icon-caret-down"></span></a>
+	  		<li class="userInfo btn-group" id="userDropdownContainer">
+	  			<a class="btn btn-primary" href="#"><i class="icon-user"></i> 
+	  			<span wicket:id="signedInAs">Signed in as {email}</span></a><a 
+	  			class="btn btn-primary dropdown-toggle" data-toggle="dropdown" 
+	  			href="#" onclick="$('#userDropdownContainer').toggleClass('open')"><span class="icon-caret-down"></span></a>
 	  			<ul class="dropdown-menu">
-			        <li><a href="#"><i class="icon-pencil"></i> Manage Deal Offers</a></li>
-			        <li><a href="#"><i class="icon-pencil"></i> Manage Locations</a></li>
-			        <li><a href="#"><i class="icon-trash"></i> Manage Accounts</a></li>
-			        <li><a href="#"><i class="icon-ban-circle"></i> Settings</a></li>
+			        <li><a href="#"><i class="icon-money icon-large"></i> Manage Deal Offers</a></li>
+			        <li><a href="#"><i class="icon-pushpin icon-large"></i> Manage Locations</a></li>
+			        <li><a href="#"><i class="icon-group icon-large"></i> Manage Accounts</a></li>
+			        <li><a href="#"><i class="icon-cog icon-large"></i> Settings</a></li>
 			        <li class="divider"></li>
-			        <li><a href="#" wicket:id="signOffLink"><i class="i"></i> (sign off)</a></li>
+			        <li><a href="#" wicket:id="signOffLink"><i class="icon-signout icon-large"></i> Sign Out</a></li>
 			    </ul>
 	  		</li>
 	  	</ol>
