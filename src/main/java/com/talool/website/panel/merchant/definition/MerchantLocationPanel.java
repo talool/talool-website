@@ -23,19 +23,20 @@ import com.talool.website.panel.SubmitCallBack;
  */
 public class MerchantLocationPanel extends BaseDefinitionPanel
 {
-
 	private static final long serialVersionUID = 661849211369766802L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocationPanel.class);
 
-
 	public MerchantLocationPanel(final String id, final Long merchantId, final SubmitCallBack callback)
 	{
-		super(id, callback, true);
-		
+		super(id, callback);
+
 		Merchant merchant = null;
-		try {
+		try
+		{
 			merchant = ServiceFactory.get().getTaloolService().getMerchantById(merchantId);
-		} catch (ServiceException se) {
+		}
+		catch (ServiceException se)
+		{
 			LOG.error("problem loading merchant", se);
 		}
 
@@ -45,9 +46,11 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 		setDefaultModel(Model.of(managedLocation));
 	}
 
-	public MerchantLocationPanel(final String id, final SubmitCallBack callback, final Long merchantManagedLocationId)
+	public MerchantLocationPanel(final String id, final SubmitCallBack callback,
+			final Long merchantManagedLocationId)
 	{
-		super(id, callback, false);;
+		super(id, callback);
+		;
 		setDefaultModel(new MerchantManagedLocationModel(merchantManagedLocationId));
 	}
 
@@ -76,24 +79,31 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public CompoundPropertyModel<MerchantManagedLocation> getDefaultCompoundPropertyModel() {
-		return new CompoundPropertyModel<MerchantManagedLocation>((IModel<MerchantManagedLocation>) getDefaultModel());
+	public CompoundPropertyModel<MerchantManagedLocation> getDefaultCompoundPropertyModel()
+	{
+		return new CompoundPropertyModel<MerchantManagedLocation>(
+				(IModel<MerchantManagedLocation>) getDefaultModel());
 	}
 
 	@Override
-	public String getObjectIdentifier() {
-		MerchantManagedLocation managedLocation = (MerchantManagedLocation) form.getDefaultModelObject();
+	public String getObjectIdentifier()
+	{
+		MerchantManagedLocation managedLocation = (MerchantManagedLocation) form
+				.getDefaultModelObject();
 		return managedLocation.getMerchantLocation().getLocationName();
 	}
 
 	@Override
-	public void save() throws ServiceException {
-		MerchantManagedLocation managedLocation = (MerchantManagedLocation) form.getDefaultModelObject();
+	public void save() throws ServiceException
+	{
+		MerchantManagedLocation managedLocation = (MerchantManagedLocation) form
+				.getDefaultModelObject();
 		taloolService.save(managedLocation);
 	}
 
 	@Override
-	public String getSaveButtonLabel() {
+	public String getSaveButtonLabel()
+	{
 		return "Save Merchant Location";
 	}
 }

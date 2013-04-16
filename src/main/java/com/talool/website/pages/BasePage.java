@@ -64,7 +64,7 @@ public abstract class BasePage extends WebPage
 		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
 		add(new Label("headerTitle", getHeaderTitle()));
 
-		final NiceFeedbackPanel feedback = new NiceFeedbackPanel("feedback");
+		feedback = new NiceFeedbackPanel("feedback");
 		add(feedback.setOutputMarkupId(true));
 
 		final AdminModalWindow definitionModal = new AdminModalWindow("modal");

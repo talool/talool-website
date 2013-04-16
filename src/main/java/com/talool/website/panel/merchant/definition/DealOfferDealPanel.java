@@ -55,7 +55,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 
 	public DealOfferDealPanel(final String id, final SubmitCallBack callback)
 	{
-		super(id, callback, true);
+		super(id, callback);
 		setMerchantContext(SessionUtils.getSession().getMerchantAccount().getMerchant());
 		Deal deal = domainFactory.newDeal(SessionUtils.getSession().getMerchantAccount());
 		setDefaultModel(Model.of(deal));
@@ -63,7 +63,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 
 	public DealOfferDealPanel(final String id, final Long dealOfferId, final SubmitCallBack callback)
 	{
-		super(id, callback, true);
+		super(id, callback);
 
 		try
 		{
@@ -81,7 +81,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 
 	public DealOfferDealPanel(final String id, final SubmitCallBack callback, final Long dealId)
 	{
-		super(id, callback, false);
+		super(id, callback);
 		setDefaultModel(new DealModel(dealId));
 
 		try
@@ -153,6 +153,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 					@Override
 					public void submitSuccess(final AjaxRequestTarget target)
 					{
+
 						if (SessionUtils.getSession().getLastDealOffer() != null)
 						{
 							setDealOffer(SessionUtils.getSession().getLastDealOffer());
@@ -266,6 +267,9 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 
 		// TODO get the image from the ImageSelectPanel
 		// deal.setImageUrl(image.getUrl());
+
+		SessionUtils.successMessage("Successfully saved '", deal.getTitle(), "' for merchant '", deal
+				.getMerchant().getName(), "'");
 
 		taloolService.save(deal);
 	}

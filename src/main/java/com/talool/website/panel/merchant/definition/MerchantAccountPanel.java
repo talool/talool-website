@@ -20,7 +20,6 @@ import com.talool.website.models.MerchantAccountModel;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
 
-
 public class MerchantAccountPanel extends BaseDefinitionPanel
 {
 
@@ -29,37 +28,42 @@ public class MerchantAccountPanel extends BaseDefinitionPanel
 
 	public MerchantAccountPanel(final String id, final Long merchantId, final SubmitCallBack callback)
 	{
-		super(id, callback, true);
-		
+		super(id, callback);
+
 		Merchant merchant = null;
-		try {
+		try
+		{
 			merchant = ServiceFactory.get().getTaloolService().getMerchantById(merchantId);
-		} catch (ServiceException se) {
+		}
+		catch (ServiceException se)
+		{
 			LOG.error("problem loading merchant", se);
 		}
 
 		MerchantAccount account = domainFactory.newMerchantAccount(merchant);
 		setDefaultModel(Model.of(account));
-		
+
 	}
 
-	public MerchantAccountPanel(final String id, final SubmitCallBack callback, final Long merchantAccountId)
+	public MerchantAccountPanel(final String id, final SubmitCallBack callback,
+			final Long merchantAccountId)
 	{
-		super(id, callback, false);
+		super(id, callback);
 		setDefaultModel(new MerchantAccountModel(merchantAccountId));
 	}
-	
+
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		
+
 		form.add(new TextField<String>("roleTitle").setRequired(true));
 		form.add(new TextField<String>("email").setRequired(true));
 		// validate the passwords match
 		FormComponent<String> pw1 = new PasswordTextField("password").setRequired(true);
-		FormComponent<String> pw2 = new PasswordTextField("confirm",new PropertyModel<String>(this,"confirm")).setRequired(true);
-		EqualPasswordInputValidator pwv = new EqualPasswordInputValidator(pw1,pw2);
+		FormComponent<String> pw2 = new PasswordTextField("confirm", new PropertyModel<String>(this,
+				"confirm")).setRequired(true);
+		EqualPasswordInputValidator pwv = new EqualPasswordInputValidator(pw1, pw2);
 		form.add(pw1);
 		form.add(pw2);
 		form.add(pwv);
@@ -68,34 +72,40 @@ public class MerchantAccountPanel extends BaseDefinitionPanel
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public CompoundPropertyModel<MerchantAccount> getDefaultCompoundPropertyModel() {
+	public CompoundPropertyModel<MerchantAccount> getDefaultCompoundPropertyModel()
+	{
 		return new CompoundPropertyModel<MerchantAccount>((IModel<MerchantAccount>) getDefaultModel());
 	}
 
 	@Override
-	public String getObjectIdentifier() {
+	public String getObjectIdentifier()
+	{
 		MerchantAccount account = (MerchantAccount) form.getDefaultModelObject();
 		return account.getEmail();
 	}
 
 	@Override
-	public void save() throws ServiceException {
+	public void save() throws ServiceException
+	{
 		MerchantAccount account = (MerchantAccount) form.getDefaultModelObject();
 		taloolService.save(account);
 	}
-	
+
 	@Override
-	public String getSaveButtonLabel() {
+	public String getSaveButtonLabel()
+	{
 		return "Save Merchant Account";
 	}
-	
+
 	private String confirm;
 
-	public String getConfirm() {
+	public String getConfirm()
+	{
 		return confirm;
 	}
 
-	public void setConfirm(String confirm) {
+	public void setConfirm(String confirm)
+	{
 		this.confirm = confirm;
 	}
 
