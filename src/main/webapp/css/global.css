@@ -11,11 +11,11 @@ body {
 	margin: 5px 20px;
 }
 
-h1.header {
-	color: white;
+.header {
 	padding: 10px 25px;
-	margin: 0;
-	font-size: 36px;
+}
+.header canvas {
+	display:block;
 }
 
 h2 {
