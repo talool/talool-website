@@ -268,8 +268,8 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		// TODO get the image from the ImageSelectPanel
 		// deal.setImageUrl(image.getUrl());
 
-		SessionUtils.successMessage("Successfully saved '", deal.getTitle(), "' for merchant '", deal
-				.getMerchant().getName(), "'");
+		SessionUtils.successMessage("Successfully saved deal '", deal.getTitle(), "' for merchant '",
+				deal.getMerchant().getName(), "'");
 
 		taloolService.save(deal);
 	}
