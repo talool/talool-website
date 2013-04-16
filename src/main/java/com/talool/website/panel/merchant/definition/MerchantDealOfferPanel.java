@@ -119,8 +119,8 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 
 		SessionUtils.getSession().setLastDealOffer(dealOffer);
 
-		SessionUtils.successMessage("Successfully saved '", dealOffer.getTitle(), "' for merchant '",
-				dealOffer.getMerchant().getName(), "'");
+		SessionUtils.successMessage("Successfully saved deal offer '", dealOffer.getTitle(),
+				"' for merchant '", dealOffer.getMerchant().getName(), "'");
 	}
 
 	@Override
