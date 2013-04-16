@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.service.ServiceException;
+import com.talool.website.util.SessionUtils;
 
 /**
  * 
@@ -17,18 +18,15 @@ import com.talool.core.service.ServiceException;
  */
 abstract public class BaseDefinitionPanel extends BasePanel
 {
-
 	private static final long serialVersionUID = -7150011935454160209L;
 	private static final Logger LOG = LoggerFactory.getLogger(BaseDefinitionPanel.class);
 	protected SubmitCallBack callback;
 	protected Form<Void> form;
-	private boolean isNew = false;
 
-	public BaseDefinitionPanel(final String id, final SubmitCallBack callback, boolean isNew)
+	public BaseDefinitionPanel(final String id, final SubmitCallBack callback)
 	{
 		super(id);
 		this.callback = callback;
-		this.isNew = isNew;
 	}
 
 	@Override
@@ -53,6 +51,7 @@ abstract public class BaseDefinitionPanel extends BasePanel
 			protected void onError(AjaxRequestTarget target, Form<?> form)
 			{
 				target.add(feedback);
+				SessionUtils.errorMessage("The was a problem submitting");
 				// attempting to scroll to top
 				target.appendJavaScript("$('.content').scrollTop();");
 			}
@@ -60,27 +59,21 @@ abstract public class BaseDefinitionPanel extends BasePanel
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form)
 			{
-				StringBuilder sb = new StringBuilder();
-
 				try
 				{
 					save();
 					target.add(feedback);
-					sb.append("Successfully ").append(isNew ? "created '" : "updated '")
-							.append(getObjectIdentifier()).append("'");
-					getSession().info(sb.toString());
 
 					if (callback != null)
 					{
 						callback.submitSuccess(target);
 					}
-
 				}
 				catch (ServiceException e)
 				{
-					sb.append("Problem saving account: ").append(e.getLocalizedMessage());
-					getSession().error(sb.toString());
-					LOG.error(sb.toString());
+					SessionUtils.errorMessage("Problem saving account: ", e.getLocalizedMessage());
+
+					LOG.error(e.getLocalizedMessage(), e);
 					if (callback != null)
 					{
 						callback.submitFailure(target);

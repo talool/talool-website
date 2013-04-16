@@ -57,7 +57,7 @@ public class MerchantManagementPage extends BaseManagementPage
 				return new MerchantDealsPanel(panelId, getPageParameters());
 			}
 		});
-		
+
 		tabs.add(new AbstractTab(new Model<String>("My Deal Offers"))
 		{
 
@@ -103,7 +103,9 @@ public class MerchantManagementPage extends BaseManagementPage
 			protected void onAjaxUpdate(AjaxRequestTarget target)
 			{
 				super.onAjaxUpdate(target);
+				getSession().getFeedbackMessages().clear();;
 				BasePage page = (BasePage) this.getPage();
+				target.add(page.getFeedback());
 				target.add(page.getActionLink());
 			}
 

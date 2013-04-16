@@ -22,24 +22,27 @@ import com.talool.core.service.ServiceException;
 import com.talool.website.models.CustomerModel;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.util.SessionUtils;
 
-public class CustomerPanel extends BaseDefinitionPanel {
+public class CustomerPanel extends BaseDefinitionPanel
+{
 
 	private static final long serialVersionUID = 2870193702212159884L;
 
-	public CustomerPanel(String id, SubmitCallBack callback) {
-		super(id, callback, true);
+	public CustomerPanel(String id, SubmitCallBack callback)
+	{
+		super(id, callback);
 
 		Customer customer = domainFactory.newCustomer();
 		setDefaultModel(Model.of(customer));
 	}
-	
+
 	public CustomerPanel(final String id, final SubmitCallBack callback, final Long customerId)
 	{
-		super(id, callback, false);
+		super(id, callback);
 		setDefaultModel(new CustomerModel(customerId));
 	}
-	
+
 	@Override
 	protected void onInitialize()
 	{
@@ -50,50 +53,58 @@ public class CustomerPanel extends BaseDefinitionPanel {
 		form.add(new TextField<String>("email").setRequired(true));
 		// validate the passwords match
 		FormComponent<String> pw1 = new PasswordTextField("password").setRequired(true);
-		FormComponent<String> pw2 = new PasswordTextField("confirm",new PropertyModel<String>(this,"confirm")).setRequired(true);
-		EqualPasswordInputValidator pwv = new EqualPasswordInputValidator(pw1,pw2);
+		FormComponent<String> pw2 = new PasswordTextField("confirm", new PropertyModel<String>(this,
+				"confirm")).setRequired(true);
+		EqualPasswordInputValidator pwv = new EqualPasswordInputValidator(pw1, pw2);
 		form.add(pw1);
 		form.add(pw2);
 		form.add(pwv);
 		// format the date
-		DateConverter converter = new PatternDateConverter("MM/dd/yyyy",false);
+		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
 		form.add(new DateTextField("birthDate", converter).setRequired(true));
 		// radio buttons
 		List<Sex> SEX = Arrays.asList(new Sex[] { Sex.Male, Sex.Female });
 		form.add(new RadioChoice<Sex>("sex", SEX).setSuffix("").setRequired(true));
-		
+
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public CompoundPropertyModel<Customer> getDefaultCompoundPropertyModel() {
+	public CompoundPropertyModel<Customer> getDefaultCompoundPropertyModel()
+	{
 		return new CompoundPropertyModel<Customer>((IModel<Customer>) getDefaultModel());
 	}
 
 	@Override
-	public String getObjectIdentifier() {
-		Customer customer = (Customer) form.getDefaultModelObject();
+	public String getObjectIdentifier()
+	{
+		final Customer customer = (Customer) form.getDefaultModelObject();
 		return customer.getEmail();
 	}
 
 	@Override
-	public void save() throws ServiceException {
-		Customer customer = (Customer) form.getDefaultModelObject();
+	public void save() throws ServiceException
+	{
+		final Customer customer = (Customer) form.getDefaultModelObject();
 		taloolService.save(customer);
+		SessionUtils.successMessage("Successfully saved customer '", customer.getEmail(), "'");
 	}
 
 	@Override
-	public String getSaveButtonLabel() {
+	public String getSaveButtonLabel()
+	{
 		return "Save Customer";
 	}
-	
+
 	private String confirm;
 
-	public String getConfirm() {
+	public String getConfirm()
+	{
 		return confirm;
 	}
 
-	public void setConfirm(String confirm) {
+	public void setConfirm(String confirm)
+	{
 		this.confirm = confirm;
 	}
 

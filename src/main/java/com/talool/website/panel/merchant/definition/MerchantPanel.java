@@ -15,8 +15,8 @@ import org.apache.wicket.validation.validator.UrlValidator;
 import com.talool.core.Merchant;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
-import com.talool.website.component.StateSelect;
 import com.talool.website.component.StateOption;
+import com.talool.website.component.StateSelect;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.models.ModelUtil;
 import com.talool.website.panel.BaseDefinitionPanel;
@@ -34,7 +34,7 @@ public class MerchantPanel extends BaseDefinitionPanel
 
 	public MerchantPanel(final String id, final SubmitCallBack callback)
 	{
-		super(id, callback, true);
+		super(id, callback);
 
 		Merchant merchant = domainFactory.newMerchant();
 		merchant.setPrimaryLocation(domainFactory.newMerchantLocation());
@@ -42,10 +42,10 @@ public class MerchantPanel extends BaseDefinitionPanel
 		merchant.getPrimaryLocation().setLogoUrl("");
 		setDefaultModel(Model.of(merchant));
 	}
-	
+
 	public MerchantPanel(final String id, final SubmitCallBack callback, final Long merchantId)
 	{
-		super(id, callback, false);
+		super(id, callback);
 		setDefaultModel(new MerchantModel(merchantId));
 	}
 
@@ -116,18 +116,21 @@ public class MerchantPanel extends BaseDefinitionPanel
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public CompoundPropertyModel<Merchant> getDefaultCompoundPropertyModel() {
+	public CompoundPropertyModel<Merchant> getDefaultCompoundPropertyModel()
+	{
 		return new CompoundPropertyModel<Merchant>((IModel<Merchant>) getDefaultModel());
 	}
 
 	@Override
-	public String getObjectIdentifier() {
+	public String getObjectIdentifier()
+	{
 		Merchant merchant = (Merchant) form.getDefaultModelObject();
 		return merchant.getName();
 	}
 
 	@Override
-	public void save() throws ServiceException {
+	public void save() throws ServiceException
+	{
 		Merchant merchant = (Merchant) form.getDefaultModelObject();
 
 		if (StringUtils.isNotEmpty(tags))
@@ -141,11 +144,12 @@ public class MerchantPanel extends BaseDefinitionPanel
 		}
 
 		taloolService.save(merchant);
-		
+
 	}
 
 	@Override
-	public String getSaveButtonLabel() {
+	public String getSaveButtonLabel()
+	{
 		return "Save Merchant";
 	}
 }

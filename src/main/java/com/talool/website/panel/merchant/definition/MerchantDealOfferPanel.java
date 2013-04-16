@@ -40,7 +40,7 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 	public MerchantDealOfferPanel(final String id, final MerchantIdentity merchantIdentity,
 			final SubmitCallBack callback)
 	{
-		super(id, callback, true);
+		super(id, callback);
 
 		Merchant merchant;
 		try
@@ -63,8 +63,9 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 	public MerchantDealOfferPanel(final String id, final SubmitCallBack callback,
 			final Long dealOfferId)
 	{
-		super(id, callback, false);
+		super(id, callback);
 		setDefaultModel(new DealOfferModel(dealOfferId));
+
 	}
 
 	@Override
@@ -111,9 +112,15 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		final DealOffer dealOffer = (DealOffer) form.getDefaultModelObject();
 		dealOffer.setUpdatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
 
+		// merchant could of changed, make sure to reset it
+		final Merchant merch = taloolService.getMerchantById(owningMerchant.getId());
+		dealOffer.setMerchant(merch);
 		taloolService.save(dealOffer);
+
 		SessionUtils.getSession().setLastDealOffer(dealOffer);
-		getSession().info("Successfully created '" + dealOffer.getTitle() + "'");
+
+		SessionUtils.successMessage("Successfully saved '", dealOffer.getTitle(), "' for merchant '",
+				dealOffer.getMerchant().getName(), "'");
 	}
 
 	@Override
@@ -121,4 +128,17 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 	{
 		return "Save Deal Offer";
 	}
+
+	public MerchantIdentity getOwningMerchant()
+	{
+		if (owningMerchant == null)
+		{
+			final DealOffer dOffer = (DealOffer) getDefaultModelObject();
+			owningMerchant = domainFactory.newMerchantIdentity(dOffer.getMerchant().getId(), dOffer
+					.getMerchant().getName());
+
+		}
+		return owningMerchant;
+	}
+
 }
