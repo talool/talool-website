@@ -3,6 +3,7 @@ package com.talool.website.panel.merchant.definition;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -23,10 +24,12 @@ import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
 import com.talool.core.DealOffer;
+import com.talool.core.Image;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantIdentity;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
+import com.talool.domain.ImageImpl;
 import com.talool.website.Config;
 import com.talool.website.component.DealOfferSelect;
 import com.talool.website.component.MerchantIdentitySelect;
@@ -52,6 +55,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	private String tags;
 	private MerchantIdentity merchantIdentity;
 	private DealOffer dealOffer;
+	private Image image;
 
 	public DealOfferDealPanel(final String id, final SubmitCallBack callback)
 	{
@@ -100,6 +104,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	private void setMerchantContext(Merchant merchant)
 	{
 		merchantIdentity = domainFactory.newMerchantIdentity(merchant.getId(), merchant.getName());
+		image = new ImageImpl("Test Image 1","http://i567.photobucket.com/albums/ss116/alphabetabeta/bg_test.png");
 	}
 
 	@Override
@@ -211,11 +216,10 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		imageSelect.setOutputMarkupId(true);
 		form.add(imageSelect);
 
-		ImageSelectPanel images = new ImageSelectPanel("imageSelectPanel", dealPreview);
+		ImageSelectPanel images = new ImageSelectPanel("imageSelectPanel", new PropertyModel<Image>(this, "image"), dealPreview);
 		images.setOutputMarkupId(true);
 		imageSelect.add(images);
 
-		// TODO consider moving this to the ImageUploadPanel
 		// multi-part for image uploads
 		form.setMultiPart(true);
 		form.setMaxSize(Config.get().getLogoUploadMaxBytes());
@@ -265,8 +269,12 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		deal.setMerchant(merchant);
 		deal.setUpdatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
 
-		// TODO get the image from the ImageSelectPanel
-		// deal.setImageUrl(image.getUrl());
+		Component imagePanel = form.get("imageSelectContainer:imageSelectPanel");
+		if (imagePanel instanceof ImageSelectPanel) {
+			deal.setImageUrl(image.getUrl());
+		} else if (imagePanel instanceof ImageUploadPanel) {
+			deal.setImageUrl(((ImageUploadPanel)imagePanel).getUpload());
+		}
 
 		SessionUtils.successMessage("Successfully saved deal '", deal.getTitle(), "' for merchant '",
 				deal.getMerchant().getName(), "'");

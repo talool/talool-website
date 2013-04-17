@@ -12,6 +12,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.talool.core.Image;
 import com.talool.website.Config;
 import com.talool.website.models.ModelUtil;
 
@@ -19,14 +20,15 @@ public class ImageUploadPanel extends Panel {
 
 	private static final long serialVersionUID = 2266250361647577936L;
 	private static final Logger LOG = LoggerFactory.getLogger(ImageUploadPanel.class);
-	private FileUploadField fileUploadField;
 	private List<FileUpload> fileUploads;
 	private DealPreview preview;
+	private PropertyModel<Image> model;
 
-	public ImageUploadPanel(String id, DealPreview preview) {
+	public ImageUploadPanel(String id, PropertyModel<Image> model, DealPreview preview) {
 		super(id);
 		setMarkupId(id);
 		this.preview = preview;
+		this.model = model;
 	}
 	
 	@Override
@@ -48,14 +50,13 @@ public class ImageUploadPanel extends Panel {
 			public void onClick(AjaxRequestTarget target)
 			{
 				// show the select panel
-				ImageSelectPanel panel = new ImageSelectPanel(self.getMarkupId(), preview);
+				ImageSelectPanel panel = new ImageSelectPanel(self.getMarkupId(), model, preview);
 				self.replaceWith(panel.setOutputMarkupId(true));
 				target.add(panel);
 			}
 		});
 	}
 	
-	// DO I STILL NEED THIS?
 	public String getUpload() {
 		String url = null;
 		if (CollectionUtils.isNotEmpty(fileUploads))
