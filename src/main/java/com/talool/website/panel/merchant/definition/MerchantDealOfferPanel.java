@@ -3,7 +3,6 @@ package com.talool.website.panel.merchant.definition;
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
-import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -82,11 +81,9 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		form.add(new TextField<String>("title").setRequired(true));
 		form.add(new TextField<String>("summary"));
 		form.add(new TextField<String>("price").setRequired(true));
-
+		
 		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
-		DateTextField expires = new DateTextField("expires", converter);
-		expires.add(new DatePicker());
-		form.add(expires);
+		form.add(new DateTextField("expires", converter));
 
 		form.add(new CheckBox("isActive"));
 

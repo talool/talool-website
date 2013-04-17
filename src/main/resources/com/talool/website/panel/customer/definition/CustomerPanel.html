@@ -1,5 +1,11 @@
 <wicket:extend>
 
+	<script>
+	  $(function() {
+	    $( "#datepicker" ).datepicker();
+	  });
+	</script>
+	
 	<div class="panel left">
 		<h3>Customer Description</h3>
 		<fieldset>
@@ -14,7 +20,7 @@
 	<div class="panel right">
 		<h3>&nbsp;</h3>
 		<fieldset>
-			<div><label>Birth Date</label><input wicket:id="birthDate" name="birth_date" type="text"/></div>
+			<div><label>Birth Date</label><input id="datepicker" wicket:id="birthDate" name="birth_date" type="text"/></div>
 			<div class="radioGroupContainer">
 				<label>Sex</label>
 				<span wicket:id="sex" class="radioGroup">

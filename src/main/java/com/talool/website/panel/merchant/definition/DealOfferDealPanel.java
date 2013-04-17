@@ -7,6 +7,9 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.datetime.DateConverter;
+import org.apache.wicket.datetime.PatternDateConverter;
+import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -219,19 +222,13 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		// multi-part for image uploads
 		form.setMultiPart(true);
 		form.setMaxSize(Config.get().getLogoUploadMaxBytes());
+		
+		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
+		DateTextField expires = new DateTextField("expires",converter);
+		form.add(expires);
+		expires.add(new DealPreviewUpdatingBehavior(dealPreview,
+				DealPreviewUpdatingBehavior.DealComponent.EXPIRES, "onChange"));
 
-		TextField<String> expires = new TextField<String>("expires");
-		form.add(expires);
-		expires.add(new DealPreviewUpdatingBehavior(dealPreview,
-				DealPreviewUpdatingBehavior.DealComponent.EXPIRES, "onChange"));
-		/*
-		 * DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
-		DateTextField expires = new DateTextField("expires", converter);
-		expires.add(new DatePicker());
-		form.add(expires);
-		expires.add(new DealPreviewUpdatingBehavior(dealPreview,
-				DealPreviewUpdatingBehavior.DealComponent.EXPIRES, "onChange"));
-		*/
 		form.add(new CheckBox("isActive"));
 	}
 
