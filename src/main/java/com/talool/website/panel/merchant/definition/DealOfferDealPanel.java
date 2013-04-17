@@ -115,7 +115,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		MerchantIdentitySelect merchantSelect = new MerchantIdentitySelect("availableMerchants",
 				new PropertyModel<MerchantIdentity>(this, "merchantIdentity"),
 				new AvailableMerchantsListModel());
-
+		merchantSelect.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.MERCHANT, "onChange"));
 		merchantSelect.add(new AjaxFormComponentUpdatingBehavior("onchange")
 		{
 			private static final long serialVersionUID = 4010213739823884089L;

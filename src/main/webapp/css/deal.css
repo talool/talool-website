@@ -58,5 +58,24 @@
 	font-weight: bold;
 	position: absolute;
 	width: 100%;
-	bottom: 20px;
+	bottom: 40px;
 }
+
+.deal .merchantLogo {
+	opacity:0.4;
+	filter:alpha(opacity=40);
+	position: absolute;
+	bottom: 40px;
+	left: 20px;
+}
+
+.deal .dealOfferLogo {
+	opacity:0.1;
+	filter:alpha(opacity=10);
+	position: absolute;
+	bottom: 40px;
+	right: 0px;
+}
+
+
+

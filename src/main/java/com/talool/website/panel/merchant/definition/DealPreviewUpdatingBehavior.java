@@ -45,6 +45,9 @@ public class DealPreviewUpdatingBehavior extends AjaxFormComponentUpdatingBehavi
 			//target.add(preview.codeLabel);
 			break;
 		case MERCHANT:
+			// TODO how to get the url from the merch?
+			preview.setMerchantLogoUrl(getFormComponent().getValue());
+			target.add(preview.merchantLogo);
 			break;
 		case DEAL_OFFER:
 			break;
