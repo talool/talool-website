@@ -1,5 +1,9 @@
 <wicket:extend>
-	
+	<script>
+	  $(function() {
+	    $( "#datepicker" ).datepicker();
+	  });
+	</script>
 	<div class="panel left">
 		<h3>Deal Offer Deal</h3>
 	    <fieldset class="">
@@ -31,7 +35,7 @@
 			</div>
 			<div>
 		    	<label><i class="hint-font icon-asterisk"></i> Expires</label>
-		    	<input wicket:id="expires" type="text"/>
+		    	<input id="datepicker" wicket:id="expires" type="text"/>
 		    </div>
 		    <div>
 	    		<label></label>
