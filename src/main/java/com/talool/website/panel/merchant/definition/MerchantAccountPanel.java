@@ -19,6 +19,7 @@ import com.talool.service.ServiceFactory;
 import com.talool.website.models.MerchantAccountModel;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.util.SessionUtils;
 
 public class MerchantAccountPanel extends BaseDefinitionPanel
 {
@@ -26,7 +27,8 @@ public class MerchantAccountPanel extends BaseDefinitionPanel
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantAccountPanel.class);
 
-	public MerchantAccountPanel(final String id, final Long merchantId, final SubmitCallBack callback)
+	public MerchantAccountPanel(final String id, final String merchantId,
+			final SubmitCallBack callback)
 	{
 		super(id, callback);
 
@@ -89,6 +91,7 @@ public class MerchantAccountPanel extends BaseDefinitionPanel
 	{
 		MerchantAccount account = (MerchantAccount) form.getDefaultModelObject();
 		taloolService.save(account);
+		SessionUtils.successMessage("Successfully saved merchant account'", account.getEmail(), "'");
 	}
 
 	@Override

@@ -10,32 +10,35 @@ import com.talool.core.Customer;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 
-public class FriendListModel extends LoadableDetachableModel<List<Customer>> {
+public class FriendListModel extends LoadableDetachableModel<List<Customer>>
+{
 
 	private static final long serialVersionUID = 8670053407495918990L;
 	private static final Logger LOG = LoggerFactory.getLogger(FriendListModel.class);
-	private Long _customerId = null;
+	private String _customerId = null;
 
 	@Override
-	protected List<Customer> load() {
+	protected List<Customer> load()
+	{
 		List<Customer> customers = null;
-		
+
 		try
 		{
-			if (_customerId != null) 
+			if (_customerId != null)
 			{
-				customers = ServiceFactory.get().getTaloolService().getFriends(_customerId.longValue());
+				customers = ServiceFactory.get().getTaloolService().getFriends(_customerId);
 			}
 		}
 		catch (ServiceException e)
 		{
 			LOG.error("problem loading friends", e);
 		}
-		
+
 		return customers;
 	}
-	
-	public void setCustomerId(long id) {
+
+	public void setCustomerId(String id)
+	{
 		_customerId = id;
 	}
 

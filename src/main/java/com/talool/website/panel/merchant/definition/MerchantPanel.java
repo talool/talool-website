@@ -21,6 +21,7 @@ import com.talool.website.models.MerchantModel;
 import com.talool.website.models.ModelUtil;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.util.SessionUtils;
 
 /**
  * 
@@ -43,7 +44,7 @@ public class MerchantPanel extends BaseDefinitionPanel
 		setDefaultModel(Model.of(merchant));
 	}
 
-	public MerchantPanel(final String id, final SubmitCallBack callback, final Long merchantId)
+	public MerchantPanel(final String id, final SubmitCallBack callback, final String merchantId)
 	{
 		super(id, callback);
 		setDefaultModel(new MerchantModel(merchantId));
@@ -144,6 +145,7 @@ public class MerchantPanel extends BaseDefinitionPanel
 		}
 
 		taloolService.save(merchant);
+		SessionUtils.successMessage("Successfully saved merchant '", merchant.getName(), "'");
 
 	}
 

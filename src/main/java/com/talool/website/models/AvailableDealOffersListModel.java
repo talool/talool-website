@@ -26,7 +26,7 @@ public class AvailableDealOffersListModel extends LoadableDetachableModel<List<D
 	{
 		List<DealOffer> dealOffers = null;
 
-		final Long merchantId = SessionUtils.getSession().getMerchantAccount().getMerchant().getId();
+		final String merchantId = SessionUtils.getSession().getMerchantAccount().getMerchant().getId();
 
 		try
 		{

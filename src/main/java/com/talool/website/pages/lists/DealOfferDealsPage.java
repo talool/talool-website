@@ -22,12 +22,12 @@ import com.talool.website.util.SecuredPage;
 public class DealOfferDealsPage extends BasePage
 {
 	private static final long serialVersionUID = 6008230892463177176L;
-	private Long _dealOfferId;
+	private String _dealOfferId;
 
 	public DealOfferDealsPage(PageParameters parameters)
 	{
 		super(parameters);
-		_dealOfferId = parameters.get("id").toLong();
+		_dealOfferId = parameters.get("id").toString();
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class DealOfferDealsPage extends BasePage
 	{
 		// NOTE: this is called via the super constructor, so can't way for
 		// _dealOfferId to be set in this constructor.
-		_dealOfferId = getPageParameters().get("id").toLong();
+		_dealOfferId = getPageParameters().get("id").toString();
 		return new DealOfferDealPanel(contentId, _dealOfferId, callback);
 	}
 

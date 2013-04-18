@@ -19,9 +19,9 @@ public class MerchantModel extends LoadableDetachableModel<Merchant>
 
 	private static final long serialVersionUID = -1571731014724589519L;
 
-	private Long merchantId;
+	private String merchantId;
 
-	public MerchantModel(final Long merchantId)
+	public MerchantModel(final String merchantId)
 	{
 		this.merchantId = merchantId;
 	}

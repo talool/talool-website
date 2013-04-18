@@ -64,7 +64,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		setDefaultModel(Model.of(deal));
 	}
 
-	public DealOfferDealPanel(final String id, final Long dealOfferId, final SubmitCallBack callback)
+	public DealOfferDealPanel(final String id, final String dealOfferId, final SubmitCallBack callback)
 	{
 		super(id, callback);
 
@@ -103,7 +103,8 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	private void setMerchantContext(Merchant merchant)
 	{
 		merchantIdentity = domainFactory.newMerchantIdentity(merchant.getId(), merchant.getName());
-		image = new ImageImpl("Test Image 1","http://i567.photobucket.com/albums/ss116/alphabetabeta/bg_test.png");
+		image = new ImageImpl("Test Image 1",
+				"http://i567.photobucket.com/albums/ss116/alphabetabeta/bg_test.png");
 	}
 
 	@Override
@@ -119,7 +120,8 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		MerchantIdentitySelect merchantSelect = new MerchantIdentitySelect("availableMerchants",
 				new PropertyModel<MerchantIdentity>(this, "merchantIdentity"),
 				new AvailableMerchantsListModel());
-		merchantSelect.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.MERCHANT, "onChange"));
+		merchantSelect.add(new DealPreviewUpdatingBehavior(dealPreview,
+				DealPreviewUpdatingBehavior.DealComponent.MERCHANT, "onChange"));
 		merchantSelect.add(new AjaxFormComponentUpdatingBehavior("onchange")
 		{
 			private static final long serialVersionUID = 4010213739823884089L;
@@ -215,16 +217,17 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		imageSelect.setOutputMarkupId(true);
 		form.add(imageSelect);
 
-		ImageSelectPanel images = new ImageSelectPanel("imageSelectPanel", new PropertyModel<Image>(this, "image"), dealPreview);
+		ImageSelectPanel images = new ImageSelectPanel("imageSelectPanel", new PropertyModel<Image>(
+				this, "image"), dealPreview);
 		images.setOutputMarkupId(true);
 		imageSelect.add(images);
 
 		// multi-part for image uploads
 		form.setMultiPart(true);
 		form.setMaxSize(Config.get().getLogoUploadMaxBytes());
-		
+
 		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
-		DateTextField expires = new DateTextField("expires",converter);
+		DateTextField expires = new DateTextField("expires", converter);
 		form.add(expires);
 		expires.add(new DealPreviewUpdatingBehavior(dealPreview,
 				DealPreviewUpdatingBehavior.DealComponent.EXPIRES, "onChange"));
@@ -268,10 +271,13 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		deal.setUpdatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
 
 		Component imagePanel = form.get("imageSelectContainer:imageSelectPanel");
-		if (imagePanel instanceof ImageSelectPanel) {
+		if (imagePanel instanceof ImageSelectPanel)
+		{
 			deal.setImageUrl(image.getUrl());
-		} else if (imagePanel instanceof ImageUploadPanel) {
-			deal.setImageUrl(((ImageUploadPanel)imagePanel).getUpload());
+		}
+		else if (imagePanel instanceof ImageUploadPanel)
+		{
+			deal.setImageUrl(((ImageUploadPanel) imagePanel).getUpload());
 		}
 
 		SessionUtils.successMessage("Successfully saved deal '", deal.getTitle(), "' for merchant '",

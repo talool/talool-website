@@ -15,14 +15,13 @@ import com.talool.service.ServiceFactory;
  */
 public class DealOfferModel extends LoadableDetachableModel<DealOffer>
 {
-
 	private static final long serialVersionUID = -6956910878696402522L;
 
 	private static final Logger LOG = LoggerFactory.getLogger(DealOfferModel.class);
 
-	private Long dealOfferId;
+	private String dealOfferId;
 
-	public DealOfferModel(final Long customerId)
+	public DealOfferModel(final String customerId)
 	{
 		this.dealOfferId = customerId;
 	}

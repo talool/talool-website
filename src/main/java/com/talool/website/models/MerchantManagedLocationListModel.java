@@ -6,7 +6,6 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.talool.core.MerchantLocation;
 import com.talool.core.MerchantManagedLocation;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
@@ -16,12 +15,13 @@ import com.talool.service.ServiceFactory;
  * @author dmccuen
  * 
  */
-public class MerchantManagedLocationListModel extends LoadableDetachableModel<List<MerchantManagedLocation>>
+public class MerchantManagedLocationListModel extends
+		LoadableDetachableModel<List<MerchantManagedLocation>>
 {
 
 	private static final long serialVersionUID = -6377845043575682681L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantManagedLocationListModel.class);
-	private Long _merchantId = null;
+	private String _merchantId = null;
 
 	@Override
 	protected List<MerchantManagedLocation> load()
@@ -30,7 +30,7 @@ public class MerchantManagedLocationListModel extends LoadableDetachableModel<Li
 
 		try
 		{
-			if (_merchantId != null) 
+			if (_merchantId != null)
 			{
 				locations = ServiceFactory.get().getTaloolService().getLocationsForMerchant(_merchantId);
 			}
@@ -42,8 +42,9 @@ public class MerchantManagedLocationListModel extends LoadableDetachableModel<Li
 
 		return locations;
 	}
-	
-	public void setMerchantId(long id) {
+
+	public void setMerchantId(final String id)
+	{
 		_merchantId = id;
 	}
 

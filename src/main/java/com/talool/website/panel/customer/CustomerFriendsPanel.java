@@ -15,12 +15,12 @@ public class CustomerFriendsPanel extends Panel
 {
 
 	private static final long serialVersionUID = -6839312363625800389L;
-	private Long _customerId;
+	private String _customerId;
 
 	public CustomerFriendsPanel(String id, PageParameters parameters)
 	{
 		super(id);
-		_customerId = parameters.get("id").toLongObject();
+		_customerId = parameters.get("id").toString();
 
 	}
 
@@ -28,7 +28,7 @@ public class CustomerFriendsPanel extends Panel
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		
+
 		FriendListModel model = new FriendListModel();
 		model.setCustomerId(_customerId);
 		final ListView<Customer> customers = new ListView<Customer>("customerRptr", model)
@@ -57,6 +57,5 @@ public class CustomerFriendsPanel extends Panel
 
 		add(customers);
 	}
-
 
 }

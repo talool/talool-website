@@ -26,12 +26,12 @@ import com.talool.website.panel.merchant.definition.MerchantLocationPanel;
 public class MerchantLocationsPanel extends BaseTabPanel
 {
 	private static final long serialVersionUID = 3634980968241854373L;
-	private Long _merchantId;
+	private String _merchantId;
 
 	public MerchantLocationsPanel(String id, PageParameters parameters)
 	{
 		super(id);
-		_merchantId = parameters.get("id").toLongObject();
+		_merchantId = parameters.get("id").toString();
 	}
 
 	@Override
@@ -79,8 +79,8 @@ public class MerchantLocationsPanel extends BaseTabPanel
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						MerchantLocationPanel panel = new MerchantLocationPanel(modal.getContentId(),
-								callback, merchantLocationId);
+						MerchantLocationPanel panel = new MerchantLocationPanel(modal.getContentId(), callback,
+								merchantLocationId);
 						modal.setContent(panel);
 						modal.setTitle("Edit Merchant Location");
 						modal.show(target);
@@ -94,14 +94,15 @@ public class MerchantLocationsPanel extends BaseTabPanel
 	}
 
 	@Override
-	public String getActionLabel() {
+	public String getActionLabel()
+	{
 		return "Create Merchant Location";
 	}
-	
+
 	@Override
-	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
+	{
 		return new MerchantLocationPanel(contentId, _merchantId, callback);
 	}
-
 
 }

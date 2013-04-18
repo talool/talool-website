@@ -26,7 +26,8 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 	private static final long serialVersionUID = 661849211369766802L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocationPanel.class);
 
-	public MerchantLocationPanel(final String id, final Long merchantId, final SubmitCallBack callback)
+	public MerchantLocationPanel(final String id, final String merchantId,
+			final SubmitCallBack callback)
 	{
 		super(id, callback);
 

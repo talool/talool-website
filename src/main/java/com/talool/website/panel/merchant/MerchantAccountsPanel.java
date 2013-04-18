@@ -22,19 +22,19 @@ public class MerchantAccountsPanel extends BaseTabPanel
 {
 
 	private static final long serialVersionUID = 3634980968241854373L;
-	private Long _merchantId;
+	private String _merchantId;
 
 	public MerchantAccountsPanel(String id, PageParameters parameters)
 	{
 		super(id);
-		_merchantId = parameters.get("id").toLongObject();
+		_merchantId = parameters.get("id").toString();
 	}
 
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		
+
 		MerchantAccountListModel model = new MerchantAccountListModel();
 		model.setMerchantId(_merchantId);
 		final ListView<MerchantAccount> customers = new ListView<MerchantAccount>("accountRptr", model)
@@ -45,7 +45,7 @@ public class MerchantAccountsPanel extends BaseTabPanel
 			@Override
 			protected void populateItem(ListItem<MerchantAccount> item)
 			{
-				
+
 				MerchantAccount account = item.getModelObject();
 				final Long merchantaccountId = account.getId();
 
@@ -71,7 +71,8 @@ public class MerchantAccountsPanel extends BaseTabPanel
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						MerchantAccountPanel panel = new MerchantAccountPanel(modal.getContentId(), callback, merchantaccountId);
+						MerchantAccountPanel panel = new MerchantAccountPanel(modal.getContentId(), callback,
+								merchantaccountId);
 						modal.setContent(panel);
 						modal.setTitle("Edit Merchant Account");
 						modal.show(target);
@@ -85,14 +86,15 @@ public class MerchantAccountsPanel extends BaseTabPanel
 	}
 
 	@Override
-	public String getActionLabel() {
+	public String getActionLabel()
+	{
 		return "Create Merchant Account";
 	}
 
 	@Override
-	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
+	{
 		return new MerchantAccountPanel(contentId, _merchantId, callback);
 	}
-
 
 }

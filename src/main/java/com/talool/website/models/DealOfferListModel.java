@@ -10,22 +10,27 @@ import com.talool.core.DealOffer;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 
-public class DealOfferListModel extends LoadableDetachableModel<List<DealOffer>> {
+public class DealOfferListModel extends LoadableDetachableModel<List<DealOffer>>
+{
 
 	private static final long serialVersionUID = -4489553425426553445L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealOfferListModel.class);
-	private static enum LOAD_METHOD {MERHCANT, ALL}
-	private long _merchantId;
+	private static enum LOAD_METHOD
+	{
+		MERHCANT, ALL
+	}
+	private String _merchantId;
 	private LOAD_METHOD _method;
-	
+
 	@Override
-	protected List<DealOffer> load() {
-		
+	protected List<DealOffer> load()
+	{
+
 		List<DealOffer> books = null;
 
 		try
 		{
-			if (_method == LOAD_METHOD.MERHCANT) 
+			if (_method == LOAD_METHOD.MERHCANT)
 			{
 				books = ServiceFactory.get().getTaloolService().getDealOffersByMerchantId(_merchantId);
 			}
@@ -33,18 +38,17 @@ public class DealOfferListModel extends LoadableDetachableModel<List<DealOffer>>
 			{
 				books = ServiceFactory.get().getTaloolService().getDealOffers();
 			}
-			
-			
+
 		}
 		catch (ServiceException e)
 		{
 			LOG.error("problem loading books (DealOffers)", e);
 		}
-		
+
 		return books;
 	}
-	
-	public void setMerchantId(long id)
+
+	public void setMerchantId(final String id)
 	{
 		_merchantId = id;
 		_method = LOAD_METHOD.MERHCANT;

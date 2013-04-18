@@ -58,7 +58,7 @@ public class MerchantsPage extends BasePage
 			protected void populateItem(ListItem<Merchant> item)
 			{
 				Merchant merchant = item.getModelObject();
-				final Long merchantId = merchant.getId();
+				final String merchantId = merchant.getId();
 
 				item.setModel(new CompoundPropertyModel<Merchant>(merchant));
 

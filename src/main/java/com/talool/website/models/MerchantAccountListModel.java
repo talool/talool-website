@@ -6,7 +6,6 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
@@ -21,8 +20,7 @@ public class MerchantAccountListModel extends LoadableDetachableModel<List<Merch
 
 	private static final long serialVersionUID = -1537678799039334997L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantAccountListModel.class);
-	private Long _merchantId = null;
-
+	private String _merchantId = null;
 
 	@Override
 	protected List<MerchantAccount> load()
@@ -31,7 +29,7 @@ public class MerchantAccountListModel extends LoadableDetachableModel<List<Merch
 
 		try
 		{
-			if (_merchantId != null) 
+			if (_merchantId != null)
 			{
 				accounts = ServiceFactory.get().getTaloolService().getAccountsForMerchant(_merchantId);
 			}
@@ -43,8 +41,9 @@ public class MerchantAccountListModel extends LoadableDetachableModel<List<Merch
 
 		return accounts;
 	}
-	
-	public void setMerchantId(long id) {
+
+	public void setMerchantId(final String id)
+	{
 		_merchantId = id;
 	}
 

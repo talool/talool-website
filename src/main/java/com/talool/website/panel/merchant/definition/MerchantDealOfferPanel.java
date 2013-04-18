@@ -60,7 +60,7 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 	}
 
 	public MerchantDealOfferPanel(final String id, final SubmitCallBack callback,
-			final Long dealOfferId)
+			final String dealOfferId)
 	{
 		super(id, callback);
 		setDefaultModel(new DealOfferModel(dealOfferId));
@@ -81,7 +81,7 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		form.add(new TextField<String>("title").setRequired(true));
 		form.add(new TextField<String>("summary"));
 		form.add(new TextField<String>("price").setRequired(true));
-		
+
 		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
 		form.add(new DateTextField("expires", converter));
 

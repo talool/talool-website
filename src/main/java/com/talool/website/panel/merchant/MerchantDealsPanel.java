@@ -20,14 +20,13 @@ import com.talool.website.panel.merchant.definition.DealOfferDealPanel;
 
 public class MerchantDealsPanel extends BaseTabPanel
 {
-
 	private static final long serialVersionUID = 3634980968241854373L;
-	private Long _merchantId;
+	private String _merchantId;
 
 	public MerchantDealsPanel(String id, PageParameters parameters)
 	{
 		super(id);
-		_merchantId = parameters.get("id").toLongObject();
+		_merchantId = parameters.get("id").toString();
 	}
 
 	@Override

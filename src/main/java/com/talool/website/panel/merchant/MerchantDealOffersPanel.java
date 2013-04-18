@@ -35,12 +35,12 @@ public class MerchantDealOffersPanel extends BaseTabPanel
 {
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantDealOffersPanel.class);
 	private static final long serialVersionUID = 3634980968241854373L;
-	private Long _merchantId;
+	private String _merchantId;
 
 	public MerchantDealOffersPanel(String id, PageParameters parameters)
 	{
 		super(id);
-		_merchantId = parameters.get("id").toLongObject();
+		_merchantId = parameters.get("id").toString();
 	}
 
 	@Override
@@ -58,9 +58,8 @@ public class MerchantDealOffersPanel extends BaseTabPanel
 			@Override
 			protected void populateItem(ListItem<DealOffer> item)
 			{
-
 				DealOffer dealOffer = item.getModelObject();
-				final Long dealOfferId = dealOffer.getId();
+				final String dealOfferId = dealOffer.getId();
 
 				item.setModel(new CompoundPropertyModel<DealOffer>(dealOffer));
 

@@ -19,8 +19,8 @@ public class DealListModel extends LoadableDetachableModel<List<Deal>>
 	{
 		MERHCANT, DEAL_OFFER
 	}
-	private long _merchantId;
-	private long _dealOfferId;
+	private String _merchantId;
+	private String _dealOfferId;
 	private LOAD_METHOD _method;
 
 	@Override
@@ -52,13 +52,13 @@ public class DealListModel extends LoadableDetachableModel<List<Deal>>
 		return deals;
 	}
 
-	public void setMerchantId(long id)
+	public void setMerchantId(String id)
 	{
 		_merchantId = id;
 		_method = LOAD_METHOD.MERHCANT;
 	}
 
-	public void setDealOfferId(long id)
+	public void setDealOfferId(final String id)
 	{
 		_dealOfferId = id;
 		_method = LOAD_METHOD.DEAL_OFFER;
