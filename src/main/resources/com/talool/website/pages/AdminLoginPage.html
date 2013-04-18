@@ -1,33 +1,38 @@
 <html>
 <head>
 <title>Talool Administration</title>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<style>
-.cmain {
-    width: 270px;
-    height: 100px;
-    position: absolute;
-    top:0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    font-family: Arial,Helvetica,Utkal,sans-serif;
-    font-size:62px;
- }
-</style>
+<title>Talool Tools</title>
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/global.css">
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="/js/logo.js"></script>
+	<script language="javascript">
+		window.ooConfig = {logo:{bAdmin:true, scale: 1.5, color:"#fff"}};
+	</script>
 </head>
-<body>
-<div class="cmain">
-<form wicket:id="loginForm">
-<table>
-<tr><td>Email:</td><td><input wicket:id="email" id="email" type="text"></td></tr>
-<tr><td>Passord:</td><td><input wicket:id="pass" type="password"></td></tr>
-<tr><td colspan="2" align="center"><input type="submit" value="Login"></td></tr>
-</table>
-</form>
-</div>
-<script type="text/javascript">$("#email").focus();</script>
- 
-</body>
+	<body class="teal-bg">
+		
+		<div class="cmain orange-border">
+			<canvas id="canvas" height="113" width="711"></canvas>
+			<form wicket:id="loginForm" class="login">
+				<table>
+					<tr><td>Email:</td><td><input wicket:id="email" id="email" type="text"></td></tr>
+					<tr><td>Password:</td><td><input wicket:id="pass" type="password"></td></tr>
+					<tr><td colspan="2" align="right">
+						<a class="btn btn-primary" onclick="$('form.login').submit()">
+				  			<i class="icon-signin"></i> 
+				  			Login
+				    	</a>
+				    </td></tr>
+				</table>
+			</form>
+		</div>
+		
+		<script type="text/javascript">$("#email").focus();</script>
+		
+	</body>
 </html>

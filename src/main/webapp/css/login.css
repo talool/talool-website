@@ -1,0 +1,32 @@
+body {
+	
+}
+
+.cmain {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+    width: 711px;
+    height: 500px;
+    margin: -250px 0 0 -355px;
+    font-size: 24px;
+ }
+ 
+.cmain td,  .cmain input {
+ 	font-size: 24px;
+ }
+ 
+ .cmain canvas {
+ 	margin-bottom: 90px;
+ }
+ 
+ .cmain table {
+ 	margin: 0 auto;
+ }
+ 
+ .cmain input {
+ 	border: 1px solid white;
+ 	padding: 5px;
+ 	margin: 5px 5px 10px;
+ 	border-radius: 5px;
+ }
