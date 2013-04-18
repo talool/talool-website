@@ -6,18 +6,19 @@ body {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-    width: 711px;
-    height: 500px;
-    margin: -250px 0 0 -355px;
-    font-size: 24px;
+    width: 600px;
+    height: 350px;
+    margin: -175px 0 0 -300px;
  }
- 
+.cmain td {
+	padding: 0 0 5px 0;
+} 
 .cmain td,  .cmain input {
- 	font-size: 24px;
+ 	font-size: 18px;
  }
  
  .cmain canvas {
- 	margin-bottom: 90px;
+ 	margin-bottom: 50px;
  }
  
  .cmain table {
@@ -27,6 +28,5 @@ body {
  .cmain input {
  	border: 1px solid white;
  	padding: 5px;
- 	margin: 5px 5px 10px;
  	border-radius: 5px;
  }
