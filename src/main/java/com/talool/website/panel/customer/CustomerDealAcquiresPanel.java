@@ -13,22 +13,20 @@ import com.talool.website.models.DealAcquireListModel;
 
 public class CustomerDealAcquiresPanel extends Panel
 {
-
 	private static final long serialVersionUID = 4601133594874157184L;
-	private Long _customerId;
+	private String _customerId;
 
 	public CustomerDealAcquiresPanel(String id, PageParameters parameters)
 	{
 		super(id);
-		_customerId = parameters.get("id").toLongObject();
-
+		_customerId = parameters.get("id").toString();
 	}
 
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		
+
 		DealAcquireListModel model = new DealAcquireListModel();
 		model.setCustomerId(_customerId);
 		final ListView<DealAcquire> dealAcquires = new ListView<DealAcquire>("rptr", model)
@@ -60,6 +58,5 @@ public class CustomerDealAcquiresPanel extends Panel
 
 		add(dealAcquires);
 	}
-
 
 }

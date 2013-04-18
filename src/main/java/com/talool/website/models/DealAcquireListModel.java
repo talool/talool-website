@@ -10,30 +10,31 @@ import com.talool.core.DealAcquire;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 
-public class DealAcquireListModel extends LoadableDetachableModel<List<DealAcquire>> {
-
+public class DealAcquireListModel extends LoadableDetachableModel<List<DealAcquire>>
+{
 	private static final long serialVersionUID = -871001031643638887L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealAcquireListModel.class);
-	private long _customerId;
+	private String _customerId;
 
 	@Override
-	protected List<DealAcquire> load() {
-		
+	protected List<DealAcquire> load()
+	{
+
 		List<DealAcquire> deals = null;
-		
-		try 
+
+		try
 		{
 			deals = ServiceFactory.get().getTaloolService().getDealAcquiresByCustomerId(_customerId);
-		} 
-		catch (ServiceException se) 
+		}
+		catch (ServiceException se)
 		{
 			LOG.error("problem loading DealAcquires", se);
 		}
-		
+
 		return deals;
 	}
-	
-	public void setCustomerId(long id)
+
+	public void setCustomerId(final String id)
 	{
 		_customerId = id;
 	}

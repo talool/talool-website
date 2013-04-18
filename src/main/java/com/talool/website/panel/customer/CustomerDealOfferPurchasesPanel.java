@@ -13,22 +13,20 @@ import com.talool.website.models.DealOfferPurchaseListModel;
 
 public class CustomerDealOfferPurchasesPanel extends Panel
 {
-
 	private static final long serialVersionUID = -1572792713158372783L;
-	private Long _customerId;
+	private String _customerId;
 
 	public CustomerDealOfferPurchasesPanel(String id, PageParameters parameters)
 	{
 		super(id);
-		_customerId = parameters.get("id").toLongObject();
-
+		_customerId = parameters.get("id").toString();
 	}
 
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		
+
 		DealOfferPurchaseListModel model = new DealOfferPurchaseListModel();
 		model.setCustomerId(_customerId);
 		final ListView<DealOfferPurchase> dops = new ListView<DealOfferPurchase>("rptr", model)
@@ -56,6 +54,5 @@ public class CustomerDealOfferPurchasesPanel extends Panel
 
 		add(dops);
 	}
-
 
 }

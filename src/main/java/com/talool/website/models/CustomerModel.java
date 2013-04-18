@@ -20,9 +20,9 @@ public class CustomerModel extends LoadableDetachableModel<Customer>
 
 	private static final Logger LOG = LoggerFactory.getLogger(CustomerModel.class);
 
-	private Long customerId;
+	private String customerId;
 
-	public CustomerModel(final Long customerId)
+	public CustomerModel(final String customerId)
 	{
 		this.customerId = customerId;
 	}

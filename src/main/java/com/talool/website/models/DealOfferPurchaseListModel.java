@@ -10,30 +10,32 @@ import com.talool.core.DealOfferPurchase;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 
-public class DealOfferPurchaseListModel extends LoadableDetachableModel<List<DealOfferPurchase>> {
-
+public class DealOfferPurchaseListModel extends LoadableDetachableModel<List<DealOfferPurchase>>
+{
 	private static final long serialVersionUID = -2313633510574402378L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealOfferPurchaseListModel.class);
-	private long _customerId;
-	
+	private String _customerId;
+
 	@Override
-	protected List<DealOfferPurchase> load() {
-		
+	protected List<DealOfferPurchase> load()
+	{
+
 		List<DealOfferPurchase> books = null;
 
 		try
 		{
-			books = ServiceFactory.get().getTaloolService().getDealOfferPurchasesByCustomerId(_customerId);
+			books = ServiceFactory.get().getTaloolService()
+					.getDealOfferPurchasesByCustomerId(_customerId);
 		}
 		catch (ServiceException e)
 		{
 			LOG.error("problem loading DealOfferPurchase list", e);
 		}
-		
+
 		return books;
 	}
-	
-	public void setCustomerId(long id)
+
+	public void setCustomerId(final String id)
 	{
 		_customerId = id;
 	}

@@ -52,7 +52,7 @@ public class DealOffersPage extends BasePage
 			protected void populateItem(ListItem<Customer> item)
 			{
 				Customer customer = item.getModelObject();
-				final Long customerId = customer.getId();
+				final String customerId = customer.getId();
 
 				item.setModel(new CompoundPropertyModel<Customer>(customer));
 

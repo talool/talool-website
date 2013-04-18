@@ -37,7 +37,7 @@ public class CustomerPanel extends BaseDefinitionPanel
 		setDefaultModel(Model.of(customer));
 	}
 
-	public CustomerPanel(final String id, final SubmitCallBack callback, final Long customerId)
+	public CustomerPanel(final String id, final SubmitCallBack callback, final String customerId)
 	{
 		super(id, callback);
 		setDefaultModel(new CustomerModel(customerId));
