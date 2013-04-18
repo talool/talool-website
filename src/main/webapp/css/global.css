@@ -215,6 +215,10 @@ body div.wicket-modal h3.w_captionText {
 	background-repeat: repeat-x;
 	border: 1px solid #bbb;
 }
+.btn-large {
+	font-size: 24px;
+	padding: 10px 20px;
+}
 .btn-group {
 	position: relative;
 	display: inline-block;
