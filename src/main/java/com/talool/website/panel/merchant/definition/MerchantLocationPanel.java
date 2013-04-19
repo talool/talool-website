@@ -1,5 +1,7 @@
 package com.talool.website.panel.merchant.definition;
 
+import java.util.UUID;
+
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -26,8 +28,7 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 	private static final long serialVersionUID = 661849211369766802L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocationPanel.class);
 
-	public MerchantLocationPanel(final String id, final String merchantId,
-			final SubmitCallBack callback)
+	public MerchantLocationPanel(final String id, final UUID merchantId, final SubmitCallBack callback)
 	{
 		super(id, callback);
 

@@ -1,5 +1,7 @@
 package com.talool.website.panel.merchant.definition;
 
+import java.util.UUID;
+
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
@@ -13,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.DealOffer;
+import com.talool.core.DealType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantIdentity;
 import com.talool.core.service.ServiceException;
@@ -60,7 +63,7 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 	}
 
 	public MerchantDealOfferPanel(final String id, final SubmitCallBack callback,
-			final String dealOfferId)
+			final UUID dealOfferId)
 	{
 		super(id, callback);
 		setDefaultModel(new DealOfferModel(dealOfferId));
@@ -80,7 +83,7 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		form.add(new DealTypeDropDownChoice("dealType").setRequired(true));
 		form.add(new TextField<String>("title").setRequired(true));
 		form.add(new TextField<String>("summary"));
-		form.add(new TextField<String>("price").setRequired(true));
+		form.add(new TextField<String>("price"));
 
 		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
 		form.add(new DateTextField("expires", converter));
@@ -107,6 +110,13 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 	public void save() throws ServiceException
 	{
 		final DealOffer dealOffer = (DealOffer) form.getDefaultModelObject();
+
+		// for safety, free means free !
+		if (dealOffer.getType() == DealType.FREE_BOOK || dealOffer.getType() == DealType.FREE_DEAL)
+		{
+			dealOffer.setPrice(0.0f);
+		}
+
 		dealOffer.setUpdatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
 
 		// merchant could of changed, make sure to reset it

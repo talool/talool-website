@@ -1,6 +1,7 @@
 package com.talool.website.panel.merchant.definition;
 
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
@@ -64,7 +65,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		setDefaultModel(Model.of(deal));
 	}
 
-	public DealOfferDealPanel(final String id, final String dealOfferId, final SubmitCallBack callback)
+	public DealOfferDealPanel(final String id, final UUID dealOfferId, final SubmitCallBack callback)
 	{
 		super(id, callback);
 
@@ -82,7 +83,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		setDefaultModel(Model.of(deal));
 	}
 
-	public DealOfferDealPanel(final String id, final SubmitCallBack callback, final Long dealId)
+	public DealOfferDealPanel(final String id, final SubmitCallBack callback, final UUID dealId)
 	{
 		super(id, callback);
 		setDefaultModel(new DealModel(dealId));

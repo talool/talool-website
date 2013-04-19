@@ -1,5 +1,7 @@
 package com.talool.website.panel.customer;
 
+import java.util.UUID;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -13,14 +15,13 @@ import com.talool.website.models.FriendListModel;
 
 public class CustomerFriendsPanel extends Panel
 {
-
 	private static final long serialVersionUID = -6839312363625800389L;
-	private String _customerId;
+	private UUID _customerId;
 
 	public CustomerFriendsPanel(String id, PageParameters parameters)
 	{
 		super(id);
-		_customerId = parameters.get("id").toString();
+		_customerId = UUID.fromString(parameters.get("id").toString());
 
 	}
 

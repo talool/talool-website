@@ -1,5 +1,7 @@
 package com.talool.website.panel.merchant;
 
+import java.util.UUID;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -20,14 +22,13 @@ import com.talool.website.panel.merchant.definition.MerchantAccountPanel;
 
 public class MerchantAccountsPanel extends BaseTabPanel
 {
-
 	private static final long serialVersionUID = 3634980968241854373L;
-	private String _merchantId;
+	private UUID _merchantId;
 
 	public MerchantAccountsPanel(String id, PageParameters parameters)
 	{
 		super(id);
-		_merchantId = parameters.get("id").toString();
+		_merchantId = UUID.fromString(parameters.get("id").toString());
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package com.talool.website.models;
 
+import java.util.UUID;
+
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,11 +21,11 @@ public class DealOfferModel extends LoadableDetachableModel<DealOffer>
 
 	private static final Logger LOG = LoggerFactory.getLogger(DealOfferModel.class);
 
-	private String dealOfferId;
+	private UUID dealOfferId;
 
-	public DealOfferModel(final String customerId)
+	public DealOfferModel(final UUID dealOfferId)
 	{
-		this.dealOfferId = customerId;
+		this.dealOfferId = dealOfferId;
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package com.talool.website.panel.customer.definition;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.PatternDateConverter;
@@ -37,7 +38,7 @@ public class CustomerPanel extends BaseDefinitionPanel
 		setDefaultModel(Model.of(customer));
 	}
 
-	public CustomerPanel(final String id, final SubmitCallBack callback, final String customerId)
+	public CustomerPanel(final String id, final SubmitCallBack callback, final UUID customerId)
 	{
 		super(id, callback);
 		setDefaultModel(new CustomerModel(customerId));

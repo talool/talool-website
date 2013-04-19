@@ -1,5 +1,7 @@
 package com.talool.website.models;
 
+import java.util.UUID;
+
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,14 +17,13 @@ import com.talool.service.ServiceFactory;
  */
 public class CustomerModel extends LoadableDetachableModel<Customer>
 {
-
 	private static final long serialVersionUID = -6956910878696402522L;
 
 	private static final Logger LOG = LoggerFactory.getLogger(CustomerModel.class);
 
-	private String customerId;
+	private UUID customerId;
 
-	public CustomerModel(final String customerId)
+	public CustomerModel(final UUID customerId)
 	{
 		this.customerId = customerId;
 	}

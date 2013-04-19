@@ -1,5 +1,7 @@
 package com.talool.website.pages.lists;
 
+import java.util.UUID;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -52,7 +54,7 @@ public class CustomersPage extends BasePage
 			protected void populateItem(ListItem<Customer> item)
 			{
 				Customer customer = item.getModelObject();
-				final String customerId = customer.getId();
+				final UUID customerId = customer.getId();
 
 				item.setModel(new CompoundPropertyModel<Customer>(customer));
 
