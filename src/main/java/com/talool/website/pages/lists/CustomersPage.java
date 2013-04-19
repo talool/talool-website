@@ -22,6 +22,7 @@ import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.customer.definition.CustomerPanel;
+import com.talool.website.panel.customer.definition.CustomerResetPasswordPanel;
 import com.talool.website.util.SecuredPage;
 
 @SecuredPage
@@ -89,6 +90,23 @@ public class CustomersPage extends BasePage
 								customerId);
 						definitionModal.setContent(panel);
 						definitionModal.setTitle("Edit Customer");
+						definitionModal.show(target);
+					}
+				});
+				
+				item.add(new AjaxLink<Void>("pwLink")
+				{
+
+					private static final long serialVersionUID = 8581489018535203283L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target)
+					{
+						getSession().getFeedbackMessages().clear();
+						CustomerResetPasswordPanel panel = new CustomerResetPasswordPanel(definitionModal.getContentId(), callback,
+								customerId);
+						definitionModal.setContent(panel);
+						definitionModal.setTitle("Reset Password");
 						definitionModal.show(target);
 					}
 				});

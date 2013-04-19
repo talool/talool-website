@@ -19,6 +19,7 @@ import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.definition.MerchantAccountPanel;
+import com.talool.website.panel.merchant.definition.MerchantAccountResetPasswordPanel;
 
 public class MerchantAccountsPanel extends BaseTabPanel
 {
@@ -76,6 +77,23 @@ public class MerchantAccountsPanel extends BaseTabPanel
 								merchantaccountId);
 						modal.setContent(panel);
 						modal.setTitle("Edit Merchant Account");
+						modal.show(target);
+					}
+				});
+				
+				item.add(new AjaxLink<Void>("pwLink")
+				{
+
+					private static final long serialVersionUID = 8581489018535203283L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target)
+					{
+						getSession().getFeedbackMessages().clear();
+						MerchantAccountResetPasswordPanel panel = new MerchantAccountResetPasswordPanel(modal.getContentId(), callback,
+								merchantaccountId);
+						modal.setContent(panel);
+						modal.setTitle("Reset Password");
 						modal.show(target);
 					}
 				});
