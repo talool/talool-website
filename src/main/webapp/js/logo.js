@@ -1,15 +1,22 @@
 window.oo = null;
 
 $(function() {
-	var Talool = function() {
-		this.init = function(color, scale, bAdmin) {
+	var Talool = function(cfg) {
 		
-		  var canvas = document.getElementById("canvas");
-		  var ctx = canvas.getContext("2d");
-		  ctx.fillStyle = color;
-		  ctx.scale(scale,scale);
-		  if (bAdmin) this.drawToolsLogo(ctx);
-		  else this.drawLogo(ctx);
+		this.config = cfg;
+		
+		this.init = function() {
+			if (this.config.logo) this.initLogo(this.config.logo);
+		};
+		
+		this.initLogo = function(cfg) {
+			var canvas = document.getElementById("canvas");
+			var ctx = canvas.getContext("2d");
+			ctx.fillStyle = cfg.color;
+			ctx.strokeStyle = cfg.color;
+			ctx.scale(cfg.scale,cfg.scale);
+			if (cfg.bAdmin) this.drawToolsLogo(ctx);
+			else this.drawLogo(ctx);
 		};
 		
 		this.drawLogo = function(ctx) {
@@ -17,142 +24,142 @@ $(function() {
 			// layer1/Group
 		      ctx.save();
 
-		      // layer1/Group/Clipping Path
+		      // layer1/Group/L2
 		      ctx.save();
 		      ctx.beginPath();
-		      ctx.moveTo(0.0, 0.0);
-		      ctx.lineTo(234.0, 0.0);
-		      ctx.lineTo(234.0, 90.0);
-		      ctx.lineTo(0.0, 90.0);
-		      ctx.lineTo(0.0, 0.0);
+		      ctx.moveTo(227.3, 0.5);
+		      ctx.lineTo(217.9, 0.5);
+		      ctx.lineTo(217.9, 57.2);
+		      ctx.bezierCurveTo(217.9, 66.1, 216.7, 76.0, 232.8, 76.1);
+		      ctx.lineTo(232.7, 66.9);
+		      ctx.lineTo(232.7, 66.8);
+		      ctx.bezierCurveTo(226.5, 66.1, 227.3, 60.8, 227.3, 55.0);
+		      ctx.lineTo(227.3, 0.5);
 		      ctx.closePath();
-		      ctx.clip();
-
-		      // layer1/Group/Compound Path
-		      ctx.beginPath();
-
-		      // layer1/Group/Compound Path/Path
-		      ctx.moveTo(123.2, 25.9);
-		      ctx.bezierCurveTo(107.1, 25.9, 94.1, 38.9, 94.1, 55.0);
-		      ctx.bezierCurveTo(94.1, 71.1, 107.1, 84.2, 123.2, 84.2);
-		      ctx.bezierCurveTo(139.3, 84.2, 152.4, 71.1, 152.4, 55.0);
-		      ctx.bezierCurveTo(152.4, 38.9, 139.3, 25.9, 123.2, 25.9);
-
-		      // layer1/Group/Compound Path/Path
-		      ctx.moveTo(123.2, 75.2);
-		      ctx.bezierCurveTo(112.1, 75.2, 103.0, 66.2, 103.0, 55.0);
-		      ctx.bezierCurveTo(103.0, 43.9, 112.1, 34.8, 123.2, 34.8);
-		      ctx.bezierCurveTo(134.4, 34.8, 143.4, 43.9, 143.4, 55.0);
-		      ctx.bezierCurveTo(143.4, 66.2, 134.4, 75.2, 123.2, 75.2);
+		      //ctx.fillStyle = "rgba(255,255,255,.3)";
 		      ctx.fill();
+		      //ctx.strokeStyle = "#fff";
+		      ctx.lineJoin = "miter";
+		      ctx.miterLimit = 4.0;
+		      ctx.stroke();
 
-		      // layer1/Group/Compound Path
+		      // layer1/Group/O2
 		      ctx.beginPath();
 
-		      // layer1/Group/Compound Path/Path
-		      ctx.moveTo(185.6, 25.9);
-		      ctx.bezierCurveTo(169.5, 25.9, 156.5, 38.9, 156.5, 55.0);
-		      ctx.bezierCurveTo(156.5, 71.1, 169.5, 84.2, 185.6, 84.2);
-		      ctx.bezierCurveTo(201.7, 84.2, 214.8, 71.1, 214.8, 55.0);
-		      ctx.bezierCurveTo(214.8, 38.9, 201.7, 25.9, 185.6, 25.9);
+		      // layer1/Group/O2/Path
+		      ctx.moveTo(183.9, 17.8);
+		      ctx.bezierCurveTo(167.8, 17.8, 154.8, 30.9, 154.8, 47.0);
+		      ctx.bezierCurveTo(154.8, 63.1, 167.8, 76.1, 183.9, 76.1);
+		      ctx.bezierCurveTo(200.0, 76.1, 213.1, 63.1, 213.1, 47.0);
+		      ctx.bezierCurveTo(213.1, 30.9, 200.0, 17.8, 183.9, 17.8);
 
-		      // layer1/Group/Compound Path/Path
-		      ctx.moveTo(185.6, 75.2);
-		      ctx.bezierCurveTo(174.5, 75.2, 165.4, 66.2, 165.4, 55.0);
-		      ctx.bezierCurveTo(165.4, 43.9, 174.5, 34.8, 185.6, 34.8);
-		      ctx.bezierCurveTo(196.8, 34.8, 205.8, 43.9, 205.8, 55.0);
-		      ctx.bezierCurveTo(205.8, 66.2, 196.8, 75.2, 185.6, 75.2);
+		      // layer1/Group/O2/Path
+		      ctx.moveTo(183.9, 67.2);
+		      ctx.bezierCurveTo(172.8, 67.2, 163.7, 58.1, 163.7, 47.0);
+		      ctx.bezierCurveTo(163.7, 35.8, 172.8, 26.8, 183.9, 26.8);
+		      ctx.bezierCurveTo(195.1, 26.8, 204.1, 35.8, 204.1, 47.0);
+		      ctx.bezierCurveTo(204.1, 58.1, 195.1, 67.2, 183.9, 67.2);
 		      ctx.fill();
+		      ctx.stroke();
 
-		      // layer1/Group/Path
+		      // layer1/Group/O1
 		      ctx.beginPath();
-		      ctx.moveTo(11.6, 63.1);
-		      ctx.lineTo(11.6, 34.9);
-		      ctx.lineTo(22.6, 34.9);
-		      ctx.lineTo(22.6, 25.8);
-		      ctx.lineTo(11.6, 25.8);
-		      ctx.lineTo(11.6, 8.6);
-		      ctx.lineTo(11.6, 8.6);
-		      ctx.lineTo(2.2, 8.6);
-		      ctx.lineTo(2.2, 8.6);
-		      ctx.lineTo(2.2, 65.3);
-		      ctx.bezierCurveTo(2.2, 66.4, 2.2, 67.5, 2.2, 68.6);
-		      ctx.bezierCurveTo(2.2, 76.5, 3.0, 84.1, 17.1, 84.2);
-		      ctx.lineTo(17.1, 84.2);
-		      ctx.lineTo(22.6, 84.2);
-		      ctx.lineTo(22.6, 74.9);
-		      ctx.lineTo(16.9, 74.9);
-		      ctx.lineTo(16.9, 74.9);
-		      ctx.lineTo(16.9, 74.9);
-		      ctx.bezierCurveTo(11.9, 74.3, 11.5, 70.7, 11.5, 66.3);
-		      ctx.bezierCurveTo(11.5, 65.2, 11.6, 64.2, 11.6, 63.1);
-		      ctx.lineTo(11.6, 63.1);
+
+		      // layer1/Group/O1/Path
+		      ctx.moveTo(121.6, 17.8);
+		      ctx.bezierCurveTo(105.5, 17.8, 92.4, 30.9, 92.4, 47.0);
+		      ctx.bezierCurveTo(92.4, 63.1, 105.5, 76.1, 121.6, 76.1);
+		      ctx.bezierCurveTo(137.7, 76.1, 150.7, 63.1, 150.7, 47.0);
+		      ctx.bezierCurveTo(150.7, 30.9, 137.7, 17.8, 121.6, 17.8);
+
+		      // layer1/Group/O1/Path
+		      ctx.moveTo(121.6, 67.2);
+		      ctx.bezierCurveTo(110.4, 67.2, 101.4, 58.1, 101.4, 47.0);
+		      ctx.bezierCurveTo(101.4, 35.8, 110.4, 26.8, 121.6, 26.8);
+		      ctx.bezierCurveTo(132.7, 26.8, 141.8, 35.8, 141.8, 47.0);
+		      ctx.bezierCurveTo(141.8, 58.1, 132.7, 67.2, 121.6, 67.2);
+		      ctx.fill();
+		      ctx.stroke();
+
+		      // layer1/Group/L1
+		      ctx.beginPath();
+		      ctx.moveTo(85.9, 0.5);
+		      ctx.lineTo(76.5, 0.5);
+		      ctx.lineTo(76.5, 57.2);
+		      ctx.bezierCurveTo(76.5, 66.1, 75.3, 76.0, 91.4, 76.1);
+		      ctx.lineTo(91.3, 66.9);
+		      ctx.lineTo(91.3, 66.8);
+		      ctx.bezierCurveTo(85.1, 66.1, 85.9, 60.8, 85.9, 55.0);
+		      ctx.lineTo(85.9, 0.5);
 		      ctx.closePath();
 		      ctx.fill();
+		      ctx.stroke();
 
-		      // layer1/Group/Path
+		      // layer1/Group/A
 		      ctx.beginPath();
-		      ctx.moveTo(87.6, 8.6);
-		      ctx.lineTo(78.2, 8.6);
-		      ctx.lineTo(78.2, 65.3);
-		      ctx.bezierCurveTo(78.2, 74.2, 77.0, 84.1, 93.1, 84.2);
-		      ctx.lineTo(92.9, 74.9);
-		      ctx.lineTo(92.9, 74.9);
-		      ctx.bezierCurveTo(86.7, 74.1, 87.6, 68.8, 87.6, 63.1);
-		      ctx.lineTo(87.6, 8.6);
+
+		      // layer1/Group/A/Path
+		      ctx.moveTo(47.9, 17.7);
+		      ctx.bezierCurveTo(41.1, 17.7, 33.6, 19.8, 27.9, 24.1);
+		      ctx.lineTo(33.6, 31.4);
+		      ctx.bezierCurveTo(37.0, 28.8, 41.7, 26.1, 48.8, 26.1);
+		      ctx.bezierCurveTo(57.9, 26.1, 62.1, 32.1, 62.1, 37.8);
+		      ctx.lineTo(62.1, 40.6);
+		      ctx.lineTo(40.6, 40.6);
+		      ctx.lineTo(40.6, 40.7);
+		      ctx.bezierCurveTo(31.6, 40.9, 24.3, 48.6, 24.3, 58.2);
+		      ctx.bezierCurveTo(24.3, 67.9, 32.1, 76.1, 41.3, 76.1);
+		      ctx.bezierCurveTo(41.3, 76.1, 43.8, 76.1, 47.2, 76.1);
+		      ctx.bezierCurveTo(47.2, 76.1, 47.3, 76.1, 47.3, 76.1);
+		      ctx.bezierCurveTo(47.3, 76.1, 47.3, 76.1, 47.3, 76.1);
+		      ctx.lineTo(47.5, 76.1);
+		      ctx.lineTo(47.5, 76.1);
+		      ctx.bezierCurveTo(52.1, 76.1, 57.2, 74.3, 61.2, 72.1);
+		      ctx.lineTo(61.2, 76.1);
+		      ctx.bezierCurveTo(66.7, 76.1, 71.2, 76.1, 71.2, 76.1);
+		      ctx.lineTo(71.2, 64.6);
+		      ctx.lineTo(71.2, 39.6);
+		      ctx.lineTo(71.2, 36.2);
+		      ctx.bezierCurveTo(71.2, 26.6, 64.4, 17.7, 47.9, 17.7);
+
+		      // layer1/Group/A/Path
+		      ctx.moveTo(34.7, 58.3);
+		      ctx.bezierCurveTo(34.7, 53.1, 38.8, 49.0, 44.0, 48.8);
+		      ctx.lineTo(44.0, 48.8);
+		      ctx.lineTo(62.0, 48.8);
+		      ctx.lineTo(62.0, 61.1);
+		      ctx.bezierCurveTo(58.6, 64.8, 53.1, 67.6, 47.8, 67.8);
+		      ctx.lineTo(44.0, 67.8);
+		      ctx.bezierCurveTo(38.8, 67.7, 34.7, 63.5, 34.7, 58.3);
+		      ctx.fill();
+		      ctx.stroke();
+
+		      // layer1/Group/T
+		      ctx.beginPath();
+		      ctx.moveTo(9.9, 55.0);
+		      ctx.lineTo(9.9, 26.9);
+		      ctx.lineTo(21.0, 26.9);
+		      ctx.lineTo(21.0, 17.7);
+		      ctx.lineTo(9.9, 17.7);
+		      ctx.lineTo(9.9, 0.5);
+		      ctx.lineTo(9.9, 0.5);
+		      ctx.lineTo(0.5, 0.5);
+		      ctx.lineTo(0.5, 0.5);
+		      ctx.lineTo(0.5, 57.2);
+		      ctx.bezierCurveTo(0.5, 58.3, 0.5, 59.5, 0.5, 60.6);
+		      ctx.bezierCurveTo(0.5, 68.4, 1.3, 76.1, 15.4, 76.1);
+		      ctx.lineTo(15.4, 76.1);
+		      ctx.lineTo(20.9, 76.1);
+		      ctx.lineTo(20.9, 66.9);
+		      ctx.lineTo(15.3, 66.9);
+		      ctx.lineTo(15.3, 66.8);
+		      ctx.lineTo(15.3, 66.8);
+		      ctx.bezierCurveTo(10.2, 66.2, 9.8, 62.6, 9.9, 58.2);
+		      ctx.bezierCurveTo(9.9, 57.2, 9.9, 56.1, 9.9, 55.0);
+		      ctx.lineTo(9.9, 55.0);
 		      ctx.closePath();
 		      ctx.fill();
-
-		      // layer1/Group/Path
-		      ctx.beginPath();
-		      ctx.moveTo(229.0, 8.6);
-		      ctx.lineTo(219.6, 8.6);
-		      ctx.lineTo(219.6, 65.3);
-		      ctx.bezierCurveTo(219.6, 74.2, 218.4, 84.1, 234.5, 84.2);
-		      ctx.lineTo(234.4, 74.9);
-		      ctx.lineTo(234.4, 74.9);
-		      ctx.bezierCurveTo(228.1, 74.1, 229.0, 68.8, 229.0, 63.1);
-		      ctx.lineTo(229.0, 8.6);
-		      ctx.closePath();
-		      ctx.fill();
-
-		      // layer1/Group/Compound Path
-		      ctx.beginPath();
-
-		      // layer1/Group/Compound Path/Path
-		      ctx.moveTo(49.6, 25.7);
-		      ctx.bezierCurveTo(42.7, 25.7, 35.3, 27.9, 29.6, 32.2);
-		      ctx.lineTo(35.2, 39.5);
-		      ctx.bezierCurveTo(38.7, 36.8, 43.3, 34.2, 50.5, 34.2);
-		      ctx.bezierCurveTo(59.5, 34.2, 63.8, 40.2, 63.8, 45.9);
-		      ctx.lineTo(63.8, 48.7);
-		      ctx.lineTo(42.3, 48.7);
-		      ctx.lineTo(42.3, 48.7);
-		      ctx.bezierCurveTo(33.2, 48.9, 26.0, 56.7, 26.0, 66.3);
-		      ctx.bezierCurveTo(26.0, 75.9, 33.8, 84.2, 43.0, 84.2);
-		      ctx.bezierCurveTo(43.0, 84.2, 45.4, 84.2, 48.9, 84.2);
-		      ctx.bezierCurveTo(48.9, 84.2, 48.9, 84.2, 48.9, 84.2);
-		      ctx.bezierCurveTo(49.0, 84.2, 49.0, 84.2, 49.0, 84.2);
-		      ctx.lineTo(49.2, 84.2);
-		      ctx.lineTo(49.2, 84.2);
-		      ctx.bezierCurveTo(53.8, 84.1, 58.9, 82.4, 62.9, 80.2);
-		      ctx.lineTo(62.9, 84.2);
-		      ctx.bezierCurveTo(68.4, 84.2, 72.8, 84.2, 72.8, 84.2);
-		      ctx.lineTo(72.8, 72.7);
-		      ctx.lineTo(72.8, 47.6);
-		      ctx.lineTo(72.8, 44.3);
-		      ctx.bezierCurveTo(72.8, 34.6, 66.0, 25.7, 49.6, 25.7);
-
-		      // layer1/Group/Compound Path/Path
-		      ctx.moveTo(36.3, 66.4);
-		      ctx.bezierCurveTo(36.3, 61.2, 40.5, 57.0, 45.6, 56.9);
-		      ctx.lineTo(45.6, 56.9);
-		      ctx.lineTo(63.6, 56.9);
-		      ctx.lineTo(63.6, 69.2);
-		      ctx.bezierCurveTo(60.2, 72.9, 54.7, 75.7, 49.4, 75.8);
-		      ctx.lineTo(45.7, 75.8);
-		      ctx.bezierCurveTo(40.5, 75.8, 36.3, 71.6, 36.3, 66.4);
-		      ctx.fill();
+		      ctx.stroke();
 		      ctx.restore();
 		      ctx.restore();
 		};
@@ -396,13 +403,12 @@ $(function() {
 		      ctx.restore();
 		      ctx.restore();
 		    };
+		    
+		    this.init();
 	};
 
-	var oo = new Talool();
 	if (window.ooConfig) {
-		oo.init(ooConfig.logo.color,ooConfig.logo.scale, ooConfig.logo.bAdmin);
-	} else {
-		oo.init("#fff",.5, true);
-	}
-	window.oo = oo;
+		window.oo = new Talool(window.ooConfig);
+	} 
+	
 });

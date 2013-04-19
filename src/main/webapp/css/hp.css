@@ -1,0 +1,21 @@
+.teal-bg {
+	background-color: rgb(25, 188, 185);
+	color: white;
+}
+.hp div {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+    width: 291px;
+    height: 96px;
+    margin: -75px 0 0 -145px;
+} 
+.hp canvas {
+ 	margin-bottom: 50px;
+ }
+#tempLetterCanvas, #tempStringCanvas {
+ 	display: none;
+ }
+#bgCanvas {
+ 	position: absolute;
+ }
