@@ -1,6 +1,7 @@
 package com.talool.website.models;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.slf4j.Logger;
@@ -19,7 +20,7 @@ public class DealOfferListModel extends LoadableDetachableModel<List<DealOffer>>
 	{
 		MERHCANT, ALL
 	}
-	private String _merchantId;
+	private UUID _merchantId;
 	private LOAD_METHOD _method;
 
 	@Override
@@ -48,7 +49,7 @@ public class DealOfferListModel extends LoadableDetachableModel<List<DealOffer>>
 		return books;
 	}
 
-	public void setMerchantId(final String id)
+	public void setMerchantId(final UUID id)
 	{
 		_merchantId = id;
 		_method = LOAD_METHOD.MERHCANT;

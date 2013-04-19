@@ -1,5 +1,7 @@
 package com.talool.website.panel.merchant;
 
+import java.util.UUID;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -35,12 +37,12 @@ public class MerchantDealOffersPanel extends BaseTabPanel
 {
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantDealOffersPanel.class);
 	private static final long serialVersionUID = 3634980968241854373L;
-	private String _merchantId;
+	private UUID _merchantId;
 
 	public MerchantDealOffersPanel(String id, PageParameters parameters)
 	{
 		super(id);
-		_merchantId = parameters.get("id").toString();
+		_merchantId = UUID.fromString(parameters.get("id").toString());
 	}
 
 	@Override
@@ -59,7 +61,7 @@ public class MerchantDealOffersPanel extends BaseTabPanel
 			protected void populateItem(ListItem<DealOffer> item)
 			{
 				DealOffer dealOffer = item.getModelObject();
-				final String dealOfferId = dealOffer.getId();
+				final UUID dealOfferId = dealOffer.getId();
 
 				item.setModel(new CompoundPropertyModel<DealOffer>(dealOffer));
 

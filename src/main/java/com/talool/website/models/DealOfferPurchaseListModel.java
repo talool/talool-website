@@ -1,6 +1,7 @@
 package com.talool.website.models;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.slf4j.Logger;
@@ -14,7 +15,7 @@ public class DealOfferPurchaseListModel extends LoadableDetachableModel<List<Dea
 {
 	private static final long serialVersionUID = -2313633510574402378L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealOfferPurchaseListModel.class);
-	private String _customerId;
+	private UUID _customerId;
 
 	@Override
 	protected List<DealOfferPurchase> load()
@@ -35,7 +36,7 @@ public class DealOfferPurchaseListModel extends LoadableDetachableModel<List<Dea
 		return books;
 	}
 
-	public void setCustomerId(final String id)
+	public void setCustomerId(final UUID id)
 	{
 		_customerId = id;
 	}

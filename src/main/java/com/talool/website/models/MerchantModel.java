@@ -1,5 +1,7 @@
 package com.talool.website.models;
 
+import java.util.UUID;
+
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +21,9 @@ public class MerchantModel extends LoadableDetachableModel<Merchant>
 
 	private static final long serialVersionUID = -1571731014724589519L;
 
-	private String merchantId;
+	private UUID merchantId;
 
-	public MerchantModel(final String merchantId)
+	public MerchantModel(final UUID merchantId)
 	{
 		this.merchantId = merchantId;
 	}

@@ -1,6 +1,7 @@
 package com.talool.website.panel.merchant.definition;
 
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -44,7 +45,7 @@ public class MerchantPanel extends BaseDefinitionPanel
 		setDefaultModel(Model.of(merchant));
 	}
 
-	public MerchantPanel(final String id, final SubmitCallBack callback, final String merchantId)
+	public MerchantPanel(final String id, final SubmitCallBack callback, final UUID merchantId)
 	{
 		super(id, callback);
 		setDefaultModel(new MerchantModel(merchantId));

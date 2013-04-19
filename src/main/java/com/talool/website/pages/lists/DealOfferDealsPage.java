@@ -1,5 +1,7 @@
 package com.talool.website.pages.lists;
 
+import java.util.UUID;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -22,12 +24,12 @@ import com.talool.website.util.SecuredPage;
 public class DealOfferDealsPage extends BasePage
 {
 	private static final long serialVersionUID = 6008230892463177176L;
-	private String _dealOfferId;
+	private UUID _dealOfferId;
 
 	public DealOfferDealsPage(PageParameters parameters)
 	{
 		super(parameters);
-		_dealOfferId = parameters.get("id").toString();
+		_dealOfferId = UUID.fromString(parameters.get("id").toString());
 	}
 
 	@Override
@@ -100,7 +102,7 @@ public class DealOfferDealsPage extends BasePage
 	{
 		// NOTE: this is called via the super constructor, so can't way for
 		// _dealOfferId to be set in this constructor.
-		_dealOfferId = getPageParameters().get("id").toString();
+		_dealOfferId = UUID.fromString(getPageParameters().get("id").toString());
 		return new DealOfferDealPanel(contentId, _dealOfferId, callback);
 	}
 

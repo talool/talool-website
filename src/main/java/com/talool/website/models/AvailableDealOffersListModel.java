@@ -1,6 +1,7 @@
 package com.talool.website.models;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.slf4j.Logger;
@@ -26,7 +27,7 @@ public class AvailableDealOffersListModel extends LoadableDetachableModel<List<D
 	{
 		List<DealOffer> dealOffers = null;
 
-		final String merchantId = SessionUtils.getSession().getMerchantAccount().getMerchant().getId();
+		final UUID merchantId = SessionUtils.getSession().getMerchantAccount().getMerchant().getId();
 
 		try
 		{

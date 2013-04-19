@@ -1,5 +1,7 @@
 package com.talool.website.panel.customer;
 
+import java.util.UUID;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -14,12 +16,12 @@ import com.talool.website.models.DealAcquireListModel;
 public class CustomerDealAcquiresPanel extends Panel
 {
 	private static final long serialVersionUID = 4601133594874157184L;
-	private String _customerId;
+	private UUID _customerId;
 
 	public CustomerDealAcquiresPanel(String id, PageParameters parameters)
 	{
 		super(id);
-		_customerId = parameters.get("id").toString();
+		_customerId = UUID.fromString(parameters.get("id").toString());
 	}
 
 	@Override

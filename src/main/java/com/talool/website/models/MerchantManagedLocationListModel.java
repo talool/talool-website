@@ -1,6 +1,7 @@
 package com.talool.website.models;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.slf4j.Logger;
@@ -21,7 +22,7 @@ public class MerchantManagedLocationListModel extends
 
 	private static final long serialVersionUID = -6377845043575682681L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantManagedLocationListModel.class);
-	private String _merchantId = null;
+	private UUID _merchantId = null;
 
 	@Override
 	protected List<MerchantManagedLocation> load()
@@ -43,7 +44,7 @@ public class MerchantManagedLocationListModel extends
 		return locations;
 	}
 
-	public void setMerchantId(final String id)
+	public void setMerchantId(final UUID id)
 	{
 		_merchantId = id;
 	}

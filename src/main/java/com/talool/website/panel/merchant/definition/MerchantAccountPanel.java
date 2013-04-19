@@ -1,5 +1,7 @@
 package com.talool.website.panel.merchant.definition;
 
+import java.util.UUID;
+
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -23,12 +25,10 @@ import com.talool.website.util.SessionUtils;
 
 public class MerchantAccountPanel extends BaseDefinitionPanel
 {
-
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantAccountPanel.class);
 
-	public MerchantAccountPanel(final String id, final String merchantId,
-			final SubmitCallBack callback)
+	public MerchantAccountPanel(final String id, final UUID merchantId, final SubmitCallBack callback)
 	{
 		super(id, callback);
 

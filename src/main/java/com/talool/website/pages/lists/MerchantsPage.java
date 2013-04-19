@@ -1,5 +1,7 @@
 package com.talool.website.pages.lists;
 
+import java.util.UUID;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -58,7 +60,7 @@ public class MerchantsPage extends BasePage
 			protected void populateItem(ListItem<Merchant> item)
 			{
 				Merchant merchant = item.getModelObject();
-				final String merchantId = merchant.getId();
+				final UUID merchantId = merchant.getId();
 
 				item.setModel(new CompoundPropertyModel<Merchant>(merchant));
 

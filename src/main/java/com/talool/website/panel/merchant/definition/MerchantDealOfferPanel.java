@@ -1,5 +1,7 @@
 package com.talool.website.panel.merchant.definition;
 
+import java.util.UUID;
+
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
@@ -60,7 +62,7 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 	}
 
 	public MerchantDealOfferPanel(final String id, final SubmitCallBack callback,
-			final String dealOfferId)
+			final UUID dealOfferId)
 	{
 		super(id, callback);
 		setDefaultModel(new DealOfferModel(dealOfferId));
