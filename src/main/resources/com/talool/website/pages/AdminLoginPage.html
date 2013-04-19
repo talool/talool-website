@@ -8,15 +8,22 @@
     <link rel="stylesheet" type="text/css" href="/css/login.css">
     <link rel="stylesheet" type="text/css" href="/css/font-awesome.css">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="/js/core.js"></script>
+	<script src="/js/letters.js"></script>
 	<script src="/js/logo.js"></script>
+	<script src="/js/background.js"></script>
 	<script language="javascript">
-		window.ooConfig = {logo:{bAdmin:true, scale: 1.25, color:"#fff"}};
+		window.ooConfig = {
+			logo:{target:"#canvas",bAdmin:true, scale: 1.1, color:"rgba(255,255,255,1)"},
+			background:{word:"talool tools", scale: .3, color:"rgba(255,255,255,.1)", animationColor: "rgba(255,255,255,.1)"}
+		};
 	</script>
 </head>
 	<body class="teal-bg">
-		
+		<canvas id="bgCanvas" height="77" width="60"></canvas>
+		<canvas id="fgCanvas" height="77" width="60"></canvas>
 		<div class="cmain orange-border">
-			<canvas id="canvas" height="95" width="600"></canvas>
+			<canvas id="canvas" height="95" width="575"></canvas>
 			<form wicket:id="loginForm" class="login">
 				<table>
 					<tr><td>Email:</td><td><input wicket:id="email" id="email" type="text"></td></tr>

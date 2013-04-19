@@ -6,12 +6,14 @@
     <meta name="content-type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="/css/hp.css">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script src="/js/logo.js"></script>
+	<script src="/js/core.js"></script>
 	<script src="/js/letters.js"></script>
-	<script language="javascript">
+	<script src="/js/logo.js"></script>
+	<script src="/js/background.js"></script>
+	<script>
 		window.ooConfig = {
-			logo:{bAdmin:false, scale: 1, color:"rgba(255,255,255,1)"},
-			letters:{word:"talool tools", scale: .3, color:"rgba(255,255,255,.06)", animateColor: "rgba(255,255,255,.1)"}
+			logo:{target:"#canvas",bAdmin:false, scale: 1, color:"rgba(255,255,255,1)"},
+			background:{word:"talool tools", scale: .3, color:"rgba(255,255,255,.1)", animationColor: "rgba(255,255,255,.1)"}
 		};
 	</script>
 </head>
@@ -19,9 +21,7 @@
 		<canvas id="bgCanvas" height="77" width="60"></canvas>
 		<canvas id="fgCanvas" height="77" width="60"></canvas>
 		<div>
-			<canvas id="canvas" height="96" width="291"></canvas>
+			<canvas id="canvas" height="77" width="235"></canvas>
 		</div>
-		<canvas id="tempLetterCanvas" height="77" width="60"></canvas>
-		<canvas id="tempStringCanvas" height="77" width="500"></canvas>
 	</body>
 </html>

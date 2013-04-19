@@ -6,16 +6,13 @@
 	position: absolute;
 	top: 50%;
 	left: 50%;
-    width: 291px;
-    height: 96px;
-    margin: -75px 0 0 -145px;
+    margin: -75px 0 0 -118px;
 } 
 .hp canvas {
- 	margin-bottom: 50px;
+
  }
-#tempLetterCanvas, #tempStringCanvas {
- 	display: none;
- }
-#bgCanvas {
+#bgCanvas, #fgCanvas {
  	position: absolute;
- }
+ 	top: 0;
+ 	left: 0;
+}

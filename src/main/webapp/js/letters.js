@@ -1,119 +1,41 @@
 $(function() {
-	var Letters = function(cfg) {
+	var Letters = function() {
 
-		var bgCanvas = document.getElementById("bgCanvas");
-		var fgCanvas = document.getElementById("bgCanvas");
-		var tempCanvas = document.getElementById("tempLetterCanvas");
-		var stringCanvas = document.getElementById("tempStringCanvas");
-		var d, stamp_d;
-		var tCtx = tempCanvas.getContext("2d");
-		var sCtx = stringCanvas.getContext("2d");
-		var bgCtx = bgCanvas.getContext("2d");
-		var fgCtx = fgCanvas.getContext("2d");
-		var letterDStore = [];
-		var stampDStore = [];
-		var animimateCycleCount = 0;
-		var animimateLimit = 1000;
+		var letterStamps = [];
 		
-		/*
-		 * TODO 
-		 * fade out some of the letters, so the animation can keep going
-		 */ 
+		this.getLetter = function(letter,cfg) {
+			var key = getStampHashKey(letter,cfg);
+			var stamp = letterStamps[key];
+			if (!stamp) {
+				stamp = draw(letter,cfg);
+				letterStamps[key] = stamp;
+			}
+			return stamp;
+		};
+		
+		var getStampHashKey = function(text,cfg) {
+			return text + cfg.color + cfg.scale;
+		};
 
-		this.init = function() {
-			// bail if these objects are not set
-			if (!bgCanvas || !tempCanvas || !stringCanvas || !cfg.word) return;
-			if (!cfg.scale) cfg.scale = 1;
-			
-			// resize the background canvas to match the window size
-			bgCanvas.width = window.innerWidth;
-			bgCanvas.height = window.innerHeight;
-			fgCanvas.width = window.innerWidth;
-			fgCanvas.height = window.innerHeight;
-			
-			// reset the core variables
-			bgCtx = bgCanvas.getContext("2d");
-			fgCtx = bgCanvas.getContext("2d");
-			d = {x:0,y:0};
-			stamp_d = {x:0,y:0};
-			letterDStore = [];
-			stampDStore = [];
-			tCtx.fillStyle = cfg.color;
-			tCtx.strokeStyle = cfg.color;
-			animimateCycleCount = 0;
-			
-			// clear the stamp canvas before we create the stamp
-			sCtx.clearRect(0,0,stringCanvas.width,stringCanvas.height);
-			drawLoop();
-		};
-		
-		var drawLoop = function() {
-			/* draw the letters in the config
-			 * use a hidden temp canvas.  clear temp, draw on temp, copy to visible canvas
-			 * each draw letter method should return a response with the letter's padding/spacing.
-			 */
-			var d1;
-			var chars = cfg.word.split('');
-			for (var i=0; i<chars.length; i++) {
-				tCtx.clearRect(0,0,tempCanvas.width,tempCanvas.height);
-				d1 = draw(chars[i],tCtx);
-				sCtx.drawImage(tempCanvas,d.x,d.y);
-				letterDStore.push({x:d.x,y:d.y,letter:chars[i]});
-				d.x += d1.x*cfg.scale;
-				d.y += d1.y*cfg.scale;
-			}
-			// clear the main canvas and stamp out the word
-			bgCtx.clearRect(0,0,bgCanvas.width,bgCanvas.height);
-			stampLoop();
-		};
-		var stampLoop = function() {
-			bgCtx.drawImage(stringCanvas,stamp_d.x,stamp_d.y);
-			stampDStore[stampDStore.length]=stamp_d;
-			stampDStore.push({x:stamp_d.x,y:stamp_d.y});
-			stamp_d.x += d.x;
-			// recursion
-			var bContinue = false;
-			if (stamp_d.x >= window.innerWidth) {
-				stamp_d.y += 90*cfg.scale;
-				stamp_d.x = 0;
-			}
-			if (stamp_d.y < window.innerHeight) bContinue = true;
-			if (bContinue) stampLoop();
-			else {
-				// start animation
-				tCtx.fillStyle = cfg.animateColor;
-				tCtx.strokeStyle = cfg.animateColor;
-				requestAnimFrame(function() {
-		        	animate();
-		        });
-			}
-		};
-		var animate = function() {
-			// pick a randome location/letter
-			var i = Math.floor(Math.random() * letterDStore.length);
-			var j = Math.floor(Math.random() * stampDStore.length);
-			var d1 = letterDStore[i];
-			var d2 = stampDStore[j];
-			var d3 = {x:(d1.x+d2.x), y:(d1.y+d2.y)};
-			// draw the letter at that position
-			tCtx.clearRect(0,0,tempCanvas.width,tempCanvas.height);
-			draw(d1.letter,tCtx);
-			fgCtx.drawImage(tempCanvas,d3.x,d3.y);
-			// recursion
-			if (animimateCycleCount++>animimateLimit) return;
-			requestAnimFrame(function() {
-	        	animate();
-	        });
-		};
-		
-		var draw = function(letter, ctx) {
-			ctx.save();
-			ctx.scale(cfg.scale,cfg.scale);
+		var draw = function(letter,cfg) {
+			var canvas = window.oo.getTempCanvas(100,100);
+			var ctx = canvas.getContext("2d");
+			ctx.fillStyle = cfg.color;
+			ctx.strokeStyle = cfg.color;
+			ctx.scale(cfg.scale,cfg.scale); 
 			ctx.lineJoin = "miter";
 			ctx.miterLimit = 4.0;
-			var d = drawLetter(letter, ctx);
+			ctx.save();
+			
+			// draw the letter and adjust spacing based on scale
+			var spacing = drawLetter(letter, ctx);
+			spacing.x = spacing.x*cfg.scale;
+			spacing.y = spacing.y*cfg.scale;
+			
 			ctx.restore();
-			return d;
+			
+			var stamp = {spacing:spacing,canvas:canvas};
+			return stamp;
 		};
 		
 		var drawLetter = function(letter,ctx) {
@@ -273,25 +195,10 @@ $(function() {
 			return {x:(max_x+0),y:0};
 		};
 		
-		this.init();
-		
 	};
 
-	if (window.ooConfig.letters && window.oo) {
-		window.oo.letters = new Letters(window.ooConfig.letters);
-		$(window).resize(function() {
-			window.oo.letters.init();
-		});
+	if (window.oo) {
+		window.oo.letters = new Letters();
 	} 
 	
 });
-window.requestAnimFrame = (function(callback) {
-    return window.requestAnimationFrame || 
-    		window.webkitRequestAnimationFrame || 
-    		window.mozRequestAnimationFrame || 
-    		window.oRequestAnimationFrame || 
-    		window.msRequestAnimationFrame ||
-    		function(callback) {
-    			window.setTimeout(callback, 1000 / 60);
-    		};
-})();

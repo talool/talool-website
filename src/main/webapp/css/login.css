@@ -2,9 +2,9 @@
 	position: absolute;
 	top: 50%;
 	left: 50%;
-    width: 600px;
+    width: 575px;
     height: 350px;
-    margin: -175px 0 0 -300px;
+    margin: -175px 0 0 -288px;
 }
 .cmain td {
 	padding: 0 0 5px 0;
@@ -25,3 +25,8 @@
  	padding: 5px;
  	border-radius: 5px;
  }
+ #bgCanvas, #fgCanvas {
+ 	position: absolute;
+ 	top: 0;
+ 	left: 0;
+}

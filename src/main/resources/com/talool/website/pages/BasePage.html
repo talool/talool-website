@@ -13,8 +13,15 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-    <script src="/js/logo.js"></script>
-     <script>Wicket.Window.unloadConfirmation = false;</script>
+    <script src="/js/core.js"></script>
+	<script src="/js/letters.js"></script>
+	<script src="/js/logo.js"></script>
+    <script>
+    	Wicket.Window.unloadConfirmation = false;
+    	window.ooConfig = {
+			logo:{target:"#canvas",bAdmin:true, scale: .75, color:"rgba(255,255,255,1)"},
+		};
+    </script>
   </head>
   <body class="talool">
   	<div wicket:id="adminMenuPanel"></div>
