@@ -48,7 +48,7 @@ public class MerchantDealsPanel extends BaseTabPanel
 			{
 
 				Deal deal = item.getModelObject();
-				final Long dealId = deal.getId();
+				final UUID dealId = deal.getId();
 
 				item.setModel(new CompoundPropertyModel<Deal>(deal));
 

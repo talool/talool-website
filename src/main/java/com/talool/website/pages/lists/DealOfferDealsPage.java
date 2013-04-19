@@ -48,7 +48,7 @@ public class DealOfferDealsPage extends BasePage
 			protected void populateItem(ListItem<Deal> item)
 			{
 				Deal deal = item.getModelObject();
-				final Long dealId = deal.getId();
+				final UUID dealId = deal.getId();
 
 				item.setModel(new CompoundPropertyModel<Deal>(deal));
 

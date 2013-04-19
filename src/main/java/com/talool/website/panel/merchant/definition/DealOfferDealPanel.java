@@ -83,7 +83,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		setDefaultModel(Model.of(deal));
 	}
 
-	public DealOfferDealPanel(final String id, final SubmitCallBack callback, final Long dealId)
+	public DealOfferDealPanel(final String id, final SubmitCallBack callback, final UUID dealId)
 	{
 		super(id, callback);
 		setDefaultModel(new DealModel(dealId));
