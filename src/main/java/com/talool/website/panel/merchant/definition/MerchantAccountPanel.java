@@ -2,15 +2,12 @@ package com.talool.website.panel.merchant.definition;
 
 import java.util.UUID;
 
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,12 +18,14 @@ import com.talool.service.ServiceFactory;
 import com.talool.website.models.MerchantAccountModel;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.customer.definition.SetPasswordPanel;
 import com.talool.website.util.SessionUtils;
 
 public class MerchantAccountPanel extends BaseDefinitionPanel
 {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantAccountPanel.class);
+	private boolean isNew;
 
 	public MerchantAccountPanel(final String id, final UUID merchantId, final SubmitCallBack callback)
 	{
@@ -44,6 +43,7 @@ public class MerchantAccountPanel extends BaseDefinitionPanel
 
 		MerchantAccount account = domainFactory.newMerchantAccount(merchant);
 		setDefaultModel(Model.of(account));
+		isNew = true;
 
 	}
 
@@ -52,6 +52,7 @@ public class MerchantAccountPanel extends BaseDefinitionPanel
 	{
 		super(id, callback);
 		setDefaultModel(new MerchantAccountModel(merchantAccountId));
+		isNew = false;
 	}
 
 	@Override
@@ -61,14 +62,15 @@ public class MerchantAccountPanel extends BaseDefinitionPanel
 
 		form.add(new TextField<String>("roleTitle").setRequired(true));
 		form.add(new TextField<String>("email").setRequired(true));
-		// validate the passwords match
-		FormComponent<String> pw1 = new PasswordTextField("password").setRequired(true);
-		FormComponent<String> pw2 = new PasswordTextField("confirm", new PropertyModel<String>(this,
-				"confirm")).setRequired(true);
-		EqualPasswordInputValidator pwv = new EqualPasswordInputValidator(pw1, pw2);
-		form.add(pw1);
-		form.add(pw2);
-		form.add(pwv);
+		
+		if (isNew)  {
+			SetPasswordPanel pwPanel = new SetPasswordPanel("passwordPanel");
+			pwPanel.setDefaultModel(getDefaultModel());
+			form.add(pwPanel);
+		} else {
+			form.add(new WebMarkupContainer("passwordPanel"));
+		}
+		
 		form.add(new CheckBox("allowDealCreation"));
 	}
 
@@ -100,16 +102,5 @@ public class MerchantAccountPanel extends BaseDefinitionPanel
 		return "Save Merchant Account";
 	}
 
-	private String confirm;
-
-	public String getConfirm()
-	{
-		return confirm;
-	}
-
-	public void setConfirm(String confirm)
-	{
-		this.confirm = confirm;
-	}
 
 }
