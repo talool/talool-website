@@ -7,15 +7,12 @@ import java.util.UUID;
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.PasswordTextField;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 
 import com.talool.core.Customer;
 import com.talool.core.Sex;
@@ -29,6 +26,7 @@ public class CustomerPanel extends BaseDefinitionPanel
 {
 
 	private static final long serialVersionUID = 2870193702212159884L;
+	private boolean isNew;
 
 	public CustomerPanel(String id, SubmitCallBack callback)
 	{
@@ -36,12 +34,14 @@ public class CustomerPanel extends BaseDefinitionPanel
 
 		Customer customer = domainFactory.newCustomer();
 		setDefaultModel(Model.of(customer));
+		isNew = true;
 	}
 
 	public CustomerPanel(final String id, final SubmitCallBack callback, final UUID customerId)
 	{
 		super(id, callback);
 		setDefaultModel(new CustomerModel(customerId));
+		isNew = false;
 	}
 
 	@Override
@@ -52,14 +52,15 @@ public class CustomerPanel extends BaseDefinitionPanel
 		form.add(new TextField<String>("firstName").setRequired(true));
 		form.add(new TextField<String>("lastName").setRequired(true));
 		form.add(new TextField<String>("email").setRequired(true));
-		// validate the passwords match
-		FormComponent<String> pw1 = new PasswordTextField("password").setRequired(true);
-		FormComponent<String> pw2 = new PasswordTextField("confirm", new PropertyModel<String>(this,
-				"confirm")).setRequired(true);
-		EqualPasswordInputValidator pwv = new EqualPasswordInputValidator(pw1, pw2);
-		form.add(pw1);
-		form.add(pw2);
-		form.add(pwv);
+		
+		if (isNew)  {
+			SetPasswordPanel pwPanel = new SetPasswordPanel("passwordPanel");
+			pwPanel.setDefaultModel(getDefaultModel());
+			form.add(pwPanel);
+		} else {
+			form.add(new WebMarkupContainer("passwordPanel"));
+		}
+		
 		// format the date
 		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
 		form.add(new DateTextField("birthDate", converter).setRequired(true));
@@ -97,16 +98,5 @@ public class CustomerPanel extends BaseDefinitionPanel
 		return "Save Customer";
 	}
 
-	private String confirm;
-
-	public String getConfirm()
-	{
-		return confirm;
-	}
-
-	public void setConfirm(String confirm)
-	{
-		this.confirm = confirm;
-	}
 
 }
