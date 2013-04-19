@@ -1,6 +1,7 @@
 package com.talool.website.panel;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -86,6 +87,23 @@ abstract public class BaseDefinitionPanel extends BasePanel
 
 		form.add(submit);
 		submit.add(new Label("submitLabel", getSaveButtonLabel()));
+		
+		@SuppressWarnings("rawtypes")
+		AjaxLink cancel = new AjaxLink("cancelButton")
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				if (callback != null)
+				{
+					callback.submitCancel(target);
+				}
+			}
+			
+			
+		};
+		form.add(cancel);
 
 	}
 

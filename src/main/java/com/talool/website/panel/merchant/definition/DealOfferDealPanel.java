@@ -174,6 +174,12 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 					{
 						// intentionally void
 					}
+
+					@Override
+					public void submitCancel(AjaxRequestTarget target) {
+						modal.replace(DealOfferDealPanel.this);
+						target.add(DealOfferDealPanel.this.setOutputMarkupId(true));
+					}
 				};
 
 				MerchantDealOfferPanel panel = new MerchantDealOfferPanel(modal.getContentId(),

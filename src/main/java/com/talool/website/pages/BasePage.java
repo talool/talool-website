@@ -124,6 +124,12 @@ public abstract class BasePage extends WebPage
 			{
 
 			}
+
+			@Override
+			public void submitCancel(AjaxRequestTarget target) {
+				modal.close(target);
+				target.add(BasePage.this);
+			}
 		};
 		return callback;
 	}
