@@ -1,4 +1,4 @@
-package com.talool.website.panel.merchant.definition;
+package com.talool.website.panel.merchant.definition.template;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.HiddenField;
@@ -7,6 +7,9 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 
 import com.talool.core.Deal;
+import com.talool.website.panel.merchant.definition.DealPreview;
+import com.talool.website.panel.merchant.definition.DealPreviewUpdatingBehavior;
+import com.talool.website.panel.merchant.definition.DealPreviewUpdatingBehavior.DealComponent;
 
 abstract public class DealTemplatePanel extends Panel {
 

@@ -1,4 +1,4 @@
-package com.talool.website.panel.merchant.definition;
+package com.talool.website.panel.merchant.definition.template;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -7,6 +7,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 
 import com.talool.core.Deal;
+import com.talool.website.panel.merchant.definition.DealPreview;
 
 public class MoneyOffDealTemplatePanel extends DealTemplatePanel {
 
