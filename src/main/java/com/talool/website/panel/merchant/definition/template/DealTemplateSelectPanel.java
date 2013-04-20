@@ -57,6 +57,14 @@ public class DealTemplateSelectPanel extends Panel {
 				switch (selectedValue) {
 					case 0: panel1 = new MoneyOffDealTemplatePanel(dealTemplateMarkupId, preview, model);
 						break;
+					case 1: panel1 = new GetOneFreeDealTemplatePanel(dealTemplateMarkupId, preview, model);
+						break;
+					case 2: panel1 = new PercentOffDealTemplatePanel(dealTemplateMarkupId, preview, model);
+						break;
+					case 3: panel1 = new MoneyOffLunchDealTemplatePanel(dealTemplateMarkupId, preview, model);
+						break;
+					case 4: panel1 = new MoneyOffDinnerDealTemplatePanel(dealTemplateMarkupId, preview, model);
+						break;
 					default: panel1 = new OtherDealTemplatePanel(dealTemplateMarkupId, preview, model);
 				}
 				
