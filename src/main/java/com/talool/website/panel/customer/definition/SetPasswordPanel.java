@@ -12,7 +12,6 @@ public class SetPasswordPanel extends Panel {
 
 	public SetPasswordPanel(String id) {
 		super(id);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override

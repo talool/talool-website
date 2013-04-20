@@ -21,18 +21,9 @@
 	    	<div wicket:id="imageSelectContainer">
 		    	<div wicket:id="imageSelectPanel"></div>
 			</div>
-			<div>
-		    	<label><i class="hint-font icon-asterisk"></i> Title</label>
-		    	<input wicket:id="title" type="text"/>
-		    </div>
-		    <div>
-		    	<label><i class="hint-font icon-asterisk"></i> Summary</label>
-		    	<textarea wicket:id="summary" type="text"/>
-		    </div>
-		    <div>
-		    	<label><i class="hint-font icon-asterisk"></i> Detail</label>
-		    	<textarea wicket:id="details" type="text"/>
-			</div>
+			
+			<div wicket:id="dealTemplateSelectPanel"></div>
+			
 			<div>
 		    	<label><i class="hint-font icon-asterisk"></i> Expires</label>
 		    	<input id="datepicker" wicket:id="expires" type="text"/>
@@ -55,15 +46,4 @@
 	<div class="panel right iPhonePanel">
 		<div wicket:id="dealBuilder"></div>
 	</div>
-	<!-- 
-	<wickt:enclosure child="imageUrl">
-	<div class="panel right">
-		<h3>Deal Image Preview</h3>
-		<fieldset class="dealBuilder">
-		 <div wicet:id="imageUrl"></div>
-		 <img wicet:id="imagePreview" src="http://localhost:8080/static/images/chipotle.jpg" width=100 height=100>
-	    </fieldset>
-	</div>
-	</wickt:enclosure>
-	 -->
 </wicket:extend>

@@ -13,7 +13,6 @@ import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -194,23 +193,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 			}
 		});
 
-		TextField<String> titleField = new TextField<String>("title");
-		titleField.setRequired(true);
-		titleField.add(new DealPreviewUpdatingBehavior(dealPreview,
-				DealPreviewUpdatingBehavior.DealComponent.TITLE, "onBlur"));
-		form.add(titleField);
-
-		TextArea<String> summaryField = new TextArea<String>("summary");
-		summaryField.setRequired(true);
-		summaryField.add(new DealPreviewUpdatingBehavior(dealPreview,
-				DealPreviewUpdatingBehavior.DealComponent.SUMMARY, "onBlur"));
-		form.add(summaryField);
-
-		TextArea<String> detailsField = new TextArea<String>("details");
-		detailsField.setRequired(true);
-		detailsField.add(new DealPreviewUpdatingBehavior(dealPreview,
-				DealPreviewUpdatingBehavior.DealComponent.DETAILS, "onBlur"));
-		form.add(detailsField);
+		form.add(new DealTemplateSelectPanel("dealTemplateSelectPanel", getDefaultCompoundPropertyModel(), dealPreview));
 
 		// TODO we need a validator on this
 		TextField<String> codeField = new TextField<String>("code");
@@ -329,5 +312,6 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 	{
 		this.dealOffer = dealOffer;
 	}
-
+	
+	
 }
