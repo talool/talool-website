@@ -27,7 +27,6 @@ import com.talool.website.pages.lists.MerchantsPage;
  */
 public class TaloolApplication extends WebApplication implements Serializable
 {
-	private final String mode = "development";
 	private static final long serialVersionUID = 1954532829422211028L;
 
 	@Override
@@ -93,12 +92,12 @@ public class TaloolApplication extends WebApplication implements Serializable
 		getSecuritySettings().setAuthorizationStrategy(authStrat);
 		getSecuritySettings().setUnauthorizedComponentInstantiationListener(authStrat);
 
-		if (mode.equalsIgnoreCase("deployment"))
+		if (Config.get().getWebsiteMode().equalsIgnoreCase("deployment"))
 		{
 			getDebugSettings().setAjaxDebugModeEnabled(false);
 			getExceptionSettings().setUnexpectedExceptionDisplay(
 					IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
-			getMarkupSettings().setStripWicketTags(false);
+			getMarkupSettings().setStripWicketTags(true);
 		}
 		else
 		{
