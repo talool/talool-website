@@ -14,6 +14,7 @@ public final class Config extends PropertiesConfiguration
 {
 	private static Config instance;
 
+	private static final String WEBSITE_MODE = "website.mode";
 	private static final String UPLOAD_DIR = "upload.dir";
 	private static final String UPLOAD_LOGO_MAX_SIZE_BYTES = "upload.logo.max.size.bytes";
 	private static final String STATIC_LOGO_BASE_URL = "static.logo.base.url";
@@ -63,6 +64,11 @@ public final class Config extends PropertiesConfiguration
 	public String getUploadDir()
 	{
 		return getString(UPLOAD_DIR);
+	}
+
+	public String getWebsiteMode()
+	{
+		return getString(WEBSITE_MODE, "development");
 	}
 
 }
