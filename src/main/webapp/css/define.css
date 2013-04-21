@@ -90,3 +90,18 @@ optgroup option {
 .selectBoxEdit a {
 	display:inline-block;
 }
+.conditionsBlock {
+	display: inline-block;
+}
+.conditionsBlock input.chbx {
+	margin-top: 7px;
+}
+.conditionsContainer {
+	display: none;
+}
+.conditionsContainer.show {
+	display: block;
+}
+
+
+

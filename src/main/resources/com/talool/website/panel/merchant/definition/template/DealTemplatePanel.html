@@ -5,9 +5,21 @@
 	<input wicket:id="title" type="hidden"/>
     <input wicket:id="summary" type="hidden"/>
     
-	<div>
-    	<label><i class="hint-font icon-asterisk"></i> Detail</label>
-    	<textarea wicket:id="details" type="text"/>
-	</div>
+    <div>
+    	<label><i class="optional-font icon-asterisk"></i> Conditions</label>
+    	<div class="conditionsBlock">
+	    	<div wicket:id="addMoreConditionsContainer">
+		    	<input wicket:id="valid" type="checkbox" class="chbx"/> Valid anytime (excluding holidays)
+		    	<div class="conditionsEdit">
+		    		<a href="#" wicket:id="addMoreConditions"><i class="icon-plus-sign icon-large"></i> add more conditions</a>
+		    	</div>
+	    	</div>
+	    	<div wicket:id="conditionsContainer" class="conditionsContainer">
+		    	<textarea wicket:id="details" type="text"/>
+			</div>
+		</div>
+    </div>
+    
+	
 	
 </wicket:panel>

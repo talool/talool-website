@@ -17,6 +17,9 @@ public class OtherDealTemplatePanel extends DealTemplatePanel {
 	
 	public OtherDealTemplatePanel(String id, DealPreview preview, CompoundPropertyModel<Deal> model) {
 		super(id, preview, model);
+		Deal deal = (Deal) model.getObject();
+		titleShim = deal.getTitle();
+		summaryShim = deal.getSummary();
 	}
 	
 	@Override
