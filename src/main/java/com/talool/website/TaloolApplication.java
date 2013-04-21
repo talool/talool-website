@@ -16,6 +16,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.talool.website.pages.AdminLoginPage;
+import com.talool.website.pages.CustomerSettingsPage;
 import com.talool.website.pages.HomePage;
 import com.talool.website.pages.lists.CustomersPage;
 import com.talool.website.pages.lists.DealOffersPage;
@@ -73,6 +74,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/admin", AdminLoginPage.class);
 		mountPage("/admin/books", DealOffersPage.class);
 		mountPage("/admin/customers", CustomersPage.class);
+		mountPage("/admin/customer/settings", CustomerSettingsPage.class);
 		mountPage("/admin/merchants", MerchantsPage.class);
 		mountPage("/admin/merchant/accounts", MerchantAccountsPage.class);
 		mountPage("/admin/merchant/books", MerchantDealOffersPage.class);

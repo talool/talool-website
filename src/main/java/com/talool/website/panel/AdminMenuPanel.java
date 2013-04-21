@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
 import com.talool.website.pages.AdminLoginPage;
+import com.talool.website.pages.CustomerSettingsPage;
 import com.talool.website.pages.lists.MerchantAccountsPage;
 import com.talool.website.pages.lists.MerchantDealOffersPage;
 import com.talool.website.pages.lists.MerchantLocationsPage;
@@ -48,6 +49,7 @@ public class AdminMenuPanel extends Panel
 		add(new BookmarkablePageLink<MerchantAccountsPage>("accountsLink",MerchantAccountsPage.class));
 		add(new BookmarkablePageLink<MerchantDealOffersPage>("dealOffersLink",MerchantDealOffersPage.class));
 		add(new BookmarkablePageLink<MerchantLocationsPage>("locationsLink",MerchantLocationsPage.class));
+		add(new BookmarkablePageLink<MerchantLocationsPage>("settingsLink",CustomerSettingsPage.class));
 	}
 
 	public String getSignedInAs()
