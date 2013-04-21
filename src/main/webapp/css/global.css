@@ -145,20 +145,36 @@ a, a:visited {
 }
 .btn.btn-primary {
 	background-image: linear-gradient(to bottom,#fff,#ddd);
+	background-image: -moz-linear-gradient(top,#fff,#ddd);
+	background-image: -webkit-gradient(linear,0 0,0 100%,from(#fff),to(#ddd));
+	background-image: -webkit-linear-gradient(top,#fff,#ddd);
+	background-image: -o-linear-gradient(top,#fff,#ddd);
 	border: 1px solid #bbb;
 	color: rgb(241, 90, 36);
 }
 .btn.btn-primary:hover {
 	background-image: linear-gradient(to bottom,#fff,#ccc);
+	background-image: -moz-linear-gradient(top,#fff,#ccc);
+	background-image: -webkit-gradient(linear,0 0,0 100%,from(#fff),to(#ccc));
+	background-image: -webkit-linear-gradient(top,#fff,#ccc);
+	background-image: -o-linear-gradient(top,#fff,#ccc);
 }
 .btn.btn-action {
 	background-image: linear-gradient(to bottom,rgba(25, 188, 185, .6),rgb(25, 188, 185));
+	background-image: -moz-linear-gradient(top,rgba(25, 188, 185, .6),rgb(25, 188, 185));
+	background-image: -webkit-gradient(linear,0 0,0 100%,from(rgba(25, 188, 185, .6)),to(rgb(25, 188, 185)));
+	background-image: -webkit-linear-gradient(top,rgba(25, 188, 185, .6),rgb(25, 188, 185));
+	background-image: -o-linear-gradient(top,rgba(25, 188, 185, .6),rgb(25, 188, 185));
 	border: 1px solid rgb(25, 188, 185);
 	color: white;
 	text-shadow: 0 1px 1px rgba(185, 172, 151,.75);
 }
 .btn.btn-action:hover {
 	background-image: linear-gradient(to bottom,rgba(25, 188, 185, .7),rgb(25, 188, 185));
+	background-image: -moz-linear-gradient(top,rgba(25, 188, 185, .7),rgb(25, 188, 185));
+	background-image: -webkit-gradient(linear,0 0,0 100%,from(rgba(25, 188, 185, .7)),to(rgb(25, 188, 185)));
+	background-image: -webkit-linear-gradient(top,rgba(25, 188, 185, .7),rgb(25, 188, 185));
+	background-image: -o-linear-gradient(top,rgba(25, 188, 185, .7),rgb(25, 188, 185));
 }
 .hint-font {
 	color: rgba(25, 188, 185,.5);
@@ -212,6 +228,10 @@ body div.wicket-modal h3.w_captionText {
 	font-size: 14px;
 	text-shadow: 0 1px 1px rgba(255,255,255,0.75);
 	background-image: linear-gradient(to bottom,#fff,#e6e6e6);
+	background-image: -moz-linear-gradient(top,#fff,#e6e6e6);
+	background-image: -webkit-gradient(linear,0 0,0 100%,from(#fff),to(#e6e6e6));
+	background-image: -webkit-linear-gradient(top,#fff,#e6e6e6);
+	background-image: -o-linear-gradient(top,#fff,#e6e6e6);
 	background-repeat: repeat-x;
 	border: 1px solid #bbb;
 }

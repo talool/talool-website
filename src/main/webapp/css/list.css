@@ -83,10 +83,18 @@ div.tabpanel div.tab-row a:hover {
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
 	background-image: linear-gradient(to bottom,#fff,#eee);
+	background-image: -moz-linear-gradient(top,#fff,#eee);
+	background-image: -webkit-gradient(linear,0 0,0 100%,from(#fff),to(#eee));
+	background-image: -webkit-linear-gradient(top,#fff,#eee);
+	background-image: -o-linear-gradient(top,#fff,#eee);
 	text-shadow: 0 1px 1px rgba(255,255,255,0.75);
 }
 .talool div.tabpanel div.tab-row li a:hover {
 	background-image: linear-gradient(to bottom,#fff,#ddd);
+	background-image: -moz-linear-gradient(top,#fff,#ddd);
+	background-image: -webkit-gradient(linear,0 0,0 100%,from(#fff),to(#ddd));
+	background-image: -webkit-linear-gradient(top,#fff,#ddd);
+	background-image: -o-linear-gradient(top,#fff,#ddd);
 }
 .talool div.tabpanel div.tab-row li.selected a,
 .talool div.tabpanel div.tab-row li.selected a:hover {
