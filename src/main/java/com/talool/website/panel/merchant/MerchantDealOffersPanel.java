@@ -112,7 +112,7 @@ public class MerchantDealOffersPanel extends BaseTabPanel
 	@Override
 	public String getActionLabel()
 	{
-		return "Create Merchant Deal Offer";
+		return "Create Deal Offer";
 	}
 
 	@Override

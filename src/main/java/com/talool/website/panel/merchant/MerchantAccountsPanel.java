@@ -107,7 +107,7 @@ public class MerchantAccountsPanel extends BaseTabPanel
 	@Override
 	public String getActionLabel()
 	{
-		return "Create Merchant Account";
+		return "Create Account";
 	}
 
 	@Override

@@ -2,11 +2,15 @@ package com.talool.website.panel;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
 import com.talool.website.pages.AdminLoginPage;
+import com.talool.website.pages.lists.MerchantAccountsPage;
+import com.talool.website.pages.lists.MerchantDealOffersPage;
+import com.talool.website.pages.lists.MerchantLocationsPage;
 import com.talool.website.util.SessionUtils;
 
 /**
@@ -41,6 +45,9 @@ public class AdminMenuPanel extends Panel
 			}
 
 		});
+		add(new BookmarkablePageLink<MerchantAccountsPage>("accountsLink",MerchantAccountsPage.class));
+		add(new BookmarkablePageLink<MerchantDealOffersPage>("dealOffersLink",MerchantDealOffersPage.class));
+		add(new BookmarkablePageLink<MerchantLocationsPage>("locationsLink",MerchantLocationsPage.class));
 	}
 
 	public String getSignedInAs()

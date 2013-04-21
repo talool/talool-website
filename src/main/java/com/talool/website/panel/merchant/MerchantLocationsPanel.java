@@ -98,7 +98,7 @@ public class MerchantLocationsPanel extends BaseTabPanel
 	@Override
 	public String getActionLabel()
 	{
-		return "Create Merchant Location";
+		return "Create Location";
 	}
 
 	@Override

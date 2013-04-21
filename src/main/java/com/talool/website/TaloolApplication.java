@@ -19,6 +19,9 @@ import com.talool.website.pages.AdminLoginPage;
 import com.talool.website.pages.HomePage;
 import com.talool.website.pages.lists.CustomersPage;
 import com.talool.website.pages.lists.DealOffersPage;
+import com.talool.website.pages.lists.MerchantAccountsPage;
+import com.talool.website.pages.lists.MerchantDealOffersPage;
+import com.talool.website.pages.lists.MerchantLocationsPage;
 import com.talool.website.pages.lists.MerchantsPage;
 
 /**
@@ -71,6 +74,9 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/admin/books", DealOffersPage.class);
 		mountPage("/admin/customers", CustomersPage.class);
 		mountPage("/admin/merchants", MerchantsPage.class);
+		mountPage("/admin/merchant/accounts", MerchantAccountsPage.class);
+		mountPage("/admin/merchant/books", MerchantDealOffersPage.class);
+		mountPage("/admin/merchant/locations", MerchantLocationsPage.class);
 
 		/*
 		 * We need a ONE_PASS_RENDER strategy because pages like search need
