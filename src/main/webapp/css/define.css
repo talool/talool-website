@@ -23,7 +23,8 @@
 	text-align: center;
 }
 
-.newMerchant .controls a {
+.newMerchant .controls a,
+.newMerchant .controls button {
 	margin: 0 10px;
 }
 
