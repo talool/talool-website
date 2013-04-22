@@ -50,7 +50,6 @@ public class CustomerPurchaseDealOfferPanel extends BaseDefinitionPanel {
 
 	@Override
 	public void save() throws ServiceException {
-		// TODO go through the factory
 		final DealOfferPurchase purchase = domainFactory.newDealOfferPurchase((Customer) form.getDefaultModelObject(), dealOffer);
 		taloolService.save(purchase);
 		SessionUtils.successMessage("Successfully purchased '", purchase.getDealOffer().getTitle(), "'");

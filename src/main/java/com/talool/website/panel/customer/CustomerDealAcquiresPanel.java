@@ -68,10 +68,10 @@ public class CustomerDealAcquiresPanel extends Panel
 					{
 						getSession().getFeedbackMessages().clear();
 						/*
-						MerchantAccountPanel panel = new MerchantAccountPanel(modal.getContentId(), callback,
-								merchantaccountId);
+						DealAcquirePanel panel = new DealAcquirePanel(modal.getContentId(), callback,
+								dealAcquireId);
 						modal.setContent(panel);
-						modal.setTitle("Edit Merchant Account");
+						modal.setTitle("Edit Deal Acquire Status");
 						modal.show(target);
 						*/
 					}
