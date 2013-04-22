@@ -52,7 +52,6 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 			final Long merchantManagedLocationId)
 	{
 		super(id, callback);
-		;
 		setDefaultModel(new MerchantManagedLocationModel(merchantManagedLocationId));
 	}
 

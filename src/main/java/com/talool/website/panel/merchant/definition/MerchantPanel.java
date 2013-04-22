@@ -14,6 +14,8 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.UrlValidator;
 
 import com.talool.core.Merchant;
+import com.talool.core.MerchantLocation;
+import com.talool.core.MerchantManagedLocation;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
 import com.talool.website.component.StateOption;
@@ -134,7 +136,11 @@ public class MerchantPanel extends BaseDefinitionPanel
 	public void save() throws ServiceException
 	{
 		Merchant merchant = (Merchant) form.getDefaultModelObject();
-
+		
+		// Load the primary location as a managed location by default
+		MerchantManagedLocation managedLocation = domainFactory.newMerchantManagedLocation(merchant);
+		managedLocation.setMerchantLocation(merchant.getPrimaryLocation());
+		
 		if (StringUtils.isNotEmpty(tags))
 		{
 			Set<Tag> selectedTags = taloolService.getOrCreateTags(tags.split(","));
@@ -146,6 +152,7 @@ public class MerchantPanel extends BaseDefinitionPanel
 		}
 
 		taloolService.save(merchant);
+		taloolService.save(managedLocation);
 		SessionUtils.successMessage("Successfully saved merchant '", merchant.getName(), "'");
 
 	}
