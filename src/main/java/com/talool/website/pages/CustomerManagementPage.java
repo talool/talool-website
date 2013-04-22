@@ -44,7 +44,7 @@ public class CustomerManagementPage extends BaseManagementPage
 
 		List<ITab> tabs = new ArrayList<ITab>();
 		
-		tabs.add(new AbstractTab(new Model<String>("Redeemed Deals"))
+		tabs.add(new AbstractTab(new Model<String>("Acquired Deals"))
 		{
 
 			private static final long serialVersionUID = -6020689518505770059L;
