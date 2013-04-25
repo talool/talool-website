@@ -13,10 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Image;
-import com.talool.website.Config;
 import com.talool.website.models.ModelUtil;
 
-public class ImageUploadPanel extends Panel {
+public class ImageUploadPanel extends Panel
+{
 
 	private static final long serialVersionUID = 2266250361647577936L;
 	private static final Logger LOG = LoggerFactory.getLogger(ImageUploadPanel.class);
@@ -24,24 +24,25 @@ public class ImageUploadPanel extends Panel {
 	private DealPreview preview;
 	private PropertyModel<Image> model;
 
-	public ImageUploadPanel(String id, PropertyModel<Image> model, DealPreview preview) {
+	public ImageUploadPanel(String id, PropertyModel<Image> model, DealPreview preview)
+	{
 		super(id);
 		setMarkupId(id);
 		this.preview = preview;
 		this.model = model;
 	}
-	
+
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		
-		FileUploadField uploader = new FileUploadField("fileUploads", 
+
+		FileUploadField uploader = new FileUploadField("fileUploads",
 				new PropertyModel<List<FileUpload>>(this, "fileUploads"));
 		add(uploader);
-		
+
 		final ImageUploadPanel self = this;
-		
+
 		add(new AjaxLink<Void>("selectImageLink")
 		{
 			private static final long serialVersionUID = -4121628859507413650L;
@@ -56,18 +57,15 @@ public class ImageUploadPanel extends Panel {
 			}
 		});
 	}
-	
-	public String getUpload() {
+
+	public String getUpload()
+	{
 		String url = null;
 		if (CollectionUtils.isNotEmpty(fileUploads))
 		{
 			try
 			{
-				final String imageName = ModelUtil.saveUploadImage(fileUploads.get(0));
-				if (imageName != null)
-				{
-					url = (Config.get().getStaticLogoBaseUrl() + imageName);
-				}
+				url = ModelUtil.saveUploadImage(fileUploads.get(0));
 			}
 			catch (Exception e)
 			{

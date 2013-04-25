@@ -200,6 +200,8 @@ div.info ul.feedbackPanel {
     border: 1px solid #090;
     background-color: #efe;
     color: #090;
+    padding-bottom: 10px;
+    padding-top: 10px;
 }
 
 /* Modal Window Overrides */

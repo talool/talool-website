@@ -4,8 +4,12 @@ import java.io.File;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 
+import com.google.common.hash.HashCode;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
 import com.talool.core.Deal;
 import com.talool.core.Merchant;
 import com.talool.core.Tag;
@@ -19,6 +23,12 @@ import com.talool.website.Config;
 public final class ModelUtil
 {
 	private static final String NO_TAG_SUMMARY = "(0)";
+
+	private static class ImageInfo
+	{
+		protected String rawPath;
+		protected String url;
+	}
 
 	private static String getTagsSummary(final Set<Tag> tags)
 	{
@@ -81,12 +91,43 @@ public final class ModelUtil
 		return getCommaSeperatedTags(deal.getTags());
 	}
 
-	// TODO - generate and return a unique image name!
+	private static ImageInfo generateUniqueFilePath(final String fileName)
+	{
+		final StringBuilder sb = new StringBuilder();
+		final ImageInfo imageInfo = new ImageInfo();
+
+		final HashFunction hf = Hashing.md5();
+		final HashCode hashCode = hf.newHasher().putString(fileName)
+				.putLong(System.currentTimeMillis()).hash();
+
+		final int hashDir = Math.abs(hashCode.asInt() % 1000);
+
+		sb.append(hashDir).append("/").append(Hashing.sha1().hashString(fileName)).append(".")
+				.append(FilenameUtils.getExtension(fileName));
+
+		final String fileNamePre = sb.toString();
+
+		imageInfo.rawPath = Config.get().getUploadDir() + fileNamePre;
+		imageInfo.url = Config.get().getStaticLogoBaseUrl() + fileNamePre;
+
+		return imageInfo;
+
+	}
+
+	/**
+	 * Hashes image directory and name, and saves image.
+	 * 
+	 * @param fileUpload
+	 * @return URL to image
+	 * @throws Exception
+	 */
 	public static String saveUploadImage(final FileUpload fileUpload) throws Exception
 	{
 		if (fileUpload != null)
 		{
-			final File newFile = new File(Config.get().getUploadDir() + fileUpload.getClientFileName());
+			ImageInfo newFileInfo = generateUniqueFilePath(fileUpload.getClientFileName());
+
+			final File newFile = new File(newFileInfo.rawPath);
 
 			if (newFile.exists())
 			{
@@ -95,9 +136,12 @@ public final class ModelUtil
 
 			try
 			{
-				newFile.createNewFile();
+
+				newFile.setReadable(true, false);
+				newFile.getParentFile().mkdirs();
+
 				fileUpload.writeTo(newFile);
-				return fileUpload.getClientFileName();
+				return newFileInfo.url;
 
 			}
 			catch (Exception e)
@@ -107,5 +151,4 @@ public final class ModelUtil
 		}
 		return null;
 	}
-
 }
