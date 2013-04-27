@@ -1,10 +1,11 @@
 <wicket:extend>
 		
-	<div class="panel left">
+	<div wicket:id="descriptionPanel" class="panel left">
 		<h3>Merchant Description</h3>
 		<fieldset>
 	    	<div><label>*Name</label><input wicket:id="name" name="name" type="text"/></div>
-	    	<div><label>Tags</label><input wicket:id="tags" name="tags" type="text"/></div>
+	    	<div><label>Category</label><select wicket:id="category"></select></div>
+	    	<div><label>Tags</label><select wicket:id="tags" multiple="multiple"></select></div>
 	    </fieldset>
 	</div>
 	

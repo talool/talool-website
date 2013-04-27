@@ -1,10 +1,15 @@
 package com.talool.website.panel.merchant.definition;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -14,7 +19,6 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.UrlValidator;
 
 import com.talool.core.Merchant;
-import com.talool.core.MerchantLocation;
 import com.talool.core.MerchantManagedLocation;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
@@ -22,6 +26,8 @@ import com.talool.website.component.StateOption;
 import com.talool.website.component.StateSelect;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.models.ModelUtil;
+import com.talool.website.models.TagListModel;
+import com.talool.website.models.TagListModel.CATEGORY_CONTEXT;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.util.SessionUtils;
@@ -34,7 +40,8 @@ import com.talool.website.util.SessionUtils;
 public class MerchantPanel extends BaseDefinitionPanel
 {
 	private static final long serialVersionUID = -8074065320919062316L;
-	private String tags;
+	private Tag category;
+	private List<Tag> tags;
 
 	public MerchantPanel(final String id, final SubmitCallBack callback)
 	{
@@ -51,6 +58,7 @@ public class MerchantPanel extends BaseDefinitionPanel
 	{
 		super(id, callback);
 		setDefaultModel(new MerchantModel(merchantId));
+		setTags(getTags());
 	}
 
 	public StateOption getStateOption()
@@ -72,28 +80,53 @@ public class MerchantPanel extends BaseDefinitionPanel
 		merch.getPrimaryLocation().getAddress().setStateProvinceCounty(stateOption.getCode());
 	}
 
-	public String getTags()
+	public List<Tag> getTags()
 	{
 		final Merchant merch = (Merchant) getDefaultModelObject();
-		return ModelUtil.getCommaSeperatedTags(merch);
+		return ModelUtil.getTagList(merch);
 	}
 
-	public void setTags(String tags)
+	public void setTags(List<Tag> tags)
 	{
 		this.tags = tags;
 	}
+	
+	public Tag getCategory() {
+		final Merchant merch = (Merchant) getDefaultModelObject();
+		return ModelUtil.getCategory(merch);
+	}
+
+	public void setCategory(Tag category) {
+		this.category = category;
+	}
+
 
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
+		
+		WebMarkupContainer descriptionPanel = new WebMarkupContainer("descriptionPanel");
+		form.add(descriptionPanel.setOutputMarkupId(true));
+		
+		descriptionPanel.add(new TextField<String>("name").setRequired(true));
+		
+		ChoiceRenderer<Tag> cr = new ChoiceRenderer<Tag>("name","name");
+		
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		final ListMultipleChoice tagChoices = new ListMultipleChoice("tags", new PropertyModel<List<Tag>>(this, "tags"), new TagListModel(category),cr);
+		tagChoices.setMaxRows(18);
+		tagChoices.setOutputMarkupId(true);
+		descriptionPanel.add(tagChoices.setRequired(true));
+		
+		DropDownChoice<Tag> categorySelect = new DropDownChoice<Tag>("category", new PropertyModel<Tag>(this, "category"), new TagListModel(CATEGORY_CONTEXT.ROOT),cr);
+		categorySelect.setOutputMarkupId(true);
+		categorySelect.add(new CategoryUpdatingBehavior("onChange", tagChoices));
+		descriptionPanel.add(categorySelect.setRequired(true));
 
 		WebMarkupContainer locationPanel = new WebMarkupContainer("locationPanel");
 		form.add(locationPanel);
-
-		form.add(new TextField<String>("name").setRequired(true));
-		form.add(new TextField<String>("tags", new PropertyModel<String>(this, "tags")));
-
+		
 		locationPanel.add(new TextField<String>("primaryLocation.address.address1").setRequired(true));
 
 		locationPanel.add(new TextField<String>("primaryLocation.address.address2"));
@@ -140,10 +173,18 @@ public class MerchantPanel extends BaseDefinitionPanel
 		// Load the primary location as a managed location by default
 		MerchantManagedLocation managedLocation = domainFactory.newMerchantManagedLocation(merchant);
 		managedLocation.setMerchantLocation(merchant.getPrimaryLocation());
-		
-		if (StringUtils.isNotEmpty(tags))
+
+		if (CollectionUtils.isNotEmpty(tags) || category!=null)
 		{
-			Set<Tag> selectedTags = taloolService.getOrCreateTags(tags.split(","));
+			Set<Tag> selectedTags = new HashSet<Tag>();
+			if (CollectionUtils.isNotEmpty(tags))
+			{
+				selectedTags.addAll(tags);
+			}
+			if (category != null)
+			{
+				selectedTags.add(category);
+			}
 			merchant.setTags(selectedTags);
 		}
 		else
@@ -162,4 +203,5 @@ public class MerchantPanel extends BaseDefinitionPanel
 	{
 		return "Save Merchant";
 	}
+	
 }

@@ -1,6 +1,8 @@
 package com.talool.website.models;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -14,6 +16,7 @@ import com.talool.core.Deal;
 import com.talool.core.Merchant;
 import com.talool.core.Tag;
 import com.talool.website.Config;
+import com.talool.website.models.TagListModel.CATEGORY_CONTEXT;
 
 /**
  * 
@@ -23,6 +26,7 @@ import com.talool.website.Config;
 public final class ModelUtil
 {
 	private static final String NO_TAG_SUMMARY = "(0)";
+	private static final List<Tag> categories = (new TagListModel(CATEGORY_CONTEXT.ROOT)).load();
 
 	private static class ImageInfo
 	{
@@ -57,30 +61,55 @@ public final class ModelUtil
 		return getTagsSummary(merchant.getTags());
 	}
 
-	public static String getCommaSeperatedTags(Merchant merchant)
+	public static List<Tag> getTagList(Merchant merchant)
 	{
-		return getCommaSeperatedTags(merchant.getTags());
+		return getTagList(merchant.getTags());
 	}
-
-	private static String getCommaSeperatedTags(Set<Tag> tags)
+	
+	public static Tag getCategory(Merchant merchant)
 	{
+		Set<Tag> tags = merchant.getTags();
 		if (CollectionUtils.isNotEmpty(tags))
 		{
-			final StringBuilder sb = new StringBuilder();
-
 			for (final Tag tag : tags)
 			{
-				if (sb.length() == 0)
+				if (isRootCategory(tag))
 				{
-					sb.append(tag.getName());
-				}
-				else
-				{
-					sb.append(",").append(tag.getName());
+					return tag;
 				}
 
 			}
-			return sb.toString();
+		}
+		return null;
+	}
+	
+	private static boolean isRootCategory(Tag tag) 
+	{
+		for (final Tag cat : categories) 
+		{
+			if (cat.getName().equals(tag.getName())) 
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static List<Tag> getTagList(Set<Tag> tags)
+	{
+		if (CollectionUtils.isNotEmpty(tags))
+		{
+			final List<Tag> list = new ArrayList<Tag>();
+
+			for (final Tag tag : tags)
+			{
+				if (!isRootCategory(tag))
+				{
+					list.add(tag);
+				}
+
+			}
+			return list;
 		}
 
 		return null;
@@ -88,7 +117,7 @@ public final class ModelUtil
 
 	public static String getCommaSeperatedTags(final Deal deal)
 	{
-		return getCommaSeperatedTags(deal.getTags());
+		return null;//getTagList(deal.getTags());
 	}
 
 	private static ImageInfo generateUniqueFilePath(final String fileName)
