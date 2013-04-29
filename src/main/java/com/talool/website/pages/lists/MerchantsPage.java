@@ -1,5 +1,6 @@
 package com.talool.website.pages.lists;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.wicket.AttributeModifier;
@@ -16,7 +17,11 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.talool.core.Location;
 import com.talool.core.Merchant;
+import com.talool.core.MerchantLocation;
+import com.talool.core.service.ServiceException;
+import com.talool.domain.LocationImpl;
 import com.talool.website.models.MerchantListModel;
 import com.talool.website.models.ModelUtil;
 import com.talool.website.pages.BasePage;
@@ -50,6 +55,26 @@ public class MerchantsPage extends BasePage
 	protected void onInitialize()
 	{
 		super.onInitialize();
+
+		try
+		{
+			final Location location = new LocationImpl(105.2700, 40.0150);
+			List<Merchant> entities = taloolService.getMerchantsWithin(location, 650);
+			for (final Merchant merchant : entities)
+			{
+				for (MerchantLocation mloc : merchant.getLocations())
+				{
+					System.out.println(merchant.getName() + " " + mloc.getDistanceInMeters());
+
+				}
+
+			}
+
+		}
+		catch (ServiceException e)
+		{
+			e.printStackTrace();
+		}
 
 		final ListView<Merchant> mechants = new ListView<Merchant>("merchRptr", new MerchantListModel())
 		{
