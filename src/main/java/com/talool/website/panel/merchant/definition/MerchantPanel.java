@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -27,7 +29,7 @@ import com.talool.website.component.StateSelect;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.models.ModelUtil;
 import com.talool.website.models.TagListModel;
-import com.talool.website.models.TagListModel.CATEGORY_CONTEXT;
+import com.talool.website.models.TagListModel.CATEGORY;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.util.SessionUtils;
@@ -119,9 +121,20 @@ public class MerchantPanel extends BaseDefinitionPanel
 		tagChoices.setOutputMarkupId(true);
 		descriptionPanel.add(tagChoices.setRequired(true));
 		
-		DropDownChoice<Tag> categorySelect = new DropDownChoice<Tag>("category", new PropertyModel<Tag>(this, "category"), new TagListModel(CATEGORY_CONTEXT.ROOT),cr);
+		DropDownChoice<Tag> categorySelect = new DropDownChoice<Tag>("category", new PropertyModel<Tag>(this, "category"), new TagListModel(CATEGORY.ROOT),cr);
 		categorySelect.setOutputMarkupId(true);
-		categorySelect.add(new CategoryUpdatingBehavior("onChange", tagChoices));
+		categorySelect.add(new AjaxFormComponentUpdatingBehavior("onChange") {
+
+			private static final long serialVersionUID = -1909537074284102774L;
+
+			@SuppressWarnings("unchecked")
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				tagChoices.setChoices( TagListModel.getModel(category));
+				target.add(tagChoices);
+			}
+			
+		});
 		descriptionPanel.add(categorySelect.setRequired(true));
 
 		WebMarkupContainer locationPanel = new WebMarkupContainer("locationPanel");

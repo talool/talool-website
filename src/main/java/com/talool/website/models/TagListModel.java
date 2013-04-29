@@ -25,7 +25,7 @@ public class TagListModel extends LoadableDetachableModel<List<Tag>>{
 	private transient static final DomainFactory domainFactory = FactoryManager.get()
 			.getDomainFactory();
 
-	public static enum CATEGORY_CONTEXT { 
+	public static enum CATEGORY { 
 		ROOT("root"), 
 		DINE_IN("Dine In"), 
 		CASUAL("Casual & Fast Food"), 
@@ -36,7 +36,7 @@ public class TagListModel extends LoadableDetachableModel<List<Tag>>{
 		
 		private final String name;
 		
-		private CATEGORY_CONTEXT(String n) {
+		private CATEGORY(String n) {
 			name = n.toLowerCase();
 		}
 		
@@ -50,9 +50,9 @@ public class TagListModel extends LoadableDetachableModel<List<Tag>>{
 		
 	}
 	
-	private CATEGORY_CONTEXT context;
+	private CATEGORY context;
 	
-	public TagListModel(CATEGORY_CONTEXT level) {
+	public TagListModel(CATEGORY level) {
 		super();
 		this.context = level;
 	}
@@ -61,22 +61,22 @@ public class TagListModel extends LoadableDetachableModel<List<Tag>>{
 		super();
 		
 		if (category == null ||
-			CATEGORY_CONTEXT.DINE_IN.equalsName(category.getName()) ||
-			CATEGORY_CONTEXT.CASUAL.equalsName(category.getName())) 
+			CATEGORY.DINE_IN.equalsName(category.getName()) ||
+			CATEGORY.CASUAL.equalsName(category.getName())) 
 		{
-			this.context = CATEGORY_CONTEXT.FOOD; 
+			this.context = CATEGORY.FOOD; 
 		}
-		else if (CATEGORY_CONTEXT.SHOPPING_SERVICES.equalsName(category.getName())) 
+		else if (CATEGORY.SHOPPING_SERVICES.equalsName(category.getName())) 
 		{
-			this.context = CATEGORY_CONTEXT.SHOPPING_SERVICES; 
+			this.context = CATEGORY.SHOPPING_SERVICES; 
 		}
-		else if (CATEGORY_CONTEXT.FUN.equalsName(category.getName())) 
+		else if (CATEGORY.FUN.equalsName(category.getName())) 
 		{
-			this.context = CATEGORY_CONTEXT.FUN; 
+			this.context = CATEGORY.FUN; 
 		}
 		else
 		{
-			this.context = CATEGORY_CONTEXT.NIGHTLIFE;
+			this.context = CATEGORY.NIGHTLIFE;
 		}
 	}
 
@@ -87,13 +87,13 @@ public class TagListModel extends LoadableDetachableModel<List<Tag>>{
 	protected List<Tag> load() {
 		List<Tag> tags = new ArrayList<Tag>();
 		
-		if (context == CATEGORY_CONTEXT.ROOT) {
-			tags.add(getTag(CATEGORY_CONTEXT.DINE_IN.toString()));
-			tags.add(getTag(CATEGORY_CONTEXT.CASUAL.toString()));
-			tags.add(getTag(CATEGORY_CONTEXT.SHOPPING_SERVICES.toString()));
-			tags.add(getTag(CATEGORY_CONTEXT.FUN.toString()));
-			tags.add(getTag(CATEGORY_CONTEXT.NIGHTLIFE.toString()));
-		} else if (context == CATEGORY_CONTEXT.FOOD) {
+		if (context == CATEGORY.ROOT) {
+			tags.add(getTag(CATEGORY.DINE_IN.toString()));
+			tags.add(getTag(CATEGORY.CASUAL.toString()));
+			tags.add(getTag(CATEGORY.SHOPPING_SERVICES.toString()));
+			tags.add(getTag(CATEGORY.FUN.toString()));
+			tags.add(getTag(CATEGORY.NIGHTLIFE.toString()));
+		} else if (context == CATEGORY.FOOD) {
 			tags.add(getTag("Breakfast"));
 			tags.add(getTag("Lunch"));
 			tags.add(getTag("Dinner"));
@@ -160,7 +160,7 @@ public class TagListModel extends LoadableDetachableModel<List<Tag>>{
 			tags.add(getTag("Thai"));
 			tags.add(getTag("Vietnamese"));
 			
-		} else if (context == CATEGORY_CONTEXT.SHOPPING_SERVICES) {		
+		} else if (context == CATEGORY.SHOPPING_SERVICES) {		
 			tags.add(getTag("Antique Shop"));
 			tags.add(getTag("Arts & Crafts Store"));
 			tags.add(getTag("Automotive Shop"));
@@ -224,7 +224,7 @@ public class TagListModel extends LoadableDetachableModel<List<Tag>>{
 			tags.add(getTag("Video Store"));
 			tags.add(getTag("Resale / Consignment"));
 			
-		} else if (context == CATEGORY_CONTEXT.FUN) {
+		} else if (context == CATEGORY.FUN) {
 			tags.add(getTag("Arcade"));
 			tags.add(getTag("Games"));
 			tags.add(getTag("Amusement Center"));
@@ -248,7 +248,7 @@ public class TagListModel extends LoadableDetachableModel<List<Tag>>{
 			tags.add(getTag("Movies"));
 			tags.add(getTag("Bowling"));
 			tags.add(getTag("Museum"));
-		} else if (context == CATEGORY_CONTEXT.NIGHTLIFE) {
+		} else if (context == CATEGORY.NIGHTLIFE) {
 			tags.add(getTag("Bar"));
 			tags.add(getTag("Beer"));
 			tags.add(getTag("Cocktails"));
@@ -281,6 +281,32 @@ public class TagListModel extends LoadableDetachableModel<List<Tag>>{
 		}
 		
 		return tag;
+	}
+	
+	public static TagListModel getModel(Tag category)
+	{
+		TagListModel model;
+		String name = category.getName();
+		
+		if (CATEGORY.DINE_IN.equalsName(name) || 
+			CATEGORY.CASUAL.equalsName(name)) 
+		{
+			model = new TagListModel(CATEGORY.FOOD);
+		} 
+		else if (CATEGORY.SHOPPING_SERVICES.equalsName(name)) 
+		{
+			model = new TagListModel(CATEGORY.SHOPPING_SERVICES);
+		}
+		else if (CATEGORY.FUN.equalsName(name)) 
+		{
+			model = new TagListModel(CATEGORY.FUN);
+		}
+		else 
+		{
+			model = new TagListModel(CATEGORY.NIGHTLIFE);
+		}
+		
+		return model;
 	}
 
 }

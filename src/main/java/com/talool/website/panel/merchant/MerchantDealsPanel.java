@@ -14,11 +14,10 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.Deal;
 import com.talool.website.models.DealListModel;
-import com.talool.website.pages.BasePage;
-import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.merchant.definition.DealOfferDealPanel;
+import com.talool.website.panel.deal.definition.DealOfferDealPanel;
+import com.talool.website.panel.deal.wizard.DealWizard;
 
 public class MerchantDealsPanel extends BaseTabPanel
 {
@@ -35,6 +34,10 @@ public class MerchantDealsPanel extends BaseTabPanel
 	protected void onInitialize()
 	{
 		super.onInitialize();
+		
+		// Wizard
+		final DealWizard wizard = new DealWizard("wiz", "Deal Wizard");
+		add(wizard);
 
 		DealListModel model = new DealListModel();
 		model.setMerchantId(_merchantId);
@@ -47,9 +50,8 @@ public class MerchantDealsPanel extends BaseTabPanel
 			protected void populateItem(ListItem<Deal> item)
 			{
 
-				Deal deal = item.getModelObject();
-				final UUID dealId = deal.getId();
-
+				final Deal deal = item.getModelObject();
+				
 				item.setModel(new CompoundPropertyModel<Deal>(deal));
 
 				if (item.getIndex() % 2 == 0)
@@ -69,9 +71,6 @@ public class MerchantDealsPanel extends BaseTabPanel
 				item.add(new Label("lastUpdatedBy", deal.getUpdatedByEmail() + " / "
 						+ deal.getUpdatedByMerchantName()));
 
-				BasePage page = (BasePage) this.getPage();
-				final AdminModalWindow modal = page.getModal();
-				final SubmitCallBack callback = page.getCallback(modal);
 				item.add(new AjaxLink<Void>("editLink")
 				{
 					private static final long serialVersionUID = 268692101349122303L;
@@ -80,11 +79,8 @@ public class MerchantDealsPanel extends BaseTabPanel
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						DealOfferDealPanel panel = new DealOfferDealPanel(modal.getContentId(), callback,
-								dealId);
-						modal.setContent(panel.setOutputMarkupId(true));
-						modal.setTitle("Edit Merchant Deal");
-						modal.show(target);
+						wizard.setModelObject(deal);
+						wizard.open(target);
 					}
 				});
 			}

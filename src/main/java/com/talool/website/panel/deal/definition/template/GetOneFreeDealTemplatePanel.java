@@ -1,21 +1,19 @@
-package com.talool.website.panel.merchant.definition.template;
+package com.talool.website.panel.deal.definition.template;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 
-import com.talool.core.Deal;
-import com.talool.website.panel.merchant.definition.DealPreview;
+import com.talool.website.panel.deal.DealPreview;
 
 public class GetOneFreeDealTemplatePanel extends DealTemplatePanel {
 
 	private static final long serialVersionUID = 3422512443138120125L;
 	private String entree;
 	
-	public GetOneFreeDealTemplatePanel(String id, DealPreview preview, CompoundPropertyModel<Deal> model) {
-		super(id, preview, model);
+	public GetOneFreeDealTemplatePanel(String id, DealPreview preview) {
+		super(id, preview);
 	}
 	
 	@Override

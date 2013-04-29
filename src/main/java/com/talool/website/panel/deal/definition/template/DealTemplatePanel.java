@@ -1,4 +1,4 @@
-package com.talool.website.panel.merchant.definition.template;
+package com.talool.website.panel.deal.definition.template;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -9,12 +9,10 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 
-import com.talool.core.Deal;
-import com.talool.website.panel.merchant.definition.DealPreview;
-import com.talool.website.panel.merchant.definition.DealPreviewUpdatingBehavior;
+import com.talool.website.panel.deal.DealPreview;
+import com.talool.website.panel.deal.DealPreviewUpdatingBehavior;
 
 abstract public class DealTemplatePanel extends Panel {
 
@@ -24,10 +22,9 @@ abstract public class DealTemplatePanel extends Panel {
 	private TextArea<String> detailsField;
 	private Boolean valid;
 
-	public DealTemplatePanel(String id, DealPreview preview, CompoundPropertyModel<Deal> model) {
+	public DealTemplatePanel(String id, DealPreview preview) {
 		super(id);
 		dealPreview = preview;
-		setDefaultModel(model);
 		setMarkupId(id);
 		setOutputMarkupId(true);
 		valid = false;

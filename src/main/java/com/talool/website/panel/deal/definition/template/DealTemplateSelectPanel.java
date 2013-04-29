@@ -1,29 +1,25 @@
-package com.talool.website.panel.merchant.definition.template;
+package com.talool.website.panel.deal.definition.template;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 
-import com.talool.core.Deal;
 import com.talool.website.component.DealTemplateSelect;
 import com.talool.website.models.DealTemplateListModel;
-import com.talool.website.panel.merchant.definition.DealPreview;
+import com.talool.website.panel.deal.DealPreview;
 
 public class DealTemplateSelectPanel extends Panel {
 
 	private static final long serialVersionUID = 8196332332882167487L;
 	private DealPreview preview;
-	private CompoundPropertyModel<Deal> model;
 	private String template = "Other";
 	private final String dealTemplateMarkupId = "dealTemplate";
 
-	public DealTemplateSelectPanel(String id, CompoundPropertyModel<Deal> model, DealPreview preview) {
+	public DealTemplateSelectPanel(String id, DealPreview preview) {
 		super(id);
 		this.setMarkupId(id);
 		this.preview = preview;
-		this.model = model;
 	}
 	
 	@Override
@@ -36,7 +32,7 @@ public class DealTemplateSelectPanel extends Panel {
 		
 		// This is the starting panel
 		// TODO this should be driven off of a property on the deal or the user
-		DealTemplatePanel dTemplate = new OtherDealTemplatePanel(dealTemplateMarkupId, preview, model);
+		DealTemplatePanel dTemplate = new OtherDealTemplatePanel(dealTemplateMarkupId, preview);
 		add(dTemplate.setOutputMarkupId(true));
 
 		final DealTemplateSelectPanel self = this;
@@ -55,17 +51,17 @@ public class DealTemplateSelectPanel extends Panel {
 				DealTemplatePanel panel1;
 				Integer selectedValue = new Integer(templates.getValue());
 				switch (selectedValue) {
-					case 0: panel1 = new MoneyOffDealTemplatePanel(dealTemplateMarkupId, preview, model);
+					case 0: panel1 = new MoneyOffDealTemplatePanel(dealTemplateMarkupId, preview);
 						break;
-					case 1: panel1 = new GetOneFreeDealTemplatePanel(dealTemplateMarkupId, preview, model);
+					case 1: panel1 = new GetOneFreeDealTemplatePanel(dealTemplateMarkupId, preview);
 						break;
-					case 2: panel1 = new PercentOffDealTemplatePanel(dealTemplateMarkupId, preview, model);
+					case 2: panel1 = new PercentOffDealTemplatePanel(dealTemplateMarkupId, preview);
 						break;
-					case 3: panel1 = new MoneyOffLunchDealTemplatePanel(dealTemplateMarkupId, preview, model);
+					case 3: panel1 = new MoneyOffLunchDealTemplatePanel(dealTemplateMarkupId, preview);
 						break;
-					case 4: panel1 = new MoneyOffDinnerDealTemplatePanel(dealTemplateMarkupId, preview, model);
+					case 4: panel1 = new MoneyOffDinnerDealTemplatePanel(dealTemplateMarkupId, preview);
 						break;
-					default: panel1 = new OtherDealTemplatePanel(dealTemplateMarkupId, preview, model);
+					default: panel1 = new OtherDealTemplatePanel(dealTemplateMarkupId, preview);
 				}
 				
 				// swap the panels

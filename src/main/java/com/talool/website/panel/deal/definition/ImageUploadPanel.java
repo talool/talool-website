@@ -1,4 +1,4 @@
-package com.talool.website.panel.merchant.definition;
+package com.talool.website.panel.deal.definition;
 
 import java.util.List;
 
@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.talool.core.Image;
 import com.talool.website.models.ModelUtil;
+import com.talool.website.panel.deal.DealPreview;
 
 public class ImageUploadPanel extends Panel
 {

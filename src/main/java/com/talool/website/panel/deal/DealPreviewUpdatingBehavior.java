@@ -1,7 +1,8 @@
-package com.talool.website.panel.merchant.definition;
+package com.talool.website.panel.deal;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+
 
 public class DealPreviewUpdatingBehavior extends AjaxFormComponentUpdatingBehavior {
 	

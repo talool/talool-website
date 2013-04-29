@@ -16,7 +16,7 @@ import com.talool.core.Deal;
 import com.talool.core.Merchant;
 import com.talool.core.Tag;
 import com.talool.website.Config;
-import com.talool.website.models.TagListModel.CATEGORY_CONTEXT;
+import com.talool.website.models.TagListModel.CATEGORY;
 
 /**
  * 
@@ -26,7 +26,7 @@ import com.talool.website.models.TagListModel.CATEGORY_CONTEXT;
 public final class ModelUtil
 {
 	private static final String NO_TAG_SUMMARY = "(0)";
-	private static final List<Tag> categories = (new TagListModel(CATEGORY_CONTEXT.ROOT)).load();
+	private static final List<Tag> categories = (new TagListModel(CATEGORY.ROOT)).load();
 
 	private static class ImageInfo
 	{

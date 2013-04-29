@@ -1,5 +1,6 @@
-package com.talool.website.panel.merchant.definition;
+package com.talool.website.panel.deal.definition;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -13,6 +14,8 @@ import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -36,11 +39,17 @@ import com.talool.website.models.AvailableDealOffersListModel;
 import com.talool.website.models.AvailableMerchantsListModel;
 import com.talool.website.models.DealModel;
 import com.talool.website.models.ModelUtil;
+import com.talool.website.models.TagListModel;
+import com.talool.website.models.TagListModel.CATEGORY;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.merchant.definition.template.DealTemplateSelectPanel;
+import com.talool.website.panel.deal.DealPreview;
+import com.talool.website.panel.deal.DealPreviewUpdatingBehavior;
+import com.talool.website.panel.deal.DealPreviewUpdatingBehavior.DealComponent;
+import com.talool.website.panel.deal.definition.template.DealTemplateSelectPanel;
+import com.talool.website.panel.merchant.definition.MerchantDealOfferPanel;
 import com.talool.website.util.SessionUtils;
 
 /**
@@ -202,7 +211,13 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 				DealPreviewUpdatingBehavior.DealComponent.CODE, "onBlur"));
 		form.add(codeField);
 
-		form.add(new TextField<String>("tags", new PropertyModel<String>(this, "tags")));
+		ChoiceRenderer<Tag> cr = new ChoiceRenderer<Tag>("name","name");
+		//TODO need to make the tags model dependent on the merchant
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		ListMultipleChoice tagChoices = new ListMultipleChoice("tags", new PropertyModel<List<Tag>>(this, "tags"), new TagListModel(CATEGORY.FOOD),cr);
+		tagChoices.setMaxRows(18);
+		tagChoices.setOutputMarkupId(true);
+		form.add(tagChoices.setRequired(true));
 
 		final WebMarkupContainer imageSelect = new WebMarkupContainer("imageSelectContainer");
 		imageSelect.setOutputMarkupId(true);

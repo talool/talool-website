@@ -1,4 +1,4 @@
-package com.talool.website.panel.merchant.definition;
+package com.talool.website.panel.deal.definition;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -8,6 +8,8 @@ import org.apache.wicket.model.PropertyModel;
 import com.talool.core.Image;
 import com.talool.website.component.DealImageSelect;
 import com.talool.website.models.AvailableDealImagesListModel;
+import com.talool.website.panel.deal.DealPreview;
+import com.talool.website.panel.deal.DealPreviewUpdatingBehavior;
 
 public class ImageSelectPanel extends Panel {
 

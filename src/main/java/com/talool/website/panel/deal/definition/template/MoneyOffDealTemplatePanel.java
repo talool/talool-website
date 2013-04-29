@@ -1,21 +1,19 @@
-package com.talool.website.panel.merchant.definition.template;
+package com.talool.website.panel.deal.definition.template;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 
-import com.talool.core.Deal;
-import com.talool.website.panel.merchant.definition.DealPreview;
+import com.talool.website.panel.deal.DealPreview;
 
-public class PercentOffDealTemplatePanel extends DealTemplatePanel {
+public class MoneyOffDealTemplatePanel extends DealTemplatePanel {
 
-	private static final long serialVersionUID = 8249845899184103868L;
+	private static final long serialVersionUID = 4682200089094814554L;
 	private String amount, entree;
 	
-	public PercentOffDealTemplatePanel(String id, DealPreview preview, CompoundPropertyModel<Deal> model) {
-		super(id, preview, model);
+	public MoneyOffDealTemplatePanel(String id, DealPreview preview) {
+		super(id, preview);
 	}
 	
 	@Override
@@ -26,7 +24,7 @@ public class PercentOffDealTemplatePanel extends DealTemplatePanel {
 		TextField<String> amount = new TextField<String>("amount", new PropertyModel<String>(this,"amount"));
 		amount.add(new AjaxFormComponentUpdatingBehavior("onChange") {
 
-			private static final long serialVersionUID = 3430295556827146206L;
+			private static final long serialVersionUID = -4991792391118027313L;
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
@@ -40,7 +38,7 @@ public class PercentOffDealTemplatePanel extends DealTemplatePanel {
 		TextField<String> entree = new TextField<String>("entree", new PropertyModel<String>(this,"entree"));
 		entree.add(new AjaxFormComponentUpdatingBehavior("onChange") {
 
-			private static final long serialVersionUID = 9212424796499074393L;
+			private static final long serialVersionUID = 1321114986782061545L;
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
@@ -70,14 +68,14 @@ public class PercentOffDealTemplatePanel extends DealTemplatePanel {
 	}
 	
 	public String cookUpTitle() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(getAmount()).append("% Off");
+		StringBuilder sb = new StringBuilder("$");
+		sb.append(getAmount()).append(" Off");
 		return sb.toString();
 	}
 	
 	public String cookUpSummary() {
 		StringBuilder sb = new StringBuilder(cookUpTitle());
-		sb.append(" of the regular price of ").append(getEntree()).append(".");
+		sb.append(" 2 or more ").append(getEntree()).append(" entrees.");
 		return sb.toString();
 	}
 

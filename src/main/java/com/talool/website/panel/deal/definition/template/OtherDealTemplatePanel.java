@@ -1,23 +1,22 @@
-package com.talool.website.panel.merchant.definition.template;
+package com.talool.website.panel.deal.definition.template;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 
 import com.talool.core.Deal;
-import com.talool.website.panel.merchant.definition.DealPreview;
+import com.talool.website.panel.deal.DealPreview;
 
 public class OtherDealTemplatePanel extends DealTemplatePanel {
 
 	private static final long serialVersionUID = 4682200089094814554L;
 	private String titleShim, summaryShim;
 	
-	public OtherDealTemplatePanel(String id, DealPreview preview, CompoundPropertyModel<Deal> model) {
-		super(id, preview, model);
-		Deal deal = (Deal) model.getObject();
+	public OtherDealTemplatePanel(String id, DealPreview preview) {
+		super(id, preview);
+		Deal deal = (Deal) preview.getDefaultModelObject();//(Deal) getDefaultModelObject();
 		titleShim = deal.getTitle();
 		summaryShim = deal.getSummary();
 	}

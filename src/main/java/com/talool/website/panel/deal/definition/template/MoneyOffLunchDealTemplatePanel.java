@@ -1,21 +1,19 @@
-package com.talool.website.panel.merchant.definition.template;
+package com.talool.website.panel.deal.definition.template;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 
-import com.talool.core.Deal;
-import com.talool.website.panel.merchant.definition.DealPreview;
+import com.talool.website.panel.deal.DealPreview;
 
-public class MoneyOffDealTemplatePanel extends DealTemplatePanel {
+public class MoneyOffLunchDealTemplatePanel extends DealTemplatePanel {
 
-	private static final long serialVersionUID = 4682200089094814554L;
-	private String amount, entree;
+	private static final long serialVersionUID = -8451854908081676190L;
+	private String amount, total;
 	
-	public MoneyOffDealTemplatePanel(String id, DealPreview preview, CompoundPropertyModel<Deal> model) {
-		super(id, preview, model);
+	public MoneyOffLunchDealTemplatePanel(String id, DealPreview preview) {
+		super(id, preview);
 	}
 	
 	@Override
@@ -26,7 +24,7 @@ public class MoneyOffDealTemplatePanel extends DealTemplatePanel {
 		TextField<String> amount = new TextField<String>("amount", new PropertyModel<String>(this,"amount"));
 		amount.add(new AjaxFormComponentUpdatingBehavior("onChange") {
 
-			private static final long serialVersionUID = -4991792391118027313L;
+			private static final long serialVersionUID = -1395371912241301832L;
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
@@ -37,10 +35,10 @@ public class MoneyOffDealTemplatePanel extends DealTemplatePanel {
 		amount.setRequired(true);
 		add(amount);
 		
-		TextField<String> entree = new TextField<String>("entree", new PropertyModel<String>(this,"entree"));
+		TextField<String> entree = new TextField<String>("total", new PropertyModel<String>(this,"total"));
 		entree.add(new AjaxFormComponentUpdatingBehavior("onChange") {
 
-			private static final long serialVersionUID = 1321114986782061545L;
+			private static final long serialVersionUID = -8834261999943120570L;
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
@@ -61,23 +59,23 @@ public class MoneyOffDealTemplatePanel extends DealTemplatePanel {
 		this.amount = amount;
 	}
 
-	public String getEntree() {
-		return entree;
+	public String getTotal() {
+		return total;
 	}
 
-	public void setEntree(String entree) {
-		this.entree = entree;
+	public void setTotal(String total) {
+		this.total = total;
 	}
 	
 	public String cookUpTitle() {
 		StringBuilder sb = new StringBuilder("$");
-		sb.append(getAmount()).append(" Off");
+		sb.append(getAmount()).append(" off a lunch purchase");
 		return sb.toString();
 	}
 	
 	public String cookUpSummary() {
 		StringBuilder sb = new StringBuilder(cookUpTitle());
-		sb.append(" 2 or more ").append(getEntree()).append(" entrees.");
+		sb.append(" of $").append(getTotal()).append(" or more.");
 		return sb.toString();
 	}
 

@@ -1,4 +1,4 @@
-package com.talool.website.panel.merchant.definition;
+package com.talool.website.panel.deal;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
