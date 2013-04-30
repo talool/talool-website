@@ -1,9 +1,7 @@
 .newMerchant {
 	padding: 0;
-	border: 1px solid;
 	width: 860px;
 	margin: 0 auto;
-	background: #ebebeb;
 }
 
 .newMerchant h2 {
@@ -34,6 +32,12 @@ button.big {
 
 fieldset {
 	border: none;
+}
+fieldset.imageDetails {
+
+}
+fieldset.templateDetails {
+
 }
 fieldset div {
 	margin-bottom: 5px;

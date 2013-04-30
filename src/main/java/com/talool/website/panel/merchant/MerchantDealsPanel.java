@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -23,6 +24,7 @@ public class MerchantDealsPanel extends BaseTabPanel
 {
 	private static final long serialVersionUID = 3634980968241854373L;
 	private UUID _merchantId;
+	private DealWizard wizard;
 
 	public MerchantDealsPanel(String id, PageParameters parameters)
 	{
@@ -34,20 +36,21 @@ public class MerchantDealsPanel extends BaseTabPanel
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		
-		// Wizard
-		final DealWizard wizard = new DealWizard("wiz", "Deal Wizard");
-		add(wizard);
 
 		DealListModel model = new DealListModel();
 		model.setMerchantId(_merchantId);
+		
+		final WebMarkupContainer container = new WebMarkupContainer("dealList");
+		container.setOutputMarkupId(true);
+		add(container);
+		
 		final ListView<Deal> customers = new ListView<Deal>("dealRptr", model)
 		{
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<Deal> item)
+			protected void populateItem(final ListItem<Deal> item)
 			{
 
 				final Deal deal = item.getModelObject();
@@ -86,8 +89,21 @@ public class MerchantDealsPanel extends BaseTabPanel
 			}
 
 		};
+		container.add(customers);
+		
+		// Wizard
+		wizard = new DealWizard("wiz", "Deal Wizard") {
 
-		add(customers);
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onFinish(AjaxRequestTarget target) {
+				super.onFinish(target);
+				// refresh the list after a deal is edited
+				target.add(container);
+			}
+		};
+		add(wizard);
 	}
 
 	@Override

@@ -49,7 +49,8 @@ h2 {
 a {
 	text-decoration: none;
 }
-.menu a, .menu a:visited {
+body.talool .menu a, 
+body.talool .menu a:visited {
 	color: white;
 }
 .menu em {
@@ -64,8 +65,11 @@ a {
 
 
 /* COLORS */
-.orange-font, .orange-font a, .orange-font a:visited,
-a, a:visited {
+.orange-font, 
+body .orange-font a, 
+body .orange-font a:visited,
+body.talool a, 
+body.talool a:visited {
 	color: rgb(241, 90, 36);
 
 }
@@ -143,7 +147,7 @@ a, a:visited {
 	background-color: rgb(83, 71, 65);
 	color: white;
 }
-.btn.btn-primary {
+body.talool .btn.btn-primary {
 	background-image: linear-gradient(to bottom,#fff,#ddd);
 	background-image: -moz-linear-gradient(top,#fff,#ddd);
 	background-image: -webkit-gradient(linear,0 0,0 100%,from(#fff),to(#ddd));
@@ -152,14 +156,14 @@ a, a:visited {
 	border: 1px solid #bbb;
 	color: rgb(241, 90, 36);
 }
-.btn.btn-primary:hover {
+body.talool .btn.btn-primary:hover {
 	background-image: linear-gradient(to bottom,#fff,#ccc);
 	background-image: -moz-linear-gradient(top,#fff,#ccc);
 	background-image: -webkit-gradient(linear,0 0,0 100%,from(#fff),to(#ccc));
 	background-image: -webkit-linear-gradient(top,#fff,#ccc);
 	background-image: -o-linear-gradient(top,#fff,#ccc);
 }
-.btn.btn-action {
+body.talool .btn.btn-action {
 	background-image: linear-gradient(to bottom,rgba(25, 188, 185, .6),rgb(25, 188, 185));
 	background-image: -moz-linear-gradient(top,rgba(25, 188, 185, .6),rgb(25, 188, 185));
 	background-image: -webkit-gradient(linear,0 0,0 100%,from(rgba(25, 188, 185, .6)),to(rgb(25, 188, 185)));
@@ -169,7 +173,7 @@ a, a:visited {
 	color: white;
 	text-shadow: 0 1px 1px rgba(185, 172, 151,.75);
 }
-.btn.btn-action:hover {
+body.talool .btn.btn-action:hover {
 	background-image: linear-gradient(to bottom,rgba(25, 188, 185, .7),rgb(25, 188, 185));
 	background-image: -moz-linear-gradient(top,rgba(25, 188, 185, .7),rgb(25, 188, 185));
 	background-image: -webkit-gradient(linear,0 0,0 100%,from(rgba(25, 188, 185, .7)),to(rgb(25, 188, 185)));

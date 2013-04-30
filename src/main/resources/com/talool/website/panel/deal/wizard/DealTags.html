@@ -1,0 +1,23 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<script>
+	  $(function() {
+	    $( "#datepicker" ).datepicker();
+	  });
+	</script>
+	<div class="newMerchant">
+	
+		<div class="panel right iPhonePanel">
+			<div wicket:id="dealBuilder"></div>
+		</div>
+		
+		<div class="panel">
+		    <fieldset class="">
+				<div>
+			    	<label><i class="hint-font icon-asterisk"></i> Tags</label>
+			    	<select wicket:id="tags" type="text"></select>
+				</div>
+		    </fieldset>
+		</div>
+		<div class="clear"></div>
+	</div>
+</wicket:panel>

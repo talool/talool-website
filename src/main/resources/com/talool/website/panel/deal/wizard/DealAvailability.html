@@ -1,0 +1,61 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<script>
+	  $(function() {
+	    $( "#datepicker" ).datepicker();
+	  });
+	</script>
+	<div class="newMerchant">
+	
+		<div class="panel right iPhonePanel">
+			<div wicket:id="dealBuilder"></div>
+		</div>
+		
+		<div class="panel">
+		    <fieldset class="">
+		    	<div>
+		    		<label><i class="hint-font icon-asterisk"></i> Deal Offer</label>
+		    		<select wicket:id="availableDealOffers"><option>Default Deal Offer</option></select>
+		    		<div class="selectBoxEdit">
+		    			<a class="orange-font"><i class="icon-plus-sign icon-large"></i> create new deal offer</a>
+		    		</div>
+		    	</div>
+		    </fieldset>
+		</div>
+		
+		<div class="wicketExtensionsWizardHeaderTitle">
+			<wicket:message key="expires.title"></wicket:message>
+		</div>
+		<div class="wicketExtensionsWizardHeaderSummary">
+			<wicket:message key="expires.summary"></wicket:message>
+		</div>
+		<div class="panel">
+			<fieldset>
+				<div>
+			    	<label><i class="optional-font icon-asterisk"></i> Expires</label>
+			    	<input id="datepicker" wicket:id="expires" type="text"/>
+			    </div>
+			    <div>
+		    		<label></label>
+		    		<input wicket:id="isActive" class="chbx" type="checkbox">Is Active
+		    	</div>
+		   	</fieldset>
+		</div>
+		
+		<div class="wicketExtensionsWizardHeaderTitle">
+			<wicket:message key="code.title"></wicket:message>
+		</div>
+		<div class="wicketExtensionsWizardHeaderSummary">
+			<wicket:message key="code.summary"></wicket:message>
+		</div>
+		<div class="panel">
+			<fieldset>
+				<div>
+			    	<label><i class="optional-font icon-asterisk"></i> Code</label>
+			    	<input wicket:id="code" type="text"/>
+				</div>
+				
+		    </fieldset>
+		</div>
+		<div class="clear"></div>
+	</div>
+</wicket:panel>

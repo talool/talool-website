@@ -5,6 +5,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
+import com.talool.core.Deal;
 import com.talool.website.component.DealTemplateSelect;
 import com.talool.website.models.DealTemplateListModel;
 import com.talool.website.panel.deal.DealPreview;
@@ -30,9 +31,11 @@ public class DealTemplateSelectPanel extends Panel {
 		final DealTemplateSelect templates = new DealTemplateSelect("templateSelect",new PropertyModel<String>(this,"template"), new DealTemplateListModel());
 		add(templates);
 		
+		final Deal deal = (Deal) getDefaultModelObject();
+		
 		// This is the starting panel
 		// TODO this should be driven off of a property on the deal or the user
-		DealTemplatePanel dTemplate = new OtherDealTemplatePanel(dealTemplateMarkupId, preview);
+		DealTemplatePanel dTemplate = new OtherDealTemplatePanel(dealTemplateMarkupId, preview, deal.getTitle(), deal.getSummary());
 		add(dTemplate.setOutputMarkupId(true));
 
 		final DealTemplateSelectPanel self = this;
@@ -61,7 +64,7 @@ public class DealTemplateSelectPanel extends Panel {
 						break;
 					case 4: panel1 = new MoneyOffDinnerDealTemplatePanel(dealTemplateMarkupId, preview);
 						break;
-					default: panel1 = new OtherDealTemplatePanel(dealTemplateMarkupId, preview);
+					default: panel1 = new OtherDealTemplatePanel(dealTemplateMarkupId, preview, deal.getTitle(), deal.getSummary());
 				}
 				
 				// swap the panels

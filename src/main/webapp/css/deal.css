@@ -1,11 +1,20 @@
 .panel.iPhonePanel {
 	padding-bottom:0;
-	margin-bottom:0;
+	margin: 0;
+	position: absolute;
+	right: 45px;
+	top: 45px;
 }
-.iphone {
+.dealWiz form {
+	height: 580px;
+}
+body.talool .dealWiz {
 	background-image: url(/img/iPhone5.png);
-	background-position-y: -70px;
-	padding: 70px 33px 30px;
+	background-position-y: -95px;
+	background-repeat: no-repeat;
+	background-position-x: 475px;
+	padding: 10px 15px;
+	position: relative;
 }
 .deal {
 	width: 320px;
@@ -78,4 +87,20 @@
 }
 
 
+.talool .ui-dialog .ui-dialog-buttonpane
+{
+	margin-top: 0;
+}
 
+.dealWiz .wicketExtensionsWizardHeaderTitle
+{
+	margin-top: 15px;
+}
+
+.dealWiz .wicketExtensionsWizardHeaderSummary,
+.dealWiz .wicketExtensionsWizardHeaderTitle,
+.dealWiz .feedbackPanel
+{
+	width: 400px;
+	border: 0px;
+}

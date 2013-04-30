@@ -115,9 +115,9 @@ public final class ModelUtil
 		return null;
 	}
 
-	public static String getCommaSeperatedTags(final Deal deal)
+	public static List<Tag> getTagList(final Deal deal)
 	{
-		return null;//getTagList(deal.getTags());
+		return getTagList(deal.getTags());
 	}
 
 	private static ImageInfo generateUniqueFilePath(final String fileName)

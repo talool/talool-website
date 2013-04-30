@@ -1,3 +1,33 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
-     <div wicket:id="panel"></div>
+     <div class="newMerchant">
+	
+		<div class="panel right iPhonePanel">
+			<div wicket:id="dealBuilder"></div>
+		</div>
+		
+		<div class="panel">
+		    <fieldset class="imageDetails">
+		    	<div>
+		    		<label><i class="hint-font icon-asterisk"></i> Merchant</label>
+		    		<select wicket:id="availableMerchants"><option>Default Merchant</option></select>
+		    	</div>
+		    	<div wicket:id="imageSelectContainer">
+			    	<div wicket:id="imageSelectPanel"></div>
+				</div>
+			</fieldset>
+		</div>
+		
+		<div class="wicketExtensionsWizardHeaderTitle">
+			<wicket:message key="template.title"></wicket:message>
+		</div>
+		<div class="wicketExtensionsWizardHeaderSummary">
+			<wicket:message key="template.summary"></wicket:message>
+		</div>
+		<div class="panel">
+			<fieldset class="templateDetails">
+				<div wicket:id="templateSelectPanel"></div>
+			</fieldset>
+		</div>
+		<div class="clear"></div>
+	</div>
 </wicket:panel>

@@ -14,11 +14,10 @@ public class OtherDealTemplatePanel extends DealTemplatePanel {
 	private static final long serialVersionUID = 4682200089094814554L;
 	private String titleShim, summaryShim;
 	
-	public OtherDealTemplatePanel(String id, DealPreview preview) {
+	public OtherDealTemplatePanel(String id, DealPreview preview, String title, String summary) {
 		super(id, preview);
-		Deal deal = (Deal) preview.getDefaultModelObject();//(Deal) getDefaultModelObject();
-		titleShim = deal.getTitle();
-		summaryShim = deal.getSummary();
+		titleShim = title;
+		summaryShim = summary;
 	}
 	
 	@Override
