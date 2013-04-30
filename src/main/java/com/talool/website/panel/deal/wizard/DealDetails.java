@@ -80,6 +80,9 @@ public class DealDetails extends WizardStep {
 		Deal deal = (Deal) getDefaultModelObject();
 		DomainFactory domainFactory = FactoryManager.get().getDomainFactory();
 		Merchant merchant = deal.getMerchant();
+		if (merchant == null) {
+			merchant = SessionUtils.getSession().getMerchantAccount().getMerchant();
+		}
 		return domainFactory.newMerchantIdentity(merchant.getId(), merchant.getName());
 	}
 

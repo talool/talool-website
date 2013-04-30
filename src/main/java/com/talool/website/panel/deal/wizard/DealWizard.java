@@ -124,8 +124,30 @@ public class DealWizard extends AbstractWizard<Deal> {
 			// Hide the finish button (cuz "save and finish" is all I want)
 			DialogButton finish = findButton("Finish");
 			finish.setVisible(false, target);
+			
+			// disable the save and finish button if the deal isn't fully defined
+			DialogButton saveAndFinish = findButton("Save & Finish");
+			saveAndFinish.setEnabled(dealReadyToSave(), target);
+
+			
+			//disable the next button if the current step is Deal Availability
+			if (step instanceof DealAvailability) {
+				DialogButton next = findButton(">");
+				next.setEnabled(false, target);
+			}
 		}
 
+	}
+	
+	/*
+	 * I hate to duplicate the validators, but I'd like to have a quick and dirty
+	 * way to eliminate errors when saving in the wizard.  Only checking the DealOffer
+	 * because it's the last step and can be hard to set a default for.
+	 */
+	private boolean dealReadyToSave()
+	{
+		Deal deal = (Deal) getModelObject();
+		return (deal.getDealOffer() != null);
 	}
 
 	@Override

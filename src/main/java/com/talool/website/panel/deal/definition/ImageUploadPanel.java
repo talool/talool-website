@@ -38,9 +38,10 @@ public class ImageUploadPanel extends Panel
 	{
 		super.onInitialize();
 
-		FileUploadField uploader = new FileUploadField("fileUploads",
+		FileUploadField uploader = new FileUploadField("fileUploads", 
 				new PropertyModel<List<FileUpload>>(this, "fileUploads"));
 		add(uploader);
+
 
 		final ImageUploadPanel self = this;
 
@@ -76,5 +77,17 @@ public class ImageUploadPanel extends Panel
 		}
 		return url;
 	}
+
+	public List<FileUpload> getFileUploads() {
+		return fileUploads;
+	}
+
+	public void setFileUploads(List<FileUpload> fileUploads) {
+		this.fileUploads = fileUploads;
+		String url = getUpload();
+		LOG.debug(url);
+	}
+	
+	
 
 }

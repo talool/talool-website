@@ -47,8 +47,6 @@ import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.deal.DealPreview;
 import com.talool.website.panel.deal.DealPreviewUpdatingBehavior;
-import com.talool.website.panel.deal.DealPreviewUpdatingBehavior.DealComponent;
-import com.talool.website.panel.deal.definition.template.DealTemplateSelectPanel;
 import com.talool.website.panel.merchant.definition.MerchantDealOfferPanel;
 import com.talool.website.util.SessionUtils;
 
@@ -203,7 +201,7 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 			}
 		});
 
-		form.add(new DealTemplateSelectPanel("dealTemplateSelectPanel", getDefaultCompoundPropertyModel(), dealPreview));
+		//form.add(new DealTemplateSelectPanel("dealTemplateSelectPanel", getDefaultCompoundPropertyModel(), dealPreview));
 
 		// TODO we need a validator on this
 		TextField<String> codeField = new TextField<String>("code");
@@ -298,10 +296,10 @@ public class DealOfferDealPanel extends BaseDefinitionPanel
 		return "Save Deal";
 	}
 
-	public String getTags()
+	public List<Tag> getTags()
 	{
 		final Deal deal = (Deal) getDefaultModelObject();
-		return ModelUtil.getCommaSeperatedTags(deal);
+		return ModelUtil.getTagList(deal);
 	}
 
 	public void setTags(String tags)
