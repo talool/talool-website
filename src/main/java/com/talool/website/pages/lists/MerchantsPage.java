@@ -59,7 +59,7 @@ public class MerchantsPage extends BasePage
 		try
 		{
 			final Location location = new LocationImpl(105.2700, 40.0150);
-			List<Merchant> entities = taloolService.getMerchantsWithin(location, 650);
+			List<Merchant> entities = taloolService.getMerchantsWithin(location, 650, null);
 			for (final Merchant merchant : entities)
 			{
 				for (MerchantLocation mloc : merchant.getLocations())
