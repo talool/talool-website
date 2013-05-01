@@ -18,12 +18,15 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.talool.website.pages.AdminLoginPage;
 import com.talool.website.pages.CustomerSettingsPage;
 import com.talool.website.pages.HomePage;
+import com.talool.website.pages.UploadPage;
 import com.talool.website.pages.lists.CustomersPage;
 import com.talool.website.pages.lists.DealOffersPage;
 import com.talool.website.pages.lists.MerchantAccountsPage;
 import com.talool.website.pages.lists.MerchantDealOffersPage;
 import com.talool.website.pages.lists.MerchantLocationsPage;
 import com.talool.website.pages.lists.MerchantsPage;
+import com.talool.website.panel.image.upload.FileManageResourceReference;
+import com.talool.website.panel.image.upload.FileUploadResourceReference;
 
 /**
  * @author clintz
@@ -68,6 +71,10 @@ public class TaloolApplication extends WebApplication implements Serializable
 		final ResourceReference faviconRef = new PackageResourceReference(this.getClass(),
 				"favicon.ico");
 		mountResource("/favicon.ico", faviconRef);
+		
+		mountResource("fileManager", new FileManageResourceReference(Config.get().getUploadDir()));
+		mountResource("fileUpload", new FileUploadResourceReference(Config.get().getUploadDir()));
+		mountPage("/upload", UploadPage.class);
 
 		getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
 
