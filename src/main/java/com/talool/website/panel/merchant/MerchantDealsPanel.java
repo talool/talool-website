@@ -142,6 +142,7 @@ public class MerchantDealsPanel extends BaseTabPanel
 				if (CollectionUtils.isNotEmpty(offers)) {
 					// TODO should probably default to the most recently updated deal offer
 					deal.setDealOffer(offers.get(0));
+					deal.setExpires(offers.get(0).getExpires());
 				}
 				if (CollectionUtils.isNotEmpty(tags)) {
 					deal.setTags(tags);
