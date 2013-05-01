@@ -24,45 +24,50 @@ import com.talool.website.models.TagListModel;
 import com.talool.website.models.TagListModel.CATEGORY;
 import com.talool.website.panel.deal.DealPreview;
 
-public class DealTags extends WizardStep{
+public class DealTags extends WizardStep
+{
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealTags.class);
 	private List<Tag> tags;
-	
+
 	public DealTags()
-    {
+	{
 		super(new ResourceModel("title"), new ResourceModel("summary"));
-    }
-	
+	}
+
 	@Override
-	protected void onConfigure() {
+	protected void onConfigure()
+	{
 		super.onConfigure();
-		
+
 		Deal deal = (Deal) getDefaultModelObject();
-		
-		final DealPreview dealPreview = new DealPreview("dealBuilder",deal);
+
+		final DealPreview dealPreview = new DealPreview("dealBuilder", deal);
 		dealPreview.setOutputMarkupId(true);
 		addOrReplace(dealPreview);
 
-		ChoiceRenderer<Tag> cr = new ChoiceRenderer<Tag>("name","name");
-		//TODO need to make the tags model dependent on the merchant
+		ChoiceRenderer<Tag> cr = new ChoiceRenderer<Tag>("name", "name");
+		// TODO need to make the tags model dependent on the merchant
 		@SuppressWarnings({ "rawtypes", "unchecked" })
-		ListMultipleChoice tagChoices = new ListMultipleChoice("tags", new PropertyModel<List<Tag>>(this, "tags"), new TagListModel(CATEGORY.FOOD),cr);
+		ListMultipleChoice tagChoices = new ListMultipleChoice("tags", new PropertyModel<List<Tag>>(
+				this, "tags"), new TagListModel(CATEGORY.FOOD), cr);
 		tagChoices.setMaxRows(25);
 		tagChoices.setOutputMarkupId(true);
 		addOrReplace(tagChoices.setRequired(true));
-		
-		
+
 	}
-	
+
 	public List<Tag> getTags()
 	{
 		Deal deal = (Deal) getDefaultModelObject();
 		List<Tag> tags;
-		try {
+		try
+		{
 			tags = ModelUtil.getTagList(deal);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			LOG.debug("Failed to get tags for deal -- trying to reattach");
 			tags = getTags(deal, true);
 		}
@@ -70,24 +75,31 @@ public class DealTags extends WizardStep{
 		{
 			tags = new ArrayList<Tag>();
 		}
-		return tags; 
+		return tags;
 	}
-	
+
 	private List<Tag> getTags(Deal deal, boolean reattach)
 	{
 		List<Tag> tags = null;
-		if (reattach) {
+		if (reattach)
+		{
 			TaloolService taloolService = FactoryManager.get().getServiceFactory().getTaloolService();
-			try {
-				taloolService.reattach(deal);
-			} catch (ServiceException se) {
-				LOG.error("Failed to reattach the Deal before getting tags",se);
+			try
+			{
+				taloolService.merge(deal);
+			}
+			catch (ServiceException se)
+			{
+				LOG.error("Failed to reattach the Deal before getting tags", se);
 			}
 		}
-		try {
+		try
+		{
 			tags = ModelUtil.getTagList(deal);
-		} catch (Exception e) {
-			LOG.error("Failed to get tags for deal: ",e);
+		}
+		catch (Exception e)
+		{
+			LOG.error("Failed to get tags for deal: ", e);
 		}
 		return tags;
 	}
@@ -107,5 +119,5 @@ public class DealTags extends WizardStep{
 			deal.clearTags();
 		}
 	}
-	
+
 }
