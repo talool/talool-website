@@ -5,26 +5,33 @@ import java.util.UUID;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
+import com.talool.core.MerchantAccount;
+import com.talool.core.service.ServiceException;
 import com.talool.website.models.DealListModel;
 import com.talool.website.pages.BasePage;
-import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.deal.definition.DealOfferDealPanel;
+import com.talool.website.panel.deal.wizard.DealWizard;
 import com.talool.website.util.SecuredPage;
+import com.talool.website.util.SessionUtils;
 
 @SecuredPage
 public class DealOfferDealsPage extends BasePage
 {
 	private static final long serialVersionUID = 6008230892463177176L;
+	private static final Logger LOG = LoggerFactory.getLogger(DealOfferDealsPage.class);
 	private UUID _dealOfferId;
+	private DealWizard wizard;
 
 	public DealOfferDealsPage(PageParameters parameters)
 	{
@@ -39,6 +46,11 @@ public class DealOfferDealsPage extends BasePage
 
 		DealListModel model = new DealListModel();
 		model.setDealOfferId(_dealOfferId);
+		
+		final WebMarkupContainer container = new WebMarkupContainer("dealList");
+		container.setOutputMarkupId(true);
+		add(container);
+		
 		final ListView<Deal> deals = new ListView<Deal>("dealRptr", model)
 		{
 
@@ -47,8 +59,7 @@ public class DealOfferDealsPage extends BasePage
 			@Override
 			protected void populateItem(ListItem<Deal> item)
 			{
-				Deal deal = item.getModelObject();
-				final UUID dealId = deal.getId();
+				final Deal deal = item.getModelObject();
 
 				item.setModel(new CompoundPropertyModel<Deal>(deal));
 
@@ -60,8 +71,6 @@ public class DealOfferDealsPage extends BasePage
 				item.add(new Label("title"));
 				item.add(new Label("summary"));
 
-				final AdminModalWindow definitionModal = getModal();
-				final SubmitCallBack callback = getCallback(definitionModal);
 				item.add(new AjaxLink<Void>("editLink")
 				{
 
@@ -71,44 +80,80 @@ public class DealOfferDealsPage extends BasePage
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						DealOfferDealPanel panel = new DealOfferDealPanel(definitionModal.getContentId(),
-								callback, dealId);
-						definitionModal.setContent(panel.setOutputMarkupId(true));
-						definitionModal.setTitle("Edit Deal");
-						definitionModal.show(target);
+						try {
+							// TODO Merge or Reattach the deal instead of Refreshing
+							taloolService.refresh(deal);
+						}
+						catch (ServiceException se) {
+							LOG.error("Failed to reattach deal for editiing", se);
+						}
+						wizard.setModelObject(deal);
+						wizard.open(target);
 					}
 				});
 
 			}
 
 		};
+		container.add(deals);
+		
+		// override the action button
+		final BasePage page = (BasePage) this.getPage();
+		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
+		{
 
-		add(deals);
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				getSession().getFeedbackMessages().clear();
+				MerchantAccount ma = SessionUtils.getSession().getMerchantAccount();
+				Deal deal = domainFactory.newDeal(ma, true);
+				wizard.setModelObject(deal);
+				wizard.open(target);
+			}
+		};
+		page.setActionLink(actionLink);
+		Label actionLabel = new Label("actionLabel", getNewDefinitionPanelTitle());
+		actionLabel.setOutputMarkupId(true);
+		actionLink.add(actionLabel);
+		actionLink.setOutputMarkupId(true);
+		
+		// Wizard
+		wizard = new DealWizard("wiz", "Deal Wizard") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onFinish(AjaxRequestTarget target) {
+				super.onFinish(target);
+				// refresh the list after a deal is edited
+				target.add(container);
+			}
+		};
+		add(wizard);
 
 	}
 
 	@Override
 	public String getHeaderTitle()
 	{
-		// TODO add another param to the url or just hit the db and pull out the
-		// details from the id? Hit the DB...
-		StringBuilder sb = new StringBuilder("Merchants > {Merchant Name} >");
-		sb.append(getPageParameters().get("name")).append(" > Deals");
+		MerchantAccount ma = SessionUtils.getSession().getMerchantAccount();
+		StringBuilder sb = new StringBuilder(ma.getMerchant().getName());
+		sb.append(" > ").append(getPageParameters().get("name")).append(" > Deals");
 		return sb.toString();
 	}
 
 	@Override
 	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
 	{
-		// NOTE: this is called via the super constructor, so can't way for
-		// _dealOfferId to be set in this constructor.
-		_dealOfferId = UUID.fromString(getPageParameters().get("id").toString());
-		return new DealOfferDealPanel(contentId, _dealOfferId, callback);
+		return null;
 	}
 
 	@Override
 	public String getNewDefinitionPanelTitle()
 	{
-		return "Create New Deal";
+		return "New Deal";
 	}
 }

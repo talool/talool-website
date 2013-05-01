@@ -1,21 +1,24 @@
 <wicket:extend>
-	<table>
-  		<thead>
-  			<tr class="gra1-bg">
-  				<th>Title</th>
-  				<th>Summary</th>
-  				<th class="actionCol">Actions</th>
-  			</tr>
-  		</thead>
-  		<tbody>
-  			<tr class="odd" wicket:id="dealRptr">
-  				<td wicket:id="title"></td>
-  				<td wicket:id="summary"></td>
-  				<td class="orange-font">
-  					<a wicket:id="editLink" class="icon icon-large icon-pencil" title="Edit Merchant"></a>
-  					<a href="#" class="icon icon-large icon-remove" title="Delete Merchant"></a>
-  				</td>
-  			</tr>
-  		</tbody>
-  	</table>
+	<div wicket:id="dealList">
+		<table>
+	  		<thead>
+	  			<tr class="gray1-bg">
+	  				<th>Title</th>
+	  				<th>Summary</th>
+	  				<th class="actionCol">Actions</th>
+	  			</tr>
+	  		</thead>
+	  		<tbody>
+	  			<tr class="odd" wicket:id="dealRptr">
+	  				<td wicket:id="title"></td>
+	  				<td wicket:id="summary"></td>
+	  				<td class="orange-font">
+	  					<a wicket:id="editLink" class="icon icon-large icon-pencil" title="Edit Merchant"></a>
+	  					<a href="#" class="icon icon-large icon-remove" title="Delete Merchant"></a>
+	  				</td>
+	  			</tr>
+	  		</tbody>
+	  	</table>
+  	</div>
+  	<div wicket:id="wiz" class="dealWiz"></div>
 </wicket:extend>

@@ -1,10 +1,7 @@
 package com.talool.website.panel.merchant;
 
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -15,15 +12,11 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.hibernate.LazyInitializationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
-import com.talool.core.DealOffer;
 import com.talool.core.MerchantAccount;
-import com.talool.core.Tag;
-import com.talool.core.service.ServiceException;
 import com.talool.website.models.DealListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.BaseTabPanel;
@@ -115,39 +108,7 @@ public class MerchantDealsPanel extends BaseTabPanel
 			{
 				getSession().getFeedbackMessages().clear();
 				MerchantAccount ma = SessionUtils.getSession().getMerchantAccount();
-				Deal deal = domainFactory.newDeal(ma);
-				
-				// TODO setting the default state for the new deal.  should move to domainFactory
-				deal.setMerchant(ma.getMerchant());
-				List<DealOffer> offers = null;
-				Set<Tag> tags = null;
-				try {
-					offers = taloolService.getDealOffersByMerchantId(ma.getMerchant().getId());
-					//tags = ma.getMerchant().getTags();
-				}
-				catch (ServiceException se)
-				{
-					LOG.error("Failed to get offers for logged in merchant", se);
-				}
-				catch (LazyInitializationException lie)
-				{
-					LOG.error("Failed to get offers for logged in merchant", lie);
-					// call out to someone who can ... taloolService.reattach(ma.getMerchant());
-				}
-				catch (Exception e) 
-				{
-					LOG.error("Failed to get offers/tags for logged in merchant", e);
-					
-				}
-				if (CollectionUtils.isNotEmpty(offers)) {
-					// TODO should probably default to the most recently updated deal offer
-					deal.setDealOffer(offers.get(0));
-					deal.setExpires(offers.get(0).getExpires());
-				}
-				if (CollectionUtils.isNotEmpty(tags)) {
-					deal.setTags(tags);
-				}
-				
+				Deal deal = domainFactory.newDeal(ma, true);
 				wizard.setModelObject(deal);
 				wizard.open(target);
 			}

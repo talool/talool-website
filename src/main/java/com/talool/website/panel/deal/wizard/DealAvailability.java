@@ -50,7 +50,7 @@ public class DealAvailability extends WizardStep {
 
 		addOrReplace(new CheckBox("isActive"));
 		
-		// TODO we need a validator on this
+		// TODO we need a validator for strings that feed a type 39 bar code
 		TextField<String> codeField = new TextField<String>("code");
 		codeField.add(new DealPreviewUpdatingBehavior(dealPreview,
 				DealPreviewUpdatingBehavior.DealComponent.CODE, "onBlur"));

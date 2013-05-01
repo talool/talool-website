@@ -58,6 +58,7 @@ public class DealTags extends WizardStep
 
 	}
 
+	// TODO consider watching for a change on the tag list to decide if the merge needs to happen
 	public List<Tag> getTags()
 	{
 		Deal deal = (Deal) getDefaultModelObject();
