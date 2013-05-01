@@ -65,9 +65,11 @@ public class MerchantPanel extends BaseDefinitionPanel
 		super(id, callback);
 
 		Merchant merchant = domainFactory.newMerchant();
-		merchant.setPrimaryLocation(domainFactory.newMerchantLocation());
-		merchant.getPrimaryLocation().setAddress(domainFactory.newAddress());
-		merchant.getPrimaryLocation().setLogoUrl("");
+		MerchantLocation location = domainFactory.newMerchantLocation();
+		location.setAddress(domainFactory.newAddress());
+		location.setLogoUrl("");
+		merchant.addLocation(location);
+
 		setDefaultModel(Model.of(merchant));
 	}
 
