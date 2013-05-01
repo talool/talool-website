@@ -10,9 +10,8 @@
 }
 body.talool .dealWiz {
 	background-image: url(/img/iPhone5.png);
-	background-position-y: -95px;
 	background-repeat: no-repeat;
-	background-position-x: 475px;
+	background-position: 475px -95px;
 	padding: 10px 15px;
 	position: relative;
 }
