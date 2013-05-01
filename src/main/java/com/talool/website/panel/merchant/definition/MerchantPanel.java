@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
-import com.talool.core.MerchantManagedLocation;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
 import com.talool.website.behaviors.OnChangeAjaxFormBehavior;
@@ -139,20 +138,23 @@ public class MerchantPanel extends BaseDefinitionPanel
 		tagChoices.setMaxRows(18);
 		tagChoices.setOutputMarkupId(true);
 		descriptionPanel.add(tagChoices.setRequired(true));
-		
-		DropDownChoice<Tag> categorySelect = new DropDownChoice<Tag>("category", new PropertyModel<Tag>(this, "category"), new TagListModel(CATEGORY.ROOT),cr);
+
+		DropDownChoice<Tag> categorySelect = new DropDownChoice<Tag>("category",
+				new PropertyModel<Tag>(this, "category"), new TagListModel(CATEGORY.ROOT), cr);
 		categorySelect.setOutputMarkupId(true);
-		categorySelect.add(new AjaxFormComponentUpdatingBehavior("onChange") {
+		categorySelect.add(new AjaxFormComponentUpdatingBehavior("onChange")
+		{
 
 			private static final long serialVersionUID = -1909537074284102774L;
 
 			@SuppressWarnings("unchecked")
 			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				tagChoices.setChoices( TagListModel.getModel(category));
+			protected void onUpdate(AjaxRequestTarget target)
+			{
+				tagChoices.setChoices(TagListModel.getModel(category));
 				target.add(tagChoices);
 			}
-			
+
 		});
 		descriptionPanel.add(categorySelect.setRequired(true));
 
@@ -267,10 +269,6 @@ public class MerchantPanel extends BaseDefinitionPanel
 	{
 		Merchant merchant = (Merchant) form.getDefaultModelObject();
 
-		// Load the primary location as a managed location by default
-		MerchantManagedLocation managedLocation = domainFactory.newMerchantManagedLocation(merchant);
-		managedLocation.setMerchantLocation(merchant.getPrimaryLocation());
-
 		if (CollectionUtils.isNotEmpty(tags) || category != null)
 		{
 			Set<Tag> selectedTags = new HashSet<Tag>();
@@ -289,14 +287,17 @@ public class MerchantPanel extends BaseDefinitionPanel
 			merchant.clearTags();
 		}
 
-		final GeometryFactory factory = new GeometryFactory(
-				new PrecisionModel(PrecisionModel.FLOATING), 4326);
+		if (longitude != null && latitude != null)
+		{
+			final GeometryFactory factory = new GeometryFactory(
+					new PrecisionModel(PrecisionModel.FLOATING), 4326);
 
-		final Point point = factory.createPoint(new Coordinate(longitude, latitude));
-		merchant.getPrimaryLocation().setGeometry(point);
+			final Point point = factory.createPoint(new Coordinate(longitude, latitude));
+			merchant.getPrimaryLocation().setGeometry(point);
+		}
 
 		taloolService.save(merchant);
-		taloolService.save(managedLocation);
+		// taloolService.save(managedLocation);
 		SessionUtils.successMessage("Successfully saved merchant '", merchant.getName(), "'");
 
 	}

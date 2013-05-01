@@ -10,13 +10,12 @@ import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.talool.core.Merchant;
-import com.talool.core.MerchantManagedLocation;
+import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
-import com.talool.service.ServiceFactory;
-import com.talool.website.models.MerchantManagedLocationModel;
+import com.talool.website.models.MerchantLocationModel;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.util.SessionUtils;
 
 /**
  * 
@@ -27,32 +26,23 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 {
 	private static final long serialVersionUID = 661849211369766802L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocationPanel.class);
+	private UUID merchantId;
 
 	public MerchantLocationPanel(final String id, final UUID merchantId, final SubmitCallBack callback)
 	{
 		super(id, callback);
-
-		Merchant merchant = null;
-		try
-		{
-			merchant = ServiceFactory.get().getTaloolService().getMerchantById(merchantId);
-		}
-		catch (ServiceException se)
-		{
-			LOG.error("problem loading merchant", se);
-		}
-
-		MerchantManagedLocation managedLocation = domainFactory.newMerchantManagedLocation(merchant);
-		managedLocation.getMerchantLocation().setAddress(domainFactory.newAddress());
-		managedLocation.getMerchantLocation().setLogoUrl("");
-		setDefaultModel(Model.of(managedLocation));
+		this.merchantId = merchantId;
+		MerchantLocation merchantLocation = domainFactory.newMerchantLocation();
+		merchantLocation.setAddress(domainFactory.newAddress());
+		merchantLocation.setLogoUrl("");
+		setDefaultModel(Model.of(merchantLocation));
 	}
 
 	public MerchantLocationPanel(final String id, final SubmitCallBack callback,
-			final Long merchantManagedLocationId)
+			final Long merchantLocationId)
 	{
 		super(id, callback);
-		setDefaultModel(new MerchantManagedLocationModel(merchantManagedLocationId));
+		setDefaultModel(new MerchantLocationModel(merchantLocationId));
 	}
 
 	@Override
@@ -63,43 +53,52 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 		WebMarkupContainer locationPanel = new WebMarkupContainer("locationPanel");
 		form.add(locationPanel);
 
-		locationPanel.add(new TextField<String>("merchantLocation.address.address1").setRequired(true));
+		locationPanel.add(new TextField<String>("address.address1").setRequired(true));
 
-		locationPanel.add(new TextField<String>("merchantLocation.address.address2"));
-		locationPanel.add(new TextField<String>("merchantLocation.address.city").setRequired(true));
-		locationPanel.add(new TextField<String>("merchantLocation.address.stateProvinceCounty")
+		locationPanel.add(new TextField<String>("address.address2"));
+		locationPanel.add(new TextField<String>("address.city").setRequired(true));
+		locationPanel.add(new TextField<String>("address.stateProvinceCounty")
 				.setRequired(true));
-		locationPanel.add(new TextField<String>("merchantLocation.address.zip").setRequired(true));
-		locationPanel.add(new TextField<String>("merchantLocation.address.country").setRequired(true));
-		locationPanel.add(new TextField<String>("merchantLocation.locationName"));
-		locationPanel.add(new TextField<String>("merchantLocation.phone").setRequired(true));
-		locationPanel.add(new TextField<String>("merchantLocation.email").setRequired(true));
-		locationPanel.add(new TextField<String>("merchantLocation.websiteUrl"));
+		locationPanel.add(new TextField<String>("address.zip").setRequired(true));
+		locationPanel.add(new TextField<String>("address.country").setRequired(true));
+		locationPanel.add(new TextField<String>("locationName"));
+		locationPanel.add(new TextField<String>("phone").setRequired(true));
+		locationPanel.add(new TextField<String>("email").setRequired(true));
+		locationPanel.add(new TextField<String>("websiteUrl"));
 
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public CompoundPropertyModel<MerchantManagedLocation> getDefaultCompoundPropertyModel()
+	public CompoundPropertyModel<MerchantLocation> getDefaultCompoundPropertyModel()
 	{
-		return new CompoundPropertyModel<MerchantManagedLocation>(
-				(IModel<MerchantManagedLocation>) getDefaultModel());
+		return new CompoundPropertyModel<MerchantLocation>(
+				(IModel<MerchantLocation>) getDefaultModel());
 	}
 
 	@Override
 	public String getObjectIdentifier()
 	{
-		MerchantManagedLocation managedLocation = (MerchantManagedLocation) form
+		MerchantLocation merchantLocation = (MerchantLocation) form
 				.getDefaultModelObject();
-		return managedLocation.getMerchantLocation().getLocationName();
+		return merchantLocation.getLocationName();
 	}
 
 	@Override
 	public void save() throws ServiceException
 	{
-		MerchantManagedLocation managedLocation = (MerchantManagedLocation) form
+		MerchantLocation merchantLocation = (MerchantLocation) form
 				.getDefaultModelObject();
-		taloolService.save(managedLocation);
+
+		if (merchantLocation.getId() == null && merchantId != null)
+		{
+			// we are creating, not updating
+			// TODO Optimize this save so we don't pull in the whole merchant
+			merchantLocation.setMerchant(taloolService.getMerchantById(merchantId));
+		}
+
+		taloolService.save(merchantLocation);
+		SessionUtils.successMessage("Successfully saved location");
 	}
 
 	@Override

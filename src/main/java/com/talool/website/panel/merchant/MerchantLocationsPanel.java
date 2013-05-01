@@ -12,8 +12,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.talool.core.MerchantManagedLocation;
-import com.talool.website.models.MerchantManagedLocationListModel;
+import com.talool.core.MerchantLocation;
+import com.talool.website.models.MerchantLocationListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseTabPanel;
@@ -41,33 +41,33 @@ public class MerchantLocationsPanel extends BaseTabPanel
 	{
 		super.onInitialize();
 
-		MerchantManagedLocationListModel model = new MerchantManagedLocationListModel();
+		MerchantLocationListModel model = new MerchantLocationListModel();
 		model.setMerchantId(_merchantId);
-		final ListView<MerchantManagedLocation> locations = new ListView<MerchantManagedLocation>(
+		final ListView<MerchantLocation> locations = new ListView<MerchantLocation>(
 				"locationRptr", model)
 		{
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<MerchantManagedLocation> item)
+			protected void populateItem(ListItem<MerchantLocation> item)
 			{
-				MerchantManagedLocation managedLocation = item.getModelObject();
+				MerchantLocation managedLocation = item.getModelObject();
 				final Long merchantLocationId = managedLocation.getId();
 
-				item.setModel(new CompoundPropertyModel<MerchantManagedLocation>(managedLocation));
+				item.setModel(new CompoundPropertyModel<MerchantLocation>(managedLocation));
 
 				if (item.getIndex() % 2 == 0)
 				{
 					item.add(new AttributeModifier("class", "gray0-bg"));
 				}
 
-				item.add(new Label("merchantLocation.locationName"));
-				item.add(new Label("merchantLocation.websiteUrl"));
-				item.add(new Label("merchantLocation.email"));
-				item.add(new Label("merchantLocation.phone"));
-				item.add(new Label("merchantLocation.address.city"));
-				item.add(new Label("merchantLocation.address.stateProvinceCounty"));
+				item.add(new Label("locationName"));
+				item.add(new Label("websiteUrl"));
+				item.add(new Label("email"));
+				item.add(new Label("phone"));
+				item.add(new Label("address.city"));
+				item.add(new Label("address.stateProvinceCounty"));
 
 				BasePage page = (BasePage) this.getPage();
 				final AdminModalWindow modal = page.getModal();
