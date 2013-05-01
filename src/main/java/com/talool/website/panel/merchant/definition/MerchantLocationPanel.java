@@ -7,11 +7,15 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
+import com.talool.website.behaviors.OnChangeAjaxFormBehavior;
+import com.talool.website.component.StateOption;
+import com.talool.website.component.StateSelect;
 import com.talool.website.models.MerchantLocationModel;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
@@ -45,6 +49,25 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 		setDefaultModel(new MerchantLocationModel(merchantLocationId));
 	}
 
+	public StateOption getStateOption()
+	{
+		final MerchantLocation loc = (MerchantLocation) getDefaultModelObject();
+		if (loc.getAddress().getStateProvinceCounty() == null)
+		{
+			return null;
+		}
+
+		return StateSelect.getStateOptionByCode(loc.getAddress()
+				.getStateProvinceCounty());
+
+	}
+
+	public void setStateOption(final StateOption stateOption)
+	{
+		final MerchantLocation loc = (MerchantLocation) getDefaultModelObject();
+		loc.getAddress().setStateProvinceCounty(stateOption.getCode());
+	}
+
 	@Override
 	protected void onInitialize()
 	{
@@ -57,14 +80,17 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 
 		locationPanel.add(new TextField<String>("address.address2"));
 		locationPanel.add(new TextField<String>("address.city").setRequired(true));
-		locationPanel.add(new TextField<String>("address.stateProvinceCounty")
-				.setRequired(true));
 		locationPanel.add(new TextField<String>("address.zip").setRequired(true));
 		locationPanel.add(new TextField<String>("address.country").setRequired(true));
 		locationPanel.add(new TextField<String>("locationName"));
 		locationPanel.add(new TextField<String>("phone").setRequired(true));
 		locationPanel.add(new TextField<String>("email").setRequired(true));
 		locationPanel.add(new TextField<String>("websiteUrl"));
+
+		final StateSelect state = new StateSelect("address.stateProvinceCounty",
+				new PropertyModel<StateOption>(this, "stateOption"));
+		state.add(new OnChangeAjaxFormBehavior());
+		locationPanel.add(state.setRequired(true));
 
 	}
 
