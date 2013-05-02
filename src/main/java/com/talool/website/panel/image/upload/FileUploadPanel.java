@@ -7,7 +7,9 @@ import org.apache.wicket.markup.html.panel.Panel;
  */
 public class FileUploadPanel extends Panel {
 
-    public FileUploadPanel(String id) {
+	private static final long serialVersionUID = 1L;
+
+	public FileUploadPanel(String id) {
         super(id);
 
         // The buttons toolbar. Mandatory
@@ -29,5 +31,8 @@ public class FileUploadPanel extends Panel {
         // Optional
         FileDownloadTemplate downloadTemplate = new FileDownloadTemplate("downloadTemplate");
         add(downloadTemplate);
+        
     }
+	
+
 }

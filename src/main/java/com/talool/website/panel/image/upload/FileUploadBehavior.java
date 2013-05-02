@@ -41,8 +41,13 @@ public class FileUploadBehavior extends Behavior {
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
         super.renderHead(component, response);
-
-        Bootstrap.renderHead(response);
+        //FileUploadBehavior.setHeadResources(component, response);
+        FileUploadBehavior.setUploadConfig(component, response);
+    }
+    
+    public static void setHeadResources(Component component, IHeaderResponse response)
+    {
+    	Bootstrap.renderHead(response);
 
         response.render(CssHeaderItem.forReference(
                 new CssResourceReference(FileUploadBehavior.class, "bootstrap-image-gallery.min.css")));
@@ -73,9 +78,10 @@ public class FileUploadBehavior extends Behavior {
 
         response.render(JavaScriptHeaderItem.forReference(
                 new JavaScriptResourceReference(FileUploadBehavior.class, "jquery.fileupload-ui.js")));
-
-
-        PackageTextTemplate jsTmpl = new PackageTextTemplate(FileUploadBehavior.class, "main.js");
+    }
+    
+    public static void setUploadConfig(Component component, IHeaderResponse response){
+    	PackageTextTemplate jsTmpl = new PackageTextTemplate(FileUploadBehavior.class, "main.js");
         Map<String, Object> variables = new HashMap<String, Object>();
 
         variables.put("componentMarkupId", component.getMarkupId());
