@@ -1,19 +1,13 @@
 package com.talool.website.panel.deal.wizard;
 
-import java.util.Set;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.wizard.IWizardStep;
 import org.apache.wicket.extensions.wizard.StaticContentStep;
 import org.apache.wicket.extensions.wizard.WizardModel;
 import org.apache.wicket.extensions.wizard.WizardStep;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.IRequestParameters;
-import org.apache.wicket.request.http.WebRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +19,6 @@ import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.website.Config;
 import com.talool.website.pages.BasePage;
-import com.talool.website.panel.image.upload.FileUploadBehavior;
 import com.talool.website.util.SessionUtils;
 
 public class DealWizard extends AbstractWizard<Deal> {
@@ -172,20 +165,6 @@ public class DealWizard extends AbstractWizard<Deal> {
 		{
 			super("Saving", "One moment please...", Model.of(), true);
 			
-		}
-	}
-	
-	@Override
-	protected void onSubmit(AjaxRequestTarget target) {
-		// TODO Auto-generated method stub
-		super.onSubmit(target);
-		
-		WebRequest req = getWebRequest();
-		IRequestParameters params = req.getPostParameters();
-		Set<String> names = params.getParameterNames();
-		for (String name : names)
-		{
-			LOG.debug(name);
 		}
 	}
 	

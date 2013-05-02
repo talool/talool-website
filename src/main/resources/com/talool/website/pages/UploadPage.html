@@ -2,101 +2,24 @@
 <html xmlns:wicket="http://wicket.apache.org">
 	<head>
 		<meta charset="utf-8" />
-		<title>Apache Wicket Quickstart</title>
-		<link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold' rel='stylesheet' type='text/css' />
-		<link rel="stylesheet" type="text/css" href="/css/uploader/bootstrap-image-gallery.min.css"/>
-    	<link rel="stylesheet" type="text/css" href="/css/uploader/jquery.fileupload-ui.css"/>
+		<title>Talool Upload</title>
+
+    	<style>
+    		body {
+    			padding:0;
+    			margin:0;
+    		}
+    	</style>
     	
-    	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-		<script src="/js/uploader/jquery.ui.widget.js"></script>
-		<script src="/js/uploader/jquery.iframe-transport.js"></script>
-		<script src="/js/uploader/tmpl.min.js"></script>
-		<script src="/js/uploader/load-image.min.js"></script>
-		<script src="/js/uploader/jquery.fileupload.js"></script>
-		<script src="/js/uploader/jquery.fileupload-fp.js"></script>
-		<script src="/js/uploader/jquery.fileupload-ui.js"></script>
-		<style>
-			body, p, li, a { font-family: georgia, times, serif;font-size:13pt;}
-			h1, h2, h3 { font-family: 'Yanone Kaffeesatz', arial, serif; }
-			body { margin:0;padding:0;}
-			#hd {
-				width : 100%;
-				height : 87px;
-				background-color : #092E67;
-				margin-top : 0;
-				padding-top : 10px;
-				border-bottom : 1px solid #888;
-				z-index : 0;
-			}
-			#ft {
-				position : absolute;
-				bottom : 0;
-				width : 100%;
-				height : 99px;
-				background-color : #6493D2;
-				border-top : 1px solid #888;
-				z-index : 0;
-			}
-			#logo,#bd {
-				width : 650px;
-				margin: 0 auto;
-				padding: 25px 50px 0 50px;
-			}
-			#logo h1 {
-				color : white;
-				font-size:36pt;
-				display: inline;
-			}
-			#logo img { 
-				display:inline;
-				vertical-align: bottom;
-				margin-left : 50px;
-				margin-right : 5px;
-			}
-			body { margin-top : 0; padding-top : 0;}
-			#logo, #logo h1 { margin-top : 0; padding-top : 0;}
-			#bd {
-				position : absolute;
-				top : 75px;
-				bottom : 75px;
-				left : 50%;
-				margin-left : -325px;
-				z-index : 1;
-				overflow: auto;
-				background-color : #fff;
-				-webkit-border-radius: 10px;
-				-moz-border-radius: 10px;
-				border-radius: 10px;
-				-moz-box-shadow: 0px 0px 10px #888;
-				-webkit-box-shadow: 0px 0px 10px #888;
-				box-shadow: 0px 0px 10px #888;
-			}
-			a, a:visited, a:hover, a:active {
-				color : #6493D2;
-			}
-			h2 {
-				padding : 0; margin:0;
-				font-size:36pt;
-				color:#FF5500;
-			}
-			h3 {
-				padding : 0; margin:0;
-				font-size:24pt;
-				color:#092E67;
-			}
-		</style>
+    	<script>
+    		function testWicket() {
+    			parent.window.callDealUploadComponent('foo');
+    		}
+    	</script>
+		
 	</head>
 	<body>
-		<div id="hd">
-			<div id="logo">
-				<h1>Upload Test</h1>
-			</div>
-		</div>
-		<div id="bd">
-            <div wicket:id="fileUpload"></div>
-		</div>
-		<div id="ft">
-		</div>
+		<div wicket:id="fileUpload"></div>
+		<a href="#foo" onclick="testWicket()">test</a>
 	</body>
 </html>
