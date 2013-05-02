@@ -22,6 +22,17 @@ $(function () {
                 action: 'save'
             }
         ]
+    }).bind('fileuploaddone', function(e, data){
+    	var resp = eval(data.jqXHR.responseText);
+    	/*
+    	[{"thumbnail_url":"./fileManager?filename=centro_3.png",
+    		"delete_url":"./fileManager?filename=centro_3.png&delete=true",
+    		"delete_type":"POST",
+    		"name":"centro_3.png",
+    		"url":"./fileManager?filename=centro_3.png",
+    		"size":84936}]
+    	*/
+    	parent.window.callDealUploadComponent(resp[0].url);
     });
 
 });
