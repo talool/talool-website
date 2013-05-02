@@ -11,11 +11,21 @@
     <link rel="stylesheet" type="text/css" href="/css/font-awesome.css">
     <link rel="stylesheet" type="text/css" href="/css/deal.css"/>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="/css/uploader/bootstrap-image-gallery.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/uploader/jquery.fileupload-ui.css"/>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
     <script src="/js/core.js"></script>
 	<script src="/js/letters.js"></script>
 	<script src="/js/logo.js"></script>
+	<script src="/js/uploader/jquery.ui.widget.js"></script>
+	<script src="/js/uploader/jquery.iframe-transport.js"></script>
+	<script src="/js/uploader/tmpl.min.js"></script>
+	<script src="/js/uploader/load-image.min.js"></script>
+	<script src="/js/uploader/jquery.fileupload.js"></script>
+	<script src="/js/uploader/jquery.fileupload-fp.js"></script>
+	<script src="/js/uploader/jquery.fileupload-ui.js"></script>
+	
     <script>
     	Wicket.Window.unloadConfirmation = false;
     	window.ooConfig = {
@@ -35,7 +45,8 @@
 		    </a>
 	  	</div>
   		<wicket:child/>
-  		<div wicket:id="modal"/>
+  		<div wicket:id="modal"></div>
+  		<div wicket:id="uploader"></div>
 	</div>
   </body>
 </html>

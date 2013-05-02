@@ -28,7 +28,7 @@ import com.talool.website.pages.BasePage;
 import com.talool.website.panel.image.upload.FileUploadBehavior;
 import com.talool.website.util.SessionUtils;
 
-public class DealWizard extends AbstractWizard<Deal> implements IHeaderContributor {
+public class DealWizard extends AbstractWizard<Deal> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealWizard.class);
 
@@ -45,13 +45,6 @@ public class DealWizard extends AbstractWizard<Deal> implements IHeaderContribut
 		wizardModel.setLastVisible(true);
 		
 		this.init(wizardModel);		
-	}
-	
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		// add the dependencies for the FileUpload
-		FileUploadBehavior.setHeadResources(this, response);
 	}
 	
 	@SuppressWarnings("rawtypes")

@@ -17,6 +17,7 @@ import com.talool.website.panel.AdminMenuPanel;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.NiceFeedbackPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.image.upload.FileUploadPanel;
 
 /**
  * 
@@ -63,7 +64,7 @@ public abstract class BasePage extends WebPage
 	{
 		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
 		add(new Label("headerTitle", getHeaderTitle()));
-
+		add(new FileUploadPanel("uploader"));
 		feedback = new NiceFeedbackPanel("feedback");
 		add(feedback.setOutputMarkupId(true));
 
@@ -103,6 +104,7 @@ public abstract class BasePage extends WebPage
 		_actionLink.setOutputMarkupId(true);
 		_action.add(_actionLink);
 		add(_action);
+		
 	}
 
 	public SubmitCallBack getCallback(final AdminModalWindow modal)

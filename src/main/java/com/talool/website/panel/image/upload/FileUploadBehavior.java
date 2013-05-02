@@ -41,23 +41,23 @@ public class FileUploadBehavior extends Behavior {
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
         super.renderHead(component, response);
-        //FileUploadBehavior.setHeadResources(component, response);
+        FileUploadBehavior.setHeadResources(component, response);
         FileUploadBehavior.setUploadConfig(component, response);
     }
     
     public static void setHeadResources(Component component, IHeaderResponse response)
     {
     	Bootstrap.renderHead(response);
-
+/*
         response.render(CssHeaderItem.forReference(
                 new CssResourceReference(FileUploadBehavior.class, "bootstrap-image-gallery.min.css")));
 
         response.render(CssHeaderItem.forReference(
                 new CssResourceReference(FileUploadBehavior.class, "jquery.fileupload-ui.css")));
-
+*/
         response.render(JavaScriptHeaderItem.forReference(
                 component.getApplication().getJavaScriptLibrarySettings().getJQueryReference()));
-
+/*
         response.render(JavaScriptHeaderItem.forReference(
                 new JavaScriptResourceReference(FileUploadBehavior.class, "jquery.ui.widget.js")));
 
@@ -78,6 +78,7 @@ public class FileUploadBehavior extends Behavior {
 
         response.render(JavaScriptHeaderItem.forReference(
                 new JavaScriptResourceReference(FileUploadBehavior.class, "jquery.fileupload-ui.js")));
+                */
     }
     
     public static void setUploadConfig(Component component, IHeaderResponse response){
