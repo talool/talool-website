@@ -31,7 +31,6 @@ public class DealWizard extends AbstractWizard<Deal> {
 		
 		WizardModel wizardModel = new WizardModel();
 		wizardModel.add(new DealDetails());
-		wizardModel.add(new DealUpload());
 		wizardModel.add(new DealTags());
 		wizardModel.add(new DealAvailability());
 		wizardModel.add(new SaveAndFinish());

@@ -31,4 +31,5 @@ public class AvailableDealImagesListModel extends LoadableDetachableModel<List<I
 
 		return images;
 	}
+	
 }

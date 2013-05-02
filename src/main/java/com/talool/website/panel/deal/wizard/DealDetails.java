@@ -1,11 +1,22 @@
 package com.talool.website.panel.deal.wizard;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.wizard.WizardStep;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.html.link.InlineFrame;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.util.template.PackageTextTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,11 +29,13 @@ import com.talool.core.MerchantIdentity;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.domain.ImageImpl;
+import com.talool.website.component.DealImageSelect;
 import com.talool.website.component.MerchantIdentitySelect;
+import com.talool.website.models.AvailableDealImagesListModel;
 import com.talool.website.models.AvailableMerchantsListModel;
+import com.talool.website.pages.UploadPage;
 import com.talool.website.panel.deal.DealPreview;
 import com.talool.website.panel.deal.DealPreviewUpdatingBehavior;
-import com.talool.website.panel.deal.definition.ImageSelectPanel;
 import com.talool.website.panel.deal.definition.ImageUploadPanel;
 import com.talool.website.panel.deal.definition.template.DealTemplateSelectPanel;
 import com.talool.website.util.SessionUtils;
@@ -32,6 +45,7 @@ public class DealDetails extends WizardStep {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealDetails.class);
 	private Image image;
+	private AvailableDealImagesListModel imageListModel;
 	private MerchantIdentity merchantIdentity;
 
 	public DealDetails()
@@ -41,6 +55,8 @@ public class DealDetails extends WizardStep {
         DomainFactory domainFactory = FactoryManager.get().getDomainFactory();
 		Merchant merchant = SessionUtils.getSession().getMerchantAccount().getMerchant();
 		merchantIdentity = domainFactory.newMerchantIdentity(merchant.getId(), merchant.getName());
+		
+		imageListModel = new AvailableDealImagesListModel();
 
     }
 	
@@ -66,14 +82,49 @@ public class DealDetails extends WizardStep {
 		templates.setDefaultModel(getDefaultModel());
 		addOrReplace(templates);
 		
-		final WebMarkupContainer imageSelect = new WebMarkupContainer("imageSelectContainer");
-		imageSelect.setOutputMarkupId(true);
-		addOrReplace(imageSelect);
+		final DealImageSelect images = new DealImageSelect("availableImages", 
+				new PropertyModel<Image>(this, "image"), 
+				imageListModel);
+		images.setRequired(true);
+		images.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.IMAGE, "onChange"));
+		addOrReplace(images);
 		
-		ImageSelectPanel images = new ImageSelectPanel("imageSelectPanel", new PropertyModel<Image>(
-				this, "image"), dealPreview);
-		images.setOutputMarkupId(true);
-		imageSelect.add(images);
+		/*
+		 * Add an iframe that keep the upload in a sandbox
+		 */
+		final InlineFrame iframe = new InlineFrame("uploaderIFrame", UploadPage.class);
+		addOrReplace(iframe);
+		
+		/*
+		 *  Enable messages to be posted from that sandbox
+		 */
+		iframe.add(new AbstractDefaultAjaxBehavior(){
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void respond(AjaxRequestTarget target) {
+				String url = RequestCycle.get().getRequest().getRequestParameters().getParameterValue("url").toString();
+				// Create a new image with the returned url and add it to the list of images
+				setImage(new ImageImpl("new image",url));
+				imageListModel.getObject().add(image);
+				target.add(images);
+				target.add(dealPreview);
+			}
+			
+			@Override
+			public void renderHead(Component component, IHeaderResponse response) {
+				super.renderHead(component, response);
+				
+				PackageTextTemplate ptt = new PackageTextTemplate( DealUpload.class, "DealUpload.js" );
+
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put( "callbackUrl", getCallbackUrl().toString() );
+				
+				response.render(JavaScriptHeaderItem.forScript(ptt.asString(map), "dealupload"));
+			}
+			
+		});
 	}
 	
 	public MerchantIdentity getMerchantIdentity() {
@@ -122,21 +173,4 @@ public class DealDetails extends WizardStep {
 		deal.setImageUrl(image.getUrl());
 	}
 
-	protected void checkUploads() {
-		Component imagePanel = get("imageSelectContainer:imageSelectPanel");
-		if (imagePanel instanceof ImageUploadPanel)
-		{
-			Deal deal = (Deal) getDefaultModelObject();
-			deal.setImageUrl(((ImageUploadPanel) imagePanel).getUpload());
-		}
-	}
-	
-	@Override
-	public void applyState() {
-		// TODO Auto-generated method stub
-		super.applyState();
-		checkUploads();
-	}
-	
-	
 }

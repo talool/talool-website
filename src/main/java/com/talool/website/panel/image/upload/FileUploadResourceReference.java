@@ -81,6 +81,7 @@ public class FileUploadResourceReference extends ResourceReference
         PageParameters params = new PageParameters();
         params.set("filename", fileItem.getName());
         CharSequence url = RequestCycle.get().urlFor(new FileManageResourceReference(Config.get().getUploadDir()), params);
+        url = url.subSequence(1, url.length());
         return url;
     }
 
