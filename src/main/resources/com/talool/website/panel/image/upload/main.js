@@ -5,6 +5,7 @@ $(function () {
         url: '${url}',
         paramName: '${paramName}',
         singleFileUploads: true,
+        autoUpload: true,
         maxFileSize: 5000000,
         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
         process: [
@@ -32,7 +33,9 @@ $(function () {
     		"url":"./fileManager?filename=centro_3.png",
     		"size":84936}]
     	*/
-    	parent.window.callDealUploadComponent(resp[0].url);
+    	if (parent.window && parent.window.callDealUploadComponent) {
+    		parent.window.callDealUploadComponent(resp[0].url);
+    	}
     });
 
 });

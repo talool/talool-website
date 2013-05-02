@@ -9,6 +9,24 @@
  * Licensed under the MIT license:
  * http://www.opensource.org/licenses/MIT
  */
+ 
+ /* Doug's overrides */
+.fileupload-buttonbar {
+	border: 2px solid #eee;
+	border-radius: 10px;
+	background: rgb(250,250,250);
+	text-align: center;
+}
+.fileupload-buttonbar b {
+	color: rgb(220,220,220);
+	display:block;
+	font-size: 25px;
+	line-height: 50px;
+}
+.fileupload-buttonbar .btn{
+	display:none;
+}
+/* End of Doug's overrides */
 
 .fileinput-button {
   position: relative;
