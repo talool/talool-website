@@ -171,6 +171,13 @@ public class DealDetails extends WizardStep {
 			img = new ImageImpl("Test Image 1",
 					"http://i567.photobucket.com/albums/ss116/alphabetabeta/bg_test.png");
 		} else {
+			for (Image image:myImages) 
+			{
+				if (image.getUrl().equals(deal.getImageUrl()))
+				{
+					return image;
+				}
+			}
 			img = new ImageImpl("Test Image 1",
 					deal.getImageUrl());
 		}
