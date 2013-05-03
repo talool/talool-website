@@ -8,13 +8,13 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.link.InlineFrame;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.template.PackageTextTemplate;
 import org.slf4j.Logger;
@@ -36,7 +36,6 @@ import com.talool.website.models.AvailableMerchantsListModel;
 import com.talool.website.pages.UploadPage;
 import com.talool.website.panel.deal.DealPreview;
 import com.talool.website.panel.deal.DealPreviewUpdatingBehavior;
-import com.talool.website.panel.deal.definition.ImageUploadPanel;
 import com.talool.website.panel.deal.definition.template.DealTemplateSelectPanel;
 import com.talool.website.util.SessionUtils;
 
@@ -45,6 +44,7 @@ public class DealDetails extends WizardStep {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealDetails.class);
 	private Image image;
+	private List<Image> myImages;
 	private AvailableDealImagesListModel imageListModel;
 	private MerchantIdentity merchantIdentity;
 
@@ -57,6 +57,7 @@ public class DealDetails extends WizardStep {
 		merchantIdentity = domainFactory.newMerchantIdentity(merchant.getId(), merchant.getName());
 		
 		imageListModel = new AvailableDealImagesListModel();
+		myImages = imageListModel.getObject();
 
     }
 	
@@ -104,10 +105,19 @@ public class DealDetails extends WizardStep {
 
 			@Override
 			protected void respond(AjaxRequestTarget target) {
-				String url = RequestCycle.get().getRequest().getRequestParameters().getParameterValue("url").toString();
+				IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
+				String url = params.getParameterValue("url").toString();
+				String name = params.getParameterValue("name").toString();
+				
 				// Create a new image with the returned url and add it to the list of images
-				setImage(new ImageImpl("new image",url));
-				imageListModel.getObject().add(image);
+				setImage(new ImageImpl(name,url));
+				myImages.add(image);
+				imageListModel.setObject(myImages);
+				
+				// re-init the preview
+				Deal deal = (Deal) getDefaultModelObject();
+				dealPreview.init(deal);
+				
 				target.add(images);
 				target.add(dealPreview);
 			}
@@ -116,7 +126,7 @@ public class DealDetails extends WizardStep {
 			public void renderHead(Component component, IHeaderResponse response) {
 				super.renderHead(component, response);
 				
-				PackageTextTemplate ptt = new PackageTextTemplate( DealUpload.class, "DealUpload.js" );
+				PackageTextTemplate ptt = new PackageTextTemplate( DealDetails.class, "DealDetails.js" );
 
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put( "callbackUrl", getCallbackUrl().toString() );

@@ -38,6 +38,15 @@ public class DealPreview extends Panel
 	public DealPreview(String id, Deal deal)
 	{
 		super(id);
+		
+		this.logos.add("http://i1328.photobucket.com/albums/w525/talooltools/Parma_logo_zpsd7363952.png");
+		this.logos.add("http://i1328.photobucket.com/albums/w525/talooltools/La_Revolucion_logo_zpsf2bd7958.png");
+		this.logos.add("http://i1328.photobucket.com/albums/w525/talooltools/Jovie_logo_zps35c45fe9.png");
+		
+		init(deal);
+	}
+	
+	public void init(Deal deal) {
 		if (deal.getId() != null)
 		{
 			title = deal.getTitle();
@@ -68,12 +77,8 @@ public class DealPreview extends Panel
 			imageUrl = defaultImageUrl;
 		}
 		
-		this.logos.add("http://i1328.photobucket.com/albums/w525/talooltools/Parma_logo_zpsd7363952.png");
-		this.logos.add("http://i1328.photobucket.com/albums/w525/talooltools/La_Revolucion_logo_zpsf2bd7958.png");
-		this.logos.add("http://i1328.photobucket.com/albums/w525/talooltools/Jovie_logo_zps35c45fe9.png");
 		merchantLogoUrl = this.logos.get(0);
 		dealOfferLogoUrl = defaultDealOfferLogoUrl;
-
 	}
 
 	@Override
