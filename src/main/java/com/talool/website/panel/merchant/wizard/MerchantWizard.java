@@ -1,11 +1,10 @@
-package com.talool.website.panel.deal.wizard;
+package com.talool.website.panel.merchant.wizard;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.wizard.IWizardStep;
 import org.apache.wicket.extensions.wizard.StaticContentStep;
 import org.apache.wicket.extensions.wizard.WizardModel;
 import org.apache.wicket.extensions.wizard.WizardStep;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
@@ -13,41 +12,42 @@ import org.slf4j.LoggerFactory;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.wizard.AbstractWizard;
-import com.talool.core.Deal;
 import com.talool.core.FactoryManager;
+import com.talool.core.Merchant;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
-import com.talool.website.Config;
 import com.talool.website.pages.BasePage;
-import com.talool.website.util.SessionUtils;
+import com.talool.website.panel.deal.wizard.DealAvailability;
 
-public class DealWizard extends AbstractWizard<Deal> {
+public class MerchantWizard extends AbstractWizard<Merchant> {
+
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOG = LoggerFactory.getLogger(DealWizard.class);
-
-	public DealWizard(String id, String title)
-	{
+	private static final Logger LOG = LoggerFactory.getLogger(MerchantWizard.class);
+	
+	public MerchantWizard(String id, String title) {
 		super(id, title);
-		
+
 		WizardModel wizardModel = new WizardModel();
-		wizardModel.add(new DealDetails());
-		wizardModel.add(new DealTags());
-		wizardModel.add(new DealAvailability());
+		wizardModel.add(new MerchantDetails());
+		wizardModel.add(new MerchantLocations());
+		wizardModel.add(new MerchantMap());
+		wizardModel.add(new MerchantAccounts());
+		wizardModel.add(new MerchantDealOffers());
 		wizardModel.add(new SaveAndFinish());
 		wizardModel.setLastVisible(true);
 		
-		this.init(wizardModel);		
+		this.init(wizardModel);
 	}
-
+	
 	@Override
-	public void setModelObject(Deal deal)
+	public void setModelObject(Merchant merchant)
 	{
 		/*
 		 * Considered setting the model on the form rather than the Wizard
 		 * so that it would filter down to the steps directly.
 		 * However, that didn't work, hence pass off via onActiveStepChanged
 		 */
-		this.setDefaultModel(new CompoundPropertyModel<Deal>(deal));
+		this.setDefaultModel(new CompoundPropertyModel<Merchant>(merchant));
 	}
 	
 	@Override
@@ -62,25 +62,23 @@ public class DealWizard extends AbstractWizard<Deal> {
 	}
 
 	@Override
-	protected void onFinish(AjaxRequestTarget target) 
-	{
+	protected void onFinish(AjaxRequestTarget target) {
 		/*
-		 * Save the deal
+		 * Save the merchant
 		 */
-		Deal deal = (Deal) getModelObject();
-		deal.setUpdatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
+		Merchant merchant = (Merchant) getModelObject();
 		TaloolService taloolService = FactoryManager.get().getServiceFactory().getTaloolService();
 		try {
-			taloolService.save(deal);
+			taloolService.save(merchant);
 			
 			StringBuilder sb = new StringBuilder("Saved Deal: ");
-			this.info(sb.append(getModelObject().getTitle()).toString());
+			this.info(sb.append(merchant.getName()).toString());
 			
 		} catch (ServiceException se) {
 			LOG.debug("Failed to save deal: ", se);
 			
 			StringBuilder sb = new StringBuilder("Failed to save Deal: ");
-			this.error(sb.append(getModelObject().getTitle()).toString());
+			this.error(sb.append(merchant.getName()).toString());
 			
 		}
 		
@@ -117,7 +115,7 @@ public class DealWizard extends AbstractWizard<Deal> {
 
 			
 			//disable the next button if the current step is Deal Availability
-			if (step instanceof DealAvailability) {
+			if (step instanceof MerchantDealOffers) {
 				DialogButton next = findButton(">");
 				next.setEnabled(false, target);
 			}
@@ -132,8 +130,8 @@ public class DealWizard extends AbstractWizard<Deal> {
 	 */
 	private boolean dealReadyToSave()
 	{
-		Deal deal = (Deal) getModelObject();
-		return (deal.getDealOffer() != null);
+		//Merchant merchant = (Merchant) getModelObject();
+		return true;
 	}
 
 	@Override
@@ -152,5 +150,5 @@ public class DealWizard extends AbstractWizard<Deal> {
 			
 		}
 	}
-	
+
 }

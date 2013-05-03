@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -29,6 +30,7 @@ import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.definition.MerchantPanel;
+import com.talool.website.panel.merchant.wizard.MerchantWizard;
 import com.talool.website.util.SecuredPage;
 
 /**
@@ -40,7 +42,8 @@ import com.talool.website.util.SecuredPage;
 public class MerchantsPage extends BasePage
 {
 	private static final long serialVersionUID = 9023714664854633955L;
-
+	private MerchantWizard wizard;
+	
 	public MerchantsPage()
 	{
 		super();
@@ -75,6 +78,10 @@ public class MerchantsPage extends BasePage
 		{
 			e.printStackTrace();
 		}
+		
+		final WebMarkupContainer container = new WebMarkupContainer("merchantList");
+		container.setOutputMarkupId(true);
+		add(container);
 
 		final ListView<Merchant> mechants = new ListView<Merchant>("merchRptr", new MerchantListModel())
 		{
@@ -131,8 +138,41 @@ public class MerchantsPage extends BasePage
 			}
 
 		};
+		container.add(mechants);
+		
+		// override the action button
+		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
+		{
 
-		add(mechants);
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				getSession().getFeedbackMessages().clear();
+				wizard.setModelObject(domainFactory.newMerchant());
+				wizard.open(target);
+			}
+		};
+		setActionLink(actionLink);
+		Label actionLabel = new Label("actionLabel", getNewDefinitionPanelTitle());
+		actionLabel.setOutputMarkupId(true);
+		actionLink.add(actionLabel);
+		actionLink.setOutputMarkupId(true);
+		
+		// Wizard
+		wizard = new MerchantWizard("wiz", "Merchant Wizard") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onFinish(AjaxRequestTarget target) {
+				super.onFinish(target);
+				// refresh the list after a deal is edited
+				target.add(container);
+			}
+		};
+		add(wizard);
 
 	}
 
@@ -151,12 +191,14 @@ public class MerchantsPage extends BasePage
 	@Override
 	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
 	{
-		return new MerchantPanel(contentId, callback);
+		// intentionally null
+		return null;
 	}
 
 	@Override
 	public String getNewDefinitionPanelTitle()
 	{
-		return "Create New Merchant";
+		// intentionally null
+		return "New Merchant";
 	}
 }
