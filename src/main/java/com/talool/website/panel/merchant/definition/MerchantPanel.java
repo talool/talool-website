@@ -24,6 +24,8 @@ import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.talool.cache.TagCache;
+import com.talool.core.Category;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.Tag;
@@ -31,10 +33,10 @@ import com.talool.core.service.ServiceException;
 import com.talool.website.behaviors.OnChangeAjaxFormBehavior;
 import com.talool.website.component.StateOption;
 import com.talool.website.component.StateSelect;
+import com.talool.website.models.CategoryListModel;
+import com.talool.website.models.CategoryTagListModel;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.models.ModelUtil;
-import com.talool.website.models.TagListModel;
-import com.talool.website.models.TagListModel.CATEGORY;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.util.HttpUtils;
@@ -55,7 +57,11 @@ public class MerchantPanel extends BaseDefinitionPanel
 	private static final long serialVersionUID = -8074065320919062316L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantPanel.class);
 
-	private Tag category;
+	private ChoiceRenderer<Tag> tagChoiceRenderer = new ChoiceRenderer<Tag>("name", "name");
+	private ChoiceRenderer<Category> categoryChoiceRenderer = new ChoiceRenderer<Category>("name",
+			"name");
+
+	private Category category;
 	private List<Tag> tags;
 	private Double latitude;
 	private Double longitude;
@@ -110,13 +116,13 @@ public class MerchantPanel extends BaseDefinitionPanel
 		this.tags = tags;
 	}
 
-	public Tag getCategory()
+	public Category getCategory()
 	{
 		final Merchant merch = (Merchant) getDefaultModelObject();
 		return ModelUtil.getCategory(merch);
 	}
 
-	public void setCategory(Tag category)
+	public void setCategory(Category category)
 	{
 		this.category = category;
 	}
@@ -131,29 +137,28 @@ public class MerchantPanel extends BaseDefinitionPanel
 
 		descriptionPanel.add(new TextField<String>("name").setRequired(true));
 
-		ChoiceRenderer<Tag> cr = new ChoiceRenderer<Tag>("name", "name");
-
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		final ListMultipleChoice tagChoices = new ListMultipleChoice("tags",
-				new PropertyModel<List<Tag>>(this, "tags"), new TagListModel(category), cr);
+		final ListMultipleChoice<Tag> tagChoices = new ListMultipleChoice<Tag>("tags",
+				new PropertyModel<List<Tag>>(this, "tags"), new CategoryTagListModel(getCategory()),
+				tagChoiceRenderer);
 
 		tagChoices.setMaxRows(18);
 		tagChoices.setOutputMarkupId(true);
 		descriptionPanel.add(tagChoices.setRequired(true));
 
-		DropDownChoice<Tag> categorySelect = new DropDownChoice<Tag>("category",
-				new PropertyModel<Tag>(this, "category"), new TagListModel(CATEGORY.ROOT), cr);
+		DropDownChoice<Category> categorySelect = new DropDownChoice<Category>("category",
+				new PropertyModel<Category>(this, "category"), new CategoryListModel(),
+				categoryChoiceRenderer);
+
 		categorySelect.setOutputMarkupId(true);
 		categorySelect.add(new AjaxFormComponentUpdatingBehavior("onChange")
 		{
 
 			private static final long serialVersionUID = -1909537074284102774L;
 
-			@SuppressWarnings("unchecked")
 			@Override
 			protected void onUpdate(AjaxRequestTarget target)
 			{
-				tagChoices.setChoices(TagListModel.getModel(category));
+				tagChoices.setChoices(TagCache.get().getTagsByCategoryName(category.getName()));
 				target.add(tagChoices);
 			}
 
@@ -278,10 +283,10 @@ public class MerchantPanel extends BaseDefinitionPanel
 			{
 				selectedTags.addAll(tags);
 			}
-			if (category != null)
-			{
-				selectedTags.add(category);
-			}
+			// if (category != null)
+			// {
+			// selectedTags.add(category);
+			// }
 			merchant.setTags(selectedTags);
 		}
 		else
@@ -298,7 +303,7 @@ public class MerchantPanel extends BaseDefinitionPanel
 			merchant.getPrimaryLocation().setGeometry(point);
 		}
 
-		taloolService.save(merchant);
+		taloolService.merge(merchant);
 		// taloolService.save(managedLocation);
 		SessionUtils.successMessage("Successfully saved merchant '", merchant.getName(), "'");
 

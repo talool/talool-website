@@ -12,6 +12,8 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
+import com.talool.cache.TagCache;
+import com.talool.core.Category;
 import com.talool.core.Deal;
 import com.talool.core.Merchant;
 import com.talool.core.Tag;
@@ -65,29 +67,24 @@ public final class ModelUtil
 	{
 		return getTagList(merchant.getTags());
 	}
-	
-	public static Tag getCategory(Merchant merchant)
+
+	public static Category getCategory(final Merchant merchant)
 	{
+		Category cat = null;
 		Set<Tag> tags = merchant.getTags();
+		// lets get the first tag and lookup a category
 		if (CollectionUtils.isNotEmpty(tags))
 		{
-			for (final Tag tag : tags)
-			{
-				if (isRootCategory(tag))
-				{
-					return tag;
-				}
-
-			}
+			cat = TagCache.get().getCategoryByTagName(tags.iterator().next().getName());
 		}
-		return null;
+		return cat;
 	}
-	
-	private static boolean isRootCategory(Tag tag) 
+
+	private static boolean isRootCategory(Tag tag)
 	{
-		for (final Tag cat : categories) 
+		for (final Tag cat : categories)
 		{
-			if (cat.getName().equals(tag.getName())) 
+			if (cat.getName().equals(tag.getName()))
 			{
 				return true;
 			}
