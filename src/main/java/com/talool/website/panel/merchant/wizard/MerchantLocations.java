@@ -45,14 +45,12 @@ public class MerchantLocations extends WizardStep {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocations.class);
 	private Image logo;
-	private MerchantLocation location;
-	private Double latitude;
-	private Double longitude;
 	private List<String> countries = new ArrayList<String>();
 	
 	public MerchantLocations()
     {
         super(new ResourceModel("title"), new ResourceModel("summary"));
+        // TODO add a country list
         countries.add("United States");
     }
 	
@@ -64,7 +62,10 @@ public class MerchantLocations extends WizardStep {
 		setDefaultModel(new CompoundPropertyModel<Merchant>((IModel<Merchant>) getDefaultModel()));
 		
 		// TODO add logo image
-		final Label logoUrl = new Label("logoUrl", getLocation().getLogoUrl());
+		Merchant merchant = (Merchant) getDefaultModelObject();
+		StringBuilder sb = new StringBuilder("number of locations:");
+		LOG.debug(sb.append(merchant.getLocations().size()).toString());
+		final Label logoUrl = new Label("logoUrl", merchant.getPrimaryLocation().getLogoUrl());
 		addOrReplace(logoUrl.setOutputMarkupId(true));
 		
 		/*
@@ -88,7 +89,8 @@ public class MerchantLocations extends WizardStep {
 				
 				// Create a new image with the returned url and set the Logo
 				logo = new ImageImpl(name,url);
-				location.setLogoUrl(url);
+				Merchant merchant = (Merchant) getDefaultModelObject();
+				merchant.getPrimaryLocation().setLogoUrl(url);
 				
 				target.add(logoUrl);
 			}
@@ -163,57 +165,6 @@ public class MerchantLocations extends WizardStep {
 	public void setLogo(Image logo) {
 		this.logo = logo;
 	}
-
-	public MerchantLocation getLocation() {
-		if (location==null)
-		{
-			DomainFactory domainFactory = FactoryManager.get().getDomainFactory();
-			location = domainFactory.newMerchantLocation();
-		}
-		return location;
-	}
-
-	public void setLocation(MerchantLocation location) {
-		this.location = location;
-	}
-	
-	public Double getLatitude()
-	{
-		if (latitude == null)
-		{
-			MerchantLocation location = ((Merchant) getDefaultModelObject()).getPrimaryLocation();
-			if (location.getGeometry() != null)
-			{
-				latitude = location.getGeometry().getCoordinate().y;
-			}
-
-		}
-		return latitude;
-	}
-
-	public void setLatitude(Double latitude)
-	{
-		this.latitude = latitude;
-	}
-
-	public Double getLongitude()
-	{
-		if (longitude == null)
-		{
-			MerchantLocation location = ((Merchant) getDefaultModelObject()).getPrimaryLocation();
-			if (location.getGeometry() != null)
-			{
-				longitude = location.getGeometry().getCoordinate().x;
-			}
-
-		}
-		return longitude;
-	}
-
-	public void setLongitude(Double longitude)
-	{
-		this.longitude = longitude;
-	}
 	
 	public StateOption getStateOption()
 	{
@@ -233,6 +184,15 @@ public class MerchantLocations extends WizardStep {
 		final Merchant merch = (Merchant) getDefaultModelObject();
 		merch.getPrimaryLocation().getAddress().setStateProvinceCounty(stateOption.getCode());
 	}
-	
+
+	@Override
+	public void applyState() {
+		// TODO Auto-generated method stub
+		super.applyState();
+		
+		Merchant merchant = (Merchant) getDefaultModelObject();
+		StringBuilder sb = new StringBuilder("POST Save: number of locations:");
+		LOG.debug(sb.append(merchant.getLocations().size()).toString());
+	}
 }
 

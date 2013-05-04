@@ -20,10 +20,26 @@
 			<div class="wicketExtensionsWizardHeaderSummary">
 				<wicket:message key="locations.summary"></wicket:message>
 			</div>
-			<div >
+			<div class="locationList">
 			
-				<font color="red">put location list here</font>
-			
+	  			<div wicket:id="locationRptr" class="location">
+	  				<div wicket:id="locationName">North Boulder</div>
+	  				<div wicket:id="address.address1">main street</div>
+	  				<div wicket:id="address.address2">#250</div>
+	  				<div>
+	  					<span wicket:id="address.city">Boulder</span>,
+	  					<span wicket:id="address.stateProvinceCounty">Colorado</span>
+	  					<span wicket:id="address.zip">12345</span>
+	  				</div>
+	  				<div wicket:id="websiteUrl">http://www.website.com</div>
+	  				<div wicket:id="email">name@website.com</div>
+	  				<div wicket:id="phone">111-222-3333</div>
+	  				<div class="orange-font">
+	  					<a wicket:id="editLink" href="#" class="icon icon-large icon-pencil"></a>
+	  					<a href="#" class="icon icon-large icon-remove"></a>
+	  				</div>
+	  			</div>
+
 			</div>
 		    
 		</div>
