@@ -27,6 +27,7 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.wicketstuff.gmap.GMap;
 
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
@@ -149,7 +150,6 @@ public class MerchantLocations extends WizardStep {
 
 		contactPanel.add(new TextField<String>("primaryLocation.websiteUrl").add(new UrlValidator()));
 
-		
 	}
 	
 	public Image getLogo() {

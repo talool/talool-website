@@ -17,6 +17,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.wicketstuff.gmap.GMap;
 
 import com.talool.core.Location;
 import com.talool.core.Merchant;
@@ -180,6 +181,10 @@ public class MerchantsPage extends BasePage
 			}
 		};
 		add(wizard);
+		
+		// preload the map to avoid a race condition with the loading of js dependencies
+		GMap map = new GMap("preloadMap");
+		add(map);
 
 	}
 
