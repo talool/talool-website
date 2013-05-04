@@ -1,20 +1,34 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
      <div class="newMerchant">
 		
-		<div class="panel">
+		<div class="panel right">
+			<div class="wicketExtensionsWizardHeaderTitle">
+				<wicket:message key="map.title"></wicket:message>
+			</div>
+			<div class="wicketExtensionsWizardHeaderSummary">
+				<wicket:message key="map.summary"></wicket:message>
+			</div>
+			<div class="map" wicket:id="map">
+			</div>
 		    
 		</div>
 		
-		<div class="wicketExtensionsWizardHeaderTitle">
-			<wicket:message key="template.title"></wicket:message>
+		<div class="panel left">
+			<div class="wicketExtensionsWizardHeaderTitle">
+				<wicket:message key="locations.title"></wicket:message>
+			</div>
+			<div class="wicketExtensionsWizardHeaderSummary">
+				<wicket:message key="locations.summary"></wicket:message>
+			</div>
+			<div >
+			
+				<font color="red">put location list here</font>
+			
+			</div>
+		    
 		</div>
-		<div class="wicketExtensionsWizardHeaderSummary">
-			<wicket:message key="template.summary"></wicket:message>
-		</div>
+		
 
-		<div class="panel">
-
-		</div>
 		<div class="clear"></div>
 	</div>
 </wicket:panel>

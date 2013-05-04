@@ -1,20 +1,51 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
      <div class="newMerchant">
+
+		<div wicket:id="locationPanel" class="panel right">
+			<div class="wicketExtensionsWizardHeaderTitle">
+				<wicket:message key="location.title"></wicket:message>
+			</div>
+			<div class="wicketExtensionsWizardHeaderSummary">
+				<wicket:message key="location.summary"></wicket:message>
+			</div>
+			<fieldset>
+				<div><label><i class="optional-font icon-asterisk"></i> Name</label><input wicket:id="primaryLocation.locationName" name="merchant_location_name"/></div>
+			    <div><label><i class="hint-font icon-asterisk"></i> Address1</label><input wicket:id="primaryLocation.address.address1" name="address1" type="text"/></div>
+			    <div><label><i class="optional-font icon-asterisk"></i> Address2</label><input wicket:id="primaryLocation.address.address2" name="address2" type="text"/></div>
+			    <div><label><i class="hint-font icon-asterisk"></i> City</label><input wicket:id="primaryLocation.address.city" name="city" type="text"/></div>
+			    <div><label><i class="hint-font icon-asterisk"></i> State</label>
+			      <select wicket:id="primaryLocation.address.stateProvinceCounty">
+			       <option>CO</option>
+			       <option>NV</option>
+			      </select></div>
+			    <div><label><i class="hint-font icon-asterisk"></i> Zip</label><input wicket:id="primaryLocation.address.zip"  name="zip" type="text"/></div>
+			    <div><label><i class="hint-font icon-asterisk"></i> Country</label><select wicket:id="primaryLocation.address.country"/></div>
+		    </fieldset>
+		</div>
 		
-		<div class="panel">
+		<div class="panel left">
+			<div class="wicketExtensionsWizardHeaderTitle">
+				<wicket:message key="logo.title"></wicket:message>
+			</div>
+			<div class="wicketExtensionsWizardHeaderSummary">
+				<wicket:message key="logo.summary"></wicket:message>
+			</div>
+		    <div wicket:id="logoUrl"></div>
+		    <iframe wicket:id="uploaderIFrame" width="325" height="110" scrolling="no"></iframe>
 		    
+		    <div class="wicketExtensionsWizardHeaderTitle">
+				<wicket:message key="contact.title"></wicket:message>
+			</div>
+			<div class="wicketExtensionsWizardHeaderSummary">
+				<wicket:message key="contact.summary"></wicket:message>
+			</div>
+			<fieldset wicket:id="contactPanel">
+				<div><label><i class="hint-font icon-asterisk"></i> Phone</label><input wicket:id="primaryLocation.phone"  name="phone" type="text"/></div>
+		    	<div><label><i class="hint-font icon-asterisk"></i> Email</label><input wicket:id="primaryLocation.email"  name="email" type="text"/></div>
+		    	<div><label><i class="optional-font icon-asterisk"></i> Website</label><input wicket:id="primaryLocation.websiteUrl"  name="web_url" type="text"/></div>
+		    </fieldset>
 		</div>
 		
-		<div class="wicketExtensionsWizardHeaderTitle">
-			<wicket:message key="template.title"></wicket:message>
-		</div>
-		<div class="wicketExtensionsWizardHeaderSummary">
-			<wicket:message key="template.summary"></wicket:message>
-		</div>
-
-		<div class="panel">
-
-		</div>
 		<div class="clear"></div>
 	</div>
 </wicket:panel>

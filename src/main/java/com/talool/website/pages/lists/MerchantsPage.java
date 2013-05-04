@@ -150,7 +150,14 @@ public class MerchantsPage extends BasePage
 			public void onClick(AjaxRequestTarget target)
 			{
 				getSession().getFeedbackMessages().clear();
-				wizard.setModelObject(domainFactory.newMerchant());
+				
+				Merchant merchant = domainFactory.newMerchant();
+				MerchantLocation location = domainFactory.newMerchantLocation();
+				location.setAddress(domainFactory.newAddress());
+				location.setLogoUrl("");
+				merchant.addLocation(location);
+				
+				wizard.setModelObject(merchant);
 				wizard.open(target);
 			}
 		};

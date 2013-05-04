@@ -57,6 +57,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 	@Override
 	protected void init()
 	{
+		
 		final IPackageResourceGuard packageResourceGuard = getResourceSettings()
 				.getPackageResourceGuard();
 		if (packageResourceGuard instanceof SecurePackageResourceGuard)

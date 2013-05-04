@@ -1,19 +1,18 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
      <div class="newMerchant">
-		
-		<div class="panel">
-		    
+		<div class="panel right">
+			<font color="red">put pretty pictures and marketing fluff here</font>
 		</div>
-		
-		<div class="wicketExtensionsWizardHeaderTitle">
-			<wicket:message key="template.title"></wicket:message>
-		</div>
-		<div class="wicketExtensionsWizardHeaderSummary">
-			<wicket:message key="template.summary"></wicket:message>
-		</div>
-
-		<div class="panel">
-
+		<div class="panel left" wicket:id="descriptionPanel">
+			<div class="wicketExtensionsWizardHeaderTitle">
+				<wicket:message key="getstarted.title"></wicket:message>
+			</div>
+			<div class="wicketExtensionsWizardHeaderSummary">
+				<wicket:message key="getstarted.summary"></wicket:message>
+			</div>
+			<div><label><i class="hint-font icon-asterisk"></i> Name</label><input wicket:id="name" name="name" type="text"/></div>
+	    	<div><label><i class="hint-font icon-asterisk"></i> Category</label><select wicket:id="category"></select></div>
+	    	<div><label><i class="hint-font icon-asterisk"></i> Tags</label><select wicket:id="tags" multiple="multiple"></select></div>
 		</div>
 		<div class="clear"></div>
 	</div>
