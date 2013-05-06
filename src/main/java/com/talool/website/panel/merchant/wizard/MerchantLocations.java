@@ -12,7 +12,7 @@ import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.InlineFrame;
@@ -27,17 +27,20 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wicketstuff.gmap.GMap;
 
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
 import com.talool.core.Image;
+import com.talool.core.MediaType;
 import com.talool.core.Merchant;
-import com.talool.core.MerchantLocation;
+import com.talool.core.MerchantMedia;
+import com.talool.core.Tag;
+import com.talool.core.service.ServiceException;
+import com.talool.core.service.TaloolService;
 import com.talool.domain.ImageImpl;
-import com.talool.website.behaviors.OnChangeAjaxFormBehavior;
 import com.talool.website.component.StateOption;
 import com.talool.website.component.StateSelect;
+import com.talool.website.models.MerchantMediaListModel;
 import com.talool.website.pages.UploadPage;
 
 public class MerchantLocations extends WizardStep {
@@ -46,12 +49,22 @@ public class MerchantLocations extends WizardStep {
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocations.class);
 	private Image logo;
 	private List<String> countries = new ArrayList<String>();
+	private List<MerchantMedia> unsavedMedia = new ArrayList<MerchantMedia>();
+	private List<MerchantMedia> myLogoChoices = new ArrayList<MerchantMedia>();
+	private DropDownChoice<MerchantMedia> mediaSelect;
+	private MerchantMedia selectedLogo;
+	
+	private transient static final TaloolService taloolService = FactoryManager.get()
+			.getServiceFactory().getTaloolService();
+	private transient static final DomainFactory domainFactory = FactoryManager.get()
+			.getDomainFactory();
 	
 	public MerchantLocations()
     {
         super(new ResourceModel("title"), new ResourceModel("summary"));
         // TODO add a country list
-        countries.add("United States");
+        countries.add("USA");
+        
     }
 	
 	@SuppressWarnings("unchecked")
@@ -61,12 +74,17 @@ public class MerchantLocations extends WizardStep {
 		
 		setDefaultModel(new CompoundPropertyModel<Merchant>((IModel<Merchant>) getDefaultModel()));
 		
+		final Merchant merchant = (Merchant) getDefaultModelObject();
+		
 		// TODO add logo image
-		Merchant merchant = (Merchant) getDefaultModelObject();
-		StringBuilder sb = new StringBuilder("number of locations:");
-		LOG.debug(sb.append(merchant.getLocations().size()).toString());
-		final Label logoUrl = new Label("logoUrl", merchant.getPrimaryLocation().getLogoUrl());
-		addOrReplace(logoUrl.setOutputMarkupId(true));
+		// TODO Dependent on a change to the merchant
+		final MerchantMediaListModel mediaListModel = new MerchantMediaListModel();
+		mediaListModel.setMerchantId(merchant.getId());
+		mediaListModel.setMediaType(MediaType.MERCHANT_LOGO);
+		myLogoChoices = mediaListModel.getObject();
+		ChoiceRenderer<MerchantMedia> cr = new ChoiceRenderer<MerchantMedia>("mediaName", "mediaUrl");
+		mediaSelect = new DropDownChoice<MerchantMedia>("logoSelect",new PropertyModel<MerchantMedia>(this,"selectedLogo"), mediaListModel, cr); 
+		addOrReplace(mediaSelect.setOutputMarkupId(true));
 		
 		/*
 		 * Add an iframe that keep the upload in a sandbox
@@ -85,14 +103,24 @@ public class MerchantLocations extends WizardStep {
 			protected void respond(AjaxRequestTarget target) {
 				IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
 				String url = params.getParameterValue("url").toString();
-				String name = params.getParameterValue("name").toString();
 				
-				// Create a new image with the returned url and set the Logo
-				logo = new ImageImpl(name,url);
-				Merchant merchant = (Merchant) getDefaultModelObject();
-				merchant.getPrimaryLocation().setLogoUrl(url);
+				MerchantMedia merchantLogo = domainFactory.newMedia(merchant.getId(), url, MediaType.MERCHANT_LOGO);
+				if (merchant.getId() != null)
+				{
+					saveMedia(merchantLogo);
+				} 
+				else
+				{
+					unsavedMedia.add(merchantLogo);
+				}
 				
-				target.add(logoUrl);
+				// TODO this is a little wacky... need to straighten it out.
+				myLogoChoices.add(merchantLogo);
+				mediaListModel.setObject(myLogoChoices);
+				mediaSelect.setChoices(mediaListModel);
+				selectedLogo = merchantLogo;
+
+				target.add(mediaSelect);
 			}
 			
 			@Override
@@ -112,27 +140,17 @@ public class MerchantLocations extends WizardStep {
 		WebMarkupContainer locationPanel = new WebMarkupContainer("locationPanel");
 		addOrReplace(locationPanel);
 
-		/*
-		 * OnChangeAjaxFormBehavior addded forAddress so we can (sort of hack)
-		 * ensure the address fields are updated in the event we "resolve location"
-		 * on our nested form. Could also use it to validate City/Address spellings
-		 * later
-		 */
 		final TextField<String> addr1 = new TextField<String>("primaryLocation.address.address1");
-		addr1.add(new OnChangeAjaxFormBehavior());
 		locationPanel.add(addr1.setRequired(true));
 
 		final TextField<String> addr2 = new TextField<String>("primaryLocation.address.address2");
-		addr2.add(new OnChangeAjaxFormBehavior());
 		locationPanel.add(addr2);
 
 		final TextField<String> city = new TextField<String>("primaryLocation.address.city");
-		city.add(new OnChangeAjaxFormBehavior());
 		locationPanel.add(city.setRequired(true));
 
 		final StateSelect state = new StateSelect("primaryLocation.address.stateProvinceCounty",
 				new PropertyModel<StateOption>(this, "stateOption"));
-		state.add(new OnChangeAjaxFormBehavior());
 		locationPanel.add(state.setRequired(true));
 
 		locationPanel.add(new TextField<String>("primaryLocation.address.zip").setRequired(true));
@@ -185,14 +203,72 @@ public class MerchantLocations extends WizardStep {
 		merch.getPrimaryLocation().getAddress().setStateProvinceCounty(stateOption.getCode());
 	}
 
+	public MerchantMedia getSelectedLogo() {
+		return selectedLogo;
+	}
+
+	public void setSelectedLogo(MerchantMedia selectedMedia) {
+		this.selectedLogo = selectedMedia;
+	}
+
+	/*
+	 * Save the state of the Merchant.
+	 */
 	@Override
 	public void applyState() {
-		// TODO Auto-generated method stub
 		super.applyState();
 		
-		Merchant merchant = (Merchant) getDefaultModelObject();
-		StringBuilder sb = new StringBuilder("POST Save: number of locations:");
-		LOG.debug(sb.append(merchant.getLocations().size()).toString());
+		final Merchant merch = (Merchant) getDefaultModelObject();
+		
+		if (merch.getId() == null)
+		{
+			try 
+			{
+				// New users need to be saved before we can save the logos
+				taloolService.save(merch);
+				StringBuilder sb = new StringBuilder("Saved Merchant with id:");
+				LOG.debug(sb.append(merch.getId()).toString());
+			}
+			catch (ServiceException se)
+			{
+				LOG.error("failed to save new merchant:",se);
+			}
+			catch (Exception e)
+			{
+				// TODO ? same merchant uploading the same file ?
+				LOG.error("random-ass-exception saving new merchant:",e);
+			}
+		}
+		
+		for (MerchantMedia media:unsavedMedia)
+		{
+			media.setMerchantId(merch.getId());
+			saveMedia(media);
+		}
+		
+		// get the selected MerchantMedia and add it to the location
+		// TODO the location needs to store a MerchantMedia object, not the url
+		// TODO don't save it if it's the default
+		if (selectedLogo != null)
+		{
+			merch.getPrimaryLocation().setLogoUrl(selectedLogo.getMediaUrl());
+		}
+	}
+	
+	private void saveMedia(MerchantMedia media)
+	{
+		try 
+		{
+			taloolService.saveMerchantMedia(media);
+		}
+		catch (ServiceException se)
+		{
+			LOG.error("failed to save media:",se);
+		}
+		catch (Exception e)
+		{
+			LOG.error("random-ass-exception saving new merchant media:",e);
+		}
 	}
 }
 

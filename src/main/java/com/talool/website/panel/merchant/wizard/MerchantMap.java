@@ -2,9 +2,9 @@ package com.talool.website.panel.merchant.wizard;
 
 import java.util.List;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -28,7 +28,6 @@ import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.definition.MerchantLocationPanel;
 import com.talool.website.util.HttpUtils;
-import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 
 public class MerchantMap extends WizardStep {
@@ -99,11 +98,6 @@ public class MerchantMap extends WizardStep {
 					final Long merchantLocationId = managedLocation.getId();
 
 					item.setModel(new CompoundPropertyModel<MerchantLocation>(managedLocation));
-
-					if (item.getIndex() % 2 == 0)
-					{
-						item.add(new AttributeModifier("class", "gray0-bg"));
-					}
 
 					item.add(new Label("locationName"));
 					item.add(new Label("websiteUrl"));
