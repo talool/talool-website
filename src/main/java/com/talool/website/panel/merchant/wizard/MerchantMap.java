@@ -91,22 +91,42 @@ public class MerchantMap extends WizardStep {
 		 */
         List<MerchantLocation> locs = merchant.getLocations();
         Point pin;
-        try {
-	        for (MerchantLocation l:locs)
+        
+	        for (MerchantLocation location:locs)
 	        {
-	        	address = l.getAddress();
-	        	pin = HttpUtils.getGeometry(address.getAddress1(), address.getAddress2(),
-						address.getCity(), address.getStateProvinceCounty());
-				
-				map.addOverlay(new GMarker(new GMarkerOptions(map, new GLatLng(pin.getY(), pin.getX()))));
-				
-				l.setGeometry(pin);
+	        	address = location.getAddress();
+	        	try
+	        	{
+	        		address.getId();
+	        	} 
+	        	catch (Exception lazy)
+	        	{
+	    			try
+	    			{
+	    				// TODO Revisit to see why merge didn't work for address
+	    				taloolService.refresh(address);
+	    				LOG.debug("Had to refresh an address");
+	    			}
+	    			catch (ServiceException se) 
+	    		    {
+	    		    	LOG.error("There was an exception merging the address to be pinned: ", se);
+	    		    }
+	        	}
+	        	
+	        	try {
+		        	pin = HttpUtils.getGeometry(address.getAddress1(), address.getAddress2(),
+							address.getCity(), address.getStateProvinceCounty());
+					
+					map.addOverlay(new GMarker(new GMarkerOptions(map, new GLatLng(pin.getY(), pin.getX()))));
+					
+					location.setGeometry(pin);
+		        }
+		        catch (Exception e) 
+			    {
+		        	LOG.error("There was an exception resolving lat/long to pin the map: " + e.getLocalizedMessage(), e);
+			    }
 	        }
-        }
-        catch (Exception e) 
-	    {
-        	LOG.error("There was an exception resolving lat/long to pin the map: " + e.getLocalizedMessage(), e);
-	    }    
+            
 	    
 		
 
