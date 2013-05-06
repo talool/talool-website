@@ -40,8 +40,18 @@ public class MerchantMediaListModel extends LoadableDetachableModel<List<Merchan
 			{
 				SearchOptions searchOptions = new SearchOptions.Builder().maxResults(100).page(0).sortProperty("merchantMedia.mediaUrl")
 						.ascending(true).build();
+				
+				MediaType[] mediaTypes;
+				if (_mediaType == null)
+				{
+					mediaTypes = MediaType.values();
+				}
+				else
+				{
+					mediaTypes = new MediaType[]{_mediaType};
+				}
 
-				media = ServiceFactory.get().getTaloolService().getMerchantMedias(_merchantId, searchOptions);
+				media = ServiceFactory.get().getTaloolService().getMerchantMedias(_merchantId, mediaTypes, searchOptions);
 			}
 			else
 			{

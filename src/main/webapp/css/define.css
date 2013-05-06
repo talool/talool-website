@@ -6,11 +6,16 @@
 	height: 325px;
 	width: 375px;
 }
+.merchantWiz .locationList {
+	height: 360px;
+	overflow:scroll;
+}
 .merchantWiz .locationList .location {
-	border: 1px solid #ebebeb;
+	border: 1px solid rgba(185, 172, 151,.5);
 	border-radius: 5px;
 	padding: 10px;
 	position: relative;
+	margin-top: 10px;
 }
 .merchantWiz .locationList .location .actions {
 	position: absolute;
