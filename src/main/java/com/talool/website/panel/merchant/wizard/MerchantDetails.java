@@ -31,9 +31,13 @@ import org.slf4j.LoggerFactory;
 
 import com.talool.cache.TagCache;
 import com.talool.core.Category;
+import com.talool.core.DomainFactory;
+import com.talool.core.FactoryManager;
 import com.talool.core.Image;
 import com.talool.core.Merchant;
 import com.talool.core.Tag;
+import com.talool.core.service.ServiceException;
+import com.talool.core.service.TaloolService;
 import com.talool.domain.ImageImpl;
 import com.talool.website.models.CategoryListModel;
 import com.talool.website.models.CategoryTagListModel;
@@ -52,6 +56,10 @@ public class MerchantDetails extends WizardStep {
 	private Category category;
 	private List<Tag> tags;
 	
+	private transient static final TaloolService taloolService = FactoryManager.get()
+			.getServiceFactory().getTaloolService();
+	private transient static final DomainFactory domainFactory = FactoryManager.get()
+			.getDomainFactory();
 	
 	public MerchantDetails()
     {
@@ -62,9 +70,23 @@ public class MerchantDetails extends WizardStep {
 	protected void onConfigure() {
 		super.onConfigure();
 		
+		final Merchant merchant = (Merchant) getDefaultModelObject();
+		if (merchant.getId() != null)
+		{
+			try
+			{
+				taloolService.merge(merchant);
+			}
+			catch (ServiceException se) 
+		    {
+		    	LOG.error("There was an exception merging the merchant: ", se);
+		    }
+		}
+		
 		WebMarkupContainer descriptionPanel = new WebMarkupContainer("descriptionPanel");
 		addOrReplace(descriptionPanel.setOutputMarkupId(true));
 
+		// TODO check for duplicate merchant names
 		descriptionPanel.add(new TextField<String>("name").setRequired(true));
 
 		final ListMultipleChoice<Tag> tagChoices = new ListMultipleChoice<Tag>("tags",

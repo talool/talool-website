@@ -27,6 +27,7 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
@@ -34,7 +35,6 @@ import com.talool.core.Image;
 import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantMedia;
-import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.domain.ImageImpl;
@@ -48,7 +48,6 @@ public class MerchantLocations extends WizardStep {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocations.class);
 	private Image logo;
-	private List<String> countries = new ArrayList<String>();
 	private List<MerchantMedia> unsavedMedia = new ArrayList<MerchantMedia>();
 	private List<MerchantMedia> myLogoChoices = new ArrayList<MerchantMedia>();
 	private DropDownChoice<MerchantMedia> mediaSelect;
@@ -62,8 +61,6 @@ public class MerchantLocations extends WizardStep {
 	public MerchantLocations()
     {
         super(new ResourceModel("title"), new ResourceModel("summary"));
-        // TODO add a country list
-        countries.add("USA");
         
     }
 	
@@ -77,7 +74,6 @@ public class MerchantLocations extends WizardStep {
 		final Merchant merchant = (Merchant) getDefaultModelObject();
 		
 		// TODO add logo image
-		// TODO Dependent on a change to the merchant
 		final MerchantMediaListModel mediaListModel = new MerchantMediaListModel();
 		mediaListModel.setMerchantId(merchant.getId());
 		mediaListModel.setMediaType(MediaType.MERCHANT_LOGO);
@@ -105,9 +101,10 @@ public class MerchantLocations extends WizardStep {
 				String url = params.getParameterValue("url").toString();
 				
 				MerchantMedia merchantLogo = domainFactory.newMedia(merchant.getId(), url, MediaType.MERCHANT_LOGO);
+				boolean updateList = true;
 				if (merchant.getId() != null)
 				{
-					saveMedia(merchantLogo);
+					updateList = saveMedia(merchantLogo);
 				} 
 				else
 				{
@@ -115,12 +112,14 @@ public class MerchantLocations extends WizardStep {
 				}
 				
 				// TODO this is a little wacky... need to straighten it out.
-				myLogoChoices.add(merchantLogo);
-				mediaListModel.setObject(myLogoChoices);
-				mediaSelect.setChoices(mediaListModel);
-				selectedLogo = merchantLogo;
-
-				target.add(mediaSelect);
+				if (updateList) 
+				{
+					myLogoChoices.add(merchantLogo);
+					mediaListModel.setObject(myLogoChoices);
+					mediaSelect.setChoices(mediaListModel);
+					selectedLogo = merchantLogo;
+					target.add(mediaSelect);
+				}
 			}
 			
 			@Override
@@ -140,35 +139,33 @@ public class MerchantLocations extends WizardStep {
 		WebMarkupContainer locationPanel = new WebMarkupContainer("locationPanel");
 		addOrReplace(locationPanel);
 
-		final TextField<String> addr1 = new TextField<String>("primaryLocation.address.address1");
+		final TextField<String> addr1 = new TextField<String>("currentLocation.address.address1");
 		locationPanel.add(addr1.setRequired(true));
 
-		final TextField<String> addr2 = new TextField<String>("primaryLocation.address.address2");
+		final TextField<String> addr2 = new TextField<String>("currentLocation.address.address2");
 		locationPanel.add(addr2);
 
-		final TextField<String> city = new TextField<String>("primaryLocation.address.city");
+		final TextField<String> city = new TextField<String>("currentLocation.address.city");
 		locationPanel.add(city.setRequired(true));
 
-		final StateSelect state = new StateSelect("primaryLocation.address.stateProvinceCounty",
+		final StateSelect state = new StateSelect("currentLocation.address.stateProvinceCounty",
 				new PropertyModel<StateOption>(this, "stateOption"));
 		locationPanel.add(state.setRequired(true));
 
-		locationPanel.add(new TextField<String>("primaryLocation.address.zip").setRequired(true));
+		locationPanel.add(new TextField<String>("currentLocation.address.zip").setRequired(true));
 
-		locationPanel.add(new DropDownChoice<String>("primaryLocation.address.country",countries).setRequired(true));
-
-		locationPanel.add(new TextField<String>("primaryLocation.locationName"));
+		locationPanel.add(new TextField<String>("currentLocation.locationName"));
 
 		
 		WebMarkupContainer contactPanel = new WebMarkupContainer("contactPanel");
 		addOrReplace(contactPanel);
 		
-		contactPanel.add(new TextField<String>("primaryLocation.phone").setRequired(true));
+		contactPanel.add(new TextField<String>("currentLocation.phone").setRequired(true));
 
-		contactPanel.add(new TextField<String>("primaryLocation.email").setRequired(true).add(
+		contactPanel.add(new TextField<String>("currentLocation.email").setRequired(true).add(
 				EmailAddressValidator.getInstance()));
 
-		contactPanel.add(new TextField<String>("primaryLocation.websiteUrl").add(new UrlValidator()));
+		contactPanel.add(new TextField<String>("currentLocation.websiteUrl").add(new UrlValidator()));
 
 	}
 	
@@ -187,12 +184,12 @@ public class MerchantLocations extends WizardStep {
 	public StateOption getStateOption()
 	{
 		final Merchant merch = (Merchant) getDefaultModelObject();
-		if (merch.getPrimaryLocation().getAddress().getStateProvinceCounty() == null)
+		if (merch.getCurrentLocation().getAddress().getStateProvinceCounty() == null)
 		{
 			return null;
 		}
 
-		return StateSelect.getStateOptionByCode(merch.getPrimaryLocation().getAddress()
+		return StateSelect.getStateOptionByCode(merch.getCurrentLocation().getAddress()
 				.getStateProvinceCounty());
 
 	}
@@ -200,7 +197,7 @@ public class MerchantLocations extends WizardStep {
 	public void setStateOption(final StateOption stateOption)
 	{
 		final Merchant merch = (Merchant) getDefaultModelObject();
-		merch.getPrimaryLocation().getAddress().setStateProvinceCounty(stateOption.getCode());
+		merch.getCurrentLocation().getAddress().setStateProvinceCounty(stateOption.getCode());
 	}
 
 	public MerchantMedia getSelectedLogo() {
@@ -235,8 +232,20 @@ public class MerchantLocations extends WizardStep {
 			}
 			catch (Exception e)
 			{
-				// TODO ? same merchant uploading the same file ?
+				// TODO duplicate merchant name?
 				LOG.error("random-ass-exception saving new merchant:",e);
+			}
+		}
+		else
+		{
+			try 
+			{
+				// Need to save the current location in the edit flow
+				taloolService.save(merch.getCurrentLocation());
+			}
+			catch (ServiceException se)
+			{
+				LOG.error("failed to save new merchant location:",se);
 			}
 		}
 		
@@ -251,24 +260,32 @@ public class MerchantLocations extends WizardStep {
 		// TODO don't save it if it's the default
 		if (selectedLogo != null)
 		{
-			merch.getPrimaryLocation().setLogoUrl(selectedLogo.getMediaUrl());
+			merch.getCurrentLocation().setLogoUrl(selectedLogo.getMediaUrl());
 		}
 	}
 	
-	private void saveMedia(MerchantMedia media)
+	private boolean saveMedia(MerchantMedia media)
 	{
 		try 
 		{
 			taloolService.saveMerchantMedia(media);
+			return true;
 		}
 		catch (ServiceException se)
 		{
 			LOG.error("failed to save media:",se);
 		}
+		catch (DataIntegrityViolationException dve)
+		{
+			// TODO Don't try to save the same media for the same merchant
+			// ERROR: duplicate key value violates unique constraint "merchant_media_merchant_id_media_url_key"
+			LOG.info("merchant tried to upload the same image twice");
+		}
 		catch (Exception e)
 		{
 			LOG.error("random-ass-exception saving new merchant media:",e);
 		}
+		return false;
 	}
 }
 

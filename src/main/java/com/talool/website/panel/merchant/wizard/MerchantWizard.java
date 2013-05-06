@@ -30,7 +30,7 @@ public class MerchantWizard extends AbstractWizard<Merchant> {
 		WizardModel wizardModel = new WizardModel();
 		wizardModel.add(new MerchantDetails());
 		wizardModel.add(new MerchantLocations());
-		wizardModel.add(new MerchantMap());
+		wizardModel.add(new MerchantMap(this));
 		wizardModel.add(new MerchantAccounts());
 		wizardModel.add(new MerchantDealOffers());
 		wizardModel.add(new SaveAndFinish());
@@ -137,6 +137,12 @@ public class MerchantWizard extends AbstractWizard<Merchant> {
 	@Override
 	public int getWidth() {
 		return 890;
+	}
+	
+	public void goBack(AjaxRequestTarget target)
+	{
+		DialogButton prev = findButton("<");
+		onClick(target,prev);
 	}
 	
 	// a bogus step to flag the "save and finish" button

@@ -4,9 +4,7 @@ import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.wizard.WizardStep;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -20,13 +18,13 @@ import org.wicketstuff.gmap.api.GMarker;
 import org.wicketstuff.gmap.api.GMarkerOptions;
 
 import com.talool.core.Address;
+import com.talool.core.DomainFactory;
+import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
+import com.talool.core.service.ServiceException;
+import com.talool.core.service.TaloolService;
 import com.talool.website.models.MerchantLocationListModel;
-import com.talool.website.pages.BasePage;
-import com.talool.website.panel.AdminModalWindow;
-import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.merchant.definition.MerchantLocationPanel;
 import com.talool.website.util.HttpUtils;
 import com.vividsolutions.jts.geom.Point;
 
@@ -34,36 +32,66 @@ public class MerchantMap extends WizardStep {
 	
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantMap.class);
+	private final MerchantWizard wizard;
 	
-	public MerchantMap()
+	private transient static final TaloolService taloolService = FactoryManager.get()
+			.getServiceFactory().getTaloolService();
+	private transient static final DomainFactory domainFactory = FactoryManager.get()
+			.getDomainFactory();
+	
+	public MerchantMap(MerchantWizard wiz)
     {
         super(new ResourceModel("title"), new ResourceModel("summary"));
-        
+        wizard = wiz;
     }
 	
 	@Override
 	protected void onConfigure() {
 		super.onConfigure();
 		
-		Merchant merchant = (Merchant) getDefaultModelObject();
+		final Merchant merchant = (Merchant) getDefaultModelObject();
+		if (merchant.getId() != null)
+		{
+			try
+			{
+				taloolService.merge(merchant);
+			}
+			catch (ServiceException se) 
+		    {
+		    	LOG.error("There was an exception merging the merchant: ", se);
+		    }
+		}
 		
-		MerchantLocation loc = merchant.getLocations().get(0);
-		Address address = loc.getAddress();
-		
+		GMap map = new GMap("map");
+        map.setStreetViewControlEnabled(false);
+        map.setScaleControlEnabled(true);
+        map.setScrollWheelZoomEnabled(true);
+        addOrReplace(map);
+        
+        /*
+         * Center the map
+         */
+        MerchantLocation loc = merchant.getLocations().get(0);
+		Address address;
 		try {
+			address = loc.getAddress();
 			Point point = HttpUtils.getGeometry(address.getAddress1(), address.getAddress2(),
 					address.getCity(), address.getStateProvinceCounty());
 			
 			GLatLng center = new GLatLng(point.getY(), point.getX());
-			
-			GMap map = new GMap("map");
-	        map.setStreetViewControlEnabled(false);
-	        map.setScaleControlEnabled(true);
-	        map.setScrollWheelZoomEnabled(true);
-	        map.setCenter(center);    
-	        
-	        List<MerchantLocation> locs = merchant.getLocations();
-	        Point pin;
+	        map.setCenter(center);
+		}
+        catch (Exception e)
+		{
+			LOG.error("There was an exception resolving lat/long to center the map: " + e.getLocalizedMessage(), e);
+		}
+		
+		/*
+		 * Put the pins on the map
+		 */
+        List<MerchantLocation> locs = merchant.getLocations();
+        Point pin;
+        try {
 	        for (MerchantLocation l:locs)
 	        {
 	        	address = l.getAddress();
@@ -72,73 +100,86 @@ public class MerchantMap extends WizardStep {
 				
 				map.addOverlay(new GMarker(new GMarkerOptions(map, new GLatLng(pin.getY(), pin.getX()))));
 				
-				// TODO does this save the point?
 				l.setGeometry(pin);
 	        }
-	        
-	        
-	        addOrReplace(map);
-	        
-	        /*
-	         * Location List
-	         */
-	        MerchantLocationListModel model = new MerchantLocationListModel();
-			model.setMerchantId(merchant.getId());
-			model.setObject(merchant.getLocations());
-			final ListView<MerchantLocation> locations = new ListView<MerchantLocation>(
-					"locationRptr", model)
-			{
+        }
+        catch (Exception e) 
+	    {
+        	LOG.error("There was an exception resolving lat/long to pin the map: " + e.getLocalizedMessage(), e);
+	    }    
+	    
+		
 
-				private static final long serialVersionUID = 1L;
+        /*
+         * Link to add more locations
+         */
+        addOrReplace(new AjaxLink<Void>("addLocation") {
 
-				@Override
-				protected void populateItem(ListItem<MerchantLocation> item)
-				{
-					MerchantLocation managedLocation = item.getModelObject();
-					final Long merchantLocationId = managedLocation.getId();
+			private static final long serialVersionUID = 1L;
 
-					item.setModel(new CompoundPropertyModel<MerchantLocation>(managedLocation));
-
-					item.add(new Label("locationName"));
-					item.add(new Label("websiteUrl"));
-					item.add(new Label("email"));
-					item.add(new Label("phone"));
-					item.add(new Label("address.address1"));
-					item.add(new Label("address.address2"));
-					item.add(new Label("address.city"));
-					item.add(new Label("address.stateProvinceCounty"));
-					item.add(new Label("address.zip"));
-
-					BasePage page = (BasePage) this.getPage();
-					final AdminModalWindow modal = page.getModal();
-					final SubmitCallBack callback = page.getCallback(modal);
-					item.add(new AjaxLink<Void>("editLink")
-					{
-
-						private static final long serialVersionUID = 8817599057544892359L;
-
-						@Override
-						public void onClick(AjaxRequestTarget target)
-						{
-							getSession().getFeedbackMessages().clear();
-							MerchantLocationPanel panel = new MerchantLocationPanel(modal.getContentId(), callback,
-									merchantLocationId);
-							modal.setContent(panel);
-							modal.setTitle("Edit Merchant Location");
-							modal.show(target);
-						}
-					});
-				}
-
-			};
-			addOrReplace(locations);
-		}
-        catch (Exception e)
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				
+				// create a new location and add it to the merchant
+				MerchantLocation location = domainFactory.newMerchantLocation();
+				location.setAddress(domainFactory.newAddress());
+				location.setLogoUrl("");
+				merchant.addLocation(location);
+				merchant.setCurrentLocation(location);
+				
+				// go back to the previous step
+				wizard.goBack(target);
+			}
+        	
+        });
+        
+        /*
+         * Location List
+         */
+        MerchantLocationListModel model = new MerchantLocationListModel();
+		model.setMerchantId(merchant.getId());
+		model.setObject(merchant.getLocations());
+		final ListView<MerchantLocation> locations = new ListView<MerchantLocation>(
+				"locationRptr", model)
 		{
-			LOG.error("There was an exception resolving lat/long: " + e.getLocalizedMessage(), e);
-			WebMarkupContainer bug = new WebMarkupContainer("map");
-			addOrReplace(bug);
-		}
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<MerchantLocation> item)
+			{
+				final MerchantLocation merchLoc = item.getModelObject();
+				
+				item.setModel(new CompoundPropertyModel<MerchantLocation>(merchLoc));
+
+				item.add(new Label("locationName"));
+				item.add(new Label("websiteUrl"));
+				item.add(new Label("email"));
+				item.add(new Label("phone"));
+				item.add(new Label("address.address1"));
+				item.add(new Label("address.address2"));
+				item.add(new Label("address.city"));
+				item.add(new Label("address.stateProvinceCounty"));
+				item.add(new Label("address.zip"));
+
+				item.add(new AjaxLink<Void>("editLink")
+				{
+
+					private static final long serialVersionUID = 8817599057544892359L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target)
+					{
+						merchant.setCurrentLocation(merchLoc);
+						// go back to the previous step
+						wizard.goBack(target);
+					}
+				});
+			}
+
+		};
+		addOrReplace(locations);
+		
 	}
 	
 }

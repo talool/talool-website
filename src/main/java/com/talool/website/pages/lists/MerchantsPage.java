@@ -1,7 +1,6 @@
 package com.talool.website.pages.lists;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -17,6 +16,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wicketstuff.gmap.GMap;
 
 import com.talool.core.Location;
@@ -28,9 +29,7 @@ import com.talool.website.models.MerchantListModel;
 import com.talool.website.models.ModelUtil;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.MerchantManagementPage;
-import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.merchant.definition.MerchantPanel;
 import com.talool.website.panel.merchant.wizard.MerchantWizard;
 import com.talool.website.util.SecuredPage;
 
@@ -43,6 +42,7 @@ import com.talool.website.util.SecuredPage;
 public class MerchantsPage extends BasePage
 {
 	private static final long serialVersionUID = 9023714664854633955L;
+	private static final Logger LOG = LoggerFactory.getLogger(MerchantsPage.class);
 	private MerchantWizard wizard;
 	
 	public MerchantsPage()
@@ -92,8 +92,7 @@ public class MerchantsPage extends BasePage
 			@Override
 			protected void populateItem(ListItem<Merchant> item)
 			{
-				Merchant merchant = item.getModelObject();
-				final UUID merchantId = merchant.getId();
+				final Merchant merchant = item.getModelObject();
 
 				item.setModel(new CompoundPropertyModel<Merchant>(merchant));
 
@@ -117,8 +116,6 @@ public class MerchantsPage extends BasePage
 				// TODO - at some point, this tags label can be based on a model
 				item.add(new Label("tags", ModelUtil.geTagSummary(merchant)));
 
-				final AdminModalWindow definitionModal = getModal();
-				final SubmitCallBack callback = getCallback(definitionModal);
 				item.add(new AjaxLink<Void>("editLink")
 				{
 
@@ -128,11 +125,8 @@ public class MerchantsPage extends BasePage
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						MerchantPanel panel = new MerchantPanel(definitionModal.getContentId(), callback,
-								merchantId);
-						definitionModal.setContent(panel);
-						definitionModal.setTitle("Edit Merchant");
-						definitionModal.show(target);
+						wizard.setModelObject(merchant);
+						wizard.open(target);
 					}
 				});
 
