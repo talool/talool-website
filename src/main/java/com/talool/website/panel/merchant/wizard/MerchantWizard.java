@@ -31,10 +31,9 @@ public class MerchantWizard extends AbstractWizard<Merchant> {
 		wizardModel.add(new MerchantDetails());
 		wizardModel.add(new MerchantLocations());
 		wizardModel.add(new MerchantMap(this));
-		wizardModel.add(new MerchantAccounts());
-		wizardModel.add(new MerchantDealOffers());
-		wizardModel.add(new SaveAndFinish());
-		wizardModel.setLastVisible(true);
+		wizardModel.setLastVisible(false);
+		
+		// TODO allow the user to save immediately if this is an edit flow
 		
 		this.init(wizardModel);
 	}
@@ -93,48 +92,6 @@ public class MerchantWizard extends AbstractWizard<Merchant> {
 	}
 
 	@Override
-	protected void onConfigure(AjaxRequestTarget target) {
-		super.onConfigure(target);
-		
-		WizardStep step = (WizardStep) getWizardModel().getActiveStep();
-
-		// If the user clicked "save and finish"
-		if (step instanceof SaveAndFinish) {
-			onFinish(target);
-			close(target, getSubmitButton());
-		} 
-		else 
-		{
-			// Hide the finish button (cuz "save and finish" is all I want)
-			DialogButton finish = findButton("Finish");
-			finish.setVisible(false, target);
-			
-			// disable the save and finish button if the deal isn't fully defined
-			DialogButton saveAndFinish = findButton("Save & Finish");
-			saveAndFinish.setEnabled(dealReadyToSave(), target);
-
-			
-			//disable the next button if the current step is Deal Availability
-			if (step instanceof MerchantDealOffers) {
-				DialogButton next = findButton(">");
-				next.setEnabled(false, target);
-			}
-		}
-
-	}
-	
-	/*
-	 * I hate to duplicate the validators, but I'd like to have a quick and dirty
-	 * way to eliminate errors when saving in the wizard.  Only checking the DealOffer
-	 * because it's the last step and can be hard to set a default for.
-	 */
-	private boolean dealReadyToSave()
-	{
-		//Merchant merchant = (Merchant) getModelObject();
-		return true;
-	}
-
-	@Override
 	public int getWidth() {
 		return 890;
 	}
@@ -143,18 +100,6 @@ public class MerchantWizard extends AbstractWizard<Merchant> {
 	{
 		DialogButton prev = findButton("<");
 		onClick(target,prev);
-	}
-	
-	// a bogus step to flag the "save and finish" button
-	class SaveAndFinish extends StaticContentStep
-	{
-		private static final long serialVersionUID = 1L;
-
-		public SaveAndFinish()
-		{
-			super("Saving", "One moment please...", Model.of(), true);
-			
-		}
 	}
 
 }
