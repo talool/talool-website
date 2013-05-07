@@ -14,14 +14,14 @@ import org.apache.wicket.model.ResourceModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.talool.cache.TagCache;
+import com.talool.core.Category;
 import com.talool.core.Deal;
 import com.talool.core.FactoryManager;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.website.models.ModelUtil;
-import com.talool.website.models.TagListModel;
-import com.talool.website.models.TagListModel.CATEGORY;
 import com.talool.website.panel.deal.DealPreview;
 
 public class DealTags extends WizardStep
@@ -30,6 +30,9 @@ public class DealTags extends WizardStep
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealTags.class);
 	private List<Tag> tags;
+	
+	private transient static final TaloolService taloolService = FactoryManager.get()
+			.getServiceFactory().getTaloolService();
 
 	public DealTags()
 	{
@@ -42,16 +45,28 @@ public class DealTags extends WizardStep
 		super.onConfigure();
 
 		Deal deal = (Deal) getDefaultModelObject();
+		if (deal.getId() != null)
+		{
+			try
+			{
+				// TODO cuz merge never works for me
+				taloolService.refresh(deal);
+			}
+			catch (ServiceException se) 
+		    {
+		    	LOG.error("There was an exception merging the merchant: ", se);
+		    }
+		}
 
 		final DealPreview dealPreview = new DealPreview("dealBuilder", deal);
 		dealPreview.setOutputMarkupId(true);
 		addOrReplace(dealPreview);
 
 		ChoiceRenderer<Tag> cr = new ChoiceRenderer<Tag>("name", "name");
-		// TODO need to make the tags model dependent on the merchant
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		ListMultipleChoice tagChoices = new ListMultipleChoice("tags", new PropertyModel<List<Tag>>(
-				this, "tags"), new TagListModel(CATEGORY.FOOD), cr);
+		Category cat = ModelUtil.getCategory(deal.getMerchant());
+		List<Tag> choices = TagCache.get().getTagsByCategoryName(cat.getName());
+		ListMultipleChoice<Tag> tagChoices = new ListMultipleChoice<Tag>("tags", new PropertyModel<List<Tag>>(
+				this, "tags"), choices, cr);
 		tagChoices.setMaxRows(25);
 		tagChoices.setOutputMarkupId(true);
 		addOrReplace(tagChoices.setRequired(true));
@@ -62,7 +77,6 @@ public class DealTags extends WizardStep
 	public List<Tag> getTags()
 	{
 		Deal deal = (Deal) getDefaultModelObject();
-		List<Tag> tags;
 		try
 		{
 			tags = ModelUtil.getTagList(deal);
@@ -84,7 +98,6 @@ public class DealTags extends WizardStep
 		List<Tag> tags = null;
 		if (reattach)
 		{
-			TaloolService taloolService = FactoryManager.get().getServiceFactory().getTaloolService();
 			try
 			{
 				taloolService.merge(deal);
