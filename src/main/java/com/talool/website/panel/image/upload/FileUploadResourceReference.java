@@ -78,11 +78,9 @@ public class FileUploadResourceReference extends ResourceReference
     }
 
     private CharSequence getViewUrl(FileItem fileItem) {
-        PageParameters params = new PageParameters();
-        params.set("filename", fileItem.getName());
-        CharSequence url = RequestCycle.get().urlFor(new FileManageResourceReference(Config.get().getUploadDir()), params);
-        url = url.subSequence(1, url.length());
-        return url;
+    	StringBuilder sb = new StringBuilder(Config.get().getStaticLogoBaseUrl());
+    	sb.append(fileItem.getName());
+        return sb.toString();
     }
 
 
