@@ -16,7 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
+import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
+import com.talool.core.service.ServiceException;
 import com.talool.website.models.DealListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.BaseTabPanel;
@@ -108,7 +110,17 @@ public class MerchantDealsPanel extends BaseTabPanel
 			{
 				getSession().getFeedbackMessages().clear();
 				MerchantAccount ma = SessionUtils.getSession().getMerchantAccount();
-				Deal deal = domainFactory.newDeal(ma, true);
+				Deal deal = domainFactory.newDeal(_merchantId, ma, true);
+				try
+				{
+					Merchant merchant = taloolService.getMerchantById(_merchantId);
+					deal.setMerchant(merchant);
+				}
+				catch(ServiceException se)
+				{
+					LOG.error("failed to find merchant for new deal:",se);
+				}
+				
 				wizard.setModelObject(deal);
 				wizard.open(target);
 			}

@@ -8,12 +8,12 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.talool.core.DomainFactory;
-import com.talool.core.FactoryManager;
 import com.talool.core.MediaType;
+import com.talool.core.Merchant;
 import com.talool.core.MerchantMedia;
 import com.talool.core.SearchOptions;
 import com.talool.core.service.ServiceException;
+import com.talool.core.service.TaloolService;
 import com.talool.service.ServiceFactory;
 
 /**
@@ -26,8 +26,27 @@ public class MerchantMediaListModel extends LoadableDetachableModel<List<Merchan
 
 	private static final long serialVersionUID = -1537678799039334997L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantMediaListModel.class);
+	private static final String talool = "Talool";
 	private UUID _merchantId = null;
+	private UUID _taloolMerchantId = null;
 	private MediaType _mediaType = null;
+	
+	private static final transient TaloolService taloolService = ServiceFactory.get().getTaloolService();
+
+	
+	public MerchantMediaListModel() {
+		super();
+		
+		try 
+		{
+			List<Merchant> merchants = taloolService.getMerchantByName(talool);
+			_taloolMerchantId = merchants.get(0).getId();
+		} 
+		catch (ServiceException se)
+		{
+			LOG.error("problem fetcing the talool merchant id", se);
+		}
+	}
 
 	@Override
 	protected List<MerchantMedia> load()
@@ -36,30 +55,30 @@ public class MerchantMediaListModel extends LoadableDetachableModel<List<Merchan
 
 		try
 		{
-			if (_merchantId != null)
+			SearchOptions searchOptions = new SearchOptions.Builder().maxResults(100).page(0).sortProperty("merchantMedia.mediaUrl")
+					.ascending(true).build();
+			
+			MediaType[] mediaTypes;
+			if (_mediaType == null)
 			{
-				SearchOptions searchOptions = new SearchOptions.Builder().maxResults(100).page(0).sortProperty("merchantMedia.mediaUrl")
-						.ascending(true).build();
-				
-				MediaType[] mediaTypes;
-				if (_mediaType == null)
-				{
-					mediaTypes = MediaType.values();
-				}
-				else
-				{
-					mediaTypes = new MediaType[]{_mediaType};
-				}
-
-				media = ServiceFactory.get().getTaloolService().getMerchantMedias(_merchantId, mediaTypes, searchOptions);
+				mediaTypes = MediaType.values();
 			}
 			else
 			{
-				media = new ArrayList<MerchantMedia>();
-				
-				// TODO do we want to have a default media?
-				media.add(getDefaultMedia());
+				mediaTypes = new MediaType[]{_mediaType};
 			}
+			
+			media = new ArrayList<MerchantMedia>();
+			
+			// add the stock media
+			media.addAll(taloolService.getMerchantMedias(_taloolMerchantId, mediaTypes, searchOptions));
+			
+			// add the merchant's media
+			if (_merchantId != null && _merchantId != _taloolMerchantId)
+			{
+				media.addAll(taloolService.getMerchantMedias(_merchantId, mediaTypes, searchOptions));
+			}
+			
 		}
 		catch (ServiceException e)
 		{
@@ -77,14 +96,6 @@ public class MerchantMediaListModel extends LoadableDetachableModel<List<Merchan
 	public void setMediaType(final MediaType mt)
 	{
 		_mediaType = mt;
-	}
-	
-	private MerchantMedia getDefaultMedia()
-	{
-		DomainFactory domainFactory = FactoryManager.get().getDomainFactory();
-		MediaType mt = (_mediaType==null)?MediaType.DEAL_IMAGE:_mediaType;
-		MerchantMedia media = domainFactory.newMedia(null, "?filename=youshoulduploadsomething.png", mt);
-		return media;
 	}
 
 }

@@ -109,7 +109,7 @@ public class DealOfferDealsPage extends BasePage
 			{
 				getSession().getFeedbackMessages().clear();
 				MerchantAccount ma = SessionUtils.getSession().getMerchantAccount();
-				Deal deal = domainFactory.newDeal(ma, true);
+				Deal deal = domainFactory.newDeal(null, ma, true);
 				wizard.setModelObject(deal);
 				wizard.open(target);
 			}

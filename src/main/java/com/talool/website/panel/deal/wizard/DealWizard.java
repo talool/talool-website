@@ -82,6 +82,11 @@ public class DealWizard extends AbstractWizard<Deal> {
 			StringBuilder sb = new StringBuilder("Failed to save Deal: ");
 			this.error(sb.append(getModelObject().getTitle()).toString());
 			
+		} catch (Exception e)
+		{
+			LOG.debug("Failed to save deal: ", e);
+			StringBuilder sb = new StringBuilder("Failed to save Deal: ");
+			this.error(sb.append(getModelObject().getTitle()).toString());
 		}
 		
 		target.add(((BasePage)getPage()).feedback.setEscapeModelStrings(false));

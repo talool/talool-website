@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -19,20 +19,21 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.template.PackageTextTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import com.talool.core.Deal;
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
-import com.talool.core.Image;
+import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantIdentity;
+import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
-import com.talool.domain.ImageImpl;
 import com.talool.website.component.DealImageSelect;
 import com.talool.website.component.MerchantIdentitySelect;
-import com.talool.website.models.AvailableDealImagesListModel;
 import com.talool.website.models.AvailableMerchantsListModel;
+import com.talool.website.models.MerchantMediaListModel;
 import com.talool.website.pages.UploadPage;
 import com.talool.website.panel.deal.DealPreview;
 import com.talool.website.panel.deal.DealPreviewUpdatingBehavior;
@@ -43,49 +44,44 @@ public class DealDetails extends WizardStep {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealDetails.class);
-	private Image image;
-	private List<Image> myImages;
-	private AvailableDealImagesListModel imageListModel;
-	private MerchantIdentity merchantIdentity;
+	private MerchantMedia image;
+	private MerchantMediaListModel mediaListModel;
+	private List<MerchantMedia> myImages;
+	
+	private transient static final TaloolService taloolService = FactoryManager.get()
+			.getServiceFactory().getTaloolService();
+	private transient static final DomainFactory domainFactory = FactoryManager.get()
+			.getDomainFactory();
 
 	public DealDetails()
     {
         super(new ResourceModel("title"), new ResourceModel("summary"));
-        
-        DomainFactory domainFactory = FactoryManager.get().getDomainFactory();
-		Merchant merchant = SessionUtils.getSession().getMerchantAccount().getMerchant();
-		merchantIdentity = domainFactory.newMerchantIdentity(merchant.getId(), merchant.getName());
-		
-		imageListModel = new AvailableDealImagesListModel();
-		myImages = imageListModel.getObject();
-
     }
+	
+	public void init() {
+		Deal deal = (Deal) getDefaultModelObject();
+		Merchant merchant = deal.getMerchant();
+		mediaListModel = new MerchantMediaListModel();
+		mediaListModel.setMerchantId(merchant.getId());
+		mediaListModel.setMediaType(MediaType.DEAL_IMAGE);
+		myImages = mediaListModel.getObject();
+	}
 	
 	@Override
 	protected void onConfigure() {
 		super.onConfigure();
 		
-		Deal deal = (Deal) getDefaultModelObject();
+		init();
+		
+		final Deal deal = (Deal) getDefaultModelObject();
 		
 		final DealPreview dealPreview = new DealPreview("dealBuilder", deal);
 		dealPreview.setOutputMarkupId(true);
 		addOrReplace(dealPreview);
 		
-		MerchantIdentitySelect merchantSelect = new MerchantIdentitySelect("availableMerchants",
-				new PropertyModel<MerchantIdentity>(this, "merchantIdentity"),
-				new AvailableMerchantsListModel());
-		merchantSelect.add(new DealPreviewUpdatingBehavior(dealPreview,
-				DealPreviewUpdatingBehavior.DealComponent.MERCHANT, "onChange"));
-
-		addOrReplace(merchantSelect.setRequired(true).setOutputMarkupId(true));
-		
-		DealTemplateSelectPanel templates = new DealTemplateSelectPanel("templateSelectPanel", dealPreview);
-		templates.setDefaultModel(getDefaultModel());
-		addOrReplace(templates);
-		
 		final DealImageSelect images = new DealImageSelect("availableImages", 
-				new PropertyModel<Image>(this, "image"), 
-				imageListModel);
+				new PropertyModel<MerchantMedia>(this, "image"), 
+				mediaListModel);
 		images.setRequired(true);
 		images.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.IMAGE, "onChange"));
 		addOrReplace(images);
@@ -107,12 +103,12 @@ public class DealDetails extends WizardStep {
 			protected void respond(AjaxRequestTarget target) {
 				IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
 				String url = params.getParameterValue("url").toString();
-				String name = params.getParameterValue("name").toString();
 				
-				// Create a new image with the returned url and add it to the list of images
-				setImage(new ImageImpl(name,url));
+				MerchantMedia dealImage = domainFactory.newMedia(deal.getMerchant().getId(), url, MediaType.DEAL_IMAGE);
+				saveMedia(dealImage);
+				setImage(dealImage);
 				myImages.add(image);
-				imageListModel.setObject(myImages);
+				mediaListModel.setObject(myImages);
 				
 				// re-init the preview
 				Deal deal = (Deal) getDefaultModelObject();
@@ -135,59 +131,56 @@ public class DealDetails extends WizardStep {
 			}
 			
 		});
-	}
-	
-	public MerchantIdentity getMerchantIdentity() {
-		Deal deal = (Deal) getDefaultModelObject();
-		DomainFactory domainFactory = FactoryManager.get().getDomainFactory();
-		Merchant merchant = deal.getMerchant();
-		if (merchant == null) {
-			merchant = SessionUtils.getSession().getMerchantAccount().getMerchant();
-		}
-		return domainFactory.newMerchantIdentity(merchant.getId(), merchant.getName());
-	}
-
-	public void setMerchantIdentity(MerchantIdentity merchantIdentity) {
-		this.merchantIdentity = merchantIdentity;
-		Deal deal = (Deal) getDefaultModelObject();
-		TaloolService taloolService = FactoryManager.get().getServiceFactory().getTaloolService();
-		Merchant merchant;
-		try {
-			merchant = taloolService.getMerchantById(merchantIdentity.getId());
-		} 
-		catch(ServiceException se)
-		{
-			merchant = null;
-		}
-		deal.setMerchant(merchant);
 		
+		DealTemplateSelectPanel templates = new DealTemplateSelectPanel("templateSelectPanel", dealPreview);
+		templates.setDefaultModel(getDefaultModel());
+		addOrReplace(templates);
 	}
 	
-	public Image getImage() {
+	public MerchantMedia getImage() {
+		// TODO Remove this loop when MerchantMedia is stored on the deal 
 		Deal deal = (Deal) getDefaultModelObject();
-		Image img;
-		if (StringUtils.isEmpty(deal.getImageUrl()))
+		for (MerchantMedia image:myImages) 
 		{
-			img = new ImageImpl("Test Image 1",
-					"http://i567.photobucket.com/albums/ss116/alphabetabeta/bg_test.png");
-		} else {
-			for (Image image:myImages) 
+			if (image.getMediaUrl().equals(deal.getImageUrl()))
 			{
-				if (image.getUrl().equals(deal.getImageUrl()))
-				{
-					return image;
-				}
+				return image;
 			}
-			img = new ImageImpl("Test Image 1",
-					deal.getImageUrl());
 		}
-		return img;	
+	
+		return null;	
 	}
 
-	public void setImage(Image image) {
+	public void setImage(MerchantMedia image) {
 		this.image = image;
 		Deal deal = (Deal) getDefaultModelObject();
-		deal.setImageUrl(image.getUrl());
+		deal.setImageUrl(image.getMediaUrl());
+	}
+	
+	private boolean saveMedia(MerchantMedia media)
+	{
+		try
+		{
+			taloolService.saveMerchantMedia(media);
+			return true;
+		}
+		catch (ServiceException se)
+		{
+			LOG.error("failed to save media:", se);
+		}
+		catch (DataIntegrityViolationException dve)
+		{
+			// TODO Don't try to save the same media for the same merchant
+			// ERROR: duplicate key value violates unique constraint
+			// "merchant_media_merchant_id_media_url_key"
+			LOG.info("merchant tried to upload the same image twice");
+		}
+		catch (Exception e)
+		{
+			LOG.error("random-ass-exception saving new merchant media:", e);
+		}
+		
+		return false;
 	}
 
 }
