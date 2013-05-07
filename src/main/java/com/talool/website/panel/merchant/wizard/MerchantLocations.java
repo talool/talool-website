@@ -251,7 +251,7 @@ public class MerchantLocations extends WizardStep
 			try
 			{
 				// Need to save the current location in the edit flow
-				taloolService.save(merch.getCurrentLocation());
+				taloolService.merge(merch.getCurrentLocation());
 			}
 			catch (ServiceException se)
 			{
