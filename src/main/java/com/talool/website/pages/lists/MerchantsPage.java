@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.wicketstuff.gmap.GMap;
 
 import com.talool.core.Location;
+import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
@@ -44,7 +45,7 @@ public class MerchantsPage extends BasePage
 	private static final long serialVersionUID = 9023714664854633955L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantsPage.class);
 	private MerchantWizard wizard;
-	
+
 	public MerchantsPage()
 	{
 		super();
@@ -79,7 +80,7 @@ public class MerchantsPage extends BasePage
 		{
 			e.printStackTrace();
 		}
-		
+
 		final WebMarkupContainer container = new WebMarkupContainer("merchantList");
 		container.setOutputMarkupId(true);
 		add(container);
@@ -134,7 +135,7 @@ public class MerchantsPage extends BasePage
 
 		};
 		container.add(mechants);
-		
+
 		// override the action button
 		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
 		{
@@ -145,13 +146,14 @@ public class MerchantsPage extends BasePage
 			public void onClick(AjaxRequestTarget target)
 			{
 				getSession().getFeedbackMessages().clear();
-				
+
 				Merchant merchant = domainFactory.newMerchant();
 				MerchantLocation location = domainFactory.newMerchantLocation();
 				location.setAddress(domainFactory.newAddress());
-				location.setLogoUrl("");
+
+				location.setLogo(domainFactory.newMedia(merchant.getId(), "", MediaType.MERCHANT_LOGO));
 				merchant.addLocation(location);
-				
+
 				wizard.setModelObject(merchant);
 				wizard.open(target);
 			}
@@ -161,22 +163,25 @@ public class MerchantsPage extends BasePage
 		actionLabel.setOutputMarkupId(true);
 		actionLink.add(actionLabel);
 		actionLink.setOutputMarkupId(true);
-		
+
 		// Wizard
-		wizard = new MerchantWizard("wiz", "Merchant Wizard") {
+		wizard = new MerchantWizard("wiz", "Merchant Wizard")
+		{
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onFinish(AjaxRequestTarget target) {
+			protected void onFinish(AjaxRequestTarget target)
+			{
 				super.onFinish(target);
 				// refresh the list after a deal is edited
 				target.add(container);
 			}
 		};
 		add(wizard);
-		
-		// preload the map to avoid a race condition with the loading of js dependencies
+
+		// preload the map to avoid a race condition with the loading of js
+		// dependencies
 		GMap map = new GMap("preloadMap");
 		add(map);
 

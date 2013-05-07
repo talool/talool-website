@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import com.talool.cache.TagCache;
 import com.talool.core.Category;
+import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.Tag;
@@ -73,7 +74,7 @@ public class MerchantPanel extends BaseDefinitionPanel
 		Merchant merchant = domainFactory.newMerchant();
 		MerchantLocation location = domainFactory.newMerchantLocation();
 		location.setAddress(domainFactory.newAddress());
-		location.setLogoUrl("");
+		location.setLogo(domainFactory.newMedia(merchant.getId(), "", MediaType.MERCHANT_LOGO));
 		merchant.addLocation(location);
 
 		setDefaultModel(Model.of(merchant));

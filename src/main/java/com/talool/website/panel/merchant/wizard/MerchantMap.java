@@ -20,6 +20,7 @@ import org.wicketstuff.gmap.api.GMarkerOptions;
 import com.talool.core.Address;
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
+import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
@@ -28,27 +29,29 @@ import com.talool.website.models.MerchantLocationListModel;
 import com.talool.website.util.HttpUtils;
 import com.vividsolutions.jts.geom.Point;
 
-public class MerchantMap extends WizardStep {
-	
+public class MerchantMap extends WizardStep
+{
+
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantMap.class);
 	private final MerchantWizard wizard;
-	
+
 	private transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
 	private transient static final DomainFactory domainFactory = FactoryManager.get()
 			.getDomainFactory();
-	
+
 	public MerchantMap(MerchantWizard wiz)
-    {
-        super(new ResourceModel("title"), new ResourceModel("summary"));
-        wizard = wiz;
-    }
-	
+	{
+		super(new ResourceModel("title"), new ResourceModel("summary"));
+		wizard = wiz;
+	}
+
 	@Override
-	protected void onConfigure() {
+	protected void onConfigure()
+	{
 		super.onConfigure();
-		
+
 		final Merchant merchant = (Merchant) getDefaultModelObject();
 		if (merchant.getId() != null)
 		{
@@ -56,107 +59,108 @@ public class MerchantMap extends WizardStep {
 			{
 				taloolService.merge(merchant);
 			}
-			catch (ServiceException se) 
-		    {
-		    	LOG.error("There was an exception merging the merchant: ", se);
-		    }
+			catch (ServiceException se)
+			{
+				LOG.error("There was an exception merging the merchant: ", se);
+			}
 		}
-		
+
 		GMap map = new GMap("map");
-        map.setStreetViewControlEnabled(false);
-        map.setScaleControlEnabled(true);
-        map.setScrollWheelZoomEnabled(true);
-        addOrReplace(map);
-        
-        /*
-         * Center the map
-         */
-        MerchantLocation loc = merchant.getLocations().get(0);
+		map.setStreetViewControlEnabled(false);
+		map.setScaleControlEnabled(true);
+		map.setScrollWheelZoomEnabled(true);
+		addOrReplace(map);
+
+		/*
+		 * Center the map
+		 */
+		MerchantLocation loc = merchant.getLocations().get(0);
 		Address address;
-		try {
+		try
+		{
 			address = loc.getAddress();
 			Point point = HttpUtils.getGeometry(address.getAddress1(), address.getAddress2(),
 					address.getCity(), address.getStateProvinceCounty());
-			
+
 			GLatLng center = new GLatLng(point.getY(), point.getX());
-	        map.setCenter(center);
+			map.setCenter(center);
 		}
-        catch (Exception e)
+		catch (Exception e)
 		{
 			LOG.error("There was an exception resolving lat/long to center the map: " + e.getLocalizedMessage(), e);
 		}
-		
+
 		/*
 		 * Put the pins on the map
 		 */
-        List<MerchantLocation> locs = merchant.getLocations();
-        Point pin;
-        
-	        for (MerchantLocation location:locs)
-	        {
-	        	address = location.getAddress();
-	        	try
-	        	{
-	        		address.getId();
-	        	} 
-	        	catch (Exception lazy)
-	        	{
-	    			try
-	    			{
-	    				// TODO Revisit to see why merge didn't work for address
-	    				taloolService.refresh(address);
-	    				LOG.debug("Had to refresh an address");
-	    			}
-	    			catch (ServiceException se) 
-	    		    {
-	    		    	LOG.error("There was an exception merging the address to be pinned: ", se);
-	    		    }
-	        	}
-	        	
-	        	try {
-		        	pin = HttpUtils.getGeometry(address.getAddress1(), address.getAddress2(),
-							address.getCity(), address.getStateProvinceCounty());
-					
-					map.addOverlay(new GMarker(new GMarkerOptions(map, new GLatLng(pin.getY(), pin.getX()))));
-					
-					location.setGeometry(pin);
-		        }
-		        catch (Exception e) 
-			    {
-		        	LOG.error("There was an exception resolving lat/long to pin the map: " + e.getLocalizedMessage(), e);
-			    }
-	        }
-            
-	    
-		
+		List<MerchantLocation> locs = merchant.getLocations();
+		Point pin;
 
-        /*
-         * Link to add more locations
-         */
-        addOrReplace(new AjaxLink<Void>("addLocation") {
+		for (MerchantLocation location : locs)
+		{
+			address = location.getAddress();
+			try
+			{
+				address.getId();
+			}
+			catch (Exception lazy)
+			{
+				try
+				{
+					// TODO Revisit to see why merge didn't work for address
+					taloolService.refresh(address);
+					LOG.debug("Had to refresh an address");
+				}
+				catch (ServiceException se)
+				{
+					LOG.error("There was an exception merging the address to be pinned: ", se);
+				}
+			}
+
+			try
+			{
+				pin = HttpUtils.getGeometry(address.getAddress1(), address.getAddress2(),
+						address.getCity(), address.getStateProvinceCounty());
+
+				map.addOverlay(new GMarker(new GMarkerOptions(map, new GLatLng(pin.getY(), pin.getX()))));
+
+				location.setGeometry(pin);
+			}
+			catch (Exception e)
+			{
+				LOG.error("There was an exception resolving lat/long to pin the map: " + e.getLocalizedMessage(), e);
+			}
+		}
+
+		/*
+		 * Link to add more locations
+		 */
+		addOrReplace(new AjaxLink<Void>("addLocation")
+		{
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
-				
+			public void onClick(AjaxRequestTarget target)
+			{
+
 				// create a new location and add it to the merchant
 				MerchantLocation location = domainFactory.newMerchantLocation();
 				location.setAddress(domainFactory.newAddress());
-				location.setLogoUrl("");
+				location.setLogo(domainFactory.newMedia(merchant.getId(), "", MediaType.MERCHANT_LOGO));
 				merchant.addLocation(location);
 				merchant.setCurrentLocation(location);
-				
+
 				// go back to the previous step
 				wizard.goBack(target);
 			}
-        	
-        });
-        
-        /*
-         * Location List
-         */
-        MerchantLocationListModel model = new MerchantLocationListModel();
+
+		});
+
+		/*
+		 * Location List
+		 */
+		MerchantLocationListModel model = new MerchantLocationListModel();
 		model.setMerchantId(merchant.getId());
 		model.setObject(merchant.getLocations());
 		final ListView<MerchantLocation> locations = new ListView<MerchantLocation>(
@@ -169,7 +173,7 @@ public class MerchantMap extends WizardStep {
 			protected void populateItem(ListItem<MerchantLocation> item)
 			{
 				final MerchantLocation merchLoc = item.getModelObject();
-				
+
 				item.setModel(new CompoundPropertyModel<MerchantLocation>(merchLoc));
 
 				item.add(new Label("locationName"));
@@ -199,8 +203,7 @@ public class MerchantMap extends WizardStep {
 
 		};
 		addOrReplace(locations);
-		
-	}
-	
-}
 
+	}
+
+}

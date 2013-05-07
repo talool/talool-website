@@ -11,7 +11,9 @@ import org.apache.wicket.model.PropertyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.talool.core.MediaType;
 import com.talool.core.MerchantLocation;
+import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
 import com.talool.website.behaviors.OnChangeAjaxFormBehavior;
 import com.talool.website.component.StateOption;
@@ -38,7 +40,9 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 		this.merchantId = merchantId;
 		MerchantLocation merchantLocation = domainFactory.newMerchantLocation();
 		merchantLocation.setAddress(domainFactory.newAddress());
-		merchantLocation.setLogoUrl("");
+
+		MerchantMedia logo = domainFactory.newMedia(merchantId, "", MediaType.MERCHANT_LOGO);
+		merchantLocation.setLogo(logo);
 		setDefaultModel(Model.of(merchantLocation));
 	}
 

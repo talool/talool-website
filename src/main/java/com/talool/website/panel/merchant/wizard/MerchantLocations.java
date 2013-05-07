@@ -43,8 +43,9 @@ import com.talool.website.component.StateSelect;
 import com.talool.website.models.MerchantMediaListModel;
 import com.talool.website.pages.UploadPage;
 
-public class MerchantLocations extends WizardStep {
-	
+public class MerchantLocations extends WizardStep
+{
+
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocations.class);
 	private Image logo;
@@ -52,67 +53,71 @@ public class MerchantLocations extends WizardStep {
 	private List<MerchantMedia> myLogoChoices = new ArrayList<MerchantMedia>();
 	private DropDownChoice<MerchantMedia> mediaSelect;
 	private MerchantMedia selectedLogo;
-	
+
 	private transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
 	private transient static final DomainFactory domainFactory = FactoryManager.get()
 			.getDomainFactory();
-	
+
 	public MerchantLocations()
-    {
-        super(new ResourceModel("title"), new ResourceModel("summary"));
-        
-    }
-	
+	{
+		super(new ResourceModel("title"), new ResourceModel("summary"));
+
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void onConfigure() {
+	protected void onConfigure()
+	{
 		super.onConfigure();
-		
+
 		setDefaultModel(new CompoundPropertyModel<Merchant>((IModel<Merchant>) getDefaultModel()));
-		
+
 		final Merchant merchant = (Merchant) getDefaultModelObject();
-		
+
 		// TODO add logo image
 		final MerchantMediaListModel mediaListModel = new MerchantMediaListModel();
 		mediaListModel.setMerchantId(merchant.getId());
 		mediaListModel.setMediaType(MediaType.MERCHANT_LOGO);
 		myLogoChoices = mediaListModel.getObject();
 		ChoiceRenderer<MerchantMedia> cr = new ChoiceRenderer<MerchantMedia>("mediaName", "mediaUrl");
-		mediaSelect = new DropDownChoice<MerchantMedia>("logoSelect",new PropertyModel<MerchantMedia>(this,"selectedLogo"), mediaListModel, cr); 
+		mediaSelect = new DropDownChoice<MerchantMedia>("logoSelect", new PropertyModel<MerchantMedia>(this, "selectedLogo"),
+				mediaListModel, cr);
 		addOrReplace(mediaSelect.setOutputMarkupId(true));
-		
+
 		/*
 		 * Add an iframe that keep the upload in a sandbox
 		 */
 		final InlineFrame iframe = new InlineFrame("uploaderIFrame", UploadPage.class);
 		addOrReplace(iframe);
-		
+
 		/*
-		 *  Enable messages to be posted from that sandbox
+		 * Enable messages to be posted from that sandbox
 		 */
-		iframe.add(new AbstractDefaultAjaxBehavior(){
+		iframe.add(new AbstractDefaultAjaxBehavior()
+		{
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void respond(AjaxRequestTarget target) {
+			protected void respond(AjaxRequestTarget target)
+			{
 				IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
 				String url = params.getParameterValue("url").toString();
-				
+
 				MerchantMedia merchantLogo = domainFactory.newMedia(merchant.getId(), url, MediaType.MERCHANT_LOGO);
 				boolean updateList = true;
 				if (merchant.getId() != null)
 				{
 					updateList = saveMedia(merchantLogo);
-				} 
+				}
 				else
 				{
 					unsavedMedia.add(merchantLogo);
 				}
-				
+
 				// TODO this is a little wacky... need to straighten it out.
-				if (updateList) 
+				if (updateList)
 				{
 					myLogoChoices.add(merchantLogo);
 					mediaListModel.setObject(myLogoChoices);
@@ -121,21 +126,22 @@ public class MerchantLocations extends WizardStep {
 					target.add(mediaSelect);
 				}
 			}
-			
+
 			@Override
-			public void renderHead(Component component, IHeaderResponse response) {
+			public void renderHead(Component component, IHeaderResponse response)
+			{
 				super.renderHead(component, response);
-				
-				PackageTextTemplate ptt = new PackageTextTemplate( MerchantLocations.class, "MerchantLocations.js" );
+
+				PackageTextTemplate ptt = new PackageTextTemplate(MerchantLocations.class, "MerchantLocations.js");
 
 				Map<String, Object> map = new HashMap<String, Object>();
-				map.put( "callbackUrl", getCallbackUrl().toString() );
-				
+				map.put("callbackUrl", getCallbackUrl().toString());
+
 				response.render(JavaScriptHeaderItem.forScript(ptt.asString(map), "logoupload"));
 			}
-			
+
 		});
-		
+
 		WebMarkupContainer locationPanel = new WebMarkupContainer("locationPanel");
 		addOrReplace(locationPanel);
 
@@ -156,10 +162,9 @@ public class MerchantLocations extends WizardStep {
 
 		locationPanel.add(new TextField<String>("currentLocation.locationName"));
 
-		
 		WebMarkupContainer contactPanel = new WebMarkupContainer("contactPanel");
 		addOrReplace(contactPanel);
-		
+
 		contactPanel.add(new TextField<String>("currentLocation.phone").setRequired(true));
 
 		contactPanel.add(new TextField<String>("currentLocation.email").setRequired(true).add(
@@ -168,19 +173,21 @@ public class MerchantLocations extends WizardStep {
 		contactPanel.add(new TextField<String>("currentLocation.websiteUrl").add(new UrlValidator()));
 
 	}
-	
-	public Image getLogo() {
-		if (logo==null)
+
+	public Image getLogo()
+	{
+		if (logo == null)
 		{
-			logo= new ImageImpl("temp image","404.png");
+			logo = new ImageImpl("temp image", "404.png");
 		}
 		return logo;
 	}
 
-	public void setLogo(Image logo) {
+	public void setLogo(Image logo)
+	{
 		this.logo = logo;
 	}
-	
+
 	public StateOption getStateOption()
 	{
 		final Merchant merch = (Merchant) getDefaultModelObject();
@@ -200,11 +207,13 @@ public class MerchantLocations extends WizardStep {
 		merch.getCurrentLocation().getAddress().setStateProvinceCounty(stateOption.getCode());
 	}
 
-	public MerchantMedia getSelectedLogo() {
+	public MerchantMedia getSelectedLogo()
+	{
 		return selectedLogo;
 	}
 
-	public void setSelectedLogo(MerchantMedia selectedMedia) {
+	public void setSelectedLogo(MerchantMedia selectedMedia)
+	{
 		this.selectedLogo = selectedMedia;
 	}
 
@@ -212,14 +221,15 @@ public class MerchantLocations extends WizardStep {
 	 * Save the state of the Merchant.
 	 */
 	@Override
-	public void applyState() {
+	public void applyState()
+	{
 		super.applyState();
-		
+
 		final Merchant merch = (Merchant) getDefaultModelObject();
-		
+
 		if (merch.getId() == null)
 		{
-			try 
+			try
 			{
 				// New users need to be saved before we can save the logos
 				taloolService.save(merch);
@@ -228,64 +238,65 @@ public class MerchantLocations extends WizardStep {
 			}
 			catch (ServiceException se)
 			{
-				LOG.error("failed to save new merchant:",se);
+				LOG.error("failed to save new merchant:", se);
 			}
 			catch (Exception e)
 			{
 				// TODO duplicate merchant name?
-				LOG.error("random-ass-exception saving new merchant:",e);
+				LOG.error("random-ass-exception saving new merchant:", e);
 			}
 		}
 		else
 		{
-			try 
+			try
 			{
 				// Need to save the current location in the edit flow
 				taloolService.save(merch.getCurrentLocation());
 			}
 			catch (ServiceException se)
 			{
-				LOG.error("failed to save new merchant location:",se);
+				LOG.error("failed to save new merchant location:", se);
 			}
 		}
-		
-		for (MerchantMedia media:unsavedMedia)
+
+		for (MerchantMedia media : unsavedMedia)
 		{
 			media.setMerchantId(merch.getId());
 			saveMedia(media);
 		}
-		
+
 		// get the selected MerchantMedia and add it to the location
 		// TODO the location needs to store a MerchantMedia object, not the url
 		// TODO don't save it if it's the default
 		if (selectedLogo != null)
 		{
-			merch.getCurrentLocation().setLogoUrl(selectedLogo.getMediaUrl());
+
+			merch.getCurrentLocation().setLogo(selectedLogo);
 		}
 	}
-	
+
 	private boolean saveMedia(MerchantMedia media)
 	{
-		try 
+		try
 		{
 			taloolService.saveMerchantMedia(media);
 			return true;
 		}
 		catch (ServiceException se)
 		{
-			LOG.error("failed to save media:",se);
+			LOG.error("failed to save media:", se);
 		}
 		catch (DataIntegrityViolationException dve)
 		{
 			// TODO Don't try to save the same media for the same merchant
-			// ERROR: duplicate key value violates unique constraint "merchant_media_merchant_id_media_url_key"
+			// ERROR: duplicate key value violates unique constraint
+			// "merchant_media_merchant_id_media_url_key"
 			LOG.info("merchant tried to upload the same image twice");
 		}
 		catch (Exception e)
 		{
-			LOG.error("random-ass-exception saving new merchant media:",e);
+			LOG.error("random-ass-exception saving new merchant media:", e);
 		}
 		return false;
 	}
 }
-
