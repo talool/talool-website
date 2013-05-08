@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 
 import com.talool.core.DealOffer;
 import com.talool.core.service.ServiceException;
@@ -40,5 +41,11 @@ public class AvailableDealOffersListModel extends LoadableDetachableModel<List<D
 		}
 
 		return dealOffers;
+	}
+	
+	public boolean isEmpty()
+	{
+		List<DealOffer> dealOffers = load();
+		return CollectionUtils.isEmpty(dealOffers);
 	}
 }

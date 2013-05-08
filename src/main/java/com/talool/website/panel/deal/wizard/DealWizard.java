@@ -3,9 +3,8 @@ package com.talool.website.panel.deal.wizard;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.wizard.IWizardStep;
 import org.apache.wicket.extensions.wizard.StaticContentStep;
-import org.apache.wicket.extensions.wizard.WizardModel;
 import org.apache.wicket.extensions.wizard.WizardStep;
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
@@ -17,24 +16,22 @@ import com.talool.core.Deal;
 import com.talool.core.FactoryManager;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
-import com.talool.website.Config;
 import com.talool.website.pages.BasePage;
 import com.talool.website.util.SessionUtils;
 
 public class DealWizard extends AbstractWizard<Deal> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealWizard.class);
+	private boolean isEdit = false;
 
 	public DealWizard(String id, String title)
 	{
 		super(id, title);
 		
-		WizardModel wizardModel = new WizardModel();
-		wizardModel.add(new DealDetails());
-		wizardModel.add(new DealTags());
-		wizardModel.add(new DealAvailability());
-		wizardModel.add(new SaveAndFinish());
-		wizardModel.setLastVisible(true);
+		final DynamicWizardModel wizardModel = new DynamicWizardModel(new DealDetails());
+		
+		// only show last button if it is an edit flow
+		wizardModel.setLastVisible(isEdit);
 		
 		this.init(wizardModel);		
 	}
@@ -59,6 +56,12 @@ public class DealWizard extends AbstractWizard<Deal> {
 		 * This call happens after onInitialize, and before onConfigure.
 		 */
 		((WizardStep)step).setDefaultModel(getDefaultModel());
+		
+		// set the visibility of the "last" button
+		DynamicWizardModel wizModel = (DynamicWizardModel)((WizardStep) step).getWizardModel(); 
+		Deal deal = (Deal)getDefaultModelObject();
+		isEdit = (deal.getId()!=null);
+		wizModel.setLastVisible(isEdit);
 	}
 
 	@Override
@@ -104,58 +107,28 @@ public class DealWizard extends AbstractWizard<Deal> {
 		super.onConfigure(target);
 		
 		WizardStep step = (WizardStep) getWizardModel().getActiveStep();
-
-		// If the user clicked "save and finish"
-		if (step instanceof SaveAndFinish) {
+		if (step instanceof DealSave)
+		{
+			// the user clicked "save and finish"
 			onFinish(target);
 			close(target, getSubmitButton());
-		} 
+		}
 		else 
 		{
-			// Hide the finish button (cuz "save and finish" is all I want)
+			// Show/Hide the finish button
 			DialogButton finish = findButton("Finish");
-			finish.setVisible(false, target);
+			finish.setVisible(!isEdit, target);
 			
-			// disable the save and finish button if the deal isn't fully defined
+			// enable/disable the "save and finish" button
 			DialogButton saveAndFinish = findButton("Save & Finish");
-			saveAndFinish.setEnabled(dealReadyToSave(), target);
-
-			
-			//disable the next button if the current step is Deal Availability
-			if (step instanceof DealAvailability) {
-				DialogButton next = findButton(">");
-				next.setEnabled(false, target);
-			}
+			saveAndFinish.setEnabled(isEdit, target);
 		}
 
-	}
-	
-	/*
-	 * I hate to duplicate the validators, but I'd like to have a quick and dirty
-	 * way to eliminate errors when saving in the wizard.  Only checking the DealOffer
-	 * because it's the last step and can be hard to set a default for.
-	 */
-	private boolean dealReadyToSave()
-	{
-		Deal deal = (Deal) getModelObject();
-		return (deal.getDealOffer() != null);
 	}
 
 	@Override
 	public int getWidth() {
 		return 890;
-	}
-	
-	// a bogus step to flag the "save and finish" button
-	class SaveAndFinish extends StaticContentStep
-	{
-		private static final long serialVersionUID = 1L;
-
-		public SaveAndFinish()
-		{
-			super("Saving", "One moment please...", Model.of(), true);
-			
-		}
 	}
 	
 }

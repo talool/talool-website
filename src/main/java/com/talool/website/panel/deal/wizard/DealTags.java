@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.wicket.extensions.wizard.WizardStep;
+import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardStep;
+import org.apache.wicket.extensions.wizard.dynamic.IDynamicWizardStep;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.model.PropertyModel;
@@ -17,26 +18,32 @@ import org.slf4j.LoggerFactory;
 import com.talool.cache.TagCache;
 import com.talool.core.Category;
 import com.talool.core.Deal;
+import com.talool.core.DealOffer;
 import com.talool.core.FactoryManager;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
+import com.talool.website.models.AvailableDealOffersListModel;
 import com.talool.website.models.ModelUtil;
 import com.talool.website.panel.deal.DealPreview;
 
-public class DealTags extends WizardStep
+public class DealTags extends DynamicWizardStep
 {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealTags.class);
 	private List<Tag> tags;
+	private final IDynamicWizardStep dealAvailabilityStep;
+	private final IDynamicWizardStep createDealOfferStep;
 	
 	private transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
 
-	public DealTags()
+	public DealTags(IDynamicWizardStep previousStep)
 	{
-		super(new ResourceModel("title"), new ResourceModel("summary"));
+		super(previousStep, new ResourceModel("title"), new ResourceModel("summary"));
+		dealAvailabilityStep = new DealAvailability(this);
+		createDealOfferStep = new CreateDealOffer(this);
 	}
 
 	@Override
@@ -64,6 +71,7 @@ public class DealTags extends WizardStep
 
 		ChoiceRenderer<Tag> cr = new ChoiceRenderer<Tag>("name", "name");
 		Category cat = ModelUtil.getCategory(deal.getMerchant());
+		
 		List<Tag> choices = TagCache.get().getTagsByCategoryName(cat.getName());
 		ListMultipleChoice<Tag> tagChoices = new ListMultipleChoice<Tag>("tags", new PropertyModel<List<Tag>>(
 				this, "tags"), choices, cr);
@@ -132,6 +140,22 @@ public class DealTags extends WizardStep
 		{
 			deal.clearTags();
 		}
+	}
+
+	@Override
+	public boolean isLastStep() {
+		return false;
+	}
+
+	@Override
+	public IDynamicWizardStep next() {
+		AvailableDealOffersListModel listModel = new AvailableDealOffersListModel();
+		return (listModel.isEmpty()) ? this.createDealOfferStep : this.dealAvailabilityStep;
+	}
+	
+	@Override
+	public IDynamicWizardStep last() {
+		return new DealSave(this);
 	}
 
 }
