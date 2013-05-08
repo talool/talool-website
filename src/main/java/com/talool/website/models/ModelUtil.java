@@ -20,7 +20,6 @@ import com.talool.core.Deal;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.Tag;
-import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.website.Config;
 import com.talool.website.models.TagListModel.CATEGORY;
@@ -79,18 +78,6 @@ public final class ModelUtil
 
 	public static Category getCategory(final Merchant merchant)
 	{
-		if (merchant.getId() != null)
-		{
-			// TODO Chris, is this debugging code?  Do we need to merge here?
-			try
-			{
-				taloolService.merge(merchant);
-			}
-			catch (ServiceException e)
-			{
-				e.printStackTrace();
-			}
-		}
 		Category cat = null;
 		Set<Tag> tags = merchant.getTags();
 		if (CollectionUtils.isNotEmpty(tags))
