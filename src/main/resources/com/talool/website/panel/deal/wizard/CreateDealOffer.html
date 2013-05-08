@@ -1,0 +1,55 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="newMerchant">
+		<div class="panel right iPhonePanel">
+			<div wicket:id="dealBuilder"></div>
+		</div>
+	
+		<div class="panel">
+		    <fieldset class="">
+				<div>
+			    	<label><i class="hint-font icon-asterisk"></i> Deal Type</label>
+			    	<select id="dt" wicket:id="dealOffer.dealType"></select>
+			    </div>
+			    <div>
+			    	<label><i class="hint-font icon-asterisk"></i> Price</label>
+			    	<input id="price" wicket:id="dealOffer.price" type="text"/>
+				</div>
+				<div>
+			    	<label><i class="hint-font icon-asterisk"></i> Title</label>
+			    	<input wicket:id="dealOffer.title" type="text"/>
+			    </div>
+			    <div>
+			    	<label><i class="optional-font icon-asterisk"></i> Summary</label>
+			    	<input wicket:id="dealOffer.summary" type="text"/>
+			    </div>
+			  
+				<div>
+			    	<label><i class="optional-font icon-asterisk"></i> Expires</label>
+			    	<input id="datepicker_do" wicket:id="dealOffer.expires" type="text"/>
+			    </div>
+			    <div>
+		    		<label></label>
+		    		<input wicket:id="dealOffer.isActive" class="chbx" type="checkbox">Is Active</input>
+		    	</div>
+			</fieldset>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<script>
+	  $(function() {
+	    $( "#datepicker_do" ).datepicker();
+	    $("#dt").change(function () {
+			var str = "";
+			$("select option:selected").each(function () {
+			   if( $(this).text()=='FREE_BOOK' || $(this).text()=='FREE_DEAL' )
+			   {
+			     $('#price').val("0.0").attr("disabled", "disabled");
+			   }
+			   else {   $('#price').val("").removeAttr("disabled");  }
+			  
+			});
+			
+		});
+	  });
+	</script>
+</wicket:panel>

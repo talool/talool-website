@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.wicket.extensions.wizard.WizardStep;
+import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardStep;
+import org.apache.wicket.extensions.wizard.dynamic.IDynamicWizardStep;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.model.PropertyModel;
@@ -21,21 +22,29 @@ import com.talool.core.FactoryManager;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
+import com.talool.website.models.AvailableDealOffersListModel;
 import com.talool.website.models.ModelUtil;
 import com.talool.website.panel.deal.DealPreview;
 
-public class DealTags extends WizardStep
+public class DealTags extends DynamicWizardStep
 {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealTags.class);
 	private List<Tag> tags;
 
+	private final IDynamicWizardStep dealAvailabilityStep;
+	private final IDynamicWizardStep createDealOfferStep;
+	private DealWizard wizard;
+
 	private transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
 
-	public DealTags()
+	public DealTags(IDynamicWizardStep previousStep, DealWizard wiz)
 	{
-		super(new ResourceModel("title"), new ResourceModel("summary"));
+		super(previousStep, new ResourceModel("title"), new ResourceModel("summary"));
+		dealAvailabilityStep = new DealAvailability(this, wiz);
+		createDealOfferStep = new CreateDealOffer(this, wiz);
+		this.wizard = wiz;
 	}
 
 	@Override
@@ -43,17 +52,6 @@ public class DealTags extends WizardStep
 	{
 		super.onConfigure();
 		Deal deal = (Deal) getDefaultModelObject();
-		// if (deal.getId() != null)
-		// {
-		// try
-		// {
-		// taloolService.merge(deal);
-		// }
-		// catch (ServiceException se)
-		// {
-		// LOG.error("There was an exception merging the merchant: ", se);
-		// }
-		// }
 
 		final DealPreview dealPreview = new DealPreview("dealBuilder", deal);
 		dealPreview.setOutputMarkupId(true);
@@ -61,6 +59,7 @@ public class DealTags extends WizardStep
 
 		ChoiceRenderer<Tag> cr = new ChoiceRenderer<Tag>("name", "name");
 		Category cat = ModelUtil.getCategory(deal.getMerchant());
+
 		List<Tag> choices = TagCache.get().getTagsByCategoryName(cat.getName());
 		ListMultipleChoice<Tag> tagChoices = new ListMultipleChoice<Tag>("tags", new PropertyModel<List<Tag>>(
 				this, "tags"), choices, cr);
@@ -130,6 +129,25 @@ public class DealTags extends WizardStep
 		{
 			deal.clearTags();
 		}
+	}
+
+	@Override
+	public boolean isLastStep()
+	{
+		return false;
+	}
+
+	@Override
+	public IDynamicWizardStep next()
+	{
+		AvailableDealOffersListModel listModel = new AvailableDealOffersListModel();
+		return (listModel.isEmpty()) ? this.createDealOfferStep : this.dealAvailabilityStep;
+	}
+
+	@Override
+	public IDynamicWizardStep last()
+	{
+		return new DealSave(this);
 	}
 
 }

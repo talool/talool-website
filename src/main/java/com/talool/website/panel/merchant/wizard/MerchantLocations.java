@@ -232,7 +232,12 @@ public class MerchantLocations extends WizardStep
 			try
 			{
 				// New users need to be saved before we can save the logos
+				// TODO fix this craziness with saving logos
+				MerchantMedia logo = merch.getCurrentLocation().getLogo();
+				merch.getCurrentLocation().setLogo(null);
 				taloolService.save(merch);
+				merch.getCurrentLocation().setLogo(logo);
+				//taloolService.merge(merch);
 				StringBuilder sb = new StringBuilder("Saved Merchant with id:");
 				LOG.debug(sb.append(merch.getId()).toString());
 			}

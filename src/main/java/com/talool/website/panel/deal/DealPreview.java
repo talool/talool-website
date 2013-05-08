@@ -47,35 +47,30 @@ public class DealPreview extends Panel
 	}
 	
 	public void init(Deal deal) {
-		if (deal.getId() != null)
-		{
-			title = deal.getTitle();
-			summary = deal.getSummary();
-			details = deal.geDetails();
-			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-			if (deal.getExpires() != null)
-			{
-				expires = formatter.format(deal.getExpires());
-			}
-			else
-			{
-				expires = NEVER_EXPIRES;
-			}
 
-			code = deal.getCode();
-			if (StringUtils.isNotEmpty(deal.getImageUrl()))
-			{
-				imageUrl = deal.getImageUrl();
-			}
-			else
-			{
-				imageUrl = defaultImageUrl;
-			}
+		title = deal.getTitle();
+		summary = deal.getSummary();
+		details = deal.geDetails();
+		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+		if (deal.getExpires() != null)
+		{
+			expires = formatter.format(deal.getExpires());
+		}
+		else
+		{
+			expires = NEVER_EXPIRES;
+		}
+
+		code = deal.getCode();
+		if (StringUtils.isNotEmpty(deal.getImageUrl()))
+		{
+			imageUrl = deal.getImageUrl();
 		}
 		else
 		{
 			imageUrl = defaultImageUrl;
 		}
+
 		
 		merchantLogoUrl = this.logos.get(0);
 		dealOfferLogoUrl = defaultDealOfferLogoUrl;

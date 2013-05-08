@@ -7,8 +7,8 @@ import java.util.Map;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.extensions.wizard.WizardStep;
+import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardStep;
+import org.apache.wicket.extensions.wizard.dynamic.IDynamicWizardStep;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.link.InlineFrame;
@@ -26,36 +26,36 @@ import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
 import com.talool.core.MediaType;
 import com.talool.core.Merchant;
-import com.talool.core.MerchantIdentity;
 import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.website.component.DealImageSelect;
-import com.talool.website.component.MerchantIdentitySelect;
-import com.talool.website.models.AvailableMerchantsListModel;
 import com.talool.website.models.MerchantMediaListModel;
 import com.talool.website.pages.UploadPage;
 import com.talool.website.panel.deal.DealPreview;
 import com.talool.website.panel.deal.DealPreviewUpdatingBehavior;
 import com.talool.website.panel.deal.definition.template.DealTemplateSelectPanel;
-import com.talool.website.util.SessionUtils;
 
-public class DealDetails extends WizardStep {
+public class DealDetails extends DynamicWizardStep {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealDetails.class);
 	private MerchantMedia image;
 	private MerchantMediaListModel mediaListModel;
 	private List<MerchantMedia> myImages;
+	private final IDynamicWizardStep nextStep;
+	private DealWizard wizard;
 	
 	private transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
 	private transient static final DomainFactory domainFactory = FactoryManager.get()
 			.getDomainFactory();
 
-	public DealDetails()
+	public DealDetails(DealWizard wiz)
     {
-        super(new ResourceModel("title"), new ResourceModel("summary"));
+        super(null, new ResourceModel("title"), new ResourceModel("summary"));
+        this.nextStep = new DealTags(this, wiz);
+        this.wizard = wiz;
     }
 	
 	public void init() {
@@ -181,6 +181,21 @@ public class DealDetails extends WizardStep {
 		}
 		
 		return false;
+	}
+
+	@Override
+	public boolean isLastStep() {
+		return false;
+	}
+
+	@Override
+	public IDynamicWizardStep next() {
+		return nextStep;
+	}
+	
+	@Override
+	public IDynamicWizardStep last() {
+		return new DealSave(this);
 	}
 
 }

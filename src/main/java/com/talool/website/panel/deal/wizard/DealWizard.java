@@ -3,8 +3,8 @@ package com.talool.website.panel.deal.wizard;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.wizard.IWizardStep;
 import org.apache.wicket.extensions.wizard.StaticContentStep;
-import org.apache.wicket.extensions.wizard.WizardModel;
 import org.apache.wicket.extensions.wizard.WizardStep;
+import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
@@ -19,48 +19,53 @@ import com.talool.core.service.TaloolService;
 import com.talool.website.pages.BasePage;
 import com.talool.website.util.SessionUtils;
 
-public class DealWizard extends AbstractWizard<Deal>
-{
+public class DealWizard extends AbstractWizard<Deal> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealWizard.class);
+	private boolean isEdit = false;
 
 	public DealWizard(String id, String title)
 	{
 		super(id, title);
-
-		WizardModel wizardModel = new WizardModel();
-		wizardModel.add(new DealDetails());
-		wizardModel.add(new DealTags());
-		wizardModel.add(new DealAvailability());
-		wizardModel.add(new SaveAndFinish());
-		wizardModel.setLastVisible(true);
-
-		this.init(wizardModel);
+		
+		final DynamicWizardModel wizardModel = new DynamicWizardModel(new DealDetails(this));
+		
+		// only show last button if it is an edit flow
+		wizardModel.setLastVisible(isEdit);
+		
+		this.init(wizardModel);		
 	}
 
+	@Override
 	public void setModelObject(Deal deal)
 	{
 		/*
-		 * Considered setting the model on the form rather than the Wizard so that
-		 * it would filter down to the steps directly. However, that didn't work,
-		 * hence pass off via onActiveStepChanged
+		 * Considered setting the model on the form rather than the Wizard
+		 * so that it would filter down to the steps directly.
+		 * However, that didn't work, hence pass off via onActiveStepChanged
 		 */
 		this.setDefaultModel(new CompoundPropertyModel<Deal>(deal));
 	}
-
+	
 	@Override
-	public void onActiveStepChanged(IWizardStep step)
-	{
+	public void onActiveStepChanged(IWizardStep step) {
 		super.onActiveStepChanged(step);
 		/*
-		 * Set the model on the active set. The steps can't share the wizard's model
-		 * directly. This call happens after onInitialize, and before onConfigure.
+		 * Set the model on the active set.
+		 * The steps can't share the wizard's model directly.
+		 * This call happens after onInitialize, and before onConfigure.
 		 */
-		((WizardStep) step).setDefaultModel(getDefaultModel());
+		((WizardStep)step).setDefaultModel(getDefaultModel());
+		
+		// set the visibility of the "last" button
+		DynamicWizardModel wizModel = (DynamicWizardModel)((WizardStep) step).getWizardModel(); 
+		Deal deal = (Deal)getDefaultModelObject();
+		isEdit = (deal.getId()!=null);
+		wizModel.setLastVisible(isEdit);
 	}
 
 	@Override
-	protected void onFinish(AjaxRequestTarget target)
+	protected void onFinish(AjaxRequestTarget target) 
 	{
 		/*
 		 * Save the deal
@@ -68,99 +73,68 @@ public class DealWizard extends AbstractWizard<Deal>
 		Deal deal = (Deal) getModelObject();
 		deal.setUpdatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
 		TaloolService taloolService = FactoryManager.get().getServiceFactory().getTaloolService();
-		try
-		{
-			taloolService.merge(deal);
-
+		try {
+			taloolService.save(deal);
+			
 			StringBuilder sb = new StringBuilder("Saved Deal: ");
 			this.info(sb.append(getModelObject().getTitle()).toString());
-
-		}
-		catch (ServiceException se)
-		{
+			
+		} catch (ServiceException se) {
 			LOG.debug("Failed to save deal: ", se);
-
+			
 			StringBuilder sb = new StringBuilder("Failed to save Deal: ");
 			this.error(sb.append(getModelObject().getTitle()).toString());
-
-		}
-		catch (Exception e)
+			
+		} catch (Exception e)
 		{
 			LOG.debug("Failed to save deal: ", e);
 			StringBuilder sb = new StringBuilder("Failed to save Deal: ");
 			this.error(sb.append(getModelObject().getTitle()).toString());
 		}
-
-		target.add(((BasePage) getPage()).feedback.setEscapeModelStrings(false));
+		
+		target.add(((BasePage)getPage()).feedback.setEscapeModelStrings(false));
 	}
-
+	
 	@Override
 	protected void onCancel(AjaxRequestTarget target)
 	{
 		this.info("Canceled...");
-		target.add(((BasePage) getPage()).feedback);
+		target.add(((BasePage)getPage()).feedback);
 	}
 
 	@Override
-	protected void onConfigure(AjaxRequestTarget target)
-	{
+	protected void onConfigure(AjaxRequestTarget target) {
 		super.onConfigure(target);
-
+		
 		WizardStep step = (WizardStep) getWizardModel().getActiveStep();
-
-		// If the user clicked "save and finish"
-		if (step instanceof SaveAndFinish)
+		if (step instanceof DealSave)
 		{
+			// the user clicked "save and finish"
 			onFinish(target);
 			close(target, getSubmitButton());
 		}
-		else
+		else 
 		{
-			// Hide the finish button (cuz "save and finish" is all I want)
+			// Show/Hide the finish button
 			DialogButton finish = findButton("Finish");
-			finish.setVisible(false, target);
-
-			// disable the save and finish button if the deal isn't fully defined
+			finish.setVisible(!isEdit, target);
+			
+			// enable/disable the "save and finish" button
 			DialogButton saveAndFinish = findButton("Save & Finish");
-			saveAndFinish.setEnabled(dealReadyToSave(), target);
-
-			// disable the next button if the current step is Deal Availability
-			if (step instanceof DealAvailability)
-			{
-				DialogButton next = findButton(">");
-				next.setEnabled(false, target);
-			}
+			saveAndFinish.setEnabled(isEdit, target);
 		}
 
-	}
-
-	/*
-	 * I hate to duplicate the validators, but I'd like to have a quick and dirty
-	 * way to eliminate errors when saving in the wizard. Only checking the
-	 * DealOffer because it's the last step and can be hard to set a default for.
-	 */
-	private boolean dealReadyToSave()
-	{
-		Deal deal = (Deal) getModelObject();
-		return (deal.getDealOffer() != null);
 	}
 
 	@Override
-	public int getWidth()
-	{
+	public int getWidth() {
 		return 890;
 	}
-
-	// a bogus step to flag the "save and finish" button
-	class SaveAndFinish extends StaticContentStep
+	
+	public void goBack(AjaxRequestTarget target)
 	{
-		private static final long serialVersionUID = 1L;
-
-		public SaveAndFinish()
-		{
-			super("Saving", "One moment please...", Model.of(), true);
-
-		}
+		DialogButton prev = findButton("<");
+		onClick(target,prev);
 	}
-
+	
 }
