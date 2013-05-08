@@ -26,11 +26,10 @@ import com.talool.website.panel.deal.DealPreview;
 
 public class DealTags extends WizardStep
 {
-
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealTags.class);
 	private List<Tag> tags;
-	
+
 	private transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
 
@@ -43,20 +42,18 @@ public class DealTags extends WizardStep
 	protected void onConfigure()
 	{
 		super.onConfigure();
-
 		Deal deal = (Deal) getDefaultModelObject();
-		if (deal.getId() != null)
-		{
-			try
-			{
-				// TODO cuz merge never works for me
-				taloolService.refresh(deal);
-			}
-			catch (ServiceException se) 
-		    {
-		    	LOG.error("There was an exception merging the merchant: ", se);
-		    }
-		}
+		// if (deal.getId() != null)
+		// {
+		// try
+		// {
+		// taloolService.merge(deal);
+		// }
+		// catch (ServiceException se)
+		// {
+		// LOG.error("There was an exception merging the merchant: ", se);
+		// }
+		// }
 
 		final DealPreview dealPreview = new DealPreview("dealBuilder", deal);
 		dealPreview.setOutputMarkupId(true);
@@ -73,7 +70,8 @@ public class DealTags extends WizardStep
 
 	}
 
-	// TODO consider watching for a change on the tag list to decide if the merge needs to happen
+	// TODO consider watching for a change on the tag list to decide if the merge
+	// needs to happen
 	public List<Tag> getTags()
 	{
 		Deal deal = (Deal) getDefaultModelObject();

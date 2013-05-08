@@ -20,6 +20,7 @@ import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
 import com.talool.core.service.ServiceException;
 import com.talool.website.models.DealListModel;
+import com.talool.website.models.DealModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
@@ -46,11 +47,11 @@ public class MerchantDealsPanel extends BaseTabPanel
 
 		DealListModel model = new DealListModel();
 		model.setMerchantId(_merchantId);
-		
+
 		final WebMarkupContainer container = new WebMarkupContainer("dealList");
 		container.setOutputMarkupId(true);
 		add(container);
-		
+
 		final ListView<Deal> customers = new ListView<Deal>("dealRptr", model)
 		{
 
@@ -59,9 +60,12 @@ public class MerchantDealsPanel extends BaseTabPanel
 			@Override
 			protected void populateItem(final ListItem<Deal> item)
 			{
+				Deal deal = item.getModelObject();
+				final UUID dealId = deal.getId();
 
-				final Deal deal = item.getModelObject();
-				
+				// Hibernate.initialize(deal);
+				// Hibernate.initialize(deal.getMerchant());
+
 				item.setModel(new CompoundPropertyModel<Deal>(deal));
 
 				if (item.getIndex() % 2 == 0)
@@ -89,7 +93,7 @@ public class MerchantDealsPanel extends BaseTabPanel
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						wizard.setModelObject(deal);
+						wizard.setModelObject(new DealModel(dealId, true).getObject());
 						wizard.open(target);
 					}
 				});
@@ -97,7 +101,7 @@ public class MerchantDealsPanel extends BaseTabPanel
 
 		};
 		container.add(customers);
-		
+
 		// override the action button
 		final BasePage page = (BasePage) this.getPage();
 		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
@@ -116,11 +120,11 @@ public class MerchantDealsPanel extends BaseTabPanel
 					Merchant merchant = taloolService.getMerchantById(_merchantId);
 					deal.setMerchant(merchant);
 				}
-				catch(ServiceException se)
+				catch (ServiceException se)
 				{
-					LOG.error("failed to find merchant for new deal:",se);
+					LOG.error("failed to find merchant for new deal:", se);
 				}
-				
+
 				wizard.setModelObject(deal);
 				wizard.open(target);
 			}
@@ -130,22 +134,23 @@ public class MerchantDealsPanel extends BaseTabPanel
 		actionLabel.setOutputMarkupId(true);
 		actionLink.add(actionLabel);
 		actionLink.setOutputMarkupId(true);
-		
-		
+
 		// Wizard
-		wizard = new DealWizard("wiz", "Deal Wizard") {
+		wizard = new DealWizard("wiz", "Deal Wizard")
+		{
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onFinish(AjaxRequestTarget target) {
+			protected void onFinish(AjaxRequestTarget target)
+			{
 				super.onFinish(target);
 				// refresh the list after a deal is edited
 				target.add(container);
 			}
 		};
 		add(wizard);
-		
+
 	}
 
 	@Override

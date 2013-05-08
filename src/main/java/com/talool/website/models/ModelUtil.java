@@ -8,6 +8,8 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
@@ -15,8 +17,11 @@ import com.google.common.hash.Hashing;
 import com.talool.cache.TagCache;
 import com.talool.core.Category;
 import com.talool.core.Deal;
+import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.Tag;
+import com.talool.core.service.ServiceException;
+import com.talool.core.service.TaloolService;
 import com.talool.website.Config;
 import com.talool.website.models.TagListModel.CATEGORY;
 
@@ -27,8 +32,12 @@ import com.talool.website.models.TagListModel.CATEGORY;
  */
 public final class ModelUtil
 {
+	private static final Logger LOG = LoggerFactory.getLogger(ModelUtil.class);
 	private static final String NO_TAG_SUMMARY = "(0)";
 	private static final List<Tag> categories = (new TagListModel(CATEGORY.ROOT)).load();
+
+	private transient static final TaloolService taloolService = FactoryManager.get()
+			.getServiceFactory().getTaloolService();
 
 	private static class ImageInfo
 	{
@@ -70,9 +79,16 @@ public final class ModelUtil
 
 	public static Category getCategory(final Merchant merchant)
 	{
+		try
+		{
+			taloolService.merge(merchant);
+		}
+		catch (ServiceException e)
+		{
+			e.printStackTrace();
+		}
 		Category cat = null;
 		Set<Tag> tags = merchant.getTags();
-		// lets get the first tag and lookup a category
 		if (CollectionUtils.isNotEmpty(tags))
 		{
 			cat = TagCache.get().getCategoryByTagName(tags.iterator().next().getName());
