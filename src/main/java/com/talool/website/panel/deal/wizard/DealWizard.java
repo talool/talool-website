@@ -74,7 +74,7 @@ public class DealWizard extends AbstractWizard<Deal> {
 		deal.setUpdatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
 		TaloolService taloolService = FactoryManager.get().getServiceFactory().getTaloolService();
 		try {
-			taloolService.save(deal);
+			taloolService.merge(deal);
 			
 			StringBuilder sb = new StringBuilder("Saved Deal: ");
 			this.info(sb.append(getModelObject().getTitle()).toString());
