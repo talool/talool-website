@@ -1,8 +1,6 @@
 package com.talool.website.pages.lists;
 
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -22,12 +20,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.gmap.GMap;
 
-import com.talool.core.Deal;
 import com.talool.core.Location;
 import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
-import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
 import com.talool.domain.LocationImpl;
 import com.talool.website.models.MerchantListModel;
@@ -53,23 +49,6 @@ public class MerchantsPage extends BasePage
 	public MerchantsPage()
 	{
 		super();
-
-		// 08245437-30d4-45be-a339-fda6a95c6530
-
-		try
-		{
-			Deal deal = taloolService.getDeal(UUID.fromString("08245437-30d4-45be-a339-fda6a95c6530"));
-
-			Set<Tag> tags = deal.getTags();
-
-			LOG.info("Size:" + tags.size());
-
-		}
-		catch (ServiceException e)
-		{
-
-			e.printStackTrace();
-		}
 	}
 
 	public MerchantsPage(PageParameters parameters)

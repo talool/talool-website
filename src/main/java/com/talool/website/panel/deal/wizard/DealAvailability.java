@@ -68,8 +68,12 @@ public class DealAvailability extends DynamicWizardStep {
 		dealPreview.setOutputMarkupId(true);
 		addOrReplace(dealPreview);
 		
+		AvailableDealOffersListModel listModel = new AvailableDealOffersListModel();
+		if (deal.getMerchant() != null) {
+			listModel.addMerchantId(deal.getMerchant().getId());
+		}
 		addOrReplace(new DealOfferSelect("availableDealOffers", new PropertyModel<DealOffer>(this,
-				"dealOffer"), new AvailableDealOffersListModel()).setRequired(true));
+				"dealOffer"), listModel).setRequired(true));
 
 		/*
 		 *  TODO add a dynamic step for the new deal offer panel

@@ -10,6 +10,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.talool.core.DealOffer;
 import com.talool.core.service.ServiceException;
+import com.talool.core.service.TaloolService;
 import com.talool.service.ServiceFactory;
 import com.talool.website.util.SessionUtils;
 
@@ -22,6 +23,7 @@ public class AvailableDealOffersListModel extends LoadableDetachableModel<List<D
 {
 	private static final long serialVersionUID = -1840804920962326496L;
 	private static final Logger LOG = LoggerFactory.getLogger(AvailableDealOffersListModel.class);
+	private UUID _merchantId;
 
 	@Override
 	protected List<DealOffer> load()
@@ -32,8 +34,17 @@ public class AvailableDealOffersListModel extends LoadableDetachableModel<List<D
 
 		try
 		{
-			dealOffers = ServiceFactory.get().getTaloolService()
-					.getAllRelatedDealsOffersForMerchantId(merchantId);
+			TaloolService taloolService = ServiceFactory.get().getTaloolService();
+			dealOffers = taloolService.getAllRelatedDealsOffersForMerchantId(merchantId);
+			
+			if (_merchantId != null && !_merchantId.equals(merchantId))
+			{
+				List<DealOffer> moreDealOffers = taloolService.getDealOffersByMerchantId(_merchantId);
+				if (!CollectionUtils.isEmpty(moreDealOffers))
+				{
+					dealOffers.addAll(moreDealOffers);
+				}
+			}
 		}
 		catch (ServiceException e)
 		{
@@ -47,5 +58,9 @@ public class AvailableDealOffersListModel extends LoadableDetachableModel<List<D
 	{
 		List<DealOffer> dealOffers = load();
 		return CollectionUtils.isEmpty(dealOffers);
+	}
+	
+	public void addMerchantId(UUID id) {
+		_merchantId = id;
 	}
 }

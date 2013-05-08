@@ -81,12 +81,6 @@ public class CreateDealOffer extends DynamicWizardStep {
 	public boolean isLastStep() {
 		return false;
 	}
-	
-	@Override
-	public IDynamicWizardStep previous() {
-		// TODO May need to change this if we came from DealAvailability
-		return super.previous();
-	}
 
 	@Override
 	public IDynamicWizardStep next() {
