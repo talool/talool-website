@@ -79,13 +79,17 @@ public final class ModelUtil
 
 	public static Category getCategory(final Merchant merchant)
 	{
-		try
+		if (merchant.getId() != null)
 		{
-			taloolService.merge(merchant);
-		}
-		catch (ServiceException e)
-		{
-			e.printStackTrace();
+			// TODO Chris, is this debugging code?  Do we need to merge here?
+			try
+			{
+				taloolService.merge(merchant);
+			}
+			catch (ServiceException e)
+			{
+				e.printStackTrace();
+			}
 		}
 		Category cat = null;
 		Set<Tag> tags = merchant.getTags();
