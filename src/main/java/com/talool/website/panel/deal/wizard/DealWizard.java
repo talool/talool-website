@@ -28,7 +28,7 @@ public class DealWizard extends AbstractWizard<Deal> {
 	{
 		super(id, title);
 		
-		final DynamicWizardModel wizardModel = new DynamicWizardModel(new DealDetails());
+		final DynamicWizardModel wizardModel = new DynamicWizardModel(new DealDetails(this));
 		
 		// only show last button if it is an edit flow
 		wizardModel.setLastVisible(isEdit);
@@ -129,6 +129,12 @@ public class DealWizard extends AbstractWizard<Deal> {
 	@Override
 	public int getWidth() {
 		return 890;
+	}
+	
+	public void goBack(AjaxRequestTarget target)
+	{
+		DialogButton prev = findButton("<");
+		onClick(target,prev);
 	}
 	
 }

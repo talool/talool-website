@@ -35,15 +35,17 @@ public class DealTags extends DynamicWizardStep
 	private List<Tag> tags;
 	private final IDynamicWizardStep dealAvailabilityStep;
 	private final IDynamicWizardStep createDealOfferStep;
+	private DealWizard wizard;
 	
 	private transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
 
-	public DealTags(IDynamicWizardStep previousStep)
+	public DealTags(IDynamicWizardStep previousStep, DealWizard wiz)
 	{
 		super(previousStep, new ResourceModel("title"), new ResourceModel("summary"));
-		dealAvailabilityStep = new DealAvailability(this);
-		createDealOfferStep = new CreateDealOffer(this);
+		dealAvailabilityStep = new DealAvailability(this, wiz);
+		createDealOfferStep = new CreateDealOffer(this, wiz);
+		this.wizard = wiz;
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package com.talool.website.panel.deal.wizard;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
@@ -16,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import com.talool.core.Deal;
 import com.talool.core.DealOffer;
 import com.talool.core.FactoryManager;
+import com.talool.core.MediaType;
+import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.website.component.DealOfferSelect;
@@ -28,13 +32,16 @@ public class DealAvailability extends DynamicWizardStep {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealAvailability.class);
 	private DealOffer dealOffer;
+	private DealWizard wizard;
+	private boolean addDealOffer = false;
 	
 	private transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
 	
-	public DealAvailability(IDynamicWizardStep previousStep)
+	public DealAvailability(IDynamicWizardStep previousStep, DealWizard wiz)
     {
 		super(previousStep, new ResourceModel("title"), new ResourceModel("summary"));
+		this.wizard = wiz;
     }
 	
 	@Override
@@ -68,6 +75,18 @@ public class DealAvailability extends DynamicWizardStep {
 		 *  TODO add a dynamic step for the new deal offer panel
 		 *  but need to make sure it's previous step is DealTags
 		 */
+		addOrReplace(new AjaxLink<Void>("newDealOffer"){
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				// go back to the previous step
+				addDealOffer = true;
+				wizard.goBack(target);
+			}
+			
+		});
 		
 		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
 		DateTextField expires = new DateTextField("expires", converter);
@@ -104,6 +123,36 @@ public class DealAvailability extends DynamicWizardStep {
 	@Override
 	public IDynamicWizardStep next() {
 		return this;
+	}
+	
+	@Override
+	public IDynamicWizardStep last() {
+		return new DealSave(this);
+	}
+	
+	@Override
+	public IDynamicWizardStep previous() {
+		// loop back through the steps to find one that is a CreateDealOffer
+		DynamicWizardStep previousStep = (DynamicWizardStep)super.previous();
+		while (previousStep != null)
+		{
+			if (previousStep instanceof CreateDealOffer)
+			{
+				break;
+			} else {
+				previousStep = (DynamicWizardStep)previousStep.previous();
+			}
+		}
+		
+		/*
+		 * if there was no CreateDealOffer in the stack, create one.
+		 */
+		if (previousStep==null)
+		{
+			previousStep = new CreateDealOffer(super.previous(),wizard);
+		}
+		
+		return (addDealOffer) ? previousStep : super.previous();
 	}
 	
 }

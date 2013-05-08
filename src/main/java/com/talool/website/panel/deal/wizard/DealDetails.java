@@ -44,16 +44,18 @@ public class DealDetails extends DynamicWizardStep {
 	private MerchantMediaListModel mediaListModel;
 	private List<MerchantMedia> myImages;
 	private final IDynamicWizardStep nextStep;
+	private DealWizard wizard;
 	
 	private transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
 	private transient static final DomainFactory domainFactory = FactoryManager.get()
 			.getDomainFactory();
 
-	public DealDetails()
+	public DealDetails(DealWizard wiz)
     {
         super(null, new ResourceModel("title"), new ResourceModel("summary"));
-        this.nextStep = new DealTags(this);
+        this.nextStep = new DealTags(this, wiz);
+        this.wizard = wiz;
     }
 	
 	public void init() {

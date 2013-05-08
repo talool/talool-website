@@ -18,9 +18,7 @@ import com.talool.core.DealOffer;
 import com.talool.core.DealType;
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
-import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
-import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.website.component.DealTypeDropDownChoice;
@@ -34,16 +32,18 @@ public class CreateDealOffer extends DynamicWizardStep {
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantDealOfferPanel.class);
 	private final IDynamicWizardStep nextStep;
 	private final DealOffer dealOffer;
+	private DealWizard wizard;
 	
 	private transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
 	private transient static final DomainFactory domainFactory = FactoryManager.get()
 			.getDomainFactory();
 	
-	public CreateDealOffer(IDynamicWizardStep previousStep) {
+	public CreateDealOffer(IDynamicWizardStep previousStep, DealWizard wiz) {
 		super(previousStep, new ResourceModel("title"), new ResourceModel("summary"));
 		
-		this.nextStep = new DealAvailability(this);
+		this.nextStep = new DealAvailability(this, wiz);
+		this.wizard = wiz;
 		
 		final MerchantAccount ma = SessionUtils.getSession().getMerchantAccount();
 		this.dealOffer = domainFactory.newDealOffer(ma.getMerchant(), ma);
