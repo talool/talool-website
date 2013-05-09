@@ -2,6 +2,7 @@ package com.talool.website.panel.image.upload;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
@@ -13,6 +14,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.template.PackageTextTemplate;
 
+import com.talool.core.MediaType;
 import com.talool.website.Config;
 
 /**
@@ -20,11 +22,24 @@ import com.talool.website.Config;
  */
 public class FileUploadBehavior extends Behavior {
 
-    /**
+	private static final long serialVersionUID = 1L;
+
+	/**
      * The name of the request parameter used for the multipart
      * Ajax request
      */
     public static final String PARAM_NAME = "FILE-UPLOAD";
+    
+    private final UUID merchantId;
+    private final MediaType mediaType;
+    
+    
+    public FileUploadBehavior(UUID merchantId, MediaType mediaType)
+    {
+    	super();
+    	this.merchantId = merchantId;
+    	this.mediaType = mediaType;
+    }
 
     /**
      * Configures the connected component to render its markup id
@@ -42,7 +57,7 @@ public class FileUploadBehavior extends Behavior {
     public void renderHead(Component component, IHeaderResponse response) {
         super.renderHead(component, response);
         FileUploadBehavior.setHeadResources(component, response);
-        FileUploadBehavior.setUploadConfig(component, response);
+        setUploadConfig(component, response);
     }
     
     public static void setHeadResources(Component component, IHeaderResponse response)
@@ -81,13 +96,15 @@ public class FileUploadBehavior extends Behavior {
                 
     }
     
-    public static void setUploadConfig(Component component, IHeaderResponse response){
+    public void setUploadConfig(Component component, IHeaderResponse response){
     	PackageTextTemplate jsTmpl = new PackageTextTemplate(FileUploadBehavior.class, "main.js");
         Map<String, Object> variables = new HashMap<String, Object>();
 
         variables.put("componentMarkupId", component.getMarkupId());
         variables.put("url", component.urlFor(new FileUploadResourceReference(Config.get().getUploadDir()), null));
         variables.put("paramName", PARAM_NAME);
+        variables.put("merchantId", merchantId.toString());
+        variables.put("mediaType", mediaType.toString());
 
         String s = jsTmpl.asString(variables);
         response.render(JavaScriptHeaderItem.forScript(s, "fileupload"));

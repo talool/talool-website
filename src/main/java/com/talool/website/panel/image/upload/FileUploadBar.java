@@ -1,6 +1,10 @@
 package com.talool.website.panel.image.upload;
 
+import java.util.UUID;
+
 import org.apache.wicket.markup.html.panel.Panel;
+
+import com.talool.core.MediaType;
 
 /**
  * This bar contributes the toolbar with "Add files", "Start upload",
@@ -8,9 +12,11 @@ import org.apache.wicket.markup.html.panel.Panel;
  */
 public class FileUploadBar extends Panel {
 
-    public FileUploadBar(String id) {
+	private static final long serialVersionUID = 1L;
+
+	public FileUploadBar(String id, UUID merchantId, MediaType mediaType) {
         super(id);
 
-        add(new FileUploadBehavior());
+        add(new FileUploadBehavior(merchantId, mediaType));
     }
 }

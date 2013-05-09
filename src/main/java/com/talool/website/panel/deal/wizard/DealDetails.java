@@ -16,6 +16,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.template.PackageTextTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,7 +90,10 @@ public class DealDetails extends DynamicWizardStep {
 		/*
 		 * Add an iframe that keep the upload in a sandbox
 		 */
-		final InlineFrame iframe = new InlineFrame("uploaderIFrame", UploadPage.class);
+		PageParameters params = new PageParameters();
+		params.add("id", deal.getMerchant().getId());
+		params.add("type", MediaType.DEAL_IMAGE);
+		final InlineFrame iframe = new InlineFrame("uploaderIFrame", UploadPage.class, params);
 		addOrReplace(iframe);
 		
 		/*

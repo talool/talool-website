@@ -1,20 +1,25 @@
 package com.talool.website.panel.image.upload;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.wicket.protocol.http.servlet.MultipartServletWebRequest;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.http.flow.AbortWithHttpErrorCodeException;
 import org.apache.wicket.request.resource.AbstractResource;
 import org.apache.wicket.util.lang.Bytes;
+import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.upload.FileItem;
 import org.apache.wicket.util.upload.FileUploadException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import com.talool.core.MediaType;
 
 /**
  * The resource that handles the file uploads.
@@ -24,7 +29,9 @@ import java.util.Map;
  */
 public abstract class AbstractFileUploadResource extends AbstractResource
 {
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractFileUploadResource.class);
+	private static final long serialVersionUID = 1L;
+
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractFileUploadResource.class);
 
     private final FileManager fileManager;
 
@@ -48,13 +55,34 @@ public abstract class AbstractFileUploadResource extends AbstractResource
         try
         {
             MultipartServletWebRequest multiPartRequest = webRequest.newMultipartWebRequest(getMaxSize(), "ignored");
+            
+            UUID merchantId = null;
+            StringValue id = multiPartRequest.getPostParameters().getParameterValue("merchantId");
+    		if (id!=null && !id.toString().equals("null"))
+    		{
+    			merchantId = UUID.fromString(id.toString());
+    		}
+    		
+    		MediaType mediaType = null;
+    		StringValue type = multiPartRequest.getPostParameters().getParameterValue("mediaType");
+    		if (type!=null && !type.toString().equals("null"))
+    		{
+    			mediaType = MediaType.valueOf(type.toString());
+    		}
 
             Map<String, List<FileItem>> files = multiPartRequest.getFiles();
             List<FileItem> fileItems = files.get(FileUploadBehavior.PARAM_NAME);
 
-            saveFiles(fileItems);
+            if (mediaType==null || merchantId==null)
+        	{
+        		saveFiles(fileItems);
+        	}
+        	else 
+        	{
+        		saveFiles(fileItems, merchantId, mediaType);
+        	}
 
-            prepareResponse(resourceResponse, webRequest, fileItems);
+            prepareResponse(resourceResponse, webRequest, fileItems, merchantId, mediaType);
         }
         catch (Exception fux)
         {
@@ -73,7 +101,7 @@ public abstract class AbstractFileUploadResource extends AbstractResource
      * @throws FileUploadException
      * @throws IOException
      */
-    protected void prepareResponse(ResourceResponse resourceResponse, ServletWebRequest webRequest, List<FileItem> fileItems)
+    protected void prepareResponse(ResourceResponse resourceResponse, ServletWebRequest webRequest, List<FileItem> fileItems, UUID merchantId, MediaType mediaType)
             throws FileUploadException, IOException {
 
         final String responseContent;
@@ -90,7 +118,7 @@ public abstract class AbstractFileUploadResource extends AbstractResource
             // a real browser
             resourceResponse.setContentType("application/json");
 
-            responseContent = generateJsonResponse(resourceResponse, webRequest, fileItems);
+            responseContent = generateJsonResponse(resourceResponse, webRequest, fileItems, merchantId, mediaType);
         }
 
         resourceResponse.setWriteCallback(new WriteCallback() {
@@ -109,7 +137,19 @@ public abstract class AbstractFileUploadResource extends AbstractResource
     protected void saveFiles(List<FileItem> fileItems) throws IOException {
         for (FileItem fileItem : fileItems)
         {
-            fileManager.save(fileItem);
+        	fileManager.save(fileItem);
+        }
+    }
+    
+    /**
+     * Delegates to FileManager to store the uploaded files
+     * @param fileItems
+     * @throws IOException
+     */
+    protected void saveFiles(List<FileItem> fileItems, UUID merchantId, MediaType mediaType) throws IOException {
+        for (FileItem fileItem : fileItems)
+        {
+        	fileManager.process(fileItem, mediaType, merchantId);
         }
     }
 
@@ -144,7 +184,7 @@ public abstract class AbstractFileUploadResource extends AbstractResource
      * @return
      */
     protected abstract String generateJsonResponse(ResourceResponse resourceResponse,
-                                                 ServletWebRequest webRequest, List<FileItem> files);
+                                                 ServletWebRequest webRequest, List<FileItem> files, UUID merchantId, MediaType mediaType);
 
     /**
      * Should generate the response's body in HTML format

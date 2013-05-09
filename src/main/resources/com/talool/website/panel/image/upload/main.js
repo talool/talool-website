@@ -4,6 +4,10 @@ $(function () {
     $('#${componentMarkupId}').fileupload({
         url: '${url}',
         paramName: '${paramName}',
+        formData: {
+        	mediaType: '${mediaType}',
+        	merchantId: '${merchantId}'
+        },
         singleFileUploads: true,
         autoUpload: true,
         maxFileSize: 5000000,
