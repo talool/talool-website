@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
 import com.talool.core.MerchantAccount;
-import com.talool.core.service.ServiceException;
 import com.talool.website.models.DealListModel;
+import com.talool.website.models.DealModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.deal.wizard.DealWizard;
@@ -46,11 +46,11 @@ public class DealOfferDealsPage extends BasePage
 
 		DealListModel model = new DealListModel();
 		model.setDealOfferId(_dealOfferId);
-		
+
 		final WebMarkupContainer container = new WebMarkupContainer("dealList");
 		container.setOutputMarkupId(true);
 		add(container);
-		
+
 		final ListView<Deal> deals = new ListView<Deal>("dealRptr", model)
 		{
 
@@ -59,7 +59,8 @@ public class DealOfferDealsPage extends BasePage
 			@Override
 			protected void populateItem(ListItem<Deal> item)
 			{
-				final Deal deal = item.getModelObject();
+				Deal deal = item.getModelObject();
+				final UUID dealId = deal.getId();
 
 				item.setModel(new CompoundPropertyModel<Deal>(deal));
 
@@ -80,14 +81,7 @@ public class DealOfferDealsPage extends BasePage
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						try {
-							// TODO Merge or Reattach the deal instead of Refreshing
-							taloolService.refresh(deal);
-						}
-						catch (ServiceException se) {
-							LOG.error("Failed to reattach deal for editiing", se);
-						}
-						wizard.setModelObject(deal);
+						wizard.setModelObject(new DealModel(dealId, true).getObject());
 						wizard.open(target);
 					}
 				});
@@ -96,7 +90,7 @@ public class DealOfferDealsPage extends BasePage
 
 		};
 		container.add(deals);
-		
+
 		// override the action button
 		final BasePage page = (BasePage) this.getPage();
 		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
@@ -119,16 +113,17 @@ public class DealOfferDealsPage extends BasePage
 		actionLabel.setOutputMarkupId(true);
 		actionLink.add(actionLabel);
 		actionLink.setOutputMarkupId(true);
-		
+
 		// Wizard
-		wizard = new DealWizard("wiz", "Deal Wizard") {
+		wizard = new DealWizard("wiz", "Deal Wizard")
+		{
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onFinish(AjaxRequestTarget target) {
+			protected void onFinish(AjaxRequestTarget target)
+			{
 				super.onFinish(target);
-				// refresh the list after a deal is edited
 				target.add(container);
 			}
 		};

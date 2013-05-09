@@ -30,6 +30,9 @@ public class DealTags extends DynamicWizardStep
 {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealTags.class);
+
+	private static final ChoiceRenderer<Tag> choiceRender = new ChoiceRenderer<Tag>("name", "name");
+
 	private List<Tag> tags;
 
 	private final IDynamicWizardStep dealAvailabilityStep;
@@ -57,12 +60,11 @@ public class DealTags extends DynamicWizardStep
 		dealPreview.setOutputMarkupId(true);
 		addOrReplace(dealPreview);
 
-		ChoiceRenderer<Tag> cr = new ChoiceRenderer<Tag>("name", "name");
 		Category cat = ModelUtil.getCategory(deal.getMerchant());
 
 		List<Tag> choices = TagCache.get().getTagsByCategoryName(cat.getName());
 		ListMultipleChoice<Tag> tagChoices = new ListMultipleChoice<Tag>("tags", new PropertyModel<List<Tag>>(
-				this, "tags"), choices, cr);
+				this, "tags"), choices, choiceRender);
 		tagChoices.setMaxRows(25);
 		tagChoices.setOutputMarkupId(true);
 		addOrReplace(tagChoices.setRequired(true));
@@ -142,7 +144,8 @@ public class DealTags extends DynamicWizardStep
 	{
 		AvailableDealOffersListModel listModel = new AvailableDealOffersListModel();
 		Deal deal = (Deal) getDefaultModelObject();
-		if (deal.getMerchant() != null) {
+		if (deal.getMerchant() != null)
+		{
 			listModel.addMerchantId(deal.getMerchant().getId());
 		}
 		return (listModel.isEmpty()) ? this.createDealOfferStep : this.dealAvailabilityStep;
