@@ -22,6 +22,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.template.PackageTextTemplate;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.UrlValidator;
@@ -86,9 +87,16 @@ public class MerchantLocations extends WizardStep
 		addOrReplace(mediaSelect.setOutputMarkupId(true));
 
 		/*
-		 * Add an iframe that keep the upload in a sandbox
+		 * Add an iframe that keeps the upload in a sandbox
 		 */
-		final InlineFrame iframe = new InlineFrame("uploaderIFrame", UploadPage.class);
+		PageParameters params = new PageParameters();
+		// TODO what to do about new merchants?  maybe move the images to a separate step?
+		if (merchant.getId() != null)
+		{
+			params.add("id", merchant.getId());
+		}
+		params.add("type", MediaType.MERCHANT_LOGO);
+		final InlineFrame iframe = new InlineFrame("uploaderIFrame", UploadPage.class, params);
 		addOrReplace(iframe);
 
 		/*

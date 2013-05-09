@@ -1,10 +1,10 @@
 package com.talool.website.panel.image.upload;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
+import org.apache.wicket.util.file.File;
 import org.apache.wicket.util.file.Folder;
 import org.apache.wicket.util.io.IOUtils;
 import org.apache.wicket.util.upload.FileItem;
@@ -29,8 +29,7 @@ public class FileUploadUtils {
 	
 	public static Folder getImageDir(UUID merchantId, boolean original) throws IOException {
 		StringBuilder folderPath = new StringBuilder(baseUploadDir);
-    	folderPath.append("/")
-    		.append(getMerchantFolderName(merchantId));
+    	folderPath.append("/").append(getMerchantFolderName(merchantId));
     	
     	if (original)
     	{
@@ -43,13 +42,28 @@ public class FileUploadUtils {
     	return merchantFolder;
 	}
 	
+	public static File getFile(FileItem image) throws IOException 
+	{
+		StringBuilder folderPath = new StringBuilder(baseUploadDir);
+		folderPath.append("/");
+		Folder folder = new Folder(folderPath.toString());
+    	return new File(folder, image.getName());
+	}
+	
+	public static File getFile(FileItem image, UUID merchantId, boolean original) throws IOException 
+	{
+		Folder folder = getImageDir(merchantId, original);
+    	return new File(folder, image.getName());
+	}
+	
 	/*
 	 * TODO consider renaming file if there is a name collision
+	 * renaming happen automatically with imagemagick, 
+	 * but i don't think we want it to
 	 */
 	public static int saveImage(FileItem image, UUID merchantId, boolean original) throws IOException 
 	{
-		Folder folder = getImageDir(merchantId, original);
-    	File imageFile = new File(folder, image.getName());
+		File imageFile = getFile(image, merchantId, original);
     	FileOutputStream fileOS = new FileOutputStream(imageFile, false);
     	return IOUtils.copy(image.getInputStream(), fileOS);
 	}

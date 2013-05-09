@@ -1,11 +1,11 @@
 package com.talool.website.panel.image.upload;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
+import org.apache.wicket.util.file.File;
 import org.apache.wicket.util.file.Files;
 import org.apache.wicket.util.file.Folder;
 import org.apache.wicket.util.io.IOUtils;
@@ -39,20 +39,23 @@ public class FileManager
         return IOUtils.copy(fileItem.getInputStream(), fileOS);
     }
     
-    public int process(FileItem image, MediaType mediaType, UUID merchantId) throws IOException
+    public void process(FileItem image, MediaType mediaType, UUID merchantId) throws IOException
     {
     	// stash the original file
     	FileUploadUtils.saveImage(image, merchantId, true);
     	
+    	// write it to the base folder
+    	save(image);
+    	
     	// process the file
     	AbstractMagick magick = (AbstractMagick)
     			this.magickFactory.getMagickForMediaType(mediaType);
-    	magick.setImage(image);
+    	magick.setInputFile(FileUploadUtils.getFile(image));
+    	magick.setOutputFile(FileUploadUtils.getFile(image, merchantId, false));
     	magick.process();
-    	image = magick.getImage();
     	
-    	// store the updated file in the merchant's folder
-    	return FileUploadUtils.saveImage(image, merchantId, false);
+    	// clean up the base folder
+    	delete(image.getName());
 
     }
 

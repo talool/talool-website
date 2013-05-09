@@ -1,24 +1,25 @@
 package com.talool.website.panel.image.upload.manipulator;
 
+import org.im4java.core.IMOperation;
+
 
 public class MerchantImageMagick extends AbstractMagick {
 
-	@Override
-	public void resize() {
-		// TODO Auto-generated method stub
 
+	/*
+	 * This will resize the image down to 
+	 * 320x160 with a center crop.
+	 */
+	@Override
+	public IMOperation getOperation() {
+		IMOperation op = new IMOperation();
+		op.addImage();
+		op.resize(320);
+		op.gravity("center");
+		op.crop(320,160,0,0);
+		op.addImage();
+		return op;
 	}
 
-	@Override
-	public void filter() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void process() {
-		// TODO Auto-generated method stub
-		
-	}
 
 }
