@@ -1,6 +1,6 @@
 package com.talool.website.pages.lists;
 
-import java.util.List;
+import java.util.UUID;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -20,13 +20,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.gmap.GMap;
 
-import com.talool.core.Location;
 import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
-import com.talool.core.service.ServiceException;
-import com.talool.domain.LocationImpl;
 import com.talool.website.models.MerchantListModel;
+import com.talool.website.models.MerchantModel;
 import com.talool.website.models.ModelUtil;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.MerchantManagementPage;
@@ -61,26 +59,6 @@ public class MerchantsPage extends BasePage
 	{
 		super.onInitialize();
 
-		try
-		{
-			final Location location = new LocationImpl(105.2700, 40.0150);
-			List<Merchant> entities = taloolService.getMerchantsWithin(location, 650, null);
-			for (final Merchant merchant : entities)
-			{
-				for (MerchantLocation mloc : merchant.getLocations())
-				{
-					System.out.println(merchant.getName() + " " + mloc.getDistanceInMeters());
-
-				}
-
-			}
-
-		}
-		catch (ServiceException e)
-		{
-			e.printStackTrace();
-		}
-
 		final WebMarkupContainer container = new WebMarkupContainer("merchantList");
 		container.setOutputMarkupId(true);
 		add(container);
@@ -93,7 +71,8 @@ public class MerchantsPage extends BasePage
 			@Override
 			protected void populateItem(ListItem<Merchant> item)
 			{
-				final Merchant merchant = item.getModelObject();
+				Merchant merchant = item.getModelObject();
+				final UUID merchantId = merchant.getId();
 
 				item.setModel(new CompoundPropertyModel<Merchant>(merchant));
 
@@ -126,7 +105,7 @@ public class MerchantsPage extends BasePage
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						wizard.setModelObject(merchant);
+						wizard.setModelObject(new MerchantModel(merchantId, true).getObject());
 						wizard.open(target);
 					}
 				});

@@ -83,7 +83,7 @@ public class MerchantPanel extends BaseDefinitionPanel
 	public MerchantPanel(final String id, final SubmitCallBack callback, final UUID merchantId)
 	{
 		super(id, callback);
-		setDefaultModel(new MerchantModel(merchantId));
+		setDefaultModel(new MerchantModel(merchantId, false));
 		setTags(getTags());
 	}
 

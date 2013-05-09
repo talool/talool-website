@@ -99,23 +99,6 @@ public class MerchantMap extends WizardStep
 		for (MerchantLocation location : locs)
 		{
 			address = location.getAddress();
-			try
-			{
-				address.getId();
-			}
-			catch (Exception lazy)
-			{
-				try
-				{
-					// TODO Revisit to see why merge didn't work for address
-					taloolService.refresh(address);
-					LOG.debug("Had to refresh an address");
-				}
-				catch (ServiceException se)
-				{
-					LOG.error("There was an exception merging the address to be pinned: ", se);
-				}
-			}
 
 			try
 			{
