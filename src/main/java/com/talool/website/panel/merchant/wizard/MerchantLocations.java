@@ -245,7 +245,6 @@ public class MerchantLocations extends WizardStep
 				merch.getCurrentLocation().setLogo(null);
 				taloolService.save(merch);
 				merch.getCurrentLocation().setLogo(logo);
-				//taloolService.merge(merch);
 				StringBuilder sb = new StringBuilder("Saved Merchant with id:");
 				LOG.debug(sb.append(merch.getId()).toString());
 			}
@@ -255,7 +254,7 @@ public class MerchantLocations extends WizardStep
 			}
 			catch (Exception e)
 			{
-				// TODO duplicate merchant name?
+				// duplicate merchant name?
 				LOG.error("random-ass-exception saving new merchant:", e);
 			}
 		}
@@ -279,8 +278,6 @@ public class MerchantLocations extends WizardStep
 		}
 
 		// get the selected MerchantMedia and add it to the location
-		// TODO the location needs to store a MerchantMedia object, not the url
-		// TODO don't save it if it's the default
 		if (selectedLogo != null)
 		{
 
@@ -301,7 +298,6 @@ public class MerchantLocations extends WizardStep
 		}
 		catch (DataIntegrityViolationException dve)
 		{
-			// TODO Don't try to save the same media for the same merchant
 			// ERROR: duplicate key value violates unique constraint
 			// "merchant_media_merchant_id_media_url_key"
 			LOG.info("merchant tried to upload the same image twice");

@@ -4,6 +4,8 @@ import org.apache.wicket.util.file.File;
 import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
+import org.im4java.core.Info;
+import org.im4java.core.InfoException;
 import org.im4java.process.ProcessStarter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +36,7 @@ public abstract class AbstractMagick implements IMagick
 	{
 		this.inputFile = inputFile;
 	}
+	
 
 	public File getOutputFile()
 	{
@@ -56,9 +59,9 @@ public abstract class AbstractMagick implements IMagick
 		try
 		{
 			// execute the operation
-			cmd.run(getOperation(), inputFilePath, outputFilePath);
-
-			// debug();
+			cmd.run(getOperation(),inputFilePath,outputFilePath);
+			
+			debug();
 		}
 		catch (IM4JavaException ime)
 		{
@@ -101,10 +104,29 @@ public abstract class AbstractMagick implements IMagick
 
 		return gradientPath;
 	}
+	
+	protected boolean isRGB()
+	{
+		boolean isRGB = true;
+		try
+		{
+			Info info = new Info(getInputFile().getAbsolutePath());
+			String colorspace = info.getProperty("Colorspace");
+			if (colorspace.equalsIgnoreCase("cmyk"))
+			{
+				isRGB=false;
+			}
+		}
+		catch (InfoException ie)
+		{
+			// should log this.  probably a corrupt file
+		}
+		return isRGB;
+	}
 
 	private void debug()
 	{
-		StringBuilder sb = new StringBuilder("IMOperation: ");
+		StringBuilder sb = new StringBuilder("IMOperation: convert ");
 		sb.append(getOperation().toString());
 		LOG.debug(sb.toString());
 	}
