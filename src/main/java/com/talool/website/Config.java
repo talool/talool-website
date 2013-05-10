@@ -18,6 +18,7 @@ public final class Config extends PropertiesConfiguration
 	private static final String UPLOAD_DIR = "upload.dir";
 	private static final String UPLOAD_LOGO_MAX_SIZE_BYTES = "upload.logo.max.size.bytes";
 	private static final String STATIC_LOGO_BASE_URL = "static.logo.base.url";
+	private static final String IMAGE_MAGICK_PATH = "image.magick.path";
 
 	private static final Integer DEFAULT_UPLOAD_LOGO_MAX_SIZE_BYTES = 10240;
 
@@ -69,6 +70,11 @@ public final class Config extends PropertiesConfiguration
 	public String getWebsiteMode()
 	{
 		return getString(WEBSITE_MODE, "development");
+	}
+
+	public String getImageMagickPath()
+	{
+		return getString(IMAGE_MAGICK_PATH);
 	}
 
 }

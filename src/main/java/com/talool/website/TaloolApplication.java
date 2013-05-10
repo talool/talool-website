@@ -57,7 +57,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 	@Override
 	protected void init()
 	{
-		
+
 		final IPackageResourceGuard packageResourceGuard = getResourceSettings()
 				.getPackageResourceGuard();
 		if (packageResourceGuard instanceof SecurePackageResourceGuard)
@@ -72,7 +72,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		final ResourceReference faviconRef = new PackageResourceReference(this.getClass(),
 				"favicon.ico");
 		mountResource("/favicon.ico", faviconRef);
-		
+
 		mountResource("fileManager", new FileManageResourceReference(Config.get().getUploadDir()));
 		mountResource("fileUpload", new FileUploadResourceReference(Config.get().getUploadDir()));
 		mountPage("/upload", UploadPage.class);
