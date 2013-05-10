@@ -63,7 +63,18 @@ body.talool .dealWiz {
   	margin-bottom: 15px;
 }
 
+.deal .dealOfferLogoContainer {
+	position: absolute;
+	bottom: 20px;
+	width: 100%;
+}
 
+.deal .code {
+	position: absolute;
+	bottom: 5px;
+	width: 300px;
+	left: 10px;
+}
 
 .talool .ui-dialog .ui-dialog-buttonpane
 {

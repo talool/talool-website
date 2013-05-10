@@ -1,5 +1,6 @@
 package com.talool.website.panel.deal.wizard;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
@@ -9,6 +10,7 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +20,16 @@ import com.talool.core.DealOffer;
 import com.talool.core.DealType;
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
+import com.talool.core.MediaType;
 import com.talool.core.MerchantAccount;
+import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.website.component.DealTypeDropDownChoice;
+import com.talool.website.component.MerchantMediaWizardPanel;
 import com.talool.website.panel.deal.DealPreview;
+import com.talool.website.panel.deal.DealPreviewUpdatingBehavior;
+import com.talool.website.panel.deal.DealPreviewUpdatingBehavior.DealComponent;
 import com.talool.website.panel.merchant.definition.MerchantDealOfferPanel;
 import com.talool.website.util.SessionUtils;
 
@@ -33,6 +40,7 @@ public class CreateDealOffer extends DynamicWizardStep {
 	private final IDynamicWizardStep nextStep;
 	private final DealOffer dealOffer;
 	private DealWizard wizard;
+	private MerchantMedia image;
 	
 	private transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
@@ -75,6 +83,24 @@ public class CreateDealOffer extends DynamicWizardStep {
 
 		addOrReplace(new CheckBox("dealOffer.isActive"));
 		
+		image = dealOffer.getImage();
+		PropertyModel<MerchantMedia> selectedMediaModel = new PropertyModel<MerchantMedia>(this,"image");
+		MerchantMediaWizardPanel mediaPanel = 
+				new MerchantMediaWizardPanel("dealOfferLogo", dealOffer.getMerchant().getId(), MediaType.DEAL_OFFER_LOGO, selectedMediaModel) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onMediaUploadComplete(AjaxRequestTarget target, String url) {
+				// re-init the preview
+				dealPreview.init(deal);
+				target.add(dealPreview);
+			}
+			
+		};
+		mediaPanel.getMediaSelect()
+			.add(new DealPreviewUpdatingBehavior(dealPreview, DealComponent.DEAL_OFFER, "onChange"));
+		addOrReplace(mediaPanel);
+		
 	}
 
 	@Override
@@ -107,7 +133,10 @@ public class CreateDealOffer extends DynamicWizardStep {
 		{
 			dealOffer.setPrice(0.0f);
 		}
-		
+		if (image != null)
+		{
+			dealOffer.setImage(image);
+		}
 		try
 		{
 			taloolService.save(dealOffer);

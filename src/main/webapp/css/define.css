@@ -133,5 +133,18 @@ optgroup option {
 	display: block;
 }
 
+.newMerchant .panel.dealOfferLogoSelectContainer {
 
+}
 
+.dealOfferLogoSelectContainer .wicketExtensionsWizardHeaderTitle {
+	font-weight: bold;
+	font-size: 1.17em;
+	-webkit-margin-before: 1em;
+	-webkit-margin-after: 1em;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+}
+.dealOfferLogoSelectContainer .wicketExtensionsWizardHeaderSummary {
+	display: none;
+}

@@ -46,7 +46,10 @@ public class DealPreviewUpdatingBehavior extends AjaxFormComponentUpdatingBehavi
 			//target.add(preview.codeLabel);
 			break;
 		case MERCHANT:
+			break;
 		case DEAL_OFFER:
+			preview.dealOfferLogoUrl = getFormComponent().getValue();
+			target.add(preview.dealOfferLogo);
 			break;
 		}
 		

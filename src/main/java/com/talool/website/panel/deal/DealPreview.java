@@ -22,7 +22,7 @@ public class DealPreview extends Panel
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
 	public String title, summary, details, code, imageUrl;
-	private String merchantLogoUrl, dealOfferLogoUrl;
+	public String merchantLogoUrl, dealOfferLogoUrl;
 	private String defaultImageUrl = "http://i567.photobucket.com/albums/ss116/alphabetabeta/bg_test.png";
 	private String defaultDealOfferLogoUrl = "http://i1328.photobucket.com/albums/w525/talooltools/paybackbook_logo_zps2ee39bdc.png";
 	public String expires;

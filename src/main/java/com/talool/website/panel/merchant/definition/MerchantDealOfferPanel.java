@@ -2,6 +2,7 @@ package com.talool.website.panel.merchant.definition;
 
 import java.util.UUID;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
@@ -16,15 +17,20 @@ import org.slf4j.LoggerFactory;
 
 import com.talool.core.DealOffer;
 import com.talool.core.DealType;
+import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantIdentity;
+import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
 import com.talool.website.component.DealTypeDropDownChoice;
 import com.talool.website.component.MerchantIdentitySelect;
+import com.talool.website.component.MerchantMediaWizardPanel;
 import com.talool.website.models.AvailableMerchantsListModel;
 import com.talool.website.models.DealOfferModel;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.deal.DealPreviewUpdatingBehavior;
+import com.talool.website.panel.deal.DealPreviewUpdatingBehavior.DealComponent;
 import com.talool.website.util.SessionUtils;
 
 /**
@@ -38,6 +44,8 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 	private static final long serialVersionUID = 661849211369766802L;
 
 	private MerchantIdentity owningMerchant;
+	private MerchantMedia image;
+	private MerchantMediaWizardPanel mediaPanel;
 
 	public MerchantDealOfferPanel(final String id, final MerchantIdentity merchantIdentity,
 			final SubmitCallBack callback)
@@ -89,6 +97,19 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		form.add(new DateTextField("expires", converter));
 
 		form.add(new CheckBox("isActive"));
+		
+		DealOffer dealOffer = (DealOffer) getDefaultModelObject();
+		image = dealOffer.getImage();
+		PropertyModel<MerchantMedia> selectedMediaModel = new PropertyModel<MerchantMedia>(this,"image");
+		mediaPanel = 
+				new MerchantMediaWizardPanel("dealOfferLogo", dealOffer.getMerchant().getId(), MediaType.DEAL_OFFER_LOGO, selectedMediaModel) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onMediaUploadComplete(AjaxRequestTarget target, String url) {}
+			
+		};
+		form.add(mediaPanel);
 
 	}
 
@@ -118,7 +139,11 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		}
 
 		dealOffer.setUpdatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
-
+		
+		if (image != null) {
+			dealOffer.setImage(image);
+		}
+		
 		// merchant could of changed, make sure to reset it
 		final Merchant merch = taloolService.getMerchantById(owningMerchant.getId());
 		dealOffer.setMerchant(merch);
