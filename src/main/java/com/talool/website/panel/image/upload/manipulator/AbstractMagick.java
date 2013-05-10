@@ -24,6 +24,7 @@ public abstract class AbstractMagick implements IMagick {
 	public void setInputFile(File inputFile) {
 		this.inputFile = inputFile;
 	}
+	
 	public File getOutputFile() {
 		return outputFile;
 	}
@@ -43,7 +44,7 @@ public abstract class AbstractMagick implements IMagick {
 			// execute the operation
 			cmd.run(getOperation(),inputFilePath,outputFilePath);
 			
-			//debug();
+			debug();
 		}
 		catch (IM4JavaException ime)
 		{
@@ -88,7 +89,7 @@ public abstract class AbstractMagick implements IMagick {
 	
 	private void debug()
 	{
-		StringBuilder sb = new StringBuilder("IMOperation: ");
+		StringBuilder sb = new StringBuilder("IMOperation: convert ");
 		sb.append(getOperation().toString());
 		LOG.debug(sb.toString());
 	}

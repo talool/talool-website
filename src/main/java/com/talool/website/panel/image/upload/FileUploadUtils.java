@@ -23,7 +23,7 @@ public class FileUploadUtils {
     		sb.append(getMerchantFolderName(merchantId))
     			.append("/");
     	}
-    	sb.append(image.getName());
+    	sb.append(getPngFileName(image));
         return sb.toString();
 	}
 	
@@ -53,7 +53,8 @@ public class FileUploadUtils {
 	public static File getFile(FileItem image, UUID merchantId, boolean original) throws IOException 
 	{
 		Folder folder = getImageDir(merchantId, original);
-    	return new File(folder, image.getName());
+		String name = (original)?image.getName():getPngFileName(image);
+    	return new File(folder, name);
 	}
 	
 	/*
@@ -75,6 +76,18 @@ public class FileUploadUtils {
 	private static String getMerchantFolderName(UUID merchantId)
 	{
 		return merchantId.toString();
+	}
+	
+	/*
+	 * Helps ensure we always save PNGs for display in the apps
+	 * We should avoid this method for original files.
+	 */
+	private static String getPngFileName(FileItem image)
+	{
+		String name = image.getName();
+		int dot = name.lastIndexOf(".");
+		StringBuilder sb = new StringBuilder(name.substring(0,dot));
+		return sb.append(".png").toString();
 	}
 	
 }
