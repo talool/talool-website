@@ -19,6 +19,7 @@ import com.talool.website.component.StaticImage;
 public class DealPreview extends Panel
 {
 	private static final String NEVER_EXPIRES = "Never";
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
 	public String title, summary, details, code, imageUrl;
 	private String merchantLogoUrl, dealOfferLogoUrl;
@@ -28,8 +29,8 @@ public class DealPreview extends Panel
 	public Label titleLabel, summaryLabel, detailsLabel;
 	public StaticImage image, merchantLogo, dealOfferLogo;
 	public DateLabel expiresLabel;
-	
-	// Temporary list of logos.  Should be tied to the merchant.
+
+	// Temporary list of logos. Should be tied to the merchant.
 	private List<String> logos = new ArrayList<String>();
 	private int logoIdx = 0;
 
@@ -38,23 +39,23 @@ public class DealPreview extends Panel
 	public DealPreview(String id, Deal deal)
 	{
 		super(id);
-		
+
 		this.logos.add("http://i1328.photobucket.com/albums/w525/talooltools/Parma_logo_zpsd7363952.png");
 		this.logos.add("http://i1328.photobucket.com/albums/w525/talooltools/La_Revolucion_logo_zpsf2bd7958.png");
 		this.logos.add("http://i1328.photobucket.com/albums/w525/talooltools/Jovie_logo_zps35c45fe9.png");
-		
+
 		init(deal);
 	}
-	
-	public void init(Deal deal) {
 
+	public void init(Deal deal)
+	{
 		title = deal.getTitle();
 		summary = deal.getSummary();
 		details = deal.geDetails();
-		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+
 		if (deal.getExpires() != null)
 		{
-			expires = formatter.format(deal.getExpires());
+			expires = dateFormat.format(deal.getExpires());
 		}
 		else
 		{
@@ -62,16 +63,15 @@ public class DealPreview extends Panel
 		}
 
 		code = deal.getCode();
-		if (StringUtils.isNotEmpty(deal.getImageUrl()))
+		if (deal.getImage() != null && StringUtils.isNotEmpty(deal.getImage().getMediaUrl()))
 		{
-			imageUrl = deal.getImageUrl();
+			imageUrl = deal.getImage().getMediaUrl();
 		}
 		else
 		{
 			imageUrl = defaultImageUrl;
 		}
 
-		
 		merchantLogoUrl = this.logos.get(0);
 		dealOfferLogoUrl = defaultDealOfferLogoUrl;
 	}
@@ -98,30 +98,35 @@ public class DealPreview extends Panel
 
 		add(image = new StaticImage("image", false, new PropertyModel<String>(this, "imageUrl")));
 		image.setOutputMarkupId(true);
-		
+
 		add(merchantLogo = new StaticImage("merchantLogo", false, new PropertyModel<String>(this, "merchantLogoUrl")));
 		merchantLogo.setOutputMarkupId(true);
-		
+
 		add(dealOfferLogo = new StaticImage("dealOfferLogo", false, new PropertyModel<String>(this, "dealOfferLogoUrl")));
 		dealOfferLogo.setOutputMarkupId(true);
 	}
-	
-	public String getMerchantLogoUrl() {
+
+	public String getMerchantLogoUrl()
+	{
 		return merchantLogoUrl;
 	}
 
-	public void setMerchantLogoUrl(String merchantLogoUrl) {
+	public void setMerchantLogoUrl(String merchantLogoUrl)
+	{
 		logoIdx++;
-		if (logoIdx >= logos.size()) logoIdx=0;
+		if (logoIdx >= logos.size())
+			logoIdx = 0;
 		this.merchantLogoUrl = logos.get(logoIdx);
 	}
 
-	public String getDealOfferLogoUrl() {
+	public String getDealOfferLogoUrl()
+	{
 		return dealOfferLogoUrl;
 	}
 
-	public void setDealOfferLogoUrl(String dealOfferLogoUrl) {
+	public void setDealOfferLogoUrl(String dealOfferLogoUrl)
+	{
 		this.dealOfferLogoUrl = dealOfferLogoUrl;
 	}
-	
+
 }

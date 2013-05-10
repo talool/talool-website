@@ -37,7 +37,8 @@ import com.talool.website.panel.deal.DealPreview;
 import com.talool.website.panel.deal.DealPreviewUpdatingBehavior;
 import com.talool.website.panel.deal.definition.template.DealTemplateSelectPanel;
 
-public class DealDetails extends DynamicWizardStep {
+public class DealDetails extends DynamicWizardStep
+{
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealDetails.class);
@@ -46,20 +47,21 @@ public class DealDetails extends DynamicWizardStep {
 	private List<MerchantMedia> myImages;
 	private final IDynamicWizardStep nextStep;
 	private DealWizard wizard;
-	
+
 	private transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
 	private transient static final DomainFactory domainFactory = FactoryManager.get()
 			.getDomainFactory();
 
 	public DealDetails(DealWizard wiz)
-    {
-        super(null, new ResourceModel("title"), new ResourceModel("summary"));
-        this.nextStep = new DealTags(this, wiz);
-        this.wizard = wiz;
-    }
-	
-	public void init() {
+	{
+		super(null, new ResourceModel("title"), new ResourceModel("summary"));
+		this.nextStep = new DealTags(this, wiz);
+		this.wizard = wiz;
+	}
+
+	public void init()
+	{
 		Deal deal = (Deal) getDefaultModelObject();
 		Merchant merchant = deal.getMerchant();
 		mediaListModel = new MerchantMediaListModel();
@@ -67,26 +69,27 @@ public class DealDetails extends DynamicWizardStep {
 		mediaListModel.setMediaType(MediaType.DEAL_IMAGE);
 		myImages = mediaListModel.getObject();
 	}
-	
+
 	@Override
-	protected void onConfigure() {
+	protected void onConfigure()
+	{
 		super.onConfigure();
-		
+
 		init();
-		
+
 		final Deal deal = (Deal) getDefaultModelObject();
-		
+
 		final DealPreview dealPreview = new DealPreview("dealBuilder", deal);
 		dealPreview.setOutputMarkupId(true);
 		addOrReplace(dealPreview);
-		
-		final DealImageSelect images = new DealImageSelect("availableImages", 
-				new PropertyModel<MerchantMedia>(this, "image"), 
+
+		final DealImageSelect images = new DealImageSelect("availableImages",
+				new PropertyModel<MerchantMedia>(this, "image"),
 				mediaListModel);
 		images.setRequired(true);
 		images.add(new DealPreviewUpdatingBehavior(dealPreview, DealPreviewUpdatingBehavior.DealComponent.IMAGE, "onChange"));
 		addOrReplace(images);
-		
+
 		/*
 		 * Add an iframe that keep the upload in a sandbox
 		 */
@@ -95,72 +98,68 @@ public class DealDetails extends DynamicWizardStep {
 		params.add("type", MediaType.DEAL_IMAGE);
 		final InlineFrame iframe = new InlineFrame("uploaderIFrame", UploadPage.class, params);
 		addOrReplace(iframe);
-		
+
 		/*
-		 *  Enable messages to be posted from that sandbox
+		 * Enable messages to be posted from that sandbox
 		 */
-		iframe.add(new AbstractDefaultAjaxBehavior(){
+		iframe.add(new AbstractDefaultAjaxBehavior()
+		{
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void respond(AjaxRequestTarget target) {
+			protected void respond(AjaxRequestTarget target)
+			{
 				IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
 				String url = params.getParameterValue("url").toString();
-				
+
 				MerchantMedia dealImage = domainFactory.newMedia(deal.getMerchant().getId(), url, MediaType.DEAL_IMAGE);
 				saveMedia(dealImage);
 				setImage(dealImage);
 				myImages.add(image);
 				mediaListModel.setObject(myImages);
-				
+
 				// re-init the preview
 				Deal deal = (Deal) getDefaultModelObject();
 				dealPreview.init(deal);
-				
+
 				target.add(images);
 				target.add(dealPreview);
 			}
-			
+
 			@Override
-			public void renderHead(Component component, IHeaderResponse response) {
+			public void renderHead(Component component, IHeaderResponse response)
+			{
 				super.renderHead(component, response);
-				
-				PackageTextTemplate ptt = new PackageTextTemplate( DealDetails.class, "DealDetails.js" );
+
+				PackageTextTemplate ptt = new PackageTextTemplate(DealDetails.class, "DealDetails.js");
 
 				Map<String, Object> map = new HashMap<String, Object>();
-				map.put( "callbackUrl", getCallbackUrl().toString() );
-				
+				map.put("callbackUrl", getCallbackUrl().toString());
+
 				response.render(JavaScriptHeaderItem.forScript(ptt.asString(map), "dealupload"));
 			}
-			
+
 		});
-		
+
 		DealTemplateSelectPanel templates = new DealTemplateSelectPanel("templateSelectPanel", dealPreview);
 		templates.setDefaultModel(getDefaultModel());
 		addOrReplace(templates);
 	}
-	
-	public MerchantMedia getImage() {
-		// TODO Remove this loop when MerchantMedia is stored on the deal 
-		Deal deal = (Deal) getDefaultModelObject();
-		for (MerchantMedia image:myImages) 
-		{
-			if (image.getMediaUrl().equals(deal.getImageUrl()))
-			{
-				return image;
-			}
-		}
-	
-		return null;	
+
+	public MerchantMedia getImage()
+	{
+		final Deal deal = (Deal) getDefaultModelObject();
+		return deal.getImage();
 	}
 
-	public void setImage(MerchantMedia image) {
+	public void setImage(final MerchantMedia image)
+	{
 		this.image = image;
 		Deal deal = (Deal) getDefaultModelObject();
-		deal.setImageUrl(image.getMediaUrl());
+		deal.setImage(image);
 	}
-	
+
 	private boolean saveMedia(MerchantMedia media)
 	{
 		try
@@ -183,22 +182,25 @@ public class DealDetails extends DynamicWizardStep {
 		{
 			LOG.error("random-ass-exception saving new merchant media:", e);
 		}
-		
+
 		return false;
 	}
 
 	@Override
-	public boolean isLastStep() {
+	public boolean isLastStep()
+	{
 		return false;
 	}
 
 	@Override
-	public IDynamicWizardStep next() {
+	public IDynamicWizardStep next()
+	{
 		return nextStep;
 	}
-	
+
 	@Override
-	public IDynamicWizardStep last() {
+	public IDynamicWizardStep last()
+	{
 		return new DealSave(this);
 	}
 
