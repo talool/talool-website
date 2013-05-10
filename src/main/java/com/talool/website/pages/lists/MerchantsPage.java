@@ -127,11 +127,6 @@ public class MerchantsPage extends BasePage
 				getSession().getFeedbackMessages().clear();
 
 				Merchant merchant = domainFactory.newMerchant();
-				MerchantLocation location = domainFactory.newMerchantLocation();
-				location.setAddress(domainFactory.newAddress());
-
-				location.setLogo(domainFactory.newMedia(merchant.getId(), "", MediaType.MERCHANT_LOGO));
-				merchant.addLocation(location);
 
 				wizard.setModelObject(merchant);
 				wizard.open(target);

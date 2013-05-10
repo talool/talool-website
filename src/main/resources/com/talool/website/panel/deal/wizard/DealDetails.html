@@ -6,22 +6,15 @@
 		</div>
 		
 		<div class="panel">
-		    <fieldset class="imageDetails">
-		    	<div>
-		    		<label><i class="hint-font icon-asterisk"></i> Image</label>
-   					<select wicket:id="availableImages"><option>Default Deal Offer</option></select>
-		    	</div>
-				<iframe wicket:id="uploaderIFrame" width="325" height="110" scrolling="no"></iframe>
-			</fieldset>
-		</div>
+		    <div wicket:id="dealImage"></div>
 		
-		<div class="wicketExtensionsWizardHeaderTitle">
-			<wicket:message key="template.title"></wicket:message>
-		</div>
-		<div class="wicketExtensionsWizardHeaderSummary">
-			<wicket:message key="template.summary"></wicket:message>
-		</div>
-		<div class="panel">
+			<div class="wicketExtensionsWizardHeaderTitle">
+				<wicket:message key="template.title"></wicket:message>
+			</div>
+			<div class="wicketExtensionsWizardHeaderSummary">
+				<wicket:message key="template.summary"></wicket:message>
+			</div>
+
 			<fieldset class="templateDetails">
 				<div wicket:id="templateSelectPanel"></div>
 			</fieldset>

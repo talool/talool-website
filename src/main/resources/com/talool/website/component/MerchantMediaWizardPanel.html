@@ -1,0 +1,15 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="wicketExtensionsWizardHeaderTitle">
+		<wicket:message key="merchant.media.title"></wicket:message>
+	</div>
+	<div class="wicketExtensionsWizardHeaderSummary">
+		<wicket:message key="merchant.media.summary"></wicket:message>
+	</div>
+	<fieldset class="imageDetails">
+    	<div>
+    		<label><i class="hint-font icon-asterisk"></i> <wicket:message key="merchant.media.label"></wicket:message></label>
+ 			<select wicket:id="availableMedia"><option>Default Media</option></select>
+    	</div>
+		<iframe wicket:id="uploaderIFrame" width="325" height="110" scrolling="no"></iframe>
+	</fieldset>
+</wicket:panel>
