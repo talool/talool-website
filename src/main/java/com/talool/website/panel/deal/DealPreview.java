@@ -1,9 +1,7 @@
 package com.talool.website.panel.deal;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.datetime.DateConverter;
@@ -14,6 +12,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
 import com.talool.core.Deal;
+import com.talool.core.DealOffer;
+import com.talool.core.MerchantLocation;
 import com.talool.website.component.StaticImage;
 
 public class DealPreview extends Panel
@@ -30,19 +30,12 @@ public class DealPreview extends Panel
 	public StaticImage image, merchantLogo, dealOfferLogo;
 	public DateLabel expiresLabel;
 
-	// Temporary list of logos. Should be tied to the merchant.
-	private List<String> logos = new ArrayList<String>();
-	private int logoIdx = 0;
-
 	private static final long serialVersionUID = 7091914958360426987L;
 
 	public DealPreview(String id, Deal deal)
 	{
 		super(id);
 
-		this.logos.add("http://i1328.photobucket.com/albums/w525/talooltools/Parma_logo_zpsd7363952.png");
-		this.logos.add("http://i1328.photobucket.com/albums/w525/talooltools/La_Revolucion_logo_zpsf2bd7958.png");
-		this.logos.add("http://i1328.photobucket.com/albums/w525/talooltools/Jovie_logo_zps35c45fe9.png");
 
 		init(deal);
 	}
@@ -72,8 +65,11 @@ public class DealPreview extends Panel
 			imageUrl = defaultImageUrl;
 		}
 
-		merchantLogoUrl = this.logos.get(0);
-		dealOfferLogoUrl = defaultDealOfferLogoUrl;
+		MerchantLocation loc = deal.getMerchant().getCurrentLocation();
+		merchantLogoUrl = (loc.getLogo() == null) ? null:loc.getLogo().getMediaUrl();
+		
+		DealOffer offer = deal.getDealOffer();
+		dealOfferLogoUrl = (offer.getImage()==null)?null:offer.getImage().getMediaUrl();
 	}
 
 	@Override
@@ -104,19 +100,6 @@ public class DealPreview extends Panel
 
 		add(dealOfferLogo = new StaticImage("dealOfferLogo", false, new PropertyModel<String>(this, "dealOfferLogoUrl")));
 		dealOfferLogo.setOutputMarkupId(true);
-	}
-
-	public String getMerchantLogoUrl()
-	{
-		return merchantLogoUrl;
-	}
-
-	public void setMerchantLogoUrl(String merchantLogoUrl)
-	{
-		logoIdx++;
-		if (logoIdx >= logos.size())
-			logoIdx = 0;
-		this.merchantLogoUrl = logos.get(logoIdx);
 	}
 
 	public String getDealOfferLogoUrl()

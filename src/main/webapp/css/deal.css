@@ -24,6 +24,7 @@ body.talool .dealWiz {
 	overflow:hidden;
 	border-bottom-right-radius: 3px;
 	border-bottom-left-radius: 3px;
+	text-align: center;
 }
 
 .deal .image {
@@ -59,31 +60,9 @@ body.talool .dealWiz {
 	display: -webkit-box;
   	-webkit-line-clamp: 3;
   	-webkit-box-orient: vertical;
+  	margin-bottom: 15px;
 }
 
-.deal .expires {
-	text-align: center;
-	font-weight: bold;
-	position: absolute;
-	width: 100%;
-	bottom: 40px;
-}
-
-.deal .merchantLogo {
-	opacity:0.4;
-	filter:alpha(opacity=40);
-	position: absolute;
-	bottom: 40px;
-	left: 20px;
-}
-
-.deal .dealOfferLogo {
-	opacity:0.1;
-	filter:alpha(opacity=10);
-	position: absolute;
-	bottom: 40px;
-	right: 0px;
-}
 
 
 .talool .ui-dialog .ui-dialog-buttonpane

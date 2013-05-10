@@ -20,6 +20,8 @@ public class MerchantLogoMagick extends AbstractMagick {
 		
 		IMOperation op = new IMOperation();
 		op.addImage();
+		
+		// TODO don't resize if it's smaller than this
 		op.resize(250,75);
 		
 		if (isRGB())
