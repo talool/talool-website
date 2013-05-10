@@ -37,8 +37,8 @@ $(function () {
     		"url":"./fileManager?filename=centro_3.png",
     		"size":84936}]
     	*/
-    	if (parent.window && parent.window.callDealUploadComponent) {
-    		parent.window.callDealUploadComponent(resp[0].url,resp[0].name);
+    	if (parent.window && parent.window.callUploadComponent) {
+    		parent.window.callUploadComponent(resp[0].url,resp[0].name);
     	}
     });
 

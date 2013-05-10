@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import com.talool.core.Deal;
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
 import com.talool.core.Image;
@@ -41,6 +42,7 @@ import com.talool.core.service.TaloolService;
 import com.talool.domain.ImageImpl;
 import com.talool.website.component.StateOption;
 import com.talool.website.component.StateSelect;
+import com.talool.website.component.UploadIFrame;
 import com.talool.website.models.MerchantMediaListModel;
 import com.talool.website.pages.UploadPage;
 
@@ -96,23 +98,12 @@ public class MerchantLocations extends WizardStep
 			params.add("id", merchant.getId());
 		}
 		params.add("type", MediaType.MERCHANT_LOGO);
-		final InlineFrame iframe = new InlineFrame("uploaderIFrame", UploadPage.class, params);
-		addOrReplace(iframe);
-
-		/*
-		 * Enable messages to be posted from that sandbox
-		 */
-		iframe.add(new AbstractDefaultAjaxBehavior()
-		{
+		addOrReplace(new UploadIFrame("uploaderIFrame",params) {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void respond(AjaxRequestTarget target)
-			{
-				IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
-				String url = params.getParameterValue("url").toString();
-
+			public void onUploadComplete(AjaxRequestTarget target, String url) {
 				MerchantMedia merchantLogo = domainFactory.newMedia(merchant.getId(), url, MediaType.MERCHANT_LOGO);
 				boolean updateList = true;
 				if (merchant.getId() != null)
@@ -134,20 +125,7 @@ public class MerchantLocations extends WizardStep
 					target.add(mediaSelect);
 				}
 			}
-
-			@Override
-			public void renderHead(Component component, IHeaderResponse response)
-			{
-				super.renderHead(component, response);
-
-				PackageTextTemplate ptt = new PackageTextTemplate(MerchantLocations.class, "MerchantLocations.js");
-
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("callbackUrl", getCallbackUrl().toString());
-
-				response.render(JavaScriptHeaderItem.forScript(ptt.asString(map), "logoupload"));
-			}
-
+			
 		});
 
 		WebMarkupContainer locationPanel = new WebMarkupContainer("locationPanel");

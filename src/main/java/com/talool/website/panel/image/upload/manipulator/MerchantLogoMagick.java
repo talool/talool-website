@@ -10,9 +10,9 @@ public class MerchantLogoMagick extends AbstractMagick {
 	 * then grayscale and colorize the image to match
 	 * the teal bg of the coupons.
 	 * 
-	 * TODO convert the white to trasparent before the clut
-	 * 
-	 * convert -colorspace sRGB -type GrayscaleMatte OrangeColterraLogo.jpg +level-colors teal,none -background black -alpha shape colterra6.png
+	 * We may get some JPEGs that are in the
+	 * CMYK colorspace.  These will need to be 
+	 * processed differently.
 	 * 
 	 */
 	@Override

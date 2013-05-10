@@ -77,7 +77,7 @@ public abstract class AbstractMagick implements IMagick
 	protected String getTealGradientFilePath()
 	{
 		StringBuilder filepath = new StringBuilder(baseUploadDir);
-		filepath.append("/").append(tealGradientFileName);
+		filepath.append(tealGradientFileName);
 		String gradientPath = filepath.toString();
 
 		/*

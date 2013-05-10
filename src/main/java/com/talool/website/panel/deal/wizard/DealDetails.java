@@ -31,6 +31,7 @@ import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.website.component.DealImageSelect;
+import com.talool.website.component.UploadIFrame;
 import com.talool.website.models.MerchantMediaListModel;
 import com.talool.website.pages.UploadPage;
 import com.talool.website.panel.deal.DealPreview;
@@ -96,23 +97,12 @@ public class DealDetails extends DynamicWizardStep
 		PageParameters params = new PageParameters();
 		params.add("id", deal.getMerchant().getId());
 		params.add("type", MediaType.DEAL_IMAGE);
-		final InlineFrame iframe = new InlineFrame("uploaderIFrame", UploadPage.class, params);
-		addOrReplace(iframe);
-
-		/*
-		 * Enable messages to be posted from that sandbox
-		 */
-		iframe.add(new AbstractDefaultAjaxBehavior()
-		{
+		addOrReplace(new UploadIFrame("uploaderIFrame",params) {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void respond(AjaxRequestTarget target)
-			{
-				IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
-				String url = params.getParameterValue("url").toString();
-
+			public void onUploadComplete(AjaxRequestTarget target, String url) {
 				MerchantMedia dealImage = domainFactory.newMedia(deal.getMerchant().getId(), url, MediaType.DEAL_IMAGE);
 				saveMedia(dealImage);
 				setImage(dealImage);
@@ -126,20 +116,7 @@ public class DealDetails extends DynamicWizardStep
 				target.add(images);
 				target.add(dealPreview);
 			}
-
-			@Override
-			public void renderHead(Component component, IHeaderResponse response)
-			{
-				super.renderHead(component, response);
-
-				PackageTextTemplate ptt = new PackageTextTemplate(DealDetails.class, "DealDetails.js");
-
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("callbackUrl", getCallbackUrl().toString());
-
-				response.render(JavaScriptHeaderItem.forScript(ptt.asString(map), "dealupload"));
-			}
-
+			
 		});
 
 		DealTemplateSelectPanel templates = new DealTemplateSelectPanel("templateSelectPanel", dealPreview);
