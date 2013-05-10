@@ -17,24 +17,33 @@ public class MerchantLogoMagick extends AbstractMagick {
 	 */
 	@Override
 	public IMOperation getOperation() {
+		
 		IMOperation op = new IMOperation();
 		op.addImage();
-		
-		op.fx("(r+g+b)/3");
 		op.resize(250,75);
-		op.addImage(getTealGradientFilePath());
-		op.clut();
 		
-		//op.colorspace("sRGB");
-		//op.type("GrayscaleMatte");
-		//op.p_levelColors("teal","none");
-		//op.background("teal");
-		//op.alpha("shape");
+		if (isRGB())
+		{
+			op.fx("(r+g+b)/3");
+			op.addImage(getTealGradientFilePath());
+			op.clut();
+		}
+		else
+		{
+			/*
+			 * we're saving as a png, so convert to RGB
+			 * and try to get some alpha
+			 */
+			op.colorspace("sRGB");
+			op.type("GrayscaleMatte");
+			op.p_levelColors("teal","none");
+			op.background("teal");
+			op.alpha("shape");
+		}
 		
 		op.addImage();
 		
 		return op;
 	}
-
 
 }
