@@ -1,16 +1,29 @@
 package com.talool.website.panel.deal;
 
+import java.util.UUID;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.talool.core.DealOffer;
+import com.talool.core.FactoryManager;
+import com.talool.core.service.ServiceException;
+import com.talool.core.service.TaloolService;
 
 
 public class DealPreviewUpdatingBehavior extends AjaxFormComponentUpdatingBehavior {
 	
 	private static final long serialVersionUID = 6447053015807823998L;
-
+	private static final Logger LOG = LoggerFactory.getLogger(DealPreviewUpdatingBehavior.class);
+	
 	public static enum DealComponent {TITLE, SUMMARY, DETAILS, IMAGE, EXPIRES, CODE, MERCHANT, DEAL_OFFER};
 	private DealPreview preview;
 	private DealComponent component;
+	
+	protected transient static final TaloolService taloolService = FactoryManager.get()
+			.getServiceFactory().getTaloolService();
 
 	public DealPreviewUpdatingBehavior(DealPreview preview, DealComponent component, String event) {
 		super(event);
@@ -48,12 +61,31 @@ public class DealPreviewUpdatingBehavior extends AjaxFormComponentUpdatingBehavi
 		case MERCHANT:
 			break;
 		case DEAL_OFFER:
-			preview.dealOfferLogoUrl = getFormComponent().getValue();
-			target.add(preview.dealOfferLogo);
+			DealOffer offer = getDealOffer(getFormComponent().getValue());
+			if (offer != null)
+			{
+				preview.dealOfferLogoUrl = offer.getImage().getMediaUrl();
+				target.add(preview.dealOfferLogo);
+			}
 			break;
 		}
 		
 		
+	}
+	
+	private DealOffer getDealOffer(String id)
+	{
+		UUID dealOfferId = UUID.fromString(id);
+		DealOffer offer = null;
+		try
+		{
+			offer = taloolService.getDealOffer(dealOfferId);
+		}
+		catch(ServiceException se)
+		{
+			LOG.error("failed to get Deal Offer",se);
+		}
+		return offer;
 	}
 	
 

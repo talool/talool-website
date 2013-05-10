@@ -12,29 +12,22 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
 import com.talool.core.DealOffer;
-import com.talool.core.FactoryManager;
-import com.talool.core.service.TaloolService;
 import com.talool.website.component.DealOfferSelect;
 import com.talool.website.models.AvailableDealOffersListModel;
 import com.talool.website.panel.deal.DealPreview;
 import com.talool.website.panel.deal.DealPreviewUpdatingBehavior;
+import com.talool.website.panel.deal.DealPreviewUpdatingBehavior.DealComponent;
 
 public class DealAvailability extends DynamicWizardStep
 {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOG = LoggerFactory.getLogger(DealAvailability.class);
 	private DealOffer dealOffer;
 	private DealWizard wizard;
 	private boolean addDealOffer = false;
-
-	private transient static final TaloolService taloolService = FactoryManager.get()
-			.getServiceFactory().getTaloolService();
 
 	public DealAvailability(IDynamicWizardStep previousStep, DealWizard wiz)
 	{
@@ -60,13 +53,12 @@ public class DealAvailability extends DynamicWizardStep
 		{
 			listModel.addMerchantId(deal.getMerchant().getId());
 		}
-		addOrReplace(new DealOfferSelect("availableDealOffers", new PropertyModel<DealOffer>(this,
-				"dealOffer"), listModel).setRequired(true));
+		DealOfferSelect dealOfferSelect = new DealOfferSelect("availableDealOffers", new PropertyModel<DealOffer>(this,
+				"dealOffer"), listModel);
+		dealOfferSelect.setRequired(true);
+		dealOfferSelect.add(new DealPreviewUpdatingBehavior(dealPreview, DealComponent.DEAL_OFFER, "onChange"));
+		addOrReplace(dealOfferSelect);
 
-		/*
-		 * TODO add a dynamic step for the new deal offer panel but need to make
-		 * sure it's previous step is DealTags
-		 */
 		addOrReplace(new AjaxLink<Void>("newDealOffer")
 		{
 

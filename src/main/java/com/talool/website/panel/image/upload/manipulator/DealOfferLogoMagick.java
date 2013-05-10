@@ -39,7 +39,7 @@ public class DealOfferLogoMagick extends AbstractMagick {
 			op.colorspace("sRGB");
 			op.type("GrayscaleMatte");
 			op.p_levelColors("teal","none");
-			op.background("teal");
+			op.background("black");
 			op.alpha("shape");
 		}
 		
