@@ -27,7 +27,7 @@ public class FriendListModel extends LoadableDetachableModel<List<Customer>>
 		{
 			if (_customerId != null)
 			{
-				customers = ServiceFactory.get().getTaloolService().getFriends(_customerId);
+				customers = ServiceFactory.get().getCustomerService().getFriends(_customerId);
 			}
 		}
 		catch (ServiceException e)

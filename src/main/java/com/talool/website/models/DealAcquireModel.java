@@ -37,7 +37,7 @@ public class DealAcquireModel extends LoadableDetachableModel<DealAcquire>
 
 		try
 		{
-			dealAcquire = ServiceFactory.get().getTaloolService().getDealAcquire(dealAcquireId);
+			dealAcquire = ServiceFactory.get().getCustomerService().getDealAcquire(dealAcquireId);
 		}
 		catch (ServiceException e)
 		{

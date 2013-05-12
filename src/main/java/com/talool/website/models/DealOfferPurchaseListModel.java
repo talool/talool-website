@@ -25,7 +25,7 @@ public class DealOfferPurchaseListModel extends LoadableDetachableModel<List<Dea
 
 		try
 		{
-			books = ServiceFactory.get().getTaloolService()
+			books = ServiceFactory.get().getCustomerService()
 					.getDealOfferPurchasesByCustomerId(_customerId);
 		}
 		catch (ServiceException e)

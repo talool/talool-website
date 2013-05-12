@@ -12,15 +12,17 @@ import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.util.SessionUtils;
 
-public class CustomerResetPasswordPanel extends BaseDefinitionPanel {
+public class CustomerResetPasswordPanel extends BaseDefinitionPanel
+{
 
 	private static final long serialVersionUID = -7185664671674236396L;
 
-	public CustomerResetPasswordPanel(String id, SubmitCallBack callback, final UUID customerId) {
+	public CustomerResetPasswordPanel(String id, SubmitCallBack callback, final UUID customerId)
+	{
 		super(id, callback);
 		setDefaultModel(new CustomerModel(customerId));
 	}
-	
+
 	@Override
 	protected void onInitialize()
 	{
@@ -33,25 +35,29 @@ public class CustomerResetPasswordPanel extends BaseDefinitionPanel {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public CompoundPropertyModel<?> getDefaultCompoundPropertyModel() {
+	public CompoundPropertyModel<?> getDefaultCompoundPropertyModel()
+	{
 		return new CompoundPropertyModel<Customer>((IModel<Customer>) getDefaultModel());
 	}
 
 	@Override
-	public String getObjectIdentifier() {
+	public String getObjectIdentifier()
+	{
 		final Customer customer = (Customer) form.getDefaultModelObject();
 		return customer.getEmail();
 	}
 
 	@Override
-	public void save() throws ServiceException {
+	public void save() throws ServiceException
+	{
 		final Customer customer = (Customer) form.getDefaultModelObject();
-		taloolService.save(customer);
+		customerService.save(customer);
 		SessionUtils.successMessage("Successfully changed the password for customer '", customer.getEmail(), "'");
 	}
 
 	@Override
-	public String getSaveButtonLabel() {
+	public String getSaveButtonLabel()
+	{
 		return "Change Password";
 	}
 

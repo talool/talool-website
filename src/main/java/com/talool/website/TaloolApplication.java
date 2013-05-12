@@ -12,10 +12,12 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.settings.IExceptionSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.apache.wicket.util.lang.PackageName;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.talool.website.pages.AdminLoginPage;
+import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.pages.CustomerSettingsPage;
 import com.talool.website.pages.HomePage;
 import com.talool.website.pages.UploadPage;
@@ -83,6 +85,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/admin/books", DealOffersPage.class);
 		mountPage("/admin/customers", CustomersPage.class);
 		mountPage("/admin/customer/settings", CustomerSettingsPage.class);
+		mountPage("/admin/customer-management", CustomerManagementPage.class);
 		mountPage("/admin/merchants", MerchantsPage.class);
 		mountPage("/admin/merchant/accounts", MerchantAccountsPage.class);
 		mountPage("/admin/merchant/books", MerchantDealOffersPage.class);
@@ -153,5 +156,11 @@ public class TaloolApplication extends WebApplication implements Serializable
 		//
 		// getMarkupSettings().setStripWicketTags(false);
 		// }
+	}
+
+	private void mount(String string, PackageName forClass)
+	{
+		// TODO Auto-generated method stub
+
 	}
 }

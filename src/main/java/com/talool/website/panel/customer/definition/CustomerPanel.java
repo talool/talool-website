@@ -52,15 +52,18 @@ public class CustomerPanel extends BaseDefinitionPanel
 		form.add(new TextField<String>("firstName").setRequired(true));
 		form.add(new TextField<String>("lastName").setRequired(true));
 		form.add(new TextField<String>("email").setRequired(true));
-		
-		if (isNew)  {
+
+		if (isNew)
+		{
 			SetPasswordPanel pwPanel = new SetPasswordPanel("passwordPanel");
 			pwPanel.setDefaultModel(getDefaultModel());
 			form.add(pwPanel);
-		} else {
+		}
+		else
+		{
 			form.add(new WebMarkupContainer("passwordPanel"));
 		}
-		
+
 		// format the date
 		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
 		form.add(new DateTextField("birthDate", converter).setRequired(true));
@@ -88,7 +91,7 @@ public class CustomerPanel extends BaseDefinitionPanel
 	public void save() throws ServiceException
 	{
 		final Customer customer = (Customer) form.getDefaultModelObject();
-		taloolService.save(customer);
+		customerService.save(customer);
 		SessionUtils.successMessage("Successfully saved customer '", customer.getEmail(), "'");
 	}
 
@@ -97,6 +100,5 @@ public class CustomerPanel extends BaseDefinitionPanel
 	{
 		return "Save Customer";
 	}
-
 
 }

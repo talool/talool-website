@@ -14,7 +14,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.DealAcquire;
 import com.talool.website.models.DealAcquireListModel;
-import com.talool.website.panel.merchant.definition.MerchantAccountPanel;
 
 public class CustomerDealAcquiresPanel extends Panel
 {
@@ -56,8 +55,8 @@ public class CustomerDealAcquiresPanel extends Panel
 				item.add(new Label("deal.dealOffer.merchant.name"));
 				item.add(new Label("redemptionDate"));
 				item.add(new Label("shareCount"));
-				item.add(new Label("status"));
-				
+				item.add(new Label("acquireStatus.status"));
+
 				item.add(new AjaxLink<Void>("editLink")
 				{
 
@@ -68,12 +67,11 @@ public class CustomerDealAcquiresPanel extends Panel
 					{
 						getSession().getFeedbackMessages().clear();
 						/*
-						DealAcquirePanel panel = new DealAcquirePanel(modal.getContentId(), callback,
-								dealAcquireId);
-						modal.setContent(panel);
-						modal.setTitle("Edit Deal Acquire Status");
-						modal.show(target);
-						*/
+						 * DealAcquirePanel panel = new
+						 * DealAcquirePanel(modal.getContentId(), callback, dealAcquireId);
+						 * modal.setContent(panel);
+						 * modal.setTitle("Edit Deal Acquire Status"); modal.show(target);
+						 */
 					}
 				});
 			}

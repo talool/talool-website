@@ -10,24 +10,26 @@ import com.talool.core.Customer;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 
-public class CustomerListModel extends LoadableDetachableModel<List<Customer>> {
+public class CustomerListModel extends LoadableDetachableModel<List<Customer>>
+{
 
 	private static final long serialVersionUID = -2068941114791569781L;
 	private static final Logger LOG = LoggerFactory.getLogger(CustomerListModel.class);
 
 	@Override
-	protected List<Customer> load() {
+	protected List<Customer> load()
+	{
 		List<Customer> customers = null;
-		
+
 		try
 		{
-			customers = ServiceFactory.get().getTaloolService().getCustomers();
+			customers = ServiceFactory.get().getCustomerService().getCustomers();
 		}
 		catch (ServiceException e)
 		{
 			LOG.error("problem loading customers", e);
 		}
-		
+
 		return customers;
 	}
 

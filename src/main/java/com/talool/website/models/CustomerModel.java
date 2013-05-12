@@ -36,7 +36,7 @@ public class CustomerModel extends LoadableDetachableModel<Customer>
 
 		try
 		{
-			customer = ServiceFactory.get().getTaloolService().getCustomerById(customerId);
+			customer = ServiceFactory.get().getCustomerService().getCustomerById(customerId);
 		}
 		catch (ServiceException e)
 		{
