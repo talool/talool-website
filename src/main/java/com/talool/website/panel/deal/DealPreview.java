@@ -23,8 +23,8 @@ public class DealPreview extends Panel
 
 	public String title, summary, details, code, imageUrl;
 	public String merchantLogoUrl, dealOfferLogoUrl;
-	private String defaultImageUrl = "http://i567.photobucket.com/albums/ss116/alphabetabeta/bg_test.png";
-	private String defaultDealOfferLogoUrl = "http://i1328.photobucket.com/albums/w525/talooltools/paybackbook_logo_zps2ee39bdc.png";
+	private String defaultImageUrl = "/img/000.png";
+	private String defaultDealOfferLogoUrl = "/img/000.png";
 	public String expires;
 	public Label titleLabel, summaryLabel, detailsLabel;
 	public StaticImage image, merchantLogo, dealOfferLogo;
@@ -69,7 +69,7 @@ public class DealPreview extends Panel
 		merchantLogoUrl = (loc.getLogo() == null) ? null:loc.getLogo().getMediaUrl();
 		
 		DealOffer offer = deal.getDealOffer();
-		dealOfferLogoUrl = (offer.getImage()==null)?defaultDealOfferLogoUrl:offer.getImage().getMediaUrl();
+		dealOfferLogoUrl = (offer == null || offer.getImage()==null)?defaultDealOfferLogoUrl:offer.getImage().getMediaUrl();
 	}
 
 	@Override
