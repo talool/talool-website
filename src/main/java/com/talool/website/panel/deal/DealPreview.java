@@ -69,7 +69,7 @@ public class DealPreview extends Panel
 		merchantLogoUrl = (loc.getLogo() == null) ? null:loc.getLogo().getMediaUrl();
 		
 		DealOffer offer = deal.getDealOffer();
-		dealOfferLogoUrl = (offer.getImage()==null)?null:offer.getImage().getMediaUrl();
+		dealOfferLogoUrl = (offer.getImage()==null)?defaultDealOfferLogoUrl:offer.getImage().getMediaUrl();
 	}
 
 	@Override
@@ -100,16 +100,6 @@ public class DealPreview extends Panel
 
 		add(dealOfferLogo = new StaticImage("dealOfferLogo", false, new PropertyModel<String>(this, "dealOfferLogoUrl")));
 		dealOfferLogo.setOutputMarkupId(true);
-	}
-
-	public String getDealOfferLogoUrl()
-	{
-		return dealOfferLogoUrl;
-	}
-
-	public void setDealOfferLogoUrl(String dealOfferLogoUrl)
-	{
-		this.dealOfferLogoUrl = dealOfferLogoUrl;
 	}
 
 }

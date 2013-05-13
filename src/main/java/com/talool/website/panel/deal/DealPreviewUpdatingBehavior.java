@@ -61,31 +61,33 @@ public class DealPreviewUpdatingBehavior extends AjaxFormComponentUpdatingBehavi
 		case MERCHANT:
 			break;
 		case DEAL_OFFER:
-			DealOffer offer = getDealOffer(getFormComponent().getValue());
-			if (offer != null)
-			{
-				preview.dealOfferLogoUrl = offer.getImage().getMediaUrl();
-				target.add(preview.dealOfferLogo);
-			}
+			// we come here with a url or a dealOffer id.  need to figure out which one.
+			preview.dealOfferLogoUrl = getDealOfferLogoUrl(getFormComponent().getValue());
+			target.add(preview.dealOfferLogo);
 			break;
 		}
 		
 		
 	}
 	
-	private DealOffer getDealOffer(String id)
+	private String getDealOfferLogoUrl(String val)
 	{
-		UUID dealOfferId = UUID.fromString(id);
-		DealOffer offer = null;
+		
+		String url = "";
 		try
 		{
-			offer = taloolService.getDealOffer(dealOfferId);
+			UUID dealOfferId = UUID.fromString(val);
+			DealOffer offer = taloolService.getDealOffer(dealOfferId);
+			if (offer != null)
+			{
+				url = offer.getImage().getMediaUrl();
+			}
 		}
 		catch(ServiceException se)
 		{
-			LOG.error("failed to get Deal Offer",se);
+			url = val;
 		}
-		return offer;
+		return url;
 	}
 	
 
