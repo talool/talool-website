@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+	<head>
+    	<title>Talool Merchant Dashboard</title>
+    	
+    	<link rel="stylesheet" type="text/css" href="/css/font-awesome.css">
+	    <link rel="stylesheet" type="text/css" href="/css/global.css">
+	    <link rel="stylesheet" type="text/css" href="/css/deal.css">
+	    <link rel="stylesheet" type="text/css" href="/css/dashboard.css">
+	    
+	    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	    <script src="/js/core.js"></script>
+		<script src="/js/letters.js"></script>
+		<script src="/js/logo.js"></script>
+		<script src="/js/responsive.js"></script>
+		
+	    <script>
+	    	//Wicket.Window.unloadConfirmation = false;
+	    	window.ooConfig = {
+				logo:{target:"#canvas",bAdmin:false, scale: .57, color:"rgba(255,255,255,1)"},
+				responsive: {mobileClass:"mobile", tabletClass:"tablet", mobileWidth: 700, tabletWidth: 1400}
+			};
+	    </script>
+
+	</head>
+  
+	<body>
+	  	<div class="header teal-bg">
+	  		<canvas id="canvas" height="45"></canvas>
+	  		<div class="userInfo">
+	  			<div class="btn-group" id="userDropdownContainer">
+		  			<a class="btn btn-primary" href="#"><i class="icon-user"></i> 
+		  			<span wickt:id="signedInAs">Signed in as {email}</span></a><a 
+		  			class="btn btn-primary dropdown-toggle" data-toggle="dropdown" 
+		  			href="#" onclick="$('#userDropdownContainer').toggleClass('open')"><span class="icon-caret-down"></span></a>
+		  			<ul class="dropdown-menu">
+				        <li><a href="#" wickt:id="dealOffersLink"><i class="icon-money icon-large"></i> Manage Deal Offers</a></li>
+				        <li><a href="#" wickt:id="locationsLink"><i class="icon-pushpin icon-large"></i> Manage Locations</a></li>
+				        <li><a href="#" wickt:id="accountsLink"><i class="icon-group icon-large"></i> Manage Accounts</a></li>
+				        <li><a href="#" wickt:id="settingsLink"><i class="icon-cog icon-large"></i> Settings</a></li>
+				        <li class="divider"></li>
+				        <li><a href="#" wickt:id="signOffLink"><i class="icon-signout icon-large"></i> Sign Out</a></li>
+				    </ul>
+			    </div>
+	  		</div>
+	  	</div>
+	    <div class="dashboard">
+	    	<wicket:child/>
+	    	<div id='debug'></div>
+	    </div>
+  </body>
+</html>
