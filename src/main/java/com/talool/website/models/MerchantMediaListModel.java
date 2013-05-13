@@ -65,7 +65,14 @@ public class MerchantMediaListModel extends LoadableDetachableModel<List<Merchan
 			}
 			else
 			{
-				mediaTypes = new MediaType[]{_mediaType};
+				if (_mediaType.equals(MediaType.DEAL_IMAGE) || _mediaType.equals(MediaType.MERCHANT_IMAGE))
+				{
+					mediaTypes = new MediaType[]{MediaType.DEAL_IMAGE,MediaType.MERCHANT_IMAGE};
+				}
+				else
+				{
+					mediaTypes = new MediaType[]{MediaType.DEAL_OFFER_LOGO,MediaType.MERCHANT_LOGO};
+				}
 			}
 			
 			media = new ArrayList<MerchantMedia>();
