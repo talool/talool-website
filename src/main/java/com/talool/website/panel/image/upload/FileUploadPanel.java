@@ -13,11 +13,11 @@ public class FileUploadPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
 
-	public FileUploadPanel(String id, UUID merchantId, MediaType mediaType) {
+	public FileUploadPanel(String id, UUID merchantId, MediaType mediaType, String callbackUrl) {
         super(id);
 
         // The buttons toolbar. Mandatory
-        FileUploadBar fileUpload = new FileUploadBar("fileUpload", merchantId, mediaType);
+        FileUploadBar fileUpload = new FileUploadBar("fileUpload", merchantId, mediaType, callbackUrl);
         add(fileUpload);
 
         // The gallery that can be used to view the uploaded files

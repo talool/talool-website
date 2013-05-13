@@ -38,7 +38,7 @@ $(function () {
     		"size":84936}]
     	*/
     	if (parent.window && parent.window.callUploadComponent) {
-    		parent.window.callUploadComponent(resp[0].url,resp[0].name);
+    		parent.window.callUploadComponent(resp[0].url,resp[0].name,"${callbackUrl}");
     	}
     });
 

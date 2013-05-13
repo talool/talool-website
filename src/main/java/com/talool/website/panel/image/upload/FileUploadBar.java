@@ -14,9 +14,9 @@ public class FileUploadBar extends Panel {
 
 	private static final long serialVersionUID = 1L;
 
-	public FileUploadBar(String id, UUID merchantId, MediaType mediaType) {
+	public FileUploadBar(String id, UUID merchantId, MediaType mediaType, String callbackUrl) {
         super(id);
 
-        add(new FileUploadBehavior(merchantId, mediaType));
+        add(new FileUploadBehavior(merchantId, mediaType, callbackUrl));
     }
 }

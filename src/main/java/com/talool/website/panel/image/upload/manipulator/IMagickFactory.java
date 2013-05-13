@@ -4,10 +4,8 @@ import com.talool.core.MediaType;
 
 public interface IMagickFactory {
 
-	public IMagick getMerchantLogoMagick();
-	public IMagick getMerchantImageMagick();
-	public IMagick getDealImageMagick();
-	public IMagick getDealOfferLogoMagick();
+	public IMagick getTaloolImageMagick();
+	public IMagick getTaloolLogoMagick();
 	public IMagick getMagickForMediaType(MediaType type);
 	
 }

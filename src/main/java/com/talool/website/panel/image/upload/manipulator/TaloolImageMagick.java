@@ -3,7 +3,7 @@ package com.talool.website.panel.image.upload.manipulator;
 import org.im4java.core.IMOperation;
 
 
-public class DealImageMagick extends AbstractMagick {
+public class TaloolImageMagick extends AbstractMagick {
 
 	/*
 	 * This will resize the image down to 

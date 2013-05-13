@@ -25,12 +25,12 @@ abstract public class MerchantMediaWizardPanel extends Panel {
 
 	private static final long serialVersionUID = -4183138880833396304L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantMediaWizardPanel.class);
-	private final PageParameters params = new PageParameters();
-	private final UUID merchantId;
-	private final MediaType mediaType;
-	private final MerchantMediaListModel mediaListModel;
-	private final List<MerchantMedia> myMediaChoices;
-	private final ChoiceRenderer<MerchantMedia> cr;
+	private PageParameters params = new PageParameters();
+	private UUID merchantId;
+	private MediaType mediaType;
+	private MerchantMediaListModel mediaListModel;
+	private List<MerchantMedia> myMediaChoices;
+	private ChoiceRenderer<MerchantMedia> cr;
 	private IModel<MerchantMedia> selectedMediaModel;
 	private DropDownChoice<MerchantMedia> mediaSelect;
 	

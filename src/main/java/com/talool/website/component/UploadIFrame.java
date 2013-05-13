@@ -19,9 +19,11 @@ import com.talool.website.pages.UploadPage;
 abstract public class UploadIFrame extends InlineFrame {
 
 	private static final long serialVersionUID = -4183138880833396304L;
+	private PageParameters params;
 
 	public UploadIFrame(String id, PageParameters params) {
 		super(id, UploadPage.class, params);
+		this.params = params;
 	}
 	
 	@Override
@@ -31,7 +33,7 @@ abstract public class UploadIFrame extends InlineFrame {
 		/*
 		 * Enable messages to be posted from that sandbox
 		 */
-		add(new AbstractDefaultAjaxBehavior()
+		AbstractDefaultAjaxBehavior behavior = new AbstractDefaultAjaxBehavior()
 		{
 
 			private static final long serialVersionUID = 1L;
@@ -54,12 +56,15 @@ abstract public class UploadIFrame extends InlineFrame {
 				ptt = new PackageTextTemplate(UploadIFrame.class, "UploadIFrame.js");
 
 				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("callbackUrl", getCallbackUrl().toString());
+				//map.put("callbackUrl", getCallbackUrl().toString());
 
 				response.render(JavaScriptHeaderItem.forScript(ptt.asString(map), "UploadIFrame"));
 			}
 
-		});
+		};
+		add(behavior);
+		
+		this.params.add("callback", behavior.getCallbackUrl().toString());
 	}
 	
 	abstract public void onUploadComplete(AjaxRequestTarget target, String url);

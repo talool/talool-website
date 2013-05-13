@@ -3,7 +3,7 @@ package com.talool.website.panel.image.upload.manipulator;
 import org.im4java.core.IMOperation;
 
 
-public class MerchantLogoMagick extends AbstractMagick {
+public class TaloolLogoMagick extends AbstractMagick {
 
 	/*
 	 * This will resize the image down to 250x75.
@@ -47,5 +47,5 @@ public class MerchantLogoMagick extends AbstractMagick {
 		
 		return op;
 	}
-
+	
 }

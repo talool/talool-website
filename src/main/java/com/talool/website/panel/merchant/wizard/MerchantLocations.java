@@ -28,7 +28,8 @@ public class MerchantLocations extends WizardStep
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocations.class);
-	private MerchantMedia selectedMedia;
+	private MerchantMedia selectedLogo;
+	private MerchantMedia selectedImage;
 
 	private transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
@@ -53,13 +54,17 @@ public class MerchantLocations extends WizardStep
 		{
 			// don't show the logo panel
 			addOrReplace(new WebMarkupContainer("merchantMediaLogo"));
+			
+			// don't show the logo panel
+			addOrReplace(new WebMarkupContainer("merchantMediaImage"));
 		}
 		else
 		{
-			// TODO add logo image
-			selectedMedia = merchant.getCurrentLocation().getLogo();
-			PropertyModel<MerchantMedia> selectedMediaModel = new PropertyModel<MerchantMedia>(this,"selectedMedia");
-			MerchantMediaWizardPanel logoPanel = new MerchantMediaWizardPanel("merchantMediaLogo", merchant.getId(), MediaType.MERCHANT_LOGO, selectedMediaModel)
+			// TODO add a preview for these uploads
+			
+			selectedLogo = merchant.getCurrentLocation().getLogo();
+			PropertyModel<MerchantMedia> selectedLogoModel = new PropertyModel<MerchantMedia>(this,"selectedLogo");
+			MerchantMediaWizardPanel logoPanel = new MerchantMediaWizardPanel("merchantMediaLogo", merchant.getId(), MediaType.MERCHANT_LOGO, selectedLogoModel)
 			{
 
 				private static final long serialVersionUID = 1L;
@@ -69,6 +74,19 @@ public class MerchantLocations extends WizardStep
 				
 			};
 			addOrReplace(logoPanel);
+			
+			selectedLogo = merchant.getCurrentLocation().getLogo();
+			PropertyModel<MerchantMedia> selectedImageModel = new PropertyModel<MerchantMedia>(this,"selectedImage");
+			MerchantMediaWizardPanel imagePanel = new MerchantMediaWizardPanel("merchantMediaImage", merchant.getId(), MediaType.MERCHANT_IMAGE, selectedImageModel)
+			{
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onMediaUploadComplete(AjaxRequestTarget target, String url) {}
+				
+			};
+			addOrReplace(imagePanel);
 		}
 
 		WebMarkupContainer locationPanel = new WebMarkupContainer("locationPanel");
@@ -91,15 +109,12 @@ public class MerchantLocations extends WizardStep
 
 		locationPanel.add(new TextField<String>("currentLocation.locationName"));
 
-		WebMarkupContainer contactPanel = new WebMarkupContainer("contactPanel");
-		addOrReplace(contactPanel);
+		locationPanel.add(new TextField<String>("currentLocation.phone").setRequired(true));
 
-		contactPanel.add(new TextField<String>("currentLocation.phone").setRequired(true));
-
-		contactPanel.add(new TextField<String>("currentLocation.email").setRequired(true).add(
+		locationPanel.add(new TextField<String>("currentLocation.email").setRequired(true).add(
 				EmailAddressValidator.getInstance()));
 
-		contactPanel.add(new TextField<String>("currentLocation.websiteUrl").add(new UrlValidator()));
+		locationPanel.add(new TextField<String>("currentLocation.websiteUrl").add(new UrlValidator()));
 
 	}
 
@@ -154,9 +169,13 @@ public class MerchantLocations extends WizardStep
 		else
 		{
 			// get the selected MerchantMedia and add it to the location
-			if (selectedMedia != null)
+			if (selectedLogo != null)
 			{
-				merch.getCurrentLocation().setLogo(selectedMedia);
+				merch.getCurrentLocation().setLogo(selectedLogo);
+			}
+			if (selectedImage != null)
+			{
+				merch.getCurrentLocation().setMerchantImage(selectedImage);
 			}
 			
 			try

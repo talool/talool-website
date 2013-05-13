@@ -13,30 +13,20 @@
 			    <div><label><i class="hint-font icon-asterisk"></i> Address1</label><input wicket:id="currentLocation.address.address1" name="address1" type="text"/></div>
 			    <div><label><i class="optional-font icon-asterisk"></i> Address2</label><input wicket:id="currentLocation.address.address2" name="address2" type="text"/></div>
 			    <div><label><i class="hint-font icon-asterisk"></i> City</label><input wicket:id="currentLocation.address.city" name="city" type="text"/></div>
-			    <div><label><i class="hint-font icon-asterisk"></i> State</label>
-			      <select wicket:id="currentLocation.address.stateProvinceCounty">
-			       <option>CO</option>
-			       <option>NV</option>
-			      </select></div>
+			    <div><label><i class="hint-font icon-asterisk"></i> State</label><select wicket:id="currentLocation.address.stateProvinceCounty"></select></div>
 			    <div><label><i class="hint-font icon-asterisk"></i> Zip</label><input wicket:id="currentLocation.address.zip"  name="zip" type="text"/></div>
+				<div><label><i class="hint-font icon-asterisk"></i> Phone</label><input wicket:id="currentLocation.phone"  name="phone" type="text"/></div>
+		    	<div><label><i class="hint-font icon-asterisk"></i> Email</label><input wicket:id="currentLocation.email"  name="email" type="text"/></div>
+		    	<div><label><i class="optional-font icon-asterisk"></i> Website</label><input wicket:id="currentLocation.websiteUrl"  name="web_url" type="text"/></div>
 		    </fieldset>
 		</div>
 		
 		<div class="panel left">
 
 			<div wicket:id="merchantMediaLogo"></div>
-		    
-		    <div class="wicketExtensionsWizardHeaderTitle">
-				<wicket:message key="contact.title"></wicket:message>
-			</div>
-			<div class="wicketExtensionsWizardHeaderSummary">
-				<wicket:message key="contact.summary"></wicket:message>
-			</div>
-			<fieldset wicket:id="contactPanel">
-				<div><label><i class="hint-font icon-asterisk"></i> Phone</label><input wicket:id="currentLocation.phone"  name="phone" type="text"/></div>
-		    	<div><label><i class="hint-font icon-asterisk"></i> Email</label><input wicket:id="currentLocation.email"  name="email" type="text"/></div>
-		    	<div><label><i class="optional-font icon-asterisk"></i> Website</label><input wicket:id="currentLocation.websiteUrl"  name="web_url" type="text"/></div>
-		    </fieldset>
+			
+			<div wicket:id="merchantMediaImage"></div>
+			
 		</div>
 		
 		<div class="clear"></div>

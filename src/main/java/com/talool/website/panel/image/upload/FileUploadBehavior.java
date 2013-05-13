@@ -32,13 +32,15 @@ public class FileUploadBehavior extends Behavior {
     
     private final UUID merchantId;
     private final MediaType mediaType;
+    private final String callbackUrl;
     
     
-    public FileUploadBehavior(UUID merchantId, MediaType mediaType)
+    public FileUploadBehavior(UUID merchantId, MediaType mediaType, String callbackUrl)
     {
     	super();
     	this.merchantId = merchantId;
     	this.mediaType = mediaType;
+    	this.callbackUrl = callbackUrl;
     }
 
     /**
@@ -105,6 +107,7 @@ public class FileUploadBehavior extends Behavior {
         variables.put("paramName", PARAM_NAME);
         variables.put("merchantId", merchantId.toString());
         variables.put("mediaType", mediaType.toString());
+        variables.put("callbackUrl", callbackUrl);
 
         String s = jsTmpl.asString(variables);
         response.render(JavaScriptHeaderItem.forScript(s, "fileupload"));

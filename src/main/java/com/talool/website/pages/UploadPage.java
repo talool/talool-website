@@ -14,6 +14,7 @@ public class UploadPage extends WebPage {
 	private static final long serialVersionUID = 1L;
 	private final UUID merchantId;
     private final MediaType mediaType;
+    private final String callbackUrl;
     
 	public UploadPage(PageParameters params)
 	{
@@ -38,13 +39,23 @@ public class UploadPage extends WebPage {
 		{
 			mediaType = MediaType.valueOf(type.toString());
 		}
+		
+		StringValue callback = params.get("callback");
+		if (callback==null)
+		{
+			callbackUrl = null;
+		}
+		else
+		{
+			callbackUrl = callback.toString();
+		}
 	}
 	
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
 		
-		FileUploadPanel fileUpload = new FileUploadPanel("fileUpload", merchantId, mediaType);
+		FileUploadPanel fileUpload = new FileUploadPanel("fileUpload", merchantId, mediaType, callbackUrl);
         add(fileUpload);
 	}
 

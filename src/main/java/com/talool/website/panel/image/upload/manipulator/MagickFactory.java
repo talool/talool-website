@@ -5,40 +5,26 @@ import com.talool.core.MediaType;
 public class MagickFactory implements IMagickFactory {
 
 	@Override
-	public IMagick getMerchantLogoMagick() {
-		return new MerchantLogoMagick();
+	public IMagick getTaloolImageMagick() {
+		return new TaloolImageMagick();
 	}
 
 	@Override
-	public IMagick getMerchantImageMagick() {
-		return new MerchantImageMagick();
-	}
-
-	@Override
-	public IMagick getDealImageMagick() {
-		return new DealImageMagick();
-	}
-
-	@Override
-	public IMagick getDealOfferLogoMagick() {
-		return new DealOfferLogoMagick();
+	public IMagick getTaloolLogoMagick() {
+		return new TaloolLogoMagick();
 	}
 
 	@Override
 	public IMagick getMagickForMediaType(MediaType type) {
 		IMagick magick;
 		switch (type){
-		case DEAL_IMAGE: 
-			magick = getDealImageMagick();
-			break;
-		case DEAL_OFFER_LOGO: 
-			magick = getDealOfferLogoMagick();
+		case DEAL_IMAGE:
+		case MERCHANT_IMAGE:
+			magick = getTaloolImageMagick();
 			break;
 		case MERCHANT_LOGO: 
-			magick = getMerchantLogoMagick();
-			break;
-		case MERCHANT_IMAGE: 
-			magick = getMerchantImageMagick();
+		case DEAL_OFFER_LOGO: 
+			magick = getTaloolLogoMagick();
 			break;
 		default:
 			magick = null;

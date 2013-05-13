@@ -74,7 +74,7 @@ public class MerchantMediaListModel extends LoadableDetachableModel<List<Merchan
 			media.addAll(taloolService.getMerchantMedias(_taloolMerchantId, mediaTypes, searchOptions));
 			
 			// add the merchant's media
-			if (_merchantId != null && _merchantId != _taloolMerchantId)
+			if (_merchantId != null && !_merchantId.equals(_taloolMerchantId))
 			{
 				media.addAll(taloolService.getMerchantMedias(_merchantId, mediaTypes, searchOptions));
 			}
