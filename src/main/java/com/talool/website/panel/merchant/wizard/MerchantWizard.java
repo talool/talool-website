@@ -28,7 +28,9 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 
 		WizardModel wizardModel = new WizardModel();
 		wizardModel.add(new MerchantDetails());
-		wizardModel.add(new MerchantLocations());
+		wizardModel.add(new MerchantLocation());
+		wizardModel.add(new MerchantLocationLogo());
+		wizardModel.add(new MerchantLocationImage());
 		wizardModel.add(new MerchantMap(this));
 		wizardModel.setLastVisible(false);
 

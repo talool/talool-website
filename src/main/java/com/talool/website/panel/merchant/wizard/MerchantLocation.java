@@ -23,18 +23,16 @@ import com.talool.website.component.MerchantMediaWizardPanel;
 import com.talool.website.component.StateOption;
 import com.talool.website.component.StateSelect;
 
-public class MerchantLocations extends WizardStep
+public class MerchantLocation extends WizardStep
 {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocations.class);
-	private MerchantMedia selectedLogo;
-	private MerchantMedia selectedImage;
+	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocation.class);
 
 	private transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
 
-	public MerchantLocations()
+	public MerchantLocation()
 	{
 		super(new ResourceModel("title"), new ResourceModel("summary"));
 
@@ -49,45 +47,6 @@ public class MerchantLocations extends WizardStep
 		setDefaultModel(new CompoundPropertyModel<Merchant>((IModel<Merchant>) getDefaultModel()));
 
 		final Merchant merchant = (Merchant) getDefaultModelObject();
-
-		if (merchant.getId() == null) 
-		{
-			// don't show the logo panel
-			addOrReplace(new WebMarkupContainer("merchantMediaLogo"));
-			
-			// don't show the logo panel
-			addOrReplace(new WebMarkupContainer("merchantMediaImage"));
-		}
-		else
-		{
-			// TODO add a preview for these uploads
-			
-			selectedLogo = merchant.getCurrentLocation().getLogo();
-			PropertyModel<MerchantMedia> selectedLogoModel = new PropertyModel<MerchantMedia>(this,"selectedLogo");
-			MerchantMediaWizardPanel logoPanel = new MerchantMediaWizardPanel("merchantMediaLogo", merchant.getId(), MediaType.MERCHANT_LOGO, selectedLogoModel)
-			{
-
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void onMediaUploadComplete(AjaxRequestTarget target, String url) {}
-				
-			};
-			addOrReplace(logoPanel);
-			
-			selectedLogo = merchant.getCurrentLocation().getLogo();
-			PropertyModel<MerchantMedia> selectedImageModel = new PropertyModel<MerchantMedia>(this,"selectedImage");
-			MerchantMediaWizardPanel imagePanel = new MerchantMediaWizardPanel("merchantMediaImage", merchant.getId(), MediaType.MERCHANT_IMAGE, selectedImageModel)
-			{
-
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void onMediaUploadComplete(AjaxRequestTarget target, String url) {}
-				
-			};
-			addOrReplace(imagePanel);
-		}
 
 		WebMarkupContainer locationPanel = new WebMarkupContainer("locationPanel");
 		addOrReplace(locationPanel);
@@ -151,7 +110,7 @@ public class MerchantLocations extends WizardStep
 		{
 			try
 			{
-				// New users need to be saved before we can save the logos
+				// New users need to be saved before we can save the logos, images, geo, etc
 				taloolService.save(merch);
 				StringBuilder sb = new StringBuilder("Saved Merchant with id:");
 				LOG.debug(sb.append(merch.getId()).toString());
@@ -166,30 +125,6 @@ public class MerchantLocations extends WizardStep
 				LOG.error("random-ass-exception saving new merchant:", e);
 			}
 		}
-		else
-		{
-			// get the selected MerchantMedia and add it to the location
-			if (selectedLogo != null)
-			{
-				merch.getCurrentLocation().setLogo(selectedLogo);
-			}
-			if (selectedImage != null)
-			{
-				merch.getCurrentLocation().setMerchantImage(selectedImage);
-			}
-			
-			try
-			{
-				// Need to save the current location in the edit flow
-				taloolService.merge(merch.getCurrentLocation());
-			}
-			catch (ServiceException se)
-			{
-				LOG.error("failed to save new merchant location:", se);
-			}
-		}
-
-
 		
 	}
 
