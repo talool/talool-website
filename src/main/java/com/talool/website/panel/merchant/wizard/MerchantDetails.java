@@ -14,17 +14,11 @@ import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.talool.cache.TagCache;
 import com.talool.core.Category;
-import com.talool.core.DomainFactory;
-import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.Tag;
-import com.talool.core.service.ServiceException;
-import com.talool.core.service.TaloolService;
 import com.talool.website.models.CategoryListModel;
 import com.talool.website.models.CategoryTagListModel;
 import com.talool.website.models.ModelUtil;
@@ -32,19 +26,13 @@ import com.talool.website.models.ModelUtil;
 public class MerchantDetails extends WizardStep {
 	
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOG = LoggerFactory.getLogger(MerchantDetails.class);
-	
+
 	private ChoiceRenderer<Tag> tagChoiceRenderer = new ChoiceRenderer<Tag>("name", "name");
 	private ChoiceRenderer<Category> categoryChoiceRenderer = new ChoiceRenderer<Category>("name",
 			"name");
 
 	private Category category;
 	private List<Tag> tags;
-	
-	private transient static final TaloolService taloolService = FactoryManager.get()
-			.getServiceFactory().getTaloolService();
-	private transient static final DomainFactory domainFactory = FactoryManager.get()
-			.getDomainFactory();
 	
 	public MerchantDetails()
     {
@@ -54,19 +42,6 @@ public class MerchantDetails extends WizardStep {
 	@Override
 	protected void onConfigure() {
 		super.onConfigure();
-		
-		final Merchant merchant = (Merchant) getDefaultModelObject();
-		if (merchant.getId() != null)
-		{
-			try
-			{
-				taloolService.merge(merchant);
-			}
-			catch (ServiceException se) 
-		    {
-		    	LOG.error("There was an exception merging the merchant: ", se);
-		    }
-		}
 		
 		WebMarkupContainer descriptionPanel = new WebMarkupContainer("descriptionPanel");
 		addOrReplace(descriptionPanel.setOutputMarkupId(true));

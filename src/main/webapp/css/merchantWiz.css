@@ -1,0 +1,82 @@
+.merchantWiz .panel {
+	height: 400px;
+	width: 350px;
+}
+.merchantWiz .panel .map {
+	height: 250px;
+	width: 320px;
+	margin-left: 9px;
+	margin-top: -24px;
+}
+.merchantWiz .locationList {
+	height: 360px;
+	overflow:scroll;
+}
+.merchantWiz .locationList .location {
+	border: 1px solid rgba(185, 172, 151,.5);
+	border-radius: 5px;
+	padding: 10px;
+	position: relative;
+	margin-top: 10px;
+}
+.merchantWiz .locationList .location .actions {
+	position: absolute;
+	top: 10px;
+	right: 5px;
+}
+body.talool .merchantWiz .panel.iPhonePanel {
+	right: 7px;
+}
+.merchantWiz .dealList .deal {
+	border: none;
+	height: auto;
+	background-color: #fff;
+	text-align: left;
+	color: black;
+	border-bottom: 1px solid #eee;
+}
+.merchantWiz .dummyDeal .deal .image {
+	margin-bottom: 0;
+}
+.merchantWiz .dealList.locList {
+	margin-left: 9px;
+	overflow:hidden;
+	height:293px;
+	border-radius: 5px;
+}
+.merchantWiz .dealList .deal .title {
+	font-size: 13px;
+	margin-top: 10px;
+}
+.merchantWiz .dealList .deal .expires {
+	font-size: 11px;
+}
+.merchantWiz .dealList .deal .categoryIcon {
+	float: left;
+	height: 50px;
+	width: 50px;
+	margin-right: 10px;
+}
+.merchantWiz .dealList .deal .categoryIcon .circle {
+	width: 45px;
+	height: 45px;
+	border-radius: 22px;	
+	margin: 3px;
+}
+.merchantWiz .colterra {
+	background-image: url(/img/iPhone5_Colterra_boulder.png);
+	background-repeat: no-repeat;
+	background-position: -85px -128px;
+	padding: 10px 15px;
+	height: 560px;
+	width: 305px;
+}
+.merchantWiz .teaser.discover {
+	padding: 10px 15px;
+	height: 524px;
+	width: 290px;
+	position: absolute;
+	top: 45px;
+	right: 61px;
+	color: red;
+}

@@ -29,8 +29,6 @@ import com.talool.website.models.AvailableMerchantsListModel;
 import com.talool.website.models.DealOfferModel;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.deal.DealPreviewUpdatingBehavior;
-import com.talool.website.panel.deal.DealPreviewUpdatingBehavior.DealComponent;
 import com.talool.website.util.SessionUtils;
 
 /**
@@ -106,7 +104,7 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onMediaUploadComplete(AjaxRequestTarget target, String url) {}
+			public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media) {}
 			
 		};
 		form.add(mediaPanel);

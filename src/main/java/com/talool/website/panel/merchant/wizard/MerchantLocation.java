@@ -1,6 +1,7 @@
 package com.talool.website.panel.merchant.wizard;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.TextField;
@@ -10,16 +11,11 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.UrlValidator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.talool.core.FactoryManager;
-import com.talool.core.MediaType;
 import com.talool.core.Merchant;
-import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
-import com.talool.website.component.MerchantMediaWizardPanel;
 import com.talool.website.component.StateOption;
 import com.talool.website.component.StateSelect;
 
@@ -45,8 +41,6 @@ public class MerchantLocation extends WizardStep
 		super.onConfigure();
 
 		setDefaultModel(new CompoundPropertyModel<Merchant>((IModel<Merchant>) getDefaultModel()));
-
-		final Merchant merchant = (Merchant) getDefaultModelObject();
 
 		WebMarkupContainer locationPanel = new WebMarkupContainer("locationPanel");
 		addOrReplace(locationPanel);
@@ -95,7 +89,7 @@ public class MerchantLocation extends WizardStep
 		final Merchant merch = (Merchant) getDefaultModelObject();
 		merch.getCurrentLocation().getAddress().setStateProvinceCounty(stateOption.getCode());
 	}
-
+	
 	/*
 	 * Save the state of the Merchant.
 	 */
@@ -127,5 +121,6 @@ public class MerchantLocation extends WizardStep
 		}
 		
 	}
+
 
 }

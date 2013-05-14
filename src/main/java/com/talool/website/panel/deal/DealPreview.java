@@ -25,6 +25,7 @@ public class DealPreview extends Panel
 	public String merchantLogoUrl, dealOfferLogoUrl;
 	private String defaultImageUrl = "/img/000.png";
 	private String defaultDealOfferLogoUrl = "/img/000.png";
+	private String defaultMerchantLogoUrl = "/img/000.png";
 	public String expires;
 	public Label titleLabel, summaryLabel, detailsLabel;
 	public StaticImage image, merchantLogo, dealOfferLogo;
@@ -66,7 +67,7 @@ public class DealPreview extends Panel
 		}
 
 		MerchantLocation loc = deal.getMerchant().getCurrentLocation();
-		merchantLogoUrl = (loc.getLogo() == null) ? null:loc.getLogo().getMediaUrl();
+		merchantLogoUrl = (loc.getLogo() == null) ? defaultMerchantLogoUrl:loc.getLogo().getMediaUrl();
 		
 		DealOffer offer = deal.getDealOffer();
 		dealOfferLogoUrl = (offer == null || offer.getImage()==null)?defaultDealOfferLogoUrl:offer.getImage().getMediaUrl();

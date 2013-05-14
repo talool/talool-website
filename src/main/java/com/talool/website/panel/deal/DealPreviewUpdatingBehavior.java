@@ -87,6 +87,14 @@ public class DealPreviewUpdatingBehavior extends AjaxFormComponentUpdatingBehavi
 		}
 		catch(ServiceException se)
 		{
+			url = "/img/000.png";
+		}
+		catch(NullPointerException npe)
+		{
+			url = "/img/000.png";
+		}
+		catch(Exception e)
+		{
 			url = val;
 		}
 		return url;

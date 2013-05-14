@@ -90,7 +90,10 @@ public class CreateDealOffer extends DynamicWizardStep {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onMediaUploadComplete(AjaxRequestTarget target, String url) {
+			public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media) {
+				image = media;
+				dealOffer.setImage(media);
+				deal.setDealOffer(dealOffer);
 				// re-init the preview
 				dealPreview.init(deal);
 				target.add(dealPreview);

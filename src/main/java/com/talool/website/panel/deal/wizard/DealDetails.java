@@ -46,7 +46,7 @@ public class DealDetails extends DynamicWizardStep
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onMediaUploadComplete(AjaxRequestTarget target, String url) {
+			public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media) {
 				// re-init the preview
 				dealPreview.init(deal);
 				target.add(dealPreview);

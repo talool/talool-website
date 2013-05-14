@@ -20,12 +20,11 @@ import org.wicketstuff.gmap.api.GMarkerOptions;
 import com.talool.core.Address;
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
-import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
-import com.talool.core.service.ServiceException;
-import com.talool.core.service.TaloolService;
+import com.talool.core.MerchantMedia;
 import com.talool.website.models.MerchantLocationListModel;
+import com.talool.website.panel.merchant.wizard.MerchantWizard.WizardMarker;
 import com.talool.website.util.HttpUtils;
 import com.vividsolutions.jts.geom.Point;
 
@@ -36,8 +35,6 @@ public class MerchantMap extends WizardStep
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantMap.class);
 	private final MerchantWizard wizard;
 
-	private transient static final TaloolService taloolService = FactoryManager.get()
-			.getServiceFactory().getTaloolService();
 	private transient static final DomainFactory domainFactory = FactoryManager.get()
 			.getDomainFactory();
 
@@ -53,17 +50,6 @@ public class MerchantMap extends WizardStep
 		super.onConfigure();
 
 		final Merchant merchant = (Merchant) getDefaultModelObject();
-		if (merchant.getId() != null)
-		{
-			try
-			{
-				taloolService.merge(merchant);
-			}
-			catch (ServiceException se)
-			{
-				LOG.error("There was an exception merging the merchant: ", se);
-			}
-		}
 
 		GMap map = new GMap("map");
 		map.setStreetViewControlEnabled(false);
@@ -130,12 +116,20 @@ public class MerchantMap extends WizardStep
 				// create a new location and add it to the merchant
 				MerchantLocation location = domainFactory.newMerchantLocation();
 				location.setAddress(domainFactory.newAddress());
-				location.setLogo(domainFactory.newMedia(merchant.getId(), "", MediaType.MERCHANT_LOGO));
+				MerchantMedia merchLogo = merchant.getCurrentLocation().getLogo();
+				if (merchLogo != null) 
+				{
+					location.setLogo(merchLogo);
+				}
+				MerchantMedia merchImage = merchant.getCurrentLocation().getMerchantImage();
+				if (merchImage != null) 
+				{
+					location.setMerchantImage(merchImage);
+				}
 				merchant.addLocation(location);
 				merchant.setCurrentLocation(location);
 
-				// go back to the previous step
-				wizard.goBack(target);
+				wizard.gotoMarker(target, WizardMarker.NewLocation);
 			}
 
 		});
@@ -178,8 +172,7 @@ public class MerchantMap extends WizardStep
 					public void onClick(AjaxRequestTarget target)
 					{
 						merchant.setCurrentLocation(merchLoc);
-						// go back to the previous step
-						wizard.goBack(target);
+						wizard.gotoMarker(target, WizardMarker.NewLocation);
 					}
 				});
 			}

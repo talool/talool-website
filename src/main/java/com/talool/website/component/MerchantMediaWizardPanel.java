@@ -86,7 +86,7 @@ abstract public class MerchantMediaWizardPanel extends Panel {
 				selectedMediaModel.setObject(merchantMedia);
 				target.add(mediaSelect);
 				
-				onMediaUploadComplete(target, url);
+				onMediaUploadComplete(target, merchantMedia);
 			}
 			
 		});
@@ -119,6 +119,6 @@ abstract public class MerchantMediaWizardPanel extends Panel {
 		return mediaSelect;
 	}
 	
-	abstract public void onMediaUploadComplete(AjaxRequestTarget target, String url);
+	abstract public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media);
 
 }

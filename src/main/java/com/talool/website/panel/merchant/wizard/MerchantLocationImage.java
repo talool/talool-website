@@ -49,7 +49,9 @@ public class MerchantLocationImage extends WizardStep
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onMediaUploadComplete(AjaxRequestTarget target, String url) {
+			public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media) {
+				selectedImage = media;
+				merchant.getCurrentLocation().setMerchantImage(media);
 				merchantPerview.init(merchant);
 				target.add(merchantPerview);
 			}

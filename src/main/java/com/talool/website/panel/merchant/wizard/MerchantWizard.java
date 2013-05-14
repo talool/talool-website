@@ -21,14 +21,18 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantWizard.class);
+	public static enum WizardMarker {NewLocation};
+	private WizardStep newLocation;
 
 	public MerchantWizard(String id, String title)
 	{
 		super(id, title);
+		
+		this.newLocation = new MerchantLocation();
 
 		WizardModel wizardModel = new WizardModel();
 		wizardModel.add(new MerchantDetails());
-		wizardModel.add(new MerchantLocation());
+		wizardModel.add(this.newLocation);
 		wizardModel.add(new MerchantLocationLogo());
 		wizardModel.add(new MerchantLocationImage());
 		wizardModel.add(new MerchantMap(this));
@@ -105,6 +109,19 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 	{
 		DialogButton prev = findButton("<");
 		onClick(target, prev);
+	}
+	
+	public void gotoMarker(AjaxRequestTarget target, WizardMarker marker) {
+		WizardModel model = (WizardModel)getWizardModel();
+		switch (marker) {
+		case NewLocation:
+			model.setActiveStep(this.newLocation);
+			break;
+		}
+		
+		// reconfigure buttons and refresh the form //
+		this.onConfigure(target);
+
 	}
 
 }

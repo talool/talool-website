@@ -1,26 +1,3 @@
-.panel.iPhonePanel {
-	padding-bottom:0;
-	margin: 0;
-	position: absolute;
-	right: 45px;
-	top: 45px;
-}
-.dealWiz form,
-.merchantWiz form {
-	height: 580px;
-}
-body.talool .dealWiz,
-body.talool .merchantWiz {
-	background-image: url(/img/iPhone5.png);
-	background-repeat: no-repeat;
-	background-position: 475px -95px;
-	padding: 10px 15px;
-	position: relative;
-}
-body.talool .merchantWiz .panel.iPhonePanel {
-	right: 42px;
-	width: 325px;
-}
 .deal {
 	width: 320px;
 	height: 543px;
@@ -85,55 +62,4 @@ body.talool .merchantWiz .panel.iPhonePanel {
 .talool .ui-dialog .ui-dialog-buttonpane
 {
 	margin-top: 0;
-}
-
-.dealWiz .wicketExtensionsWizardHeaderTitle,
-.merchantWiz .wicketExtensionsWizardHeaderTitle
-{
-	margin-top: 15px;
-}
-
-.dealWiz .wicketExtensionsWizardHeaderSummary,
-.dealWiz .wicketExtensionsWizardHeaderTitle,
-.dealWiz .feedbackPanel,
-.merchantWiz .wicketExtensionsWizardHeaderSummary,
-.merchantWiz .wicketExtensionsWizardHeaderTitle,
-.merchantWiz .feedbackPanel
-
-{
-	width: 400px;
-	border: 0px;
-}
-.merchantWiz .dealList .deal {
-	border: none;
-	height: auto;
-	background-color: #fff;
-	text-align: left;
-	color: black;
-	border-bottom: 1px solid #eee;
-}
-.merchantWiz .dummyDeal .deal .image {
-	margin-bottom: 0;
-}
-.merchantWiz .dealList.locList {
-	margin-left: 9px;
-}
-.merchantWiz .dealList .deal .title {
-	font-size: 13px;
-	margin-top: 10px;
-}
-.merchantWiz .dealList .deal .expires {
-	font-size: 11px;
-}
-.merchantWiz .dealList .deal .categoryIcon {
-	float: left;
-	height: 50px;
-	width: 50px;
-	margin-right: 10px;
-}
-.merchantWiz .dealList .deal .categoryIcon .circle {
-	width: 45px;
-	height: 45px;
-	border-radius: 22px;	
-	margin: 3px;
 }

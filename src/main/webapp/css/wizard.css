@@ -1,0 +1,51 @@
+body.talool .wiz {
+	background-image: url(/img/iPhone5.png);
+	background-repeat: no-repeat;
+	background-position: 475px -95px;
+	padding: 10px 15px;
+	position: relative;
+}
+.dealOfferLogoSelectContainer .wicketExtensionsWizardHeaderTitle {
+	font-weight: bold;
+	font-size: 1.17em;
+	-webkit-margin-before: 1em;
+	-webkit-margin-after: 1em;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+}
+.dealOfferLogoSelectContainer .wicketExtensionsWizardHeaderSummary {
+	display: none;
+}
+.wiz .panel.iPhonePanel {
+	padding-bottom:0;
+	margin: 0;
+	position: absolute;
+	right: 45px;
+	top: 45px;
+}
+.wiz form {
+	height: 580px;
+}
+.abstractWizard .wicketExtensionsWizardHeaderTitle {
+	font-weight: bold;
+}
+
+.abstractWizard .wicketExtensionsWizardHeaderSummary {
+	font-style: italic;
+	margin-bottom: 1em;
+}
+
+.abstractWizard .feedbackPanel {
+	margin-bottom: 1em;
+}
+.wiz .wicketExtensionsWizardHeaderSummary,
+.wiz .wicketExtensionsWizardHeaderTitle,
+.wiz .feedbackPanel
+{
+	width: 400px;
+	border: 0px;
+}
+.wiz .wicketExtensionsWizardHeaderTitle
+{
+	margin-top: 15px;
+}

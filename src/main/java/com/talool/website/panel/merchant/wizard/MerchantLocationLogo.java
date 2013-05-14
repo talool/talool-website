@@ -56,7 +56,8 @@ public class MerchantLocationLogo extends WizardStep
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onMediaUploadComplete(AjaxRequestTarget target, String url) {
+			public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media) {
+				dummyDeal.getMerchant().getCurrentLocation().setLogo(media);
 				dealPreview.init(dummyDeal);
 				target.add(dealPreview);
 			}
