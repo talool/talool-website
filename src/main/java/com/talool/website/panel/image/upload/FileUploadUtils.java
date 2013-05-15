@@ -84,9 +84,13 @@ public class FileUploadUtils {
 	 */
 	private static String getPngFileName(FileItem image)
 	{
-		String name = image.getName();
-		int dot = name.lastIndexOf(".");
-		StringBuilder sb = new StringBuilder(name.substring(0,dot));
+		return getPngFileName(image.getName());
+	}
+	
+	public static String getPngFileName(String imageName)
+	{
+		int dot = imageName.lastIndexOf(".");
+		StringBuilder sb = new StringBuilder(imageName.substring(0,dot));
 		return sb.append(".png").toString();
 	}
 	
