@@ -80,7 +80,7 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 		{
 			taloolService.merge(merchant);
 
-			StringBuilder sb = new StringBuilder("Saved Merchant: ");
+			StringBuilder sb = new StringBuilder("Succesfully saved merchant: ");
 			this.info(sb.append(merchant.getName()).toString());
 
 		}

@@ -120,7 +120,7 @@ public class MerchantPanel extends BaseDefinitionPanel
 	public Category getCategory()
 	{
 		final Merchant merch = (Merchant) getDefaultModelObject();
-		return ModelUtil.getCategory(merch);
+		return merch.getCategory();
 	}
 
 	public void setCategory(Category category)
