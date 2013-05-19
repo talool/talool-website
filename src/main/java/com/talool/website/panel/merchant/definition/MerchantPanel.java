@@ -146,8 +146,7 @@ public class MerchantPanel extends BaseDefinitionPanel
 		tagChoices.setOutputMarkupId(true);
 		descriptionPanel.add(tagChoices.setRequired(true));
 
-		DropDownChoice<Category> categorySelect = new DropDownChoice<Category>("category",
-				new PropertyModel<Category>(this, "category"), new CategoryListModel(),
+		DropDownChoice<Category> categorySelect = new DropDownChoice<Category>("category", new CategoryListModel(),
 				categoryChoiceRenderer);
 
 		categorySelect.setOutputMarkupId(true);

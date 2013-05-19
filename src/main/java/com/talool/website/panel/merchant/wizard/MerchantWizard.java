@@ -21,13 +21,16 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantWizard.class);
-	public static enum WizardMarker {NewLocation};
+	public static enum WizardMarker
+	{
+		NewLocation
+	};
 	private WizardStep newLocation;
 
 	public MerchantWizard(String id, String title)
 	{
 		super(id, title);
-		
+
 		this.newLocation = new MerchantLocation();
 
 		WizardModel wizardModel = new WizardModel();
@@ -77,15 +80,15 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 		{
 			taloolService.merge(merchant);
 
-			StringBuilder sb = new StringBuilder("Saved Deal: ");
+			StringBuilder sb = new StringBuilder("Saved Merchant: ");
 			this.info(sb.append(merchant.getName()).toString());
 
 		}
 		catch (ServiceException se)
 		{
-			LOG.error("Failed to save deal: ", se);
+			LOG.error("Failed to save merchant: ", se);
 
-			StringBuilder sb = new StringBuilder("Failed to save Deal: ");
+			StringBuilder sb = new StringBuilder("Failed to save merchant: ");
 			this.error(sb.append(merchant.getName()).toString());
 
 		}
@@ -110,15 +113,17 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 		DialogButton prev = findButton("<");
 		onClick(target, prev);
 	}
-	
-	public void gotoMarker(AjaxRequestTarget target, WizardMarker marker) {
-		WizardModel model = (WizardModel)getWizardModel();
-		switch (marker) {
-		case NewLocation:
-			model.setActiveStep(this.newLocation);
-			break;
+
+	public void gotoMarker(AjaxRequestTarget target, WizardMarker marker)
+	{
+		WizardModel model = (WizardModel) getWizardModel();
+		switch (marker)
+		{
+			case NewLocation:
+				model.setActiveStep(this.newLocation);
+				break;
 		}
-		
+
 		// reconfigure buttons and refresh the form //
 		this.onConfigure(target);
 

@@ -23,8 +23,9 @@ import com.talool.website.models.CategoryListModel;
 import com.talool.website.models.CategoryTagListModel;
 import com.talool.website.models.ModelUtil;
 
-public class MerchantDetails extends WizardStep {
-	
+public class MerchantDetails extends WizardStep
+{
+
 	private static final long serialVersionUID = 1L;
 
 	private ChoiceRenderer<Tag> tagChoiceRenderer = new ChoiceRenderer<Tag>("name", "name");
@@ -33,16 +34,17 @@ public class MerchantDetails extends WizardStep {
 
 	private Category category;
 	private List<Tag> tags;
-	
+
 	public MerchantDetails()
-    {
-        super(new ResourceModel("title"), new ResourceModel("summary"));
-    }
-	
+	{
+		super(new ResourceModel("title"), new ResourceModel("summary"));
+	}
+
 	@Override
-	protected void onConfigure() {
+	protected void onConfigure()
+	{
 		super.onConfigure();
-		
+
 		WebMarkupContainer descriptionPanel = new WebMarkupContainer("descriptionPanel");
 		addOrReplace(descriptionPanel.setOutputMarkupId(true));
 
@@ -71,13 +73,14 @@ public class MerchantDetails extends WizardStep {
 			protected void onUpdate(AjaxRequestTarget target)
 			{
 				tagChoices.setChoices(TagCache.get().getTagsByCategoryName(category.getName()));
+				((Merchant) getDefaultModelObject()).setCategory(category);
 				target.add(tagChoices);
 			}
 
 		});
 		descriptionPanel.add(categorySelect.setRequired(true));
 	}
-	
+
 	public List<Tag> getTags()
 	{
 		final Merchant merch = (Merchant) getDefaultModelObject();
@@ -103,6 +106,5 @@ public class MerchantDetails extends WizardStep {
 	{
 		this.category = category;
 	}
-	
-}
 
+}
