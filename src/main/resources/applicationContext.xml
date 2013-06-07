@@ -15,7 +15,7 @@
 	<import resource="./dataSource.xml" />
 	<import resource="./taloolService.xml" />
 
-	<bean id="propertyConfigurer"
+	<bean id="webPropertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>

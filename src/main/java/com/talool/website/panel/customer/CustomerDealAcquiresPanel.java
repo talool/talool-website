@@ -55,7 +55,7 @@ public class CustomerDealAcquiresPanel extends Panel
 				item.add(new Label("deal.dealOffer.merchant.name"));
 				item.add(new Label("redemptionDate"));
 				item.add(new Label("shareCount"));
-				item.add(new Label("acquireStatus.status"));
+				item.add(new Label("acquireStatus"));
 
 				item.add(new AjaxLink<Void>("editLink")
 				{
