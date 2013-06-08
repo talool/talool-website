@@ -1,15 +1,38 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 	<head prefix="og: http://ogp.me/ns# product: http://ogp.me/ns/product#">
+	
+		<title>A Gift For You on Talool</title>
+	
     	<meta property="fb:app_id" wicket:id="app_id" content="">
     	<meta property="og:url" wicket:id="url" content="">
     	<meta property="og:type" wicket:id="type" content="">
     	<meta property="og:title" wicket:id="title" content="">
     	<meta property="og:image" wicket:id="image" content="">
     	<meta property="og:description" wicket:id="description" content="">
-    	<title>Product Name</title>
+    	
+    	<link rel="stylesheet" type="text/css" href="/css/font-awesome.css">
+	    <link rel="stylesheet" type="text/css" href="/css/global.css">
+	    <link rel="stylesheet" type="text/css" href="/css/deal.css">
+	    <link rel="stylesheet" type="text/css" href="/css/gift.css">
+	    
+	    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	    <script src="/js/core.js"></script>
+		<script src="/js/letters.js"></script>
+		<script src="/js/logo.js"></script>
+		<script src="/js/responsive.js"></script>
+		
+	    
+	    
 	</head>
     <body>
-    	<div wicket:id="body"></div>
+    	<div class="header teal-bg">
+	  		<canvas id="canvas" height="25"></canvas>
+	  	</div>
+	    <div class="gift">
+    		<wicket:child/>
+    		<div id='debug'></div>
+	    </div>
     </body>
 </html>

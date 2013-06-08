@@ -1,0 +1,62 @@
+.gift {
+	padding: 10px;
+	min-width: 320px;
+}
+
+.gift #debug {
+	position: fixed;
+	bottom: 5px;
+	left: 5px;
+	padding: 10px;
+	background: pink;
+}
+
+.gift .box {
+	border: 2px solid #ddd;
+	border-radius: 7px;
+	padding: 3px;
+	margin: 10px;
+}
+
+.gift .box .wrapping {
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	padding: 10px;
+	text-align: center;
+}
+
+.gift h1 {
+	text-align: center;
+}
+
+.gift table td {
+	padding-bottom: 10px;	
+	text-align: left;
+}
+
+.gift table .label {
+	width: 100px;
+	text-align: right;
+	font-size: 13px;
+	padding: 0 10px 0 0;
+	vertical-align: top;
+}
+
+.gift .footer {
+	text-align: center;
+}
+
+.gift .footer .links {
+	margin: 0 0 10px;
+}
+
+.mobile .gift .getit {
+	display:none;
+}
+
+.gift .getit {
+	float: right;
+	background: pink;
+	padding: 50px;
+	width: 150px;
+}

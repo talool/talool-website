@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<wicket:head>
+	<script>
+    	//Wicket.Window.unloadConfirmation = false;
+    	window.ooConfig = {
+			logo:{target:"#canvas",bAdmin:false, scale: .30, color:"rgba(255,255,255,1)"},
+			responsive: {mobileClass:"mobile", tabletClass:"tablet", mobileWidth: 750, tabletWidth: 1400, redirectToApp: false}
+		};
+    </script>
+</wicket:head>
+<wicket:extend xmlns:wicket="http://wicket.apache.org">
+	
+	<div class="box">
+		<div class="wrapping gray4-font">
+			<div class="getit">
+				Add the get.it integration here.  It can be here when the page loads, 
+				but it will only be visible for non-mobile clients.
+			</div>
+			<div class="details">
+				<img wicket:id="dealImage"/>
+				<h1 wicket:id="titleLabel">Gifter has sent you a gift for Gift Title</h1>
+				<table>
+					<tbody>
+						<tr>
+							<td class="label true-gray-font">where?</td>
+							<td wicket:id="merchantName">merchant name</td>
+						</tr>
+						<tr>
+							<td class="label true-gray-font">what?</td>
+							<td wicket:id="dealSummary">deal summary</td>
+						</tr>
+						<tr>
+							<td class="label true-gray-font">how?</td>
+							<td wicket:id="how">To accept your deal, install Talool for iOS or Android and register with this email address.</td>
+						</tr>
+						<tr>
+							<td class="label true-gray-font">about us</td>
+							<td>Talool is committed to bringing you better deals and closer relationships with the places you shop, eat, relax at, and visit.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+	<div class="footer">
+		<div class="links teal-font">
+          	<a href="http://talool.com/support/">Support</a> |
+            <a href="http://talool.com/legal/">Terms and Conditions</a> |
+            <a href="http://talool.com/privacy/">Privacy Policy</a>
+		</div>
+        <div class="copyright true-gray-font">Copyright © 2013, Talool, Inc., Boulder, Colorado, USA</div>
+    </div>      
+
+
+</wicket:extend>

@@ -6,6 +6,10 @@ $(function() {
 			var respond = function() {
 				if (window.innerWidth < cfg.mobileWidth) {
 					$('body').addClass(cfg.mobileClass).removeClass(cfg.tabletClass);
+					if (cfg.redirectToApp)
+					{
+						this.appRedirect();
+					}
 				} else if (window.innerWidth < cfg.tabletWidth) {
 					$('body').addClass(cfg.tabletClass).removeClass(cfg.mobileClass);
 				} else {
@@ -17,6 +21,17 @@ $(function() {
 			respond();
 		};
 		
+		this.appRedirect = function()
+		{
+			  document.location = 'yourAppScheme://';
+			  setTimeout( function()
+			  {
+			      if( confirm( 'You do not seem to have Your App installed, do you want to go download it now?'))
+			      {
+			        document.location = 'http://itunes.apple.com/us/app/yourAppId';
+			      }
+			  }, 300);
+		};
 		    
 		this.init();
 	};

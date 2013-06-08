@@ -151,6 +151,9 @@ body.talool a:visited {
 	background-color: rgb(83, 71, 65);
 	color: white;
 }
+.true-gray-font, .true-gray-font a, .true-gray-font a:visited {
+	color: rgb(190, 190, 190);
+}
 body.talool .btn.btn-primary {
 	background-image: linear-gradient(to bottom,#fff,#ddd);
 	background-image: -moz-linear-gradient(top,#fff,#ddd);
