@@ -6,11 +6,10 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
+import com.talool.core.service.CustomerService;
 import com.talool.core.service.TaloolService;
 
 public abstract class OpenGraphRepeator extends WebPage {
@@ -21,6 +20,9 @@ public abstract class OpenGraphRepeator extends WebPage {
 	
 	protected transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
+	
+	protected transient static final CustomerService customerService = FactoryManager.get()
+			.getServiceFactory().getCustomerService();
 
 	protected transient static final DomainFactory domainFactory = FactoryManager.get()
 			.getDomainFactory();

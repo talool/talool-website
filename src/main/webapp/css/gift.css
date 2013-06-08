@@ -1,6 +1,8 @@
 .gift {
 	padding: 10px;
 	min-width: 320px;
+	max-width: 750px;
+	margin: 0px auto;
 }
 
 .gift #debug {
@@ -9,6 +11,7 @@
 	left: 5px;
 	padding: 10px;
 	background: pink;
+	display: none;
 }
 
 .gift .box {
@@ -23,6 +26,13 @@
 	border-radius: 5px;
 	padding: 10px;
 	text-align: center;
+}
+
+.gift .box .wrapping .details {
+	max-width: 320px;
+}
+.mobile .gift .box .wrapping .details {
+	max-width: 800px;
 }
 
 .gift h1 {
@@ -57,6 +67,6 @@
 .gift .getit {
 	float: right;
 	background: pink;
-	padding: 50px;
-	width: 150px;
+	padding: 50px 0;
+	width: 320px;
 }

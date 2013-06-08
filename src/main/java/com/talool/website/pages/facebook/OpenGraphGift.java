@@ -8,7 +8,10 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.talool.core.Customer;
 import com.talool.core.Deal;
+import com.talool.core.gift.EmailGift;
+import com.talool.core.gift.FaceBookGift;
 import com.talool.core.gift.Gift;
 import com.talool.core.service.ServiceException;
 import com.talool.website.component.StaticImage;
@@ -20,6 +23,7 @@ public class OpenGraphGift extends OpenGraphRepeator {
 	
 	private Gift gift = null;
 	private Deal deal = null;
+	private Customer customer = null;
 	private String merchantName;
 	private String instructions;
 	private String title;
@@ -28,13 +32,14 @@ public class OpenGraphGift extends OpenGraphRepeator {
 	public OpenGraphGift(PageParameters parameters) {
 		super(parameters);
 		
-		// TODO change this to a gift id
-		String dId = parameters.get(0).toString();
-		UUID dealId = UUID.fromString(dId);
+		String gId = parameters.get(0).toString();
+		UUID giftId = UUID.fromString(gId);
 
 		try
 		{
-			deal = taloolService.getDeal(dealId);
+			gift = customerService.getGift(giftId);
+			deal = gift.getDealAcquire().getDeal();
+			customer = gift.getFromCustomer();
 		} 
 		catch (ServiceException se)
 		{
@@ -50,21 +55,20 @@ public class OpenGraphGift extends OpenGraphRepeator {
 			
 			merchantName = deal.getMerchant().getName();
 			
-			// TODO check the share type
+			// check the share type
 			StringBuilder instructionsSB = new StringBuilder("To accept your deal, install Talool for iOS or Android and");
-			if (true)
+			if (gift instanceof FaceBookGift)
 			{
 				instructionsSB.append(" login with Facebook.");
 			}
 			else
 			{
-				instructionsSB.append(" register with this email: ");
-				// TODO get he email address
+				instructionsSB.append(" register with this email: ").append( ((EmailGift)gift).getToEmail());
 			}
 			instructions = instructionsSB.toString();
 			
-			StringBuilder titleSB = new StringBuilder("Someone"); // TODO add the gifter name
-			titleSB.append(" has sent you a gift for ").append(deal.getTitle());
+			StringBuilder titleSB = new StringBuilder(customer.getFirstName());
+			titleSB.append(" ").append(customer.getLastName()).append(" has sent you a gift for ").append(deal.getTitle());
 			title = titleSB.toString();
 		}
 	}
