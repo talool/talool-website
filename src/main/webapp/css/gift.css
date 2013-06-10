@@ -1,8 +1,22 @@
+.mw {
+	background: #ebebeb;
+}
 .gift {
 	padding: 10px;
 	min-width: 320px;
 	max-width: 750px;
 	margin: 0px auto;
+}
+.mw .gift {
+	width: 320px;
+	padding:0;
+}
+.mw .gift .details h1 {
+	margin: 10px;
+}
+
+.mw .gift .details table {
+	margin: 10px 0 30px;
 }
 
 .gift #debug {
@@ -14,11 +28,22 @@
 	display: none;
 }
 
+.mw #debug {
+	display:none;
+}
+
 .gift .box {
 	border: 2px solid #ddd;
 	border-radius: 7px;
 	padding: 3px;
 	margin: 10px;
+	background: #fff;
+}
+
+.mw .gift .box {
+	border:none;
+	padding:0 0 20px;
+	margin:0;
 }
 
 .gift .box .wrapping {
@@ -28,11 +53,9 @@
 	text-align: center;
 }
 
-.gift .box .wrapping .details {
-	max-width: 320px;
-}
-.mobile .gift .box .wrapping .details {
-	max-width: 800px;
+.mw .gift .box .wrapping {
+	padding:0;
+	border:none;
 }
 
 .gift h1 {
@@ -42,6 +65,7 @@
 .gift table td {
 	padding-bottom: 10px;	
 	text-align: left;
+	font-size: 14px;
 }
 
 .gift table .label {
@@ -53,20 +77,11 @@
 }
 
 .gift .footer {
+	margin: 15px 5px 40px;
 	text-align: center;
+	font-size: 10px;
 }
 
 .gift .footer .links {
 	margin: 0 0 10px;
-}
-
-.mobile .gift .getit {
-	display:none;
-}
-
-.gift .getit {
-	float: right;
-	background: pink;
-	padding: 50px 0;
-	width: 320px;
 }

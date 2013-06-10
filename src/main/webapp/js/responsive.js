@@ -19,6 +19,24 @@ $(function() {
 			};
 			$(window).resize(respond);
 			respond();
+			
+			// add a class for mobile web
+			oo.isMobile = navigator.userAgent.match(/(Android|iPhone|iPod|iPad)/);
+			if (oo.isMobile) 
+			{
+				$('body').addClass("mw");
+				var ww = ( $(window).width() < window.screen.width ) ? $(window).width() : window.screen.width; //get proper width
+				var mw = 320; // min width of site
+				var ratio =  ww / mw; //calculate ratio
+				if ( ww < mw)
+				{ //smaller than minimum size
+				   $('#Viewport').attr('content', 'initial-scale=' + ratio + ', maximum-scale=' + ratio + ', minimum-scale=' + ratio + ', user-scalable=yes, width=' + ww);
+				}
+				else
+				{ //regular size
+				   $('#Viewport').attr('content', 'initial-scale=1.0, maximum-scale=2, minimum-scale=1.0, user-scalable=yes, width=' + ww);
+				}
+			}
 		};
 		
 		this.appRedirect = function()

@@ -39,7 +39,6 @@ public abstract class OpenGraphRepeator extends WebPage {
 		
 		ogUrl = RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(urlFor(OpenGraphRepeator.class, 
 				parameters).toString()));
-		
 	}
 	
 	@Override
@@ -69,6 +68,7 @@ public abstract class OpenGraphRepeator extends WebPage {
 		WebMarkupContainer title = new WebMarkupContainer("title");
 		title.add(new AttributeModifier("content",ogTitle));
 		add(title);
+
 	}
 
 	public void setOgDescription(String ogDescription) {
