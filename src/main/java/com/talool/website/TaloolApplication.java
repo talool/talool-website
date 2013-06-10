@@ -20,6 +20,7 @@ import com.talool.website.pages.AdminLoginPage;
 import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.pages.CustomerSettingsPage;
 import com.talool.website.pages.HomePage;
+import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.pages.UploadPage;
 import com.talool.website.pages.dashboard.MerchantDashboard;
 import com.talool.website.pages.facebook.OpenGraphGift;
@@ -92,8 +93,10 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/admin/merchant/accounts", MerchantAccountsPage.class);
 		mountPage("/admin/merchant/books", MerchantDealOffersPage.class);
 		mountPage("/admin/merchant/locations", MerchantLocationsPage.class);
-		mountPage("/admin/merchant/dashboard",MerchantDashboard.class);
-		mountPage("/gift",OpenGraphGift.class);
+		mountPage("/admin/merchant/dashboard", MerchantDashboard.class);
+		mountPage("/admin/merchant/mm", MerchantManagementPage.class);
+
+		mountPage("/gift", OpenGraphGift.class);
 
 		/*
 		 * We need a ONE_PASS_RENDER strategy because pages like search need
