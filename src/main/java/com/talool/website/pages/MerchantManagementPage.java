@@ -16,6 +16,7 @@ import com.talool.website.panel.merchant.MerchantAccountsPanel;
 import com.talool.website.panel.merchant.MerchantDealOffersPanel;
 import com.talool.website.panel.merchant.MerchantDealsPanel;
 import com.talool.website.panel.merchant.MerchantLocationsPanel;
+import com.talool.website.panel.merchant.RedemptionCodeLookupPanel;
 import com.talool.website.util.SecuredPage;
 
 /**
@@ -48,7 +49,6 @@ public class MerchantManagementPage extends BaseManagementPage
 
 		tabs.add(new AbstractTab(new Model<String>("My Deals"))
 		{
-
 			private static final long serialVersionUID = 6405610365875810783L;
 
 			@Override
@@ -91,6 +91,18 @@ public class MerchantManagementPage extends BaseManagementPage
 			public Panel getPanel(String panelId)
 			{
 				return new MerchantAccountsPanel(panelId, getPageParameters());
+			}
+		});
+
+		tabs.add(new AbstractTab(new Model<String>("Redemption Codes"))
+		{
+
+			private static final long serialVersionUID = 5853871222415506440L;
+
+			@Override
+			public Panel getPanel(String panelId)
+			{
+				return new RedemptionCodeLookupPanel(panelId, getPageParameters());
 			}
 		});
 
