@@ -19,6 +19,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.talool.website.pages.AdminLoginPage;
 import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.pages.CustomerSettingsPage;
+import com.talool.website.pages.HealthCheckPage;
 import com.talool.website.pages.HomePage;
 import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.pages.UploadPage;
@@ -95,6 +96,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/admin/merchant/locations", MerchantLocationsPage.class);
 		mountPage("/admin/merchant/dashboard", MerchantDashboard.class);
 		mountPage("/admin/merchant/mm", MerchantManagementPage.class);
+		mountPage("/h", HealthCheckPage.class);
 
 		mountPage("/gift", OpenGraphGift.class);
 
