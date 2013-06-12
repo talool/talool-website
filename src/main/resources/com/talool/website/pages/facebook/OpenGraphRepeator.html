@@ -2,7 +2,7 @@
 <html xmlns:wicket="http://wicket.apache.org">
 	<head prefix="og: http://ogp.me/ns# product: http://ogp.me/ns/product#">
 	
-		<title>A Gift For You on Talool</title>
+		<title><wicket:message key="title"/></title>
 	
 		<meta id="Viewport" name="viewport" width="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
 		
@@ -24,7 +24,12 @@
 		<script src="/js/letters.js"></script>
 		<script src="/js/logo.js"></script>
 		<script src="/js/responsive.js"></script>
-
+		<script>
+	    	window.ooConfig = {
+				logo:{target:"#canvas",bAdmin:false, scale: .30, color:"rgba(255,255,255,1)"},
+				responsive: {mobileClass:"mobile", tabletClass:"tablet", mobileWidth: 750, tabletWidth: 1400, redirectToApp: true}
+			};
+	    </script>
 	</head>
     <body>
     	<div class="header teal-bg">
@@ -32,6 +37,14 @@
 	  	</div>
 	    <div class="gift">
     		<wicket:child/>
+    		<div class="footer">
+				<div class="links teal-font">
+		          	<a href="http://talool.com/support/">Support</a> |
+		            <a href="http://talool.com/legal/">Terms and Conditions</a> |
+		            <a href="http://talool.com/privacy/">Privacy Policy</a>
+				</div>
+		        <div class="copyright true-gray-font">Copyright © 2013, Talool, Inc., Boulder, Colorado, USA</div>
+		    </div>
     		<div id='debug'></div>
 	    </div>
     </body>

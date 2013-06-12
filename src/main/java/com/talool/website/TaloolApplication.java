@@ -24,7 +24,10 @@ import com.talool.website.pages.HomePage;
 import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.pages.UploadPage;
 import com.talool.website.pages.dashboard.MerchantDashboard;
+import com.talool.website.pages.facebook.OpenGraphDeal;
+import com.talool.website.pages.facebook.OpenGraphDealOffer;
 import com.talool.website.pages.facebook.OpenGraphGift;
+import com.talool.website.pages.facebook.OpenGraphLocation;
 import com.talool.website.pages.lists.CustomersPage;
 import com.talool.website.pages.lists.DealOffersPage;
 import com.talool.website.pages.lists.MerchantAccountsPage;
@@ -99,6 +102,9 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/h", HealthCheckPage.class);
 
 		mountPage("/gift", OpenGraphGift.class);
+		mountPage("/deal", OpenGraphDeal.class);
+		mountPage("/offer", OpenGraphDealOffer.class);
+		mountPage("/location", OpenGraphLocation.class);
 
 		/*
 		 * We need a ONE_PASS_RENDER strategy because pages like search need
@@ -119,20 +125,19 @@ public class TaloolApplication extends WebApplication implements Serializable
 		final AuthStrategy authStrat = new AuthStrategy();
 		getSecuritySettings().setAuthorizationStrategy(authStrat);
 		getSecuritySettings().setUnauthorizedComponentInstantiationListener(authStrat);
-
+		getMarkupSettings().setStripWicketTags(true);
+		
 		if (Config.get().getWebsiteMode().equalsIgnoreCase("deployment"))
 		{
 			getDebugSettings().setAjaxDebugModeEnabled(false);
 			getExceptionSettings().setUnexpectedExceptionDisplay(
 					IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
-			getMarkupSettings().setStripWicketTags(true);
 		}
 		else
 		{
 			getDebugSettings().setAjaxDebugModeEnabled(true);
 			getExceptionSettings().setUnexpectedExceptionDisplay(
 					IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
-			getMarkupSettings().setStripWicketTags(false);
 		}
 		// else
 		// {
