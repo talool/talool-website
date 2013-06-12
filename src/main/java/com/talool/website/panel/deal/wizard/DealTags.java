@@ -142,12 +142,8 @@ public class DealTags extends DynamicWizardStep
 	@Override
 	public IDynamicWizardStep next()
 	{
-		AvailableDealOffersListModel listModel = new AvailableDealOffersListModel();
 		Deal deal = (Deal) getDefaultModelObject();
-		if (deal.getMerchant() != null)
-		{
-			listModel.addMerchantId(deal.getMerchant().getId());
-		}
+		AvailableDealOffersListModel listModel = new AvailableDealOffersListModel(deal);
 		return (listModel.isEmpty()) ? this.createDealOfferStep : this.dealAvailabilityStep;
 	}
 

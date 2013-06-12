@@ -48,11 +48,7 @@ public class DealAvailability extends DynamicWizardStep
 		dealPreview.setOutputMarkupId(true);
 		addOrReplace(dealPreview);
 
-		AvailableDealOffersListModel listModel = new AvailableDealOffersListModel();
-		if (deal.getMerchant() != null)
-		{
-			listModel.addMerchantId(deal.getMerchant().getId());
-		}
+		AvailableDealOffersListModel listModel = new AvailableDealOffersListModel(deal);
 		DealOfferSelect dealOfferSelect = new DealOfferSelect("availableDealOffers", new PropertyModel<DealOffer>(this,
 				"dealOffer"), listModel);
 		dealOfferSelect.setRequired(true);
