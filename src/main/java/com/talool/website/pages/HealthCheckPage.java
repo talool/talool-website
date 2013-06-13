@@ -57,7 +57,7 @@ public class HealthCheckPage extends WebPage
 		try
 		{
 			final List<Merchant> merchants = ServiceFactory.get().getTaloolService().getMerchantByName("Talool");
-			add(new Label("health", merchants.size() > 0 ? "OK" : "BAD"));
+			add(new Label("health", merchants.size() > 0 ? merchants.get(0).getName() : "BAD").setRenderBodyOnly(true));
 		}
 		catch (ServiceException e)
 		{
