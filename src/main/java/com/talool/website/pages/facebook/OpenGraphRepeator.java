@@ -3,8 +3,8 @@ package com.talool.website.pages.facebook;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Url;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.DomainFactory;
@@ -27,7 +27,6 @@ public abstract class OpenGraphRepeator extends WebPage {
 	protected transient static final DomainFactory domainFactory = FactoryManager.get()
 			.getDomainFactory();
 	
-	private String ogUrl;
 	private String ogDescription;
 	private String ogType;
 	private String ogImage;
@@ -36,9 +35,6 @@ public abstract class OpenGraphRepeator extends WebPage {
 	public OpenGraphRepeator(PageParameters parameters)
 	{
 		super(parameters);
-		
-		ogUrl = RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(urlFor(OpenGraphRepeator.class, 
-				parameters).toString()));
 	}
 	
 	@Override
@@ -46,7 +42,7 @@ public abstract class OpenGraphRepeator extends WebPage {
 		super.onInitialize();
 
 		WebMarkupContainer url = new WebMarkupContainer("url");
-		url.add(new AttributeModifier("content",ogUrl));
+		url.add(new AttributeModifier("content",getUrl()));
 		add(url);
 		
 		WebMarkupContainer appid = new WebMarkupContainer("app_id");
@@ -89,4 +85,26 @@ public abstract class OpenGraphRepeator extends WebPage {
 		this.ogTitle = ogTitle;
 	}
 	
+	public String getUrl()
+	{
+		StringBuilder sb = new StringBuilder(getHost());
+		sb.append(getUrlPath());
+		return sb.toString();
+	}
+	
+	abstract public String getUrlPath();
+	
+	public String getHost()
+	{
+		Request request = getRequest(); //RequestCycle.get().getRequest();
+		Url url = request.getClientUrl();
+		String hostName = url.getHost();
+		int port = url.getPort();
+		String protocol = url.getProtocol();
+		StringBuilder sb = new StringBuilder(protocol);
+		sb.append("://").append(hostName);
+		if (port > 80) sb.append(":").append(port);
+		
+		return sb.toString();
+	}
 }

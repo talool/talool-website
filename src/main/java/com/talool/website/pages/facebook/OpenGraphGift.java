@@ -92,5 +92,12 @@ public class OpenGraphGift extends OpenGraphRepeator {
 		Label titleLabel = new Label("titleLabel", new PropertyModel<String>(this,"title"));
 		add(titleLabel);
 	}
+	
+	@Override
+	public String getUrlPath() {
+		StringBuilder sb = new StringBuilder("/gift/");
+		sb.append(gift.getId());
+		return sb.toString();
+	}
 
 }

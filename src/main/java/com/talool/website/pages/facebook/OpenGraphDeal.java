@@ -71,5 +71,12 @@ public class OpenGraphDeal extends OpenGraphRepeator {
 		Label titleLabel = new Label("titleLabel", new PropertyModel<String>(this,"title"));
 		add(titleLabel);
 	}
+	
+	@Override
+	public String getUrlPath() {
+		StringBuilder sb = new StringBuilder("/deal/");
+		sb.append(deal.getId());
+		return sb.toString();
+	}
 
 }
