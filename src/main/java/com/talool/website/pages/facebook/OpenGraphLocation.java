@@ -101,5 +101,12 @@ public class OpenGraphLocation extends OpenGraphRepeator {
 		Label titleLabel = new Label("titleLabel", new PropertyModel<String>(this,"title"));
 		add(titleLabel);
 	}
+	
+	@Override
+	public String getUrlPath() {
+		StringBuilder sb = new StringBuilder("/location/");
+		sb.append(location.getId());
+		return sb.toString();
+	}
 
 }

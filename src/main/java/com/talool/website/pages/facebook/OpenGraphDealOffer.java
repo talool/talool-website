@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +42,7 @@ public class OpenGraphDealOffer extends OpenGraphRepeator {
 		{
 			setOgDescription(offer.getSummary());
 			setOgTitle(offer.getTitle());
-			setOgType("dealPack");
+			setOgType("deal_pack");
 			setOgImage(offer.getMerchant().getCurrentLocation().getMerchantImage().getMediaUrl());
 			
 			merchantName = offer.getMerchant().getName();
@@ -67,5 +68,14 @@ public class OpenGraphDealOffer extends OpenGraphRepeator {
 		Label titleLabel = new Label("titleLabel", new PropertyModel<String>(this,"title"));
 		add(titleLabel);
 	}
+
+	@Override
+	public String getUrlPath() {
+		StringBuilder sb = new StringBuilder("/offer/");
+		sb.append(offer.getId());
+		return sb.toString();
+	}
+	
+	
 
 }
