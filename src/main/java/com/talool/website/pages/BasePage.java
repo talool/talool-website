@@ -102,8 +102,13 @@ public abstract class BasePage extends WebPage
 		_actionLink.add(_actionLabel);
 		_actionLink.setOutputMarkupId(true);
 		_action.add(_actionLink);
-		add(_action);
-		
+		add(_action.setVisible(hasActionLink()));
+
+	}
+
+	public boolean hasActionLink()
+	{
+		return true;
 	}
 
 	public SubmitCallBack getCallback(final AdminModalWindow modal)
@@ -127,7 +132,8 @@ public abstract class BasePage extends WebPage
 			}
 
 			@Override
-			public void submitCancel(AjaxRequestTarget target) {
+			public void submitCancel(AjaxRequestTarget target)
+			{
 				modal.close(target);
 				target.add(BasePage.this);
 			}

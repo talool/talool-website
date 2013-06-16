@@ -68,7 +68,7 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 
 		};
 
-		form.add(new TextField<String>("redemptionCode", new PropertyModel<String>(this, "redemptionCode")));
+		form.add(new TextField<String>("redemptionCode", new PropertyModel<String>(this, "redemptionCode")).setRequired(true));
 		add(form);
 
 		add(new ListView<DealAcquire>("redeemedRptr")
@@ -80,10 +80,10 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 			{
 				DealAcquire dac = item.getModelObject();
 				item.add(new Label("redemptionDate", dac.getRedemptionDate()));
-				if (dac.getGeometry() != null)
+				if (dac.getRedeemedAtGeometry() != null)
 				{
-					item.add(new Label("redeemedLocation", "longitude: " + dac.getGeometry().getCoordinate().x + " latitude:"
-							+ dac.getGeometry().getCoordinate().x));
+					item.add(new Label("redeemedLocation", "longitude: " + dac.getRedeemedAtGeometry().getCoordinate().x + " latitude:"
+							+ dac.getRedeemedAtGeometry().getCoordinate().x));
 				}
 				else
 				{

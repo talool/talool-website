@@ -1,9 +1,9 @@
 <wicket:extend>
 <form wicket:id="searchForm">
-<div>
+<div style="padding-bottom:10px;">
 <label>Enter Code:</label>
-<input type="text" wicket:id="redemptionCode">
-<input type="submit" value="search">
+<input type="text" wicket:id="redemptionCode" id="code">
+<input type="submit" class="btn btn-action" value="Search">
 </div>
 </form>
 <wicket:enclosure child="redeemedRptr">
@@ -14,8 +14,7 @@
   				<th>Redemption Date</th>
   				<th>Redeemed Location</th>
   				<th>Customer Name</th>
-  				<th>Customr Email</th>
-  				
+  				<th>Customr Email</th>	
   			</tr>
   		</thead>
   		<tbody>
@@ -29,4 +28,5 @@
   		</tbody>
   	</table>
  </wicket:enclosure>
+<script type="text/javascript">$("#code").focus();</script>
 </wicket:extend>

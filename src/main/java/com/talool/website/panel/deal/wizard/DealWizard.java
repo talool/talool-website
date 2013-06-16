@@ -2,11 +2,9 @@ package com.talool.website.panel.deal.wizard;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.wizard.IWizardStep;
-import org.apache.wicket.extensions.wizard.StaticContentStep;
 import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardModel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,7 +96,6 @@ public class DealWizard extends AbstractWizard<Deal> {
 	@Override
 	protected void onCancel(AjaxRequestTarget target)
 	{
-		this.info("Canceled...");
 		target.add(((BasePage)getPage()).feedback);
 	}
 
