@@ -1,7 +1,5 @@
 package com.talool.website.panel.merchant.wizard;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.TextField;
@@ -11,6 +9,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.UrlValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
@@ -45,20 +45,20 @@ public class MerchantLocation extends WizardStep
 		WebMarkupContainer locationPanel = new WebMarkupContainer("locationPanel");
 		addOrReplace(locationPanel);
 
-		final TextField<String> addr1 = new TextField<String>("currentLocation.address.address1");
+		final TextField<String> addr1 = new TextField<String>("currentLocation.address1");
 		locationPanel.add(addr1.setRequired(true));
 
-		final TextField<String> addr2 = new TextField<String>("currentLocation.address.address2");
+		final TextField<String> addr2 = new TextField<String>("currentLocation.address2");
 		locationPanel.add(addr2);
 
-		final TextField<String> city = new TextField<String>("currentLocation.address.city");
+		final TextField<String> city = new TextField<String>("currentLocation.city");
 		locationPanel.add(city.setRequired(true));
 
-		final StateSelect state = new StateSelect("currentLocation.address.stateProvinceCounty",
+		final StateSelect state = new StateSelect("currentLocation.stateProvinceCounty",
 				new PropertyModel<StateOption>(this, "stateOption"));
 		locationPanel.add(state.setRequired(true));
 
-		locationPanel.add(new TextField<String>("currentLocation.address.zip").setRequired(true));
+		locationPanel.add(new TextField<String>("currentLocation.zip").setRequired(true));
 
 		locationPanel.add(new TextField<String>("currentLocation.locationName"));
 
@@ -74,12 +74,12 @@ public class MerchantLocation extends WizardStep
 	public StateOption getStateOption()
 	{
 		final Merchant merch = (Merchant) getDefaultModelObject();
-		if (merch.getCurrentLocation().getAddress().getStateProvinceCounty() == null)
+		if (merch.getCurrentLocation().getStateProvinceCounty() == null)
 		{
 			return null;
 		}
 
-		return StateSelect.getStateOptionByCode(merch.getCurrentLocation().getAddress()
+		return StateSelect.getStateOptionByCode(merch.getCurrentLocation()
 				.getStateProvinceCounty());
 
 	}
@@ -87,9 +87,9 @@ public class MerchantLocation extends WizardStep
 	public void setStateOption(final StateOption stateOption)
 	{
 		final Merchant merch = (Merchant) getDefaultModelObject();
-		merch.getCurrentLocation().getAddress().setStateProvinceCounty(stateOption.getCode());
+		merch.getCurrentLocation().setStateProvinceCounty(stateOption.getCode());
 	}
-	
+
 	/*
 	 * Save the state of the Merchant.
 	 */
@@ -104,7 +104,8 @@ public class MerchantLocation extends WizardStep
 		{
 			try
 			{
-				// New users need to be saved before we can save the logos, images, geo, etc
+				// New users need to be saved before we can save the logos, images, geo,
+				// etc
 				taloolService.save(merch);
 				StringBuilder sb = new StringBuilder("Saved Merchant with id:");
 				LOG.debug(sb.append(merch.getId()).toString());
@@ -119,8 +120,7 @@ public class MerchantLocation extends WizardStep
 				LOG.error("random-ass-exception saving new merchant:", e);
 			}
 		}
-		
-	}
 
+	}
 
 }

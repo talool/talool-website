@@ -39,7 +39,6 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 		super(id, callback);
 		this.merchantId = merchantId;
 		MerchantLocation merchantLocation = domainFactory.newMerchantLocation();
-		merchantLocation.setAddress(domainFactory.newAddress());
 
 		MerchantMedia logo = domainFactory.newMedia(merchantId, "", MediaType.MERCHANT_LOGO);
 		merchantLocation.setLogo(logo);
@@ -56,20 +55,19 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 	public StateOption getStateOption()
 	{
 		final MerchantLocation loc = (MerchantLocation) getDefaultModelObject();
-		if (loc.getAddress().getStateProvinceCounty() == null)
+		if (loc.getStateProvinceCounty() == null)
 		{
 			return null;
 		}
 
-		return StateSelect.getStateOptionByCode(loc.getAddress()
-				.getStateProvinceCounty());
+		return StateSelect.getStateOptionByCode(loc.getStateProvinceCounty());
 
 	}
 
 	public void setStateOption(final StateOption stateOption)
 	{
 		final MerchantLocation loc = (MerchantLocation) getDefaultModelObject();
-		loc.getAddress().setStateProvinceCounty(stateOption.getCode());
+		loc.setStateProvinceCounty(stateOption.getCode());
 	}
 
 	@Override
@@ -80,18 +78,18 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 		WebMarkupContainer locationPanel = new WebMarkupContainer("locationPanel");
 		form.add(locationPanel);
 
-		locationPanel.add(new TextField<String>("address.address1").setRequired(true));
+		locationPanel.add(new TextField<String>("address1").setRequired(true));
 
-		locationPanel.add(new TextField<String>("address.address2"));
-		locationPanel.add(new TextField<String>("address.city").setRequired(true));
-		locationPanel.add(new TextField<String>("address.zip").setRequired(true));
-		locationPanel.add(new TextField<String>("address.country").setRequired(true));
+		locationPanel.add(new TextField<String>("address2"));
+		locationPanel.add(new TextField<String>("city").setRequired(true));
+		locationPanel.add(new TextField<String>("zip").setRequired(true));
+		locationPanel.add(new TextField<String>("country").setRequired(true));
 		locationPanel.add(new TextField<String>("locationName"));
 		locationPanel.add(new TextField<String>("phone").setRequired(true));
 		locationPanel.add(new TextField<String>("email").setRequired(true));
 		locationPanel.add(new TextField<String>("websiteUrl"));
 
-		final StateSelect state = new StateSelect("address.stateProvinceCounty",
+		final StateSelect state = new StateSelect("stateProvinceCounty",
 				new PropertyModel<StateOption>(this, "stateOption"));
 		state.add(new OnChangeAjaxFormBehavior());
 		locationPanel.add(state.setRequired(true));

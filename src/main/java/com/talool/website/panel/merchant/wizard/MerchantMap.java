@@ -17,7 +17,6 @@ import org.wicketstuff.gmap.api.GLatLng;
 import org.wicketstuff.gmap.api.GMarker;
 import org.wicketstuff.gmap.api.GMarkerOptions;
 
-import com.talool.core.Address;
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
@@ -61,12 +60,11 @@ public class MerchantMap extends WizardStep
 		 * Center the map
 		 */
 		MerchantLocation loc = merchant.getLocations().get(0);
-		Address address;
+
 		try
 		{
-			address = loc.getAddress();
-			Point point = HttpUtils.getGeometry(address.getAddress1(), address.getAddress2(),
-					address.getCity(), address.getStateProvinceCounty());
+			final Point point = HttpUtils.getGeometry(loc.getAddress1(), loc.getAddress2(),
+					loc.getCity(), loc.getStateProvinceCounty());
 
 			GLatLng center = new GLatLng(point.getY(), point.getX());
 			map.setCenter(center);
@@ -82,14 +80,13 @@ public class MerchantMap extends WizardStep
 		List<MerchantLocation> locs = merchant.getLocations();
 		Point pin;
 
-		for (MerchantLocation location : locs)
+		for (final MerchantLocation location : locs)
 		{
-			address = location.getAddress();
 
 			try
 			{
-				pin = HttpUtils.getGeometry(address.getAddress1(), address.getAddress2(),
-						address.getCity(), address.getStateProvinceCounty());
+				pin = HttpUtils.getGeometry(location.getAddress1(), location.getAddress2(),
+						location.getCity(), location.getStateProvinceCounty());
 
 				map.addOverlay(new GMarker(new GMarkerOptions(map, new GLatLng(pin.getY(), pin.getX()))));
 
@@ -115,14 +112,13 @@ public class MerchantMap extends WizardStep
 
 				// create a new location and add it to the merchant
 				MerchantLocation location = domainFactory.newMerchantLocation();
-				location.setAddress(domainFactory.newAddress());
 				MerchantMedia merchLogo = merchant.getCurrentLocation().getLogo();
-				if (merchLogo != null) 
+				if (merchLogo != null)
 				{
 					location.setLogo(merchLogo);
 				}
 				MerchantMedia merchImage = merchant.getCurrentLocation().getMerchantImage();
-				if (merchImage != null) 
+				if (merchImage != null)
 				{
 					location.setMerchantImage(merchImage);
 				}
@@ -157,11 +153,11 @@ public class MerchantMap extends WizardStep
 				item.add(new Label("websiteUrl"));
 				item.add(new Label("email"));
 				item.add(new Label("phone"));
-				item.add(new Label("address.address1"));
-				item.add(new Label("address.address2"));
-				item.add(new Label("address.city"));
-				item.add(new Label("address.stateProvinceCounty"));
-				item.add(new Label("address.zip"));
+				item.add(new Label("address1"));
+				item.add(new Label("address2"));
+				item.add(new Label("city"));
+				item.add(new Label("stateProvinceCounty"));
+				item.add(new Label("zip"));
 
 				item.add(new AjaxLink<Void>("editLink")
 				{

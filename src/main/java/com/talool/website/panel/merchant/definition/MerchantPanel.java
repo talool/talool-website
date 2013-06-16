@@ -73,7 +73,6 @@ public class MerchantPanel extends BaseDefinitionPanel
 
 		Merchant merchant = domainFactory.newMerchant();
 		MerchantLocation location = domainFactory.newMerchantLocation();
-		location.setAddress(domainFactory.newAddress());
 		location.setLogo(domainFactory.newMedia(merchant.getId(), "", MediaType.MERCHANT_LOGO));
 		merchant.addLocation(location);
 
@@ -90,20 +89,19 @@ public class MerchantPanel extends BaseDefinitionPanel
 	public StateOption getStateOption()
 	{
 		final Merchant merch = (Merchant) getDefaultModelObject();
-		if (merch.getPrimaryLocation().getAddress().getStateProvinceCounty() == null)
+		if (merch.getPrimaryLocation().getStateProvinceCounty() == null)
 		{
 			return null;
 		}
 
-		return StateSelect.getStateOptionByCode(merch.getPrimaryLocation().getAddress()
-				.getStateProvinceCounty());
+		return StateSelect.getStateOptionByCode(merch.getPrimaryLocation().getStateProvinceCounty());
 
 	}
 
 	public void setStateOption(final StateOption stateOption)
 	{
 		final Merchant merch = (Merchant) getDefaultModelObject();
-		merch.getPrimaryLocation().getAddress().setStateProvinceCounty(stateOption.getCode());
+		merch.getPrimaryLocation().setStateProvinceCounty(stateOption.getCode());
 	}
 
 	public List<Tag> getTags()
@@ -174,26 +172,26 @@ public class MerchantPanel extends BaseDefinitionPanel
 		 * on our nested form. Could also use it to validate City/Address spellings
 		 * later
 		 */
-		final TextField<String> addr1 = new TextField<String>("primaryLocation.address.address1");
+		final TextField<String> addr1 = new TextField<String>("primaryLocation.address1");
 		addr1.add(new OnChangeAjaxFormBehavior());
 		locationPanel.add(addr1.setRequired(true));
 
-		final TextField<String> addr2 = new TextField<String>("primaryLocation.address.address2");
+		final TextField<String> addr2 = new TextField<String>("primaryLocation.address2");
 		addr2.add(new OnChangeAjaxFormBehavior());
 		locationPanel.add(addr2);
 
-		final TextField<String> city = new TextField<String>("primaryLocation.address.city");
+		final TextField<String> city = new TextField<String>("primaryLocation.city");
 		city.add(new OnChangeAjaxFormBehavior());
 		locationPanel.add(city.setRequired(true));
 
-		final StateSelect state = new StateSelect("primaryLocation.address.stateProvinceCounty",
+		final StateSelect state = new StateSelect("primaryLocation.stateProvinceCounty",
 				new PropertyModel<StateOption>(this, "stateOption"));
 		state.add(new OnChangeAjaxFormBehavior());
 		locationPanel.add(state.setRequired(true));
 
-		locationPanel.add(new TextField<String>("primaryLocation.address.zip").setRequired(true));
+		locationPanel.add(new TextField<String>("primaryLocation.zip").setRequired(true));
 
-		locationPanel.add(new TextField<String>("primaryLocation.address.country").setRequired(true));
+		locationPanel.add(new TextField<String>("primaryLocation.country").setRequired(true));
 
 		locationPanel.add(new TextField<String>("primaryLocation.locationName"));
 

@@ -66,8 +66,8 @@ public class MerchantLocationsPanel extends BaseTabPanel
 				item.add(new Label("websiteUrl"));
 				item.add(new Label("email"));
 				item.add(new Label("phone"));
-				item.add(new Label("address.city"));
-				item.add(new Label("address.stateProvinceCounty"));
+				item.add(new Label("city"));
+				item.add(new Label("stateProvinceCounty"));
 
 				BasePage page = (BasePage) this.getPage();
 				final AdminModalWindow modal = page.getModal();

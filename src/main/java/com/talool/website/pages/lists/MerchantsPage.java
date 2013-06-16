@@ -20,9 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.gmap.GMap;
 
-import com.talool.core.MediaType;
 import com.talool.core.Merchant;
-import com.talool.core.MerchantLocation;
 import com.talool.website.models.MerchantListModel;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.models.ModelUtil;
@@ -90,7 +88,7 @@ public class MerchantsPage extends BasePage
 
 				item.add(namelLink);
 
-				item.add(new Label("primaryLocation.address.niceCityState"));
+				item.add(new Label("primaryLocation.niceCityState"));
 				item.add(new Label("accounts", merchant.getNumberOfMerchantAccounts()));
 
 				// TODO - at some point, this tags label can be based on a model
