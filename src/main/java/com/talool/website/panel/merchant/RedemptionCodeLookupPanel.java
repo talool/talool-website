@@ -3,6 +3,7 @@ package com.talool.website.panel.merchant;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -26,7 +27,9 @@ import com.talool.website.panel.merchant.definition.MerchantAccountPanel;
  */
 public class RedemptionCodeLookupPanel extends BaseTabPanel
 {
+	private static final Logger L = Logger.getLogger(RedemptionCodeLookupPanel.class);
 	private static final long serialVersionUID = 3634980968241854373L;
+
 	private UUID merchantId;
 	private String redemptionCode;
 
@@ -54,7 +57,6 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 					List<DealAcquire> dacs = taloolService.getRedeemedDealAcquires(merchantId, redemptionCode);
 					RedemptionCodeLookupPanel.this.get("redeemedRptr").setDefaultModel(Model.of(dacs));
 					RedemptionCodeLookupPanel.this.get("redeemedRptr").setVisible(true);
-					System.out.println(dacs.size());
 				}
 				catch (ServiceException e)
 				{

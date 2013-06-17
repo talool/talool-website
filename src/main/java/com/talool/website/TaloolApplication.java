@@ -1,7 +1,10 @@
 package com.talool.website;
 
 import java.io.Serializable;
+import java.util.UUID;
 
+import org.apache.wicket.ConverterLocator;
+import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.IPackageResourceGuard;
 import org.apache.wicket.markup.html.SecurePackageResourceGuard;
@@ -16,6 +19,7 @@ import org.apache.wicket.util.lang.PackageName;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.talool.website.converter.UUIDConverter;
 import com.talool.website.pages.AdminLoginPage;
 import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.pages.CustomerSettingsPage;
@@ -29,6 +33,7 @@ import com.talool.website.pages.facebook.OpenGraphDealOffer;
 import com.talool.website.pages.facebook.OpenGraphGift;
 import com.talool.website.pages.facebook.OpenGraphLocation;
 import com.talool.website.pages.lists.CustomersPage;
+import com.talool.website.pages.lists.DealHistoryPage;
 import com.talool.website.pages.lists.DealOffersPage;
 import com.talool.website.pages.lists.MerchantAccountsPage;
 import com.talool.website.pages.lists.MerchantDealOffersPage;
@@ -43,7 +48,16 @@ import com.talool.website.panel.image.upload.FileUploadResourceReference;
  */
 public class TaloolApplication extends WebApplication implements Serializable
 {
+
 	private static final long serialVersionUID = 1954532829422211028L;
+
+	@Override
+	protected IConverterLocator newConverterLocator()
+	{
+		ConverterLocator cloc = (ConverterLocator) super.newConverterLocator();
+		cloc.set(UUID.class, UUIDConverter.get());
+		return cloc;
+	}
 
 	@Override
 	public Session newSession(Request request, Response response)
@@ -90,6 +104,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 
 		mountPage("/admin", AdminLoginPage.class);
 		mountPage("/admin/books", DealOffersPage.class);
+		mountPage("/admin/dh", DealHistoryPage.class);
 		mountPage("/admin/customers", CustomersPage.class);
 		mountPage("/admin/customer/settings", CustomerSettingsPage.class);
 		mountPage("/admin/customer-management", CustomerManagementPage.class);
@@ -126,7 +141,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		getSecuritySettings().setAuthorizationStrategy(authStrat);
 		getSecuritySettings().setUnauthorizedComponentInstantiationListener(authStrat);
 		getMarkupSettings().setStripWicketTags(true);
-		
+
 		if (Config.get().getWebsiteMode().equalsIgnoreCase("deployment"))
 		{
 			getDebugSettings().setAjaxDebugModeEnabled(false);

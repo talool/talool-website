@@ -1,35 +1,57 @@
 package com.talool.website.pages.lists;
 
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.list.Loop;
+import org.apache.wicket.markup.html.list.LoopItem;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.talool.core.Customer;
-import com.talool.website.models.CustomerListModel;
+import com.talool.core.AcquireStatus;
+import com.talool.core.DealAcquire;
+import com.talool.core.DealAcquireHistory;
+import com.talool.core.gift.EmailGift;
+import com.talool.core.gift.FaceBookGift;
+import com.talool.core.gift.Gift;
+import com.talool.core.service.ServiceException;
 import com.talool.website.pages.BasePage;
-import com.talool.website.pages.CustomerManagementPage;
-import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.customer.definition.CustomerPanel;
-import com.talool.website.panel.customer.definition.CustomerPurchaseDealOfferPanel;
-import com.talool.website.panel.customer.definition.CustomerResetPasswordPanel;
 import com.talool.website.util.SecuredPage;
 
+/**
+ * 
+ * @author clintz
+ * 
+ */
 @SecuredPage
 public class DealHistoryPage extends BasePage
 {
+	private static final Logger LOG = Logger.getLogger(DealHistoryPage.class);
+
 	private static final long serialVersionUID = 2102415289760762365L;
+
+	private static final String HISTORY_REPEATER = "historyRptr";
+	private static final String CURRENT_CONTAINER = "currentContainer";
+	private static final String NO_HISTORY_AVAIL = "noHistoryAvailable";
+
+	private List<DealAcquireHistory> histories;
+
+	private UUID elementId;
+	private boolean isGiftSearch = false;
 
 	public DealHistoryPage()
 	{
@@ -39,6 +61,15 @@ public class DealHistoryPage extends BasePage
 	public DealHistoryPage(PageParameters parameters)
 	{
 		super(parameters);
+		if (parameters.get("d").toString() != null)
+		{
+			elementId = UUID.fromString(parameters.get("d").toString());
+		}
+		else if (parameters.get("g").toString() != null)
+		{
+			elementId = UUID.fromString(parameters.get("g").toString());
+			isGiftSearch = true;
+		}
 	}
 
 	public boolean hasActionLink()
@@ -46,105 +77,148 @@ public class DealHistoryPage extends BasePage
 		return false;
 	}
 
+	private void getHistory()
+	{
+		try
+		{
+			WebMarkupContainer container = (WebMarkupContainer) DealHistoryPage.this.get(CURRENT_CONTAINER);
+
+			if (isGiftSearch)
+			{
+				histories = taloolService.getDealAcquireHistoryByGiftId(elementId, false);
+			}
+			else
+			{
+				histories = taloolService.getDealAcquireHistory(elementId, false);
+			}
+
+			if (!CollectionUtils.isEmpty(histories))
+			{
+				// make sure to add 1 so we can stuff the current status
+				// (dealAcquire)
+				// in the first row
+				container.get(HISTORY_REPEATER).setDefaultModel(Model.of(histories.size() + 1));
+				container.get(HISTORY_REPEATER).setVisible(true);
+
+				container.setVisible(true);
+				container.setDefaultModel(new CompoundPropertyModel<DealAcquire>(histories.get(0).getDealAcquire()));
+			}
+			else
+			{
+				get(NO_HISTORY_AVAIL).setVisible(true);
+				get(NO_HISTORY_AVAIL).modelChanged();
+			}
+
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("Problem getting dealAcquireHistory " + e.getLocalizedMessage(), e);
+			error("Problem getting dealAcquireHistory");
+		}
+	}
+
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
 
-		final ListView<Customer> customers = new ListView<Customer>("customerRptr",
-				new CustomerListModel())
-		{
+		add(new Label(NO_HISTORY_AVAIL).setVisible(false));
 
-			private static final long serialVersionUID = 4104816505968727445L;
+		Form<Void> form = new Form<Void>("historyForm")
+		{
+			private static final long serialVersionUID = -477362909507132959L;
 
 			@Override
-			protected void populateItem(ListItem<Customer> item)
+			protected void onSubmit()
 			{
-				Customer customer = item.getModelObject();
-				final UUID customerId = customer.getId();
+				getHistory();
+			}
+		};
 
-				item.setModel(new CompoundPropertyModel<Customer>(customer));
+		add(form);
+		form.add(new TextField<UUID>("elementId", new PropertyModel<UUID>(this, "elementId"), UUID.class));
+
+		WebMarkupContainer currentContainer = new WebMarkupContainer(CURRENT_CONTAINER);
+		add(currentContainer.setVisible(false));
+
+		final Loop history = new Loop(HISTORY_REPEATER, new Model<Integer>(0))
+		{
+
+			private static final long serialVersionUID = 462664541713299654L;
+
+			@Override
+			protected void populateItem(LoopItem item)
+			{
+				Fragment giftTo = null;
+				Date date = null;
+				AcquireStatus acquireStatus = null;
+				String customerEmail = null;
+				Gift gift = null;
+
+				if (item.getIndex() == 0)
+				{
+					DealAcquire dac = histories.get(0).getDealAcquire();
+					date = dac.getUpdated();
+					acquireStatus = dac.getAcquireStatus();
+					customerEmail = dac.getCustomer().getEmail();
+					gift = dac.getGift();
+				}
+				else
+				{
+					DealAcquireHistory history = histories.get(item.getIndex() - 1);
+					date = history.getUpdated();
+					acquireStatus = history.getAcquireStatus();
+					customerEmail = history.getCustomer().getEmail();
+					gift = history.getGift();
+				}
 
 				if (item.getIndex() % 2 == 0)
 				{
 					item.add(new AttributeModifier("class", "gray0-bg"));
 				}
 
-				item.add(new Label("firstName"));
-				item.add(new Label("lastName"));
+				item.add(new Label("date", date));
+				item.add(new Label("acquireStatus2", acquireStatus));
+				item.add(new Label("customerEmail", customerEmail));
 
-				PageParameters customerParams = new PageParameters();
-				customerParams.set("id", customer.getId());
-				customerParams.set("email", customer.getEmail());
-				String url = (String) urlFor(CustomerManagementPage.class, customerParams);
-				ExternalLink emailLink = new ExternalLink("emailLink", Model.of(url),
-						new PropertyModel<String>(customer, "email"));
-				item.add(emailLink);
-
-				final AdminModalWindow definitionModal = getModal();
-				final SubmitCallBack callback = getCallback(definitionModal);
-				item.add(new AjaxLink<Void>("editLink")
+				if (gift == null)
 				{
-
-					private static final long serialVersionUID = -4592149231430681542L;
-
-					@Override
-					public void onClick(AjaxRequestTarget target)
-					{
-						getSession().getFeedbackMessages().clear();
-						CustomerPanel panel = new CustomerPanel(definitionModal.getContentId(), callback,
-								customerId);
-						definitionModal.setContent(panel);
-						definitionModal.setTitle("Edit Customer");
-						definitionModal.show(target);
-					}
-				});
-
-				item.add(new AjaxLink<Void>("pwLink")
+					giftTo = new Fragment("giftTo", "notGifted", DealHistoryPage.this);
+				}
+				// Be careful. Gift is Lazy loaded instanceof will break!
+				else if (gift instanceof FaceBookGift)
 				{
-
-					private static final long serialVersionUID = 8581489018535203283L;
-
-					@Override
-					public void onClick(AjaxRequestTarget target)
-					{
-						getSession().getFeedbackMessages().clear();
-						CustomerResetPasswordPanel panel = new CustomerResetPasswordPanel(definitionModal.getContentId(), callback,
-								customerId);
-						definitionModal.setContent(panel);
-						definitionModal.setTitle("Reset Password");
-						definitionModal.show(target);
-					}
-				});
-
-				item.add(new AjaxLink<Void>("dealOfferLink")
+					giftTo = new Fragment("giftTo", "facebook", DealHistoryPage.this);
+					giftTo.add(new Label("name", gift.getReceipientName()));
+				}
+				else if (gift instanceof EmailGift)
 				{
+					giftTo = new Fragment("giftTo", "email", DealHistoryPage.this);
+					giftTo.add(new Label("email", ((EmailGift) gift).getToEmail()));
+				}
 
-					private static final long serialVersionUID = 7381871678482983865L;
-
-					@Override
-					public void onClick(AjaxRequestTarget target)
-					{
-						getSession().getFeedbackMessages().clear();
-						CustomerPurchaseDealOfferPanel panel = new CustomerPurchaseDealOfferPanel(definitionModal.getContentId(), callback,
-								customerId);
-						definitionModal.setContent(panel);
-						definitionModal.setTitle("Purchase Deal Offer");
-						definitionModal.show(target);
-					}
-				});
-
+				item.add(giftTo);
 			}
-
 		};
 
-		add(customers);
+		currentContainer.add(history);
+
+		currentContainer.add(new Label("deal.merchant.name"));
+		currentContainer.add(new Label("deal.title"));
+		currentContainer.add(new Label("deal.dealOffer.title"));
+		currentContainer.add(new Label("deal.created"));
+
+		if (elementId != null)
+		{
+			getHistory();
+		}
+
 	}
 
 	@Override
 	public String getHeaderTitle()
 	{
-		return "Deal History";
+		return "Deal Acquire History";
 	}
 
 	@Override

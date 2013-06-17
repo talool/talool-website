@@ -49,6 +49,7 @@ public class AdminLoginPage extends WebPage
 					if (mAccnt != null)
 					{
 						SessionUtils.getSession().setMerchantAccount(mAccnt);
+						continueToOriginalDestination();
 						setResponsePage(MerchantsPage.class);
 					}
 				}
