@@ -29,6 +29,7 @@ import com.talool.core.gift.EmailGift;
 import com.talool.core.gift.FaceBookGift;
 import com.talool.core.gift.Gift;
 import com.talool.core.service.ServiceException;
+import com.talool.service.ServiceFactory;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.customer.definition.CustomerPanel;
@@ -50,6 +51,7 @@ public class DealHistoryPage extends BasePage
 	private static final String CURRENT_CONTAINER = "currentContainer";
 
 	private List<DealAcquireHistory> histories;
+	private DealAcquire dealAcquire;
 
 	private enum HistoryLookupType
 	{
@@ -99,22 +101,31 @@ public class DealHistoryPage extends BasePage
 				histories = taloolService.getDealAcquireHistory(elementId, false);
 			}
 
-			if (!CollectionUtils.isEmpty(histories))
+			if (CollectionUtils.isEmpty(histories))
+			{
+				// get the raw DealAcquire if no history. The current DealAcquire is the
+				// only record
+				dealAcquire = ServiceFactory.get().getCustomerService().getDealAcquire(elementId);
+				if (dealAcquire == null || dealAcquire.getId() == null)
+				{
+					container.setVisible(false);
+					warn("There is no DealAcquire for that ID");
+					return;
+				}
+				container.get(HISTORY_REPEATER).setDefaultModel(Model.of(1));
+				container.setDefaultModel(new CompoundPropertyModel<DealAcquire>(dealAcquire));
+			}
+			else
 			{
 				// make sure to add 1 so we can stuff the current status
 				// (dealAcquire)
 				// in the first row
 				container.get(HISTORY_REPEATER).setDefaultModel(Model.of(histories.size() + 1));
-				container.get(HISTORY_REPEATER).setVisible(true);
-
-				container.setVisible(true);
 				container.setDefaultModel(new CompoundPropertyModel<DealAcquire>(histories.get(0).getDealAcquire()));
 			}
-			else
-			{
-				container.setVisible(false);
-				warn("There is no history available");
-			}
+
+			container.setVisible(true);
+			container.get(HISTORY_REPEATER).setVisible(true);
 
 		}
 		catch (ServiceException e)
@@ -166,7 +177,7 @@ public class DealHistoryPage extends BasePage
 
 				if (item.getIndex() == 0)
 				{
-					DealAcquire dac = histories.get(0).getDealAcquire();
+					DealAcquire dac = dealAcquire == null ? histories.get(0).getDealAcquire() : dealAcquire;
 					date = dac.getUpdated();
 					acquireStatus = dac.getAcquireStatus();
 					customerEmail = dac.getCustomer().getEmail();
