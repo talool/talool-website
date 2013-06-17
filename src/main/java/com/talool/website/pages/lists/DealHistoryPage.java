@@ -1,5 +1,6 @@
 package com.talool.website.pages.lists;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -9,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.Loop;
@@ -46,12 +48,17 @@ public class DealHistoryPage extends BasePage
 
 	private static final String HISTORY_REPEATER = "historyRptr";
 	private static final String CURRENT_CONTAINER = "currentContainer";
-	private static final String NO_HISTORY_AVAIL = "noHistoryAvailable";
 
 	private List<DealAcquireHistory> histories;
 
+	private enum HistoryLookupType
+	{
+		GiftId, DealAcquireId
+	};
+
+	private HistoryLookupType selectedHistoryLookupType = HistoryLookupType.DealAcquireId;
+
 	private UUID elementId;
-	private boolean isGiftSearch = false;
 
 	public DealHistoryPage()
 	{
@@ -68,7 +75,7 @@ public class DealHistoryPage extends BasePage
 		else if (parameters.get("g").toString() != null)
 		{
 			elementId = UUID.fromString(parameters.get("g").toString());
-			isGiftSearch = true;
+			selectedHistoryLookupType = HistoryLookupType.GiftId;
 		}
 	}
 
@@ -83,7 +90,7 @@ public class DealHistoryPage extends BasePage
 		{
 			WebMarkupContainer container = (WebMarkupContainer) DealHistoryPage.this.get(CURRENT_CONTAINER);
 
-			if (isGiftSearch)
+			if (selectedHistoryLookupType == HistoryLookupType.GiftId)
 			{
 				histories = taloolService.getDealAcquireHistoryByGiftId(elementId, false);
 			}
@@ -105,8 +112,8 @@ public class DealHistoryPage extends BasePage
 			}
 			else
 			{
-				get(NO_HISTORY_AVAIL).setVisible(true);
-				get(NO_HISTORY_AVAIL).modelChanged();
+				container.setVisible(false);
+				warn("There is no history available");
 			}
 
 		}
@@ -122,8 +129,6 @@ public class DealHistoryPage extends BasePage
 	{
 		super.onInitialize();
 
-		add(new Label(NO_HISTORY_AVAIL).setVisible(false));
-
 		Form<Void> form = new Form<Void>("historyForm")
 		{
 			private static final long serialVersionUID = -477362909507132959L;
@@ -134,6 +139,10 @@ public class DealHistoryPage extends BasePage
 				getHistory();
 			}
 		};
+
+		form.add(new DropDownChoice<HistoryLookupType>("historyLookup",
+				new PropertyModel<HistoryLookupType>(this, "selectedHistoryLookupType"),
+				Arrays.asList(HistoryLookupType.values())));
 
 		add(form);
 		form.add(new TextField<UUID>("elementId", new PropertyModel<UUID>(this, "elementId"), UUID.class));

@@ -1,7 +1,7 @@
 <wicket:extend>
 <form wicket:id="historyForm">
 <div style="padding-bottom:10px;">
-<select>
+<select wicket:id="historyLookup">
   <option value="dealAcquireId">DealAcquire ID</option>
   <option value="giftId">Gift ID</option>
 </select> 
@@ -41,7 +41,7 @@
   		</thead>
   		<tbody>
   			<tr class="odd" wicket:id="historyRptr">
-  				<td><a href="#" wicket:id="date"></a></td>
+  				<td wicket:id="date"></td>
   				<td wicket:id="acquireStatus2">PURCHASED</td>
   				<td wicket:id="customerEmail">McCuen</td>
   				<td><span wicket:id="giftTo"></span></td>
@@ -49,7 +49,6 @@
   		</tbody>
   	</table>
  </div>
-<p wicket:id="noHistoryAvailable">There is no history available</p>
  <wicket:fragment wicket:id="facebook"><img src="/img/fb.jpg" width="20" height="20" style="vertical-align:middle"><span wicket:id="name"></span></wicket:fragment>
  <wicket:fragment wicket:id="email"><img src="/img/email-i.jpg" width="20" height="20" style="vertical-align:middle"/><span wicket:id="email"></span></wicket:fragment>
  <wicket:fragment wicket:id="notGifted">N/A</wicket:fragment>
