@@ -36,6 +36,16 @@ import com.talool.website.panel.customer.definition.CustomerPanel;
 import com.talool.website.util.SecuredPage;
 
 /**
+ * History page. Keep in mind a DealAcquire object only has history records when
+ * updates occur. In other words, if a DealAcquire record is created, that
+ * record represent the current state.
+ * 
+ * It isn't until a state change, gift, etc take place (an update) which forms a
+ * DealAcquireHistory record. This saves persistence space by not forming
+ * duplicate records until updates occur. Therefore special cases occur when
+ * looking into the history: either a DealAcquire record exists (current state)
+ * or a DealAcquire record + any DealAcquireHistory formed from updates.
+ * 
  * 
  * @author clintz
  * 
@@ -120,6 +130,7 @@ public class DealHistoryPage extends BasePage
 				// make sure to add 1 so we can stuff the current status
 				// (dealAcquire)
 				// in the first row
+				dealAcquire = histories.get(0).getDealAcquire();
 				container.get(HISTORY_REPEATER).setDefaultModel(Model.of(histories.size() + 1));
 				container.setDefaultModel(new CompoundPropertyModel<DealAcquire>(histories.get(0).getDealAcquire()));
 			}
@@ -177,11 +188,10 @@ public class DealHistoryPage extends BasePage
 
 				if (item.getIndex() == 0)
 				{
-					DealAcquire dac = dealAcquire == null ? histories.get(0).getDealAcquire() : dealAcquire;
-					date = dac.getUpdated();
-					acquireStatus = dac.getAcquireStatus();
-					customerEmail = dac.getCustomer().getEmail();
-					gift = dac.getGift();
+					date = dealAcquire.getUpdated();
+					acquireStatus = dealAcquire.getAcquireStatus();
+					customerEmail = dealAcquire.getCustomer().getEmail();
+					gift = dealAcquire.getGift();
 				}
 				else
 				{
