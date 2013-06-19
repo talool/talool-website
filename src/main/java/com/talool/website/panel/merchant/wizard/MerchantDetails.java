@@ -8,6 +8,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
@@ -50,6 +51,8 @@ public class MerchantDetails extends WizardStep
 
 		// TODO check for duplicate merchant names
 		descriptionPanel.add(new TextField<String>("name").setRequired(true));
+
+		descriptionPanel.add(new CheckBox("isDiscoverable").setRequired(true));
 
 		final ListMultipleChoice<Tag> tagChoices = new ListMultipleChoice<Tag>("tags",
 				new PropertyModel<List<Tag>>(this, "tags"), new CategoryTagListModel(getCategory()),
