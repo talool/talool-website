@@ -167,7 +167,7 @@ public class DealHistoryPage extends BasePage
 				Arrays.asList(HistoryLookupType.values())));
 
 		add(form);
-		form.add(new TextField<UUID>("elementId", new PropertyModel<UUID>(this, "elementId"), UUID.class));
+		form.add(new TextField<UUID>("elementId", new PropertyModel<UUID>(this, "elementId"), UUID.class).setRequired(true));
 
 		WebMarkupContainer currentContainer = new WebMarkupContainer(CURRENT_CONTAINER);
 		add(currentContainer.setVisible(false));
@@ -260,7 +260,7 @@ public class DealHistoryPage extends BasePage
 	@Override
 	public String getNewDefinitionPanelTitle()
 	{
-		return "Create New Customer";
+		return null;
 	}
 
 }
