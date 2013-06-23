@@ -6,7 +6,6 @@
 		<artifactId>talool-base</artifactId>
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>com.talool</groupId>
 	<artifactId>talool-website</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
@@ -35,8 +34,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.talool</groupId>
-			<artifactId>talool-persistence</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<artifactId>talool-service</artifactId>
+			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
