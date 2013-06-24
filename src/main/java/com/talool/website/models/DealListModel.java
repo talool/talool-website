@@ -42,7 +42,7 @@ public class DealListModel extends LoadableDetachableModel<List<Deal>>
 			}
 			else if (_method == LOAD_METHOD.DEAL_OFFER)
 			{
-				deals = ServiceFactory.get().getTaloolService().getDealsByDealOfferId(_dealOfferId);
+				deals = ServiceFactory.get().getTaloolService().getDealsByDealOfferId(_dealOfferId, null, null);
 			}
 		}
 		catch (ServiceException se)

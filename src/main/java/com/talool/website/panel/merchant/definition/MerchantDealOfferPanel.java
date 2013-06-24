@@ -89,24 +89,28 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		form.add(new DealTypeDropDownChoice("dealType").setRequired(true));
 		form.add(new TextField<String>("title").setRequired(true));
 		form.add(new TextField<String>("summary"));
+		form.add(new TextField<String>("locationName"));
 		form.add(new TextField<String>("price"));
 
 		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
 		form.add(new DateTextField("expires", converter));
 
 		form.add(new CheckBox("isActive"));
-		
+
 		DealOffer dealOffer = (DealOffer) getDefaultModelObject();
 		image = dealOffer.getImage();
-		PropertyModel<MerchantMedia> selectedMediaModel = new PropertyModel<MerchantMedia>(this,"image");
-		mediaPanel = 
-				new MerchantMediaWizardPanel("dealOfferLogo", dealOffer.getMerchant().getId(), MediaType.DEAL_OFFER_LOGO, selectedMediaModel) {
-			private static final long serialVersionUID = 1L;
+		PropertyModel<MerchantMedia> selectedMediaModel = new PropertyModel<MerchantMedia>(this, "image");
+		mediaPanel =
+				new MerchantMediaWizardPanel("dealOfferLogo", dealOffer.getMerchant().getId(), MediaType.DEAL_OFFER_LOGO,
+						selectedMediaModel)
+				{
+					private static final long serialVersionUID = 1L;
 
-			@Override
-			public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media) {}
-			
-		};
+					@Override
+					public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media)
+					{}
+
+				};
 		form.add(mediaPanel);
 
 	}
@@ -137,11 +141,12 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		}
 
 		dealOffer.setUpdatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
-		
-		if (image != null) {
+
+		if (image != null)
+		{
 			dealOffer.setImage(image);
 		}
-		
+
 		// merchant could of changed, make sure to reset it
 		final Merchant merch = taloolService.getMerchantById(owningMerchant.getId());
 		dealOffer.setMerchant(merch);
