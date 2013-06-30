@@ -1,0 +1,7 @@
+.services li {
+	text-align: left;
+	margin-bottom: 15px;
+}
+.services li b {
+	display: block;
+}

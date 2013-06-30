@@ -27,6 +27,12 @@ import com.talool.website.pages.HealthCheckPage;
 import com.talool.website.pages.HomePage;
 import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.pages.UploadPage;
+import com.talool.website.pages.corporate.ConsumerServices;
+import com.talool.website.pages.corporate.Feedback;
+import com.talool.website.pages.corporate.MerchantServices;
+import com.talool.website.pages.corporate.PrivacyPolicy;
+import com.talool.website.pages.corporate.PublisherServices;
+import com.talool.website.pages.corporate.TermsOfService;
 import com.talool.website.pages.dashboard.MerchantDashboard;
 import com.talool.website.pages.facebook.OpenGraphDeal;
 import com.talool.website.pages.facebook.OpenGraphDealOffer;
@@ -120,6 +126,13 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/deal", OpenGraphDeal.class);
 		mountPage("/offer", OpenGraphDealOffer.class);
 		mountPage("/location", OpenGraphLocation.class);
+		
+		mountPage("/privacy", PrivacyPolicy.class);
+		mountPage("/terms", TermsOfService.class);
+		mountPage("/feedback", Feedback.class);
+		mountPage("/services/merchants", MerchantServices.class);
+		mountPage("/services/publishers", PublisherServices.class);
+		mountPage("/services/consumers", ConsumerServices.class);
 
 		/*
 		 * We need a ONE_PASS_RENDER strategy because pages like search need
