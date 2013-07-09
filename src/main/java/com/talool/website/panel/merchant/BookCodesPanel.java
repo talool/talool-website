@@ -15,6 +15,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -90,8 +91,10 @@ public class BookCodesPanel extends BaseTabPanel
 			protected void populateItem(final ListItem<ActivationSummary> item)
 			{
 				final ActivationSummary summary = item.getModelObject();
-				item.add(new Label("dealOfferTitle", summary.getTitle()));
-				item.add(new Label("totalCodes", summary.getTotalCodes()));
+				item.setDefaultModel(new CompoundPropertyModel<ActivationSummary>(summary));
+				item.add(new Label("title"));
+				item.add(new Label("totalCodes"));
+				item.add(new Label("totalActivations"));
 
 				if (item.getIndex() % 2 == 0)
 				{
