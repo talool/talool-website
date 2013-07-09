@@ -12,6 +12,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.merchant.BookCodesPanel;
 import com.talool.website.panel.merchant.MerchantAccountsPanel;
 import com.talool.website.panel.merchant.MerchantDealOffersPanel;
 import com.talool.website.panel.merchant.MerchantDealsPanel;
@@ -105,6 +106,25 @@ public class MerchantManagementPage extends BaseManagementPage
 				return new RedemptionCodeLookupPanel(panelId, getPageParameters());
 			}
 		});
+
+		/*
+		 * Yes i am doing this very special case. Payback book codes only render
+		 * this tab!
+		 */
+		if (getPageParameters().get("name").toString().equalsIgnoreCase("Payback Book"))
+		{
+			tabs.add(new AbstractTab(new Model<String>("Book Codes"))
+			{
+
+				private static final long serialVersionUID = 5853871222415506440L;
+
+				@Override
+				public Panel getPanel(String panelId)
+				{
+					return new BookCodesPanel(panelId, getPageParameters());
+				}
+			});
+		}
 
 		final AjaxTabbedPanel<ITab> tabbedPanel = new AjaxTabbedPanel<ITab>("tabs", tabs)
 		{

@@ -1,0 +1,33 @@
+<wicket:extend>
+<wicket:enclosure child="codeRptr">
+  	<table>
+  	<thead>
+  			<tr class="gray1-bg">
+  				<th>Deal Offer Title</th>
+  				<th>Total Codes</th>
+  				<th>Actions</th>
+  			</tr>
+  		</thead>
+  		<tbody>
+  			<tr wicket:id="codeRptr">
+  				<td wicket:id="dealOfferTitle"></td>
+  				<td wicket:id="totalCodes"></td>
+  				<td>
+  				<div>
+  				<div style="float:left;border:1px solid black;padding:3px;width:290px">
+  				<form wicket:id="generateCodesForm">
+  				+ <input wicket:id="newCodesTotal" type="text" maxlength="5" style="width:35px;height:10px">
+  				<input type="submit" value="generate more codes"/>
+  				</form>
+  				</div>
+  				<div style="float:left;margin-left:20px;margin-top:5px;">
+  				<a wicket:id="downloadCodesLink" href="#" title="Download Codes"><i class="icon-download icon-2x"></i></a>
+  				</div>
+  				</div>
+  				</td>
+  			</tr>
+  		</tbody>
+  	</table>
+ </wicket:enclosure>
+<script type="text/javascript">$("#code").focus();</script>
+</wicket:extend>
