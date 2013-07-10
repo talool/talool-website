@@ -89,7 +89,6 @@ public class MerchantsPage extends BasePage
 				item.add(namelLink);
 
 				item.add(new Label("primaryLocation.niceCityState"));
-				item.add(new Label("accounts", merchant.getNumberOfMerchantAccounts()));
 
 				// TODO - at some point, this tags label can be based on a model
 				item.add(new Label("tags", ModelUtil.geTagSummary(merchant)));

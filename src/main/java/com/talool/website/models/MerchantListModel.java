@@ -28,7 +28,7 @@ public class MerchantListModel extends LoadableDetachableModel<List<Merchant>>
 
 		try
 		{
-			merchants = ServiceFactory.get().getTaloolService().getMerchants();
+			merchants = ServiceFactory.get().getTaloolService().getAllMerchants();
 		}
 		catch (ServiceException e)
 		{
