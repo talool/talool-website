@@ -10,12 +10,14 @@ import org.apache.wicket.util.io.IOUtils;
 import org.apache.wicket.util.upload.FileItem;
 
 import com.talool.website.Config;
+import com.talool.website.util.SafeSimpleDateFormat;
 
 public class FileUploadUtils
 {
 
 	private static final String baseUrl = Config.get().getStaticLogoBaseUrl();
 	private static final String baseUploadDir = Config.get().getUploadDir();
+	private static final SafeSimpleDateFormat dateFormat = new SafeSimpleDateFormat("yyMMddHHmmss");
 
 	public static String getImageUrl(FileItem image, UUID merchantId)
 	{
@@ -56,8 +58,13 @@ public class FileUploadUtils
 	public static File getFile(FileItem image, UUID merchantId, boolean original) throws IOException
 	{
 		Folder folder = getImageDir(merchantId, original);
-		String name = (original) ? image.getName() : getPngFileName(image);
+		String name = (original) ? prefixUniqueAndClean(image.getName()) : getPngFileName(image);
 		return new File(folder, name);
+	}
+
+	public static String prefixUniqueAndClean(final String fileName)
+	{
+		return dateFormat.format(System.currentTimeMillis()) + fileName.replaceAll(" ", "_");
 	}
 
 	/*
@@ -91,8 +98,8 @@ public class FileUploadUtils
 	public static String getPngFileName(String imageName)
 	{
 		int dot = imageName.lastIndexOf(".");
-		StringBuilder sb = new StringBuilder(imageName.substring(0, dot));
+		final StringBuilder sb = new StringBuilder();
+		sb.append(prefixUniqueAndClean(imageName.substring(0, dot)));
 		return sb.append(".png").toString();
 	}
-
 }
