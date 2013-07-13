@@ -1,6 +1,5 @@
 package com.talool.website.panel.deal;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
@@ -15,11 +14,12 @@ import com.talool.core.Deal;
 import com.talool.core.DealOffer;
 import com.talool.core.MerchantLocation;
 import com.talool.website.component.StaticImage;
+import com.talool.website.util.SafeSimpleDateFormat;
 
 public class DealPreview extends Panel
 {
 	private static final String NEVER_EXPIRES = "Never";
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+	private static final SafeSimpleDateFormat dateFormat = new SafeSimpleDateFormat("MM/dd/yyyy");
 
 	public String title, summary, details, code, imageUrl;
 	public String merchantLogoUrl, dealOfferLogoUrl;
@@ -36,7 +36,6 @@ public class DealPreview extends Panel
 	public DealPreview(String id, Deal deal)
 	{
 		super(id);
-
 
 		init(deal);
 	}
@@ -67,10 +66,10 @@ public class DealPreview extends Panel
 		}
 
 		MerchantLocation loc = deal.getMerchant().getCurrentLocation();
-		merchantLogoUrl = (loc.getLogo() == null) ? defaultMerchantLogoUrl:loc.getLogo().getMediaUrl();
-		
+		merchantLogoUrl = (loc.getLogo() == null) ? defaultMerchantLogoUrl : loc.getLogo().getMediaUrl();
+
 		DealOffer offer = deal.getDealOffer();
-		dealOfferLogoUrl = (offer == null || offer.getImage()==null)?defaultDealOfferLogoUrl:offer.getImage().getMediaUrl();
+		dealOfferLogoUrl = (offer == null || offer.getImage() == null) ? defaultDealOfferLogoUrl : offer.getImage().getMediaUrl();
 	}
 
 	@Override
