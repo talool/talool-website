@@ -16,59 +16,72 @@ import com.talool.website.panel.image.upload.manipulator.AbstractMagick;
 import com.talool.website.panel.image.upload.manipulator.IMagickFactory;
 import com.talool.website.panel.image.upload.manipulator.MagickFactory;
 
-
 /**
- * A simple file manager that knows how to store, read and delete files
- * from the file system.
+ * A simple file manager that knows how to store, read and delete files from the
+ * file system.
  */
 public class FileManager
 {
-    private final Folder baseFolder;
-    private final IMagickFactory magickFactory;
+	private final Folder baseFolder;
+	private final IMagickFactory magickFactory;
 
-    public FileManager(final String baseFolder)
-    {
-        this.baseFolder = new Folder(baseFolder);
-        this.magickFactory = new MagickFactory();
-    }
+	public FileManager(final String baseFolder)
+	{
+		this.baseFolder = new Folder(baseFolder);
+		this.magickFactory = new MagickFactory();
+	}
 
-    public int save(FileItem fileItem) throws IOException
-    {
-        File file = new File(baseFolder, fileItem.getName());
-        FileOutputStream fileOS = new FileOutputStream(file, false);
-        return IOUtils.copy(fileItem.getInputStream(), fileOS);
-    }
-    
-    public void process(FileItem image, MediaType mediaType, UUID merchantId) throws IOException
-    {
-    	// stash the original file
-    	FileUploadUtils.saveImage(image, merchantId, true);
-    	
-    	// write it to the base folder
-    	save(image);
-    	
-    	// process the file
-    	AbstractMagick magick = (AbstractMagick)
-    			this.magickFactory.getMagickForMediaType(mediaType);
-    	magick.setInputFile(FileUploadUtils.getFile(image));
-    	magick.setOutputFile(FileUploadUtils.getFile(image, merchantId, false));
-    	magick.process();
-    	
-    	// clean up the base folder
-    	delete(image.getName());
+	public int save(FileItem fileItem) throws IOException
+	{
+		File file = new File(baseFolder, fileItem.getName());
+		FileOutputStream fileOS = new FileOutputStream(file, false);
+		return IOUtils.copy(fileItem.getInputStream(), fileOS);
+	}
 
-    }
+	/**
+	 * 
+	 * @param image
+	 * @param mediaType
+	 * @param merchantId
+	 * @return The output file created
+	 * @throws IOException
+	 */
+	public File process(FileItem image, MediaType mediaType, UUID merchantId) throws IOException
+	{
+		// stash the original file
+		FileUploadUtils.saveImage(image, merchantId, true);
 
-    // NOTE: we're not using this, but it is broken when "process" is used
-    public byte[] get(String fileName) throws IOException {
-        File file = new File(baseFolder, fileName);
-        return IOUtils.toByteArray(new FileInputStream(file));
-    }
+		// write it to the base folder
+		save(image);
 
-    // NOTE: we're not using this, but it is broken when "process" is used
-    public boolean delete(String fileName)
-    {
-        File file = new File(baseFolder, fileName);
-        return Files.remove(file);
-    }
+		// process the file
+		final AbstractMagick magick = (AbstractMagick)
+				this.magickFactory.getMagickForMediaType(mediaType);
+		magick.setInputFile(FileUploadUtils.getFile(image));
+
+		final File transformedOutFile = FileUploadUtils.getFile(image, merchantId, false);
+		magick.setOutputFile(FileUploadUtils.getFile(image, merchantId, false));
+
+		magick.process();
+
+		// clean up the base folder
+		delete(image.getName());
+
+		return transformedOutFile;
+
+	}
+
+	// NOTE: we're not using this, but it is broken when "process" is used
+	public byte[] get(String fileName) throws IOException
+	{
+		File file = new File(baseFolder, fileName);
+		return IOUtils.toByteArray(new FileInputStream(file));
+	}
+
+	// NOTE: we're not using this, but it is broken when "process" is used
+	public boolean delete(String fileName)
+	{
+		File file = new File(baseFolder, fileName);
+		return Files.remove(file);
+	}
 }

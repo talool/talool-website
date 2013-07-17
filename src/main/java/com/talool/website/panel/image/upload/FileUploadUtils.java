@@ -8,18 +8,20 @@ import org.apache.wicket.util.file.File;
 import org.apache.wicket.util.file.Folder;
 import org.apache.wicket.util.io.IOUtils;
 import org.apache.wicket.util.upload.FileItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.talool.website.Config;
 import com.talool.website.util.SafeSimpleDateFormat;
 
 public class FileUploadUtils
 {
-
+	private static final Logger LOG = LoggerFactory.getLogger(FileUploadUtils.class);
 	private static final String baseUrl = Config.get().getStaticLogoBaseUrl();
 	private static final String baseUploadDir = Config.get().getUploadDir();
 	private static final SafeSimpleDateFormat dateFormat = new SafeSimpleDateFormat("yyMMddHHmmss");
 
-	public static String getImageUrl(FileItem image, UUID merchantId)
+	public static String getImageUrl(java.io.File image, UUID merchantId)
 	{
 		StringBuilder sb = new StringBuilder(baseUrl);
 		if (merchantId != null)
@@ -27,7 +29,7 @@ public class FileUploadUtils
 			sb.append(getMerchantFolderName(merchantId))
 					.append("/");
 		}
-		sb.append(getPngFileName(image));
+		sb.append(image.getName());
 		return sb.toString();
 	}
 
@@ -59,7 +61,10 @@ public class FileUploadUtils
 	{
 		Folder folder = getImageDir(merchantId, original);
 		String name = (original) ? prefixUniqueAndClean(image.getName()) : getPngFileName(image);
-		return new File(folder, name);
+
+		File f = new File(folder, name);
+
+		return f;
 	}
 
 	public static String prefixUniqueAndClean(final String fileName)

@@ -21,7 +21,8 @@ import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.website.models.MerchantMediaListModel;
 
-abstract public class MerchantMediaWizardPanel extends Panel {
+abstract public class MerchantMediaWizardPanel extends Panel
+{
 
 	private static final long serialVersionUID = -4183138880833396304L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantMediaWizardPanel.class);
@@ -33,65 +34,68 @@ abstract public class MerchantMediaWizardPanel extends Panel {
 	private ChoiceRenderer<MerchantMedia> cr;
 	private IModel<MerchantMedia> selectedMediaModel;
 	private DropDownChoice<MerchantMedia> mediaSelect;
-	
+
 	private transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
 	private transient static final DomainFactory domainFactory = FactoryManager.get()
 			.getDomainFactory();
 
-	public MerchantMediaWizardPanel(String id, UUID merchantId, MediaType mediaType, IModel<MerchantMedia> model) {
+	public MerchantMediaWizardPanel(String id, UUID merchantId, MediaType mediaType, IModel<MerchantMedia> model)
+	{
 		super(id);
 		this.merchantId = merchantId;
 		this.mediaType = mediaType;
-		params.add("id",merchantId);
+		params.add("id", merchantId);
 		params.add("type", mediaType);
-		
+
 		mediaListModel = new MerchantMediaListModel();
 		mediaListModel.setMerchantId(merchantId);
 		mediaListModel.setMediaType(mediaType);
-		
+
 		myMediaChoices = mediaListModel.getObject();
-		
+
 		cr = new ChoiceRenderer<MerchantMedia>("mediaName", "mediaUrl");
-		
+
 		selectedMediaModel = model;
-		
+
 		mediaSelect = new DropDownChoice<MerchantMedia>("availableMedia", selectedMediaModel, mediaListModel, cr);
 	}
-	
+
 	@Override
-	protected void onInitialize() {
+	protected void onInitialize()
+	{
 		super.onInitialize();
-		
+
 		/*
 		 * Add the Media Selector
 		 */
 		add(mediaSelect.setOutputMarkupId(true));
-		
+
 		/*
 		 * Add the Upload iFrame
 		 */
-		add(new UploadIFrame("uploaderIFrame",params) {
+		add(new UploadIFrame("uploaderIFrame", params)
+		{
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onUploadComplete(AjaxRequestTarget target, String url) {
-				
-				MerchantMedia merchantMedia = domainFactory.newMedia(merchantId, url, mediaType);
+			public void onUploadComplete(AjaxRequestTarget target, String url)
+			{
+				final MerchantMedia merchantMedia = domainFactory.newMedia(merchantId, url, mediaType);
 				saveMedia(merchantMedia);
 
 				myMediaChoices.add(merchantMedia);
 				mediaListModel.setObject(myMediaChoices);
 				selectedMediaModel.setObject(merchantMedia);
 				target.add(mediaSelect);
-				
+
 				onMediaUploadComplete(target, merchantMedia);
 			}
-			
+
 		});
 	}
-	
+
 	private void saveMedia(MerchantMedia media)
 	{
 		try
@@ -113,12 +117,12 @@ abstract public class MerchantMediaWizardPanel extends Panel {
 			LOG.error("random-ass-exception saving new merchant media:", e);
 		}
 	}
-	
+
 	public DropDownChoice<MerchantMedia> getMediaSelect()
 	{
 		return mediaSelect;
 	}
-	
+
 	abstract public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media);
 
 }

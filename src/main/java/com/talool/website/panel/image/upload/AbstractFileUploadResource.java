@@ -1,6 +1,8 @@
 package com.talool.website.panel.image.upload;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -22,10 +24,9 @@ import org.slf4j.LoggerFactory;
 import com.talool.core.MediaType;
 
 /**
- * The resource that handles the file uploads.
- * Reads the file items from the request parameters and uses FileManager
- * to store them.
- * Additionally cares about the response's content type and body.
+ * The resource that handles the file uploads. Reads the file items from the
+ * request parameters and uses FileManager to store them. Additionally cares
+ * about the response's content type and body.
  */
 public abstract class AbstractFileUploadResource extends AbstractResource
 {
@@ -33,167 +34,189 @@ public abstract class AbstractFileUploadResource extends AbstractResource
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractFileUploadResource.class);
 
-    private final FileManager fileManager;
+	private final FileManager fileManager;
 
-    public AbstractFileUploadResource(FileManager fileManager)
-    {
-        this.fileManager = fileManager;
-    }
+	public AbstractFileUploadResource(FileManager fileManager)
+	{
+		this.fileManager = fileManager;
+	}
 
-    /**
-     * Reads and stores the uploaded files
-     * @param attributes
-     * @return
-     */
-    @Override
-    protected ResourceResponse newResourceResponse(Attributes attributes)
-    {
-        final ResourceResponse resourceResponse = new ResourceResponse();
+	/**
+	 * Reads and stores the uploaded files
+	 * 
+	 * @param attributes
+	 * @return
+	 */
+	@Override
+	protected ResourceResponse newResourceResponse(Attributes attributes)
+	{
+		final ResourceResponse resourceResponse = new ResourceResponse();
+		List<File> outFiles = null;
 
-        final ServletWebRequest webRequest = (ServletWebRequest) attributes.getRequest();
+		final ServletWebRequest webRequest = (ServletWebRequest) attributes.getRequest();
 
-        try
-        {
-            MultipartServletWebRequest multiPartRequest = webRequest.newMultipartWebRequest(getMaxSize(), "ignored");
-            
-            UUID merchantId = null;
-            StringValue id = multiPartRequest.getPostParameters().getParameterValue("merchantId");
-    		if (id!=null && !id.toString().equals("null"))
-    		{
-    			merchantId = UUID.fromString(id.toString());
-    		}
-    		
-    		MediaType mediaType = null;
-    		StringValue type = multiPartRequest.getPostParameters().getParameterValue("mediaType");
-    		if (type!=null && !type.toString().equals("null"))
-    		{
-    			mediaType = MediaType.valueOf(type.toString());
-    		}
+		try
+		{
+			MultipartServletWebRequest multiPartRequest = webRequest.newMultipartWebRequest(getMaxSize(), "ignored");
 
-            Map<String, List<FileItem>> files = multiPartRequest.getFiles();
-            List<FileItem> fileItems = files.get(FileUploadBehavior.PARAM_NAME);
+			UUID merchantId = null;
+			StringValue id = multiPartRequest.getPostParameters().getParameterValue("merchantId");
 
-            if (mediaType==null || merchantId==null)
-        	{
-        		saveFiles(fileItems);
-        	}
-        	else 
-        	{
-        		saveFiles(fileItems, merchantId, mediaType);
-        	}
+			if (id != null && !id.toString().equals("null"))
+			{
+				merchantId = UUID.fromString(id.toString());
+			}
 
-            prepareResponse(resourceResponse, webRequest, fileItems, merchantId, mediaType);
-        }
-        catch (Exception fux)
-        {
-            LOG.error("An error occurred while uploading a file", fux);
-            throw new AbortWithHttpErrorCodeException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, fux.getMessage());
-        }
+			MediaType mediaType = null;
+			StringValue type = multiPartRequest.getPostParameters().getParameterValue("mediaType");
+			if (type != null && !type.toString().equals("null"))
+			{
+				mediaType = MediaType.valueOf(type.toString());
+			}
 
-        return resourceResponse;
-    }
+			Map<String, List<FileItem>> files = multiPartRequest.getFiles();
+			List<FileItem> fileItems = files.get(FileUploadBehavior.PARAM_NAME);
 
-    /**
-     * Sets the response's content type and body
-     * @param resourceResponse
-     * @param webRequest
-     * @param fileItems
-     * @throws FileUploadException
-     * @throws IOException
-     */
-    protected void prepareResponse(ResourceResponse resourceResponse, ServletWebRequest webRequest, List<FileItem> fileItems, UUID merchantId, MediaType mediaType)
-            throws FileUploadException, IOException {
+			if (mediaType == null || merchantId == null)
+			{
+				saveFiles(fileItems);
+			}
+			else
+			{
+				outFiles = saveFiles(fileItems, merchantId, mediaType);
+			}
 
-        final String responseContent;
-        String accept = webRequest.getHeader("Accept");
-        if (wantsHtml(accept))
-        {
-            // Internet Explorer
-            resourceResponse.setContentType("text/html");
+			prepareResponse(resourceResponse, webRequest, fileItems, outFiles, merchantId, mediaType);
+		}
+		catch (Exception fux)
+		{
+			LOG.error("An error occurred while uploading a file", fux);
+			throw new AbortWithHttpErrorCodeException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, fux.getMessage());
+		}
 
-            responseContent = generateHtmlResponse(resourceResponse, webRequest, fileItems);
-        }
-        else
-        {
-            // a real browser
-            resourceResponse.setContentType("application/json");
+		return resourceResponse;
+	}
 
-            responseContent = generateJsonResponse(resourceResponse, webRequest, fileItems, merchantId, mediaType);
-        }
+	/**
+	 * Sets the response's content type and body
+	 * 
+	 * @param resourceResponse
+	 * @param webRequest
+	 * @param fileItems
+	 * @throws FileUploadException
+	 * @throws IOException
+	 */
+	protected void prepareResponse(ResourceResponse resourceResponse, ServletWebRequest webRequest, List<FileItem> fileItems,
+			List<File> outFiles,
+			UUID merchantId, MediaType mediaType)
+			throws FileUploadException, IOException
+	{
 
-        resourceResponse.setWriteCallback(new WriteCallback() {
-            @Override
-            public void writeData(Attributes attributes) throws IOException {
-                attributes.getResponse().write(responseContent);
-            }
-        });
-    }
+		final String responseContent;
+		String accept = webRequest.getHeader("Accept");
+		if (wantsHtml(accept))
+		{
+			// Internet Explorer
+			resourceResponse.setContentType("text/html");
 
-    /**
-     * Delegates to FileManager to store the uploaded files
-     * @param fileItems
-     * @throws IOException
-     */
-    protected void saveFiles(List<FileItem> fileItems) throws IOException {
-        for (FileItem fileItem : fileItems)
-        {
-        	fileManager.save(fileItem);
-        }
-    }
-    
-    /**
-     * Delegates to FileManager to store the uploaded files
-     * @param fileItems
-     * @throws IOException
-     */
-    protected void saveFiles(List<FileItem> fileItems, UUID merchantId, MediaType mediaType) throws IOException {
-        for (FileItem fileItem : fileItems)
-        {
-        	fileManager.process(fileItem, mediaType, merchantId);
-        }
-    }
+			responseContent = generateHtmlResponse(resourceResponse, webRequest, fileItems, outFiles);
+		}
+		else
+		{
+			// a real browser
+			resourceResponse.setContentType("application/json");
 
-    /**
-     * Decides what should be the response's content type depending on the 'Accept' request header.
-     * HTML5 browsers work with "application/json", older ones use IFrame to make the upload and the
-     * response should be HTML.
-     * Read http://blueimp.github.com/jQuery-File-Upload/ docs for more info.
-     * @param acceptHeader
-     * @return
-     */
-    protected boolean wantsHtml(String acceptHeader)
-    {
-        return !Strings.isEmpty(acceptHeader) && acceptHeader.contains("text/html");
-    }
+			responseContent = generateJsonResponse(resourceResponse, webRequest, fileItems, outFiles, merchantId, mediaType);
+		}
 
-    /**
-     * Defines what is the maximum size of the uploaded files.
-     * TODO: integrate this in FileUploadBehavior to set the max size at the client side too
-     * @return
-     */
-    protected Bytes getMaxSize()
-    {
-        return Bytes.megabytes(100);
-    }
-    /**
-     * Should generate the response's body in JSON format
-     *
-     * @param resourceResponse
-     * @param webRequest
-     * @param files
-     * @return
-     */
-    protected abstract String generateJsonResponse(ResourceResponse resourceResponse,
-                                                 ServletWebRequest webRequest, List<FileItem> files, UUID merchantId, MediaType mediaType);
+		resourceResponse.setWriteCallback(new WriteCallback()
+		{
+			@Override
+			public void writeData(Attributes attributes) throws IOException
+			{
+				attributes.getResponse().write(responseContent);
+			}
+		});
+	}
 
-    /**
-     * Should generate the response's body in HTML format
-     * @param resourceResponse
-     * @param webRequest
-     * @param files
-     * @return
-     */
-    protected abstract String generateHtmlResponse(ResourceResponse resourceResponse,
-                                                 ServletWebRequest webRequest, List<FileItem> files);
+	/**
+	 * Delegates to FileManager to store the uploaded files
+	 * 
+	 * @param fileItems
+	 * @throws IOException
+	 */
+	protected void saveFiles(List<FileItem> fileItems) throws IOException
+	{
+		for (FileItem fileItem : fileItems)
+		{
+			fileManager.save(fileItem);
+		}
+	}
+
+	/**
+	 * Delegates to FileManager to store the uploaded files
+	 * 
+	 * @param fileItems
+	 * @return The File objects representing the stored files on disk
+	 * @throws IOException
+	 */
+	protected List<File> saveFiles(List<FileItem> fileItems, UUID merchantId, MediaType mediaType) throws IOException
+	{
+		final List<File> outFiles = new ArrayList<File>(fileItems.size());
+
+		for (FileItem fileItem : fileItems)
+		{
+			outFiles.add(fileManager.process(fileItem, mediaType, merchantId));
+		}
+
+		return outFiles;
+	}
+
+	/**
+	 * Decides what should be the response's content type depending on the
+	 * 'Accept' request header. HTML5 browsers work with "application/json", older
+	 * ones use IFrame to make the upload and the response should be HTML. Read
+	 * http://blueimp.github.com/jQuery-File-Upload/ docs for more info.
+	 * 
+	 * @param acceptHeader
+	 * @return
+	 */
+	protected boolean wantsHtml(String acceptHeader)
+	{
+		return !Strings.isEmpty(acceptHeader) && acceptHeader.contains("text/html");
+	}
+
+	/**
+	 * Defines what is the maximum size of the uploaded files. TODO: integrate
+	 * this in FileUploadBehavior to set the max size at the client side too
+	 * 
+	 * @return
+	 */
+	protected Bytes getMaxSize()
+	{
+		return Bytes.megabytes(100);
+	}
+
+	/**
+	 * Should generate the response's body in JSON format
+	 * 
+	 * @param resourceResponse
+	 * @param webRequest
+	 * @param files
+	 * @return
+	 */
+	protected abstract String generateJsonResponse(ResourceResponse resourceResponse,
+			ServletWebRequest webRequest, List<FileItem> files, List<File> outFiles, UUID merchantId, MediaType mediaType);
+
+	/**
+	 * Should generate the response's body in HTML format
+	 * 
+	 * @param resourceResponse
+	 * @param webRequest
+	 * @param files
+	 * @return
+	 */
+	protected abstract String generateHtmlResponse(ResourceResponse resourceResponse,
+			ServletWebRequest webRequest, List<FileItem> files, List<File> outFiles);
 
 }
