@@ -15,7 +15,7 @@ public class TaloolImageMagick extends AbstractMagick {
 		op.addImage();
 		op.resize(320);
 		op.gravity("center");
-		op.crop(320,160,0,0);
+		op.crop(320,100,0,0);
 		op.addImage();
 		return op;
 	}
