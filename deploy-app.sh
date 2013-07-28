@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e
-server=dev-app1
+server=$1
 buildDir=/opt/talool/builds
 
 if [ -n "$1" ]; then
