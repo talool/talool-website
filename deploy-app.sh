@@ -4,7 +4,7 @@ set -e
 server=$1
 buildDir=/opt/talool/builds
 
-if [ -n "$1" ]; then
+if [ -n "$2" ]; then
   warFile="$1"
 else
  warFile=$(ls target/*SNAPSHOT.war)
