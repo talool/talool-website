@@ -67,6 +67,16 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		}
 
 	}
+	
+	public MerchantDealOfferPanel(final String id, final Merchant merchant,
+			final SubmitCallBack callback)
+	{
+		super(id, callback);
+
+		final DealOffer dealOffer = domainFactory.newDealOffer(merchant, SessionUtils.getSession().getMerchantAccount());
+
+		setDefaultModel(Model.of(dealOffer));
+	}
 
 	public MerchantDealOfferPanel(final String id, final SubmitCallBack callback,
 			final UUID dealOfferId)

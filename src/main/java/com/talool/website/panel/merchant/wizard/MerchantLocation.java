@@ -67,7 +67,7 @@ public class MerchantLocation extends WizardStep
 		locationPanel.add(new TextField<String>("currentLocation.email").setRequired(true).add(
 				EmailAddressValidator.getInstance()));
 
-		locationPanel.add(new TextField<String>("currentLocation.websiteUrl").add(new UrlValidator()));
+		locationPanel.add(new TextField<String>("currentLocation.websiteUrl").setRequired(true).add(new UrlValidator()));
 
 	}
 

@@ -69,7 +69,7 @@ public class DealOfferDealsPage extends BasePage
 					item.add(new AttributeModifier("class", "gray0-bg"));
 				}
 
-				item.add(new Label("title"));
+				item.add(new Label("merchant.name"));
 				item.add(new Label("summary"));
 
 				item.add(new AjaxLink<Void>("editLink")

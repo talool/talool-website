@@ -1,21 +1,27 @@
 <wicket:extend>
-	<table>
+  	<table>
   		<thead>
   			<tr class="gray1-bg">
-  				<th>First Name</th>
-  				<th>Last Name</th>
-  				<th>Email</th>
+  				<th>Title</th>
+  				<th>Publisher</th>
+  				<th>Price</th>
+  				<th>Deal Type</th>
+  				<th>Expires</th>
+  				<th>Is Active</th>
   				<th class="actionCol">Actions</th>
   			</tr>
   		</thead>
   		<tbody>
-  			<tr class="odd" wicket:id="customerRptr">
-  				<td><a href="#" wicket:id="emailLink"></a></td>
-  				<td wicket:id="firstName">Doug</td>
-  				<td wicket:id="lastName">McCuen</td>
+  			<tr wicket:id="offerRptr">
+  				<td><a wicket:id="titleLink"></a></td>
+  				<td wicket:id="merchant.name"></td>
+  				<td wicket:id="price"></td>
+  				<td wicket:id="dealType"></td>
+  				<td wicket:id="expires"></td>
+  				<td wicket:id="isActive"></td>
   				<td class="orange-font">
-  					<a wicket:id="editLink" class="icon icon-large icon-pencil" title="Edit Merchant"></a>
-  					<a href="#" class="icon icon-large icon-remove" title="Delete Merchant"></a>
+  					<a wicket:id="editLink" href="#" class="icon icon-large icon-pencil"></a>
+  					<a href="#" class="icon icon-large icon-remove"></a>
   				</td>
   			</tr>
   		</tbody>

@@ -15,14 +15,15 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.talool.core.Customer;
-import com.talool.website.models.CustomerListModel;
+import com.talool.core.DealOffer;
+import com.talool.core.Merchant;
+import com.talool.website.models.DealOfferListModel;
 import com.talool.website.pages.BasePage;
-import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.customer.definition.CustomerPanel;
+import com.talool.website.panel.merchant.definition.MerchantDealOfferPanel;
 import com.talool.website.util.SecuredPage;
+import com.talool.website.util.SessionUtils;
 
 @SecuredPage
 public class DealOffersPage extends BasePage
@@ -44,52 +45,55 @@ public class DealOffersPage extends BasePage
 	{
 		super.onInitialize();
 
-		final ListView<Customer> customers = new ListView<Customer>("customerRptr",
-				new CustomerListModel())
+		final ListView<DealOffer> customers = new ListView<DealOffer>("offerRptr",
+				new DealOfferListModel())
 		{
 
 			private static final long serialVersionUID = 4104816505968727445L;
 
 			@Override
-			protected void populateItem(ListItem<Customer> item)
+			protected void populateItem(ListItem<DealOffer> item)
 			{
-				Customer customer = item.getModelObject();
-				final UUID customerId = customer.getId();
+				DealOffer dealOffer = item.getModelObject();
+				final UUID dealOfferId = dealOffer.getId();
 
-				item.setModel(new CompoundPropertyModel<Customer>(customer));
+				item.setModel(new CompoundPropertyModel<DealOffer>(dealOffer));
 
 				if (item.getIndex() % 2 == 0)
 				{
 					item.add(new AttributeModifier("class", "gray0-bg"));
 				}
 
-				item.add(new Label("firstName"));
-				item.add(new Label("lastName"));
+				PageParameters dealsParams = new PageParameters();
+				dealsParams.set("id", dealOffer.getId());
+				dealsParams.set("name", dealOffer.getTitle());
+				String url = (String) urlFor(DealOfferDealsPage.class, dealsParams);
+				ExternalLink titleLink = new ExternalLink("titleLink", Model.of(url),
+						new PropertyModel<String>(dealOffer, "title"));
+				item.add(titleLink);
 
-				PageParameters customerParams = new PageParameters();
-				customerParams.set("id", customer.getId());
-				customerParams.set("email", customer.getEmail());
-				String url = (String) urlFor(CustomerManagementPage.class, customerParams);
-				ExternalLink emailLink = new ExternalLink("emailLink", Model.of(url),
-						new PropertyModel<String>(customer, "email"));
-				item.add(emailLink);
+				item.add(new Label("merchant.name"));
+				item.add(new Label("price"));
+				item.add(new Label("dealType"));
+				item.add(new Label("expires"));
+				item.add(new Label("isActive"));
 
-				final AdminModalWindow definitionModal = getModal();
-				final SubmitCallBack callback = getCallback(definitionModal);
+				BasePage page = (BasePage) this.getPage();
+				final AdminModalWindow modal = page.getModal();
+				final SubmitCallBack callback = page.getCallback(modal);
 				item.add(new AjaxLink<Void>("editLink")
 				{
-
-					private static final long serialVersionUID = -4592149231430681542L;
+					private static final long serialVersionUID = 268692101349122303L;
 
 					@Override
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						CustomerPanel panel = new CustomerPanel(definitionModal.getContentId(), callback,
-								customerId);
-						definitionModal.setContent(panel);
-						definitionModal.setTitle("Edit Customer");
-						definitionModal.show(target);
+						MerchantDealOfferPanel panel = new MerchantDealOfferPanel(modal.getContentId(),
+								callback, dealOfferId);
+						modal.setContent(panel);
+						modal.setTitle("Edit Merchant Deal Offer");
+						modal.show(target);
 					}
 				});
 
@@ -103,19 +107,20 @@ public class DealOffersPage extends BasePage
 	@Override
 	public String getHeaderTitle()
 	{
-		return "Customers";
+		return "Deal Offers";
 	}
 
 	@Override
 	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
 	{
-		return new CustomerPanel(contentId, callback);
+		Merchant m = SessionUtils.getSession().getMerchantAccount().getMerchant();
+		return new MerchantDealOfferPanel(contentId, m, callback);
 	}
 
 	@Override
 	public String getNewDefinitionPanelTitle()
 	{
-		return "Create New Customer";
+		return "Create New Deal Offer";
 	}
 
 }

@@ -87,11 +87,21 @@ public class MerchantsPage extends BasePage
 						new PropertyModel<String>(merchant, "name"));
 
 				item.add(namelLink);
-
+				
+				item.add(new Label("primaryLocation.address1"));
+				item.add(new Label("primaryLocation.address2"));
 				item.add(new Label("primaryLocation.niceCityState"));
+				item.add(new Label("primaryLocation.zip"));
+				item.add(new Label("primaryLocation.phone"));
+				item.add(new Label("primaryLocation.websiteUrl"));
+				item.add(new Label("primaryLocation.email"));
+				
+				StringBuilder hasMultiple = new StringBuilder();
+				hasMultiple.append(merchant.getLocations().size());
+				item.add(new Label("multiple", hasMultiple.toString()));
 
 				// TODO - at some point, this tags label can be based on a model
-				item.add(new Label("tags", ModelUtil.geTagSummary(merchant)));
+				//item.add(new Label("tags", ModelUtil.geTagSummary(merchant)));
 
 				item.add(new AjaxLink<Void>("editLink")
 				{

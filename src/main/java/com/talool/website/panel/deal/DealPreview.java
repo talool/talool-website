@@ -21,7 +21,7 @@ public class DealPreview extends Panel
 	private static final String NEVER_EXPIRES = "Never";
 	private static final SafeSimpleDateFormat dateFormat = new SafeSimpleDateFormat("MM/dd/yyyy");
 
-	public String title, summary, details, code, imageUrl;
+	public String title, summary, details, code, imageUrl, merchantName;
 	public String merchantLogoUrl, dealOfferLogoUrl;
 	private String defaultImageUrl = "/img/000.png";
 	private String defaultDealOfferLogoUrl = "/img/000.png";
@@ -45,6 +45,7 @@ public class DealPreview extends Panel
 		title = deal.getTitle();
 		summary = deal.getSummary();
 		details = deal.geDetails();
+		merchantName = deal.getMerchant().getName();
 
 		if (deal.getExpires() != null)
 		{
@@ -77,6 +78,8 @@ public class DealPreview extends Panel
 	{
 		super.onInitialize();
 
+		add(new Label("merchantName", new PropertyModel<String>(this,"merchantName")));
+		
 		add(titleLabel = new Label("title", new PropertyModel<String>(this, "title")));
 		titleLabel.setOutputMarkupId(true);
 		add(summaryLabel = new Label("summary", new PropertyModel<String>(this, "summary")));

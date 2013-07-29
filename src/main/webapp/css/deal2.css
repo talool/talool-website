@@ -1,0 +1,140 @@
+@font-face {
+  font-family: 'MarkerFelt';
+  src: url('../font/MarkerFelt_Normal.ttf'); format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'MarkerFelt';
+  src: url('../font/MarkerFeltWide_Regular.ttf'); format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+.deal2 {
+	width: 320px;
+	height: 543px;
+	border:1px solid black;
+	position: relative;
+	overflow:hidden;
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+}
+
+.deal2 .nav,
+.newMerchant .nav {
+	text-align: center;
+	color: white;
+	font-weight: bold;
+	line-height: 40px;
+	height: 40px;
+}
+.newMerchant .nav.mapView {
+	margin-top: -25px;
+	width: 320px;
+	margin-left: 10px;
+	height: 65px;
+}
+
+.deal2 .bbuttonbar {
+	background-image: url(/img/deal/buttonBar3Brown.png);
+	background-repeat: no-repeat;
+	height: 70px;
+	padding: 5px 5px 0;
+	overflow: hidden;
+}
+
+.deal2 .bbuttonbar .icon
+{
+	margin: 15px auto 5px;
+	height: 30px;
+	width: 103px;
+	text-align: center;
+}
+.deal2 .bbuttonbar .bbtn
+{
+	float: left;
+	width: 103px;
+	height: 70px;
+}
+.deal2 .bbuttonbar .label
+{
+	font-size: 8px;
+	text-align: center;
+}
+
+.deal2 .image 
+{
+	margin: 5px 0 0;
+	height: 95px;
+	position: relative;
+	overflow: hidden;
+}
+
+.deal2 .image .outline
+{
+	top: 0;
+	left: 0;
+	height: 95px;
+	position: absolute;
+}
+.deal2 .location {
+	background-image: url(/img/deal/webTileTop.png);
+	height: 40px;
+	padding: 8px 20px 0;
+}
+
+.deal2 .location .merchantLogo {
+	float: right;
+	max-height: 40px;
+	max-width: 150px;
+}
+
+.deal2 .location .address {
+	font-size: 9px;
+}
+
+.deal2 .details .summary {
+	background-image: url(/img/deal/webTileTop.png);
+	text-align: center;
+	padding: 25px 20px 0;
+	font-family: "MarkerFelt";
+	font-weight: bold;
+	font-size: 24px;
+}
+
+.deal2 .details .restrictions {
+	background-image: url(/img/deal/webTileMiddle.png);
+	background-repeat: no-repeat;
+	height: 89px;
+	font-family: "MarkerFelt";
+	font-weight: normal;
+}
+.deal2 .details .restrictions div {
+	text-align: center;
+	padding: 30px 20px 0;
+}
+
+.deal2 .details .title {
+	display: none;
+}
+
+.deal2 .footer {
+	background-image: url(/img/deal/dealBottom.png);
+	background-repeat: no-repeat;
+	height: 40px;
+	padding:0 20px 0;
+}
+
+.deal2 .footer .expires {
+	font-size: 9px;
+	float: right;
+	line-height: 40px;
+}
+
+.dealList .deal {
+	background-image: url(/img/deal/tableCell60.png);
+	background-repeat: no-repeat;
+	height: 60px;
+	padding:0 15px 0;
+}

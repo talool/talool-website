@@ -29,11 +29,8 @@ body.talool .merchantWiz .panel.iPhonePanel {
 }
 .merchantWiz .dealList .deal {
 	border: none;
-	height: auto;
-	background-color: #fff;
 	text-align: left;
 	color: black;
-	border-bottom: 1px solid #eee;
 }
 .merchantWiz .dummyDeal .deal .image {
 	margin-bottom: 0;
@@ -41,8 +38,8 @@ body.talool .merchantWiz .panel.iPhonePanel {
 .merchantWiz .dealList.locList {
 	margin-left: 9px;
 	overflow:hidden;
-	height:293px;
-	border-radius: 5px;
+	height:254px;
+	width: 320px;
 }
 .merchantWiz .dealList .deal .title {
 	font-size: 13px;
@@ -55,7 +52,7 @@ body.talool .merchantWiz .panel.iPhonePanel {
 	float: left;
 	height: 50px;
 	width: 50px;
-	margin-right: 10px;
+	margin: 5px 10px 0 0;
 }
 .merchantWiz .dealList .deal .categoryIcon .circle {
 	width: 45px;
@@ -72,11 +69,15 @@ body.talool .merchantWiz .panel.iPhonePanel {
 	width: 305px;
 }
 .merchantWiz .teaser.discover {
-	padding: 10px 15px;
-	height: 524px;
-	width: 290px;
+	padding: 0;
+	height: 545px;
+	width: 320px;
 	position: absolute;
 	top: 45px;
 	right: 61px;
-	color: red;
+	overflow: hidden;
+}
+
+.merchantWiz .teaser.discover img {
+	max-width: 320px;
 }

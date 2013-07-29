@@ -1,19 +1,42 @@
-<!-- 
+
 <wicket:head>
-    <link rel="stylesheet" type="text/css" href="/css/deal.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/deal2.css"/>
 </wicket:head>
- -->
+
 <wicket:panel>
 <div class="iphone">
-	<div class="deal teal-bg">
-		<div class="image gray2-bg"><img wicket:id="image" src=""/></div>
-		<img wicket:id="merchantLogo" class="merchantLogo" src=""/>
-		<div wicket:id="title" class="title"></div>
-		<div wicket:id="summary" class="summary"></div>
-		<div wicket:id="details" class="details"></div>
-		<div class="expires">Expires <span wicket:id="expires"></span></div>
-		<div class="dealOfferLogoContainer"><img wicket:id="dealOfferLogo" class="dealOfferLogo" src=""/></div>
-		<div class="code gray5-bg"></div>
+	<div class="deal2 gray4-bg gray4-font">
+		<div wicket:id="merchantName"  class="nav teal-bg">Merchant Name</div>
+		<div class="bbuttonbar">
+			<div class="bbtn">
+				<div class="icon"><i class="icon-2x icon-money"></i></div>
+				<div class="label gray2-font">Use Deal Now</div>
+			</div>
+			<div class="bbtn">
+				<div class="icon"><i class="icon-2x icon-facebook"></i></div>
+				<div class="label gray2-font">Gift Via Facebook</div>
+			</div>
+			<div class="bbtn">
+				<div class="icon"><i class="icon-2x icon-envelope-alt"></i></div>
+				<div class="label gray2-font">Gift Via Email</div>
+			</div>
+		</div>
+		<div class="image"><img wicket:id="image" src=""/><img class="outline" src="/img/deal/imageMaskOutlineWeb.png"/></div>
+		<div class="location  gray4-font">
+			<img wicket:id="merchantLogo" class="merchantLogo" src=""/>
+			<div class="address">
+				<b>offer valid at:</b><br/>
+			</div>
+		</div>
+		<div class="details gray4-font">
+			<div wicket:id="title" class="title"></div>
+			<div class="summary"><div wicket:id="summary"></div></div>
+			<div class="restrictions"><div wicket:id="details"></div></div>
+		</div>
+		<div class="footer gray4-font">
+			<div class="expires">Expires <span wicket:id="expires"></span></div>
+			<div class="dealOfferLogoContainer"><img wicket:id="dealOfferLogo" class="dealOfferLogo" src=""/></div>
+		</div>
 	</div>
 </div>
 </wicket:panel>

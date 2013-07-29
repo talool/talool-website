@@ -1,5 +1,6 @@
 package com.talool.website.panel.merchant;
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
@@ -10,6 +11,7 @@ import com.talool.website.component.StaticImage;
 public class MerchantPreview extends Panel
 {
 	public String merchantImageUrl;
+	public String merchantName;
 	private String defaultImageUrl = "/img/000.png";
 	public StaticImage image;
 
@@ -35,6 +37,7 @@ public class MerchantPreview extends Panel
 		{
 			merchantImageUrl = defaultImageUrl;
 		}
+		merchantName = merchant.getName();
 
 	}
 
@@ -43,6 +46,7 @@ public class MerchantPreview extends Panel
 	{
 		super.onInitialize();
 
+		add(new Label("merchantName", new PropertyModel<String>(this, "merchantName")));
 		add(image = new StaticImage("image", false, new PropertyModel<String>(this, "merchantImageUrl")));
 		image.setOutputMarkupId(true);
 

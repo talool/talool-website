@@ -50,6 +50,8 @@ public class MerchantMap extends WizardStep
 
 		final Merchant merchant = (Merchant) getDefaultModelObject();
 
+		addOrReplace(new Label("merchantName",merchant.getName()));
+		
 		GMap map = new GMap("map");
 		map.setStreetViewControlEnabled(false);
 		map.setScaleControlEnabled(true);

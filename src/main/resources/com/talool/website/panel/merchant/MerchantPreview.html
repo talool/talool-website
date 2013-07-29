@@ -1,7 +1,26 @@
+<wicket:head>
+    <link rel="stylesheet" type="text/css" href="/css/deal2.css"/>
+</wicket:head>
+
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
 	<div class="iphone">
-		<div class="deal gray1-bg">
-			<div class="image gray2-bg"><img wicket:id="image" src=""/></div>
+		<div class="deal2 gray4-bg gray4-font">
+			<div wicket:id="merchantName"  class="nav teal-bg">Merchant Name</div>
+			<div class="bbuttonbar">
+				<div class="bbtn">
+					<div class="icon"><i class="icon-2x icon-map-marker"></i></div>
+					<div class="label gray2-font">Open Map</div>
+				</div>
+				<div class="bbtn">
+					<div class="icon"><i class="icon-2x icon-phone-sign"></i></div>
+					<div class="label gray2-font">Call</div>
+				</div>
+				<div class="bbtn">
+					<div class="icon"><i class="icon-2x icon-info-sign"></i></div>
+					<div class="label gray2-font">Visit Website</div>
+				</div>
+			</div>
+			<div class="image"><img wicket:id="image" src=""/><img class="outline" src="/img/deal/imageMaskOutlineWeb.png"/></div>
 			<div class="dealList">
 				<div class="deal">
 					<div class="categoryIcon"><div class="circle teal-bg"></div></div>

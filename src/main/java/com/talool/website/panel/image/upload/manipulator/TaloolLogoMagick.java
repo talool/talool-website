@@ -7,8 +7,7 @@ public class TaloolLogoMagick extends AbstractMagick {
 
 	/*
 	 * This will resize the image down to 250x75.
-	 * then grayscale and colorize the image to match
-	 * the teal bg of the coupons.
+	 * then grayscale the image.
 	 * 
 	 * We may get some JPEGs that are in the
 	 * CMYK colorspace.  These will need to be 
@@ -42,18 +41,6 @@ public class TaloolLogoMagick extends AbstractMagick {
 			op.type("GrayscaleMatte");
 		}
 		
-		// filter the logo to have a teal tint
-		if (image.hasAlpha)
-		{
-			op.addImage(getTealGradientFilePath());
-			op.clut();
-		}
-		else
-		{
-			op.p_levelColors("teal","none");
-			op.background("black");
-			op.alpha("shape");
-		}
 		op.addImage();
 		
 		return op;
