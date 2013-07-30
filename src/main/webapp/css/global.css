@@ -1,3 +1,16 @@
+@font-face {
+  font-family: 'MarkerFelt';
+  src: url('../font/MarkerFelt_Normal.ttf'); format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'MarkerFelt';
+  src: url('../font/MarkerFeltWide_Regular.ttf'); format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
 body {
     font-family: verdana;
     font-size:12px;

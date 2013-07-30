@@ -1,9 +1,19 @@
 <!DOCTYPE html>
 <wicket:extend xmlns:wicket="http://wicket.apache.org">
 
-	<div class="gray4-font">
-		feedback form goes here
-
+	<div class="feedback">
+		<h2 wicket:id="header">We're listening</h2>
+		
+		<form method="POST" action="/feedback">
+			<div wicket:id="formbox">
+				<input type="hidden" wicket:id="fromEmail" name="fromEmail"/>
+				<input type="hidden" wicket:id="feedbackSrc" name="feedbackSrc"/>
+				<textarea name="feedback" rows="10" cols="20"></textarea>
+				<br/>
+				<input type="submit" value="Submit Feedback" class="btn btn-action"/>
+			</div>
+		</form>
+		
 	</div>
 
 </wicket:extend>

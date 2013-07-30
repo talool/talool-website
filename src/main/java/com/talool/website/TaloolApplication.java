@@ -128,7 +128,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/location", OpenGraphLocation.class);
 		
 		mountPage("/privacy", PrivacyPolicy.class);
-		mountPage("/terms", TermsOfService.class);
+		mountPage("/termsofservice", TermsOfService.class);
 		mountPage("/feedback", Feedback.class);
 		mountPage("/services/merchants", MerchantServices.class);
 		mountPage("/services/publishers", PublisherServices.class);
