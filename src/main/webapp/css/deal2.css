@@ -90,6 +90,11 @@
 	max-width: 150px;
 }
 
+.deal2 .footer .dealOfferLogo {
+	max-height: 30px;
+	max-width: 150px;
+}
+
 .deal2 .location .address {
 	font-size: 9px;
 }
@@ -97,7 +102,7 @@
 .deal2 .details .summary {
 	background-image: url(/img/deal/webTileTop.png);
 	text-align: center;
-	padding: 25px 20px 0;
+	padding: 30px 20px;
 	font-family: "MarkerFelt";
 	font-weight: bold;
 	font-size: 24px;
@@ -112,7 +117,7 @@
 }
 .deal2 .details .restrictions div {
 	text-align: center;
-	padding: 30px 20px 0;
+	padding: 0 20px;
 }
 
 .deal2 .details .title {
