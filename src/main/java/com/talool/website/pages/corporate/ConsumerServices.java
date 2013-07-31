@@ -5,7 +5,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class ConsumerServices extends BaseCorporatePage {
 
-	ConsumerServices(PageParameters params) {
+	public ConsumerServices(PageParameters params) {
 		super(params);
 		// TODO Auto-generated constructor stub
 	}
