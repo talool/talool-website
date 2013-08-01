@@ -41,6 +41,18 @@ public class TaloolLogoMagick extends AbstractMagick {
 			op.type("GrayscaleMatte");
 		}
 		
+		// filter the logo to have a teal tint
+		if (image.hasAlpha)
+		{
+			op.addImage(getGradientFilePath());
+			op.clut();
+		}
+		else
+		{
+			op.p_levelColors("white","none");
+			op.background("black");
+			op.alpha("shape");
+		}
 		op.addImage();
 		
 		return op;

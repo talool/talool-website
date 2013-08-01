@@ -25,7 +25,7 @@ public abstract class AbstractMagick implements IMagick
 	protected static final int maxLogoHeight = 75;
 	
 	private static final String baseUploadDir = Config.get().getUploadDir();
-	private static final String tealGradientFileName = "tealGradient5.png";
+	private static final String tealGradientFileName = "gradient.png";
 
 	static
 	{
@@ -86,7 +86,7 @@ public abstract class AbstractMagick implements IMagick
 
 	}
 
-	protected String getTealGradientFilePath()
+	protected String getGradientFilePath()
 	{
 		StringBuilder filepath = new StringBuilder(baseUploadDir);
 		filepath.append(tealGradientFileName);
@@ -102,7 +102,7 @@ public abstract class AbstractMagick implements IMagick
 			ConvertCmd cmd = new ConvertCmd();
 			IMOperation op = new IMOperation();
 			op.size(10, 100);
-			op.addImage("gradient:teal", gradientPath);
+			op.addImage("gradient:black-white", gradientPath);
 			try
 			{
 				// execute the operation
@@ -110,7 +110,7 @@ public abstract class AbstractMagick implements IMagick
 			}
 			catch (Exception e)
 			{
-				LOG.error("failed to generate the teal gradient: ", e);
+				LOG.error("failed to generate the gradient: ", e);
 			}
 		}
 
