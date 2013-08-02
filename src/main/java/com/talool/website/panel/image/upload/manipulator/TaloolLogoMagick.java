@@ -6,7 +6,7 @@ import org.im4java.core.IMOperation;
 public class TaloolLogoMagick extends AbstractMagick {
 
 	/*
-	 * This will resize the image down to 250x75.
+	 * This will resize the image down to 140x44.
 	 * then grayscale the image.
 	 * 
 	 * We may get some JPEGs that are in the
@@ -50,7 +50,7 @@ public class TaloolLogoMagick extends AbstractMagick {
 		else
 		{
 			op.p_levelColors("white","none");
-			op.background("black");
+			op.background("gray30");
 			op.alpha("shape");
 		}
 		op.addImage();

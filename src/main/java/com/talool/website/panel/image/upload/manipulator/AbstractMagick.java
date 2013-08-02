@@ -21,11 +21,11 @@ public abstract class AbstractMagick implements IMagick
 	private File inputFile;
 	private File outputFile;
 	
-	protected static final int maxLogoWidth = 250;
-	protected static final int maxLogoHeight = 75;
+	protected static final int maxLogoWidth = 140;
+	protected static final int maxLogoHeight = 40;
 	
 	private static final String baseUploadDir = Config.get().getUploadDir();
-	private static final String tealGradientFileName = "gradient.png";
+	private static final String gradientFileName = "grayGradient3.png";
 
 	static
 	{
@@ -89,7 +89,7 @@ public abstract class AbstractMagick implements IMagick
 	protected String getGradientFilePath()
 	{
 		StringBuilder filepath = new StringBuilder(baseUploadDir);
-		filepath.append(tealGradientFileName);
+		filepath.append(gradientFileName);
 		String gradientPath = filepath.toString();
 
 		/*
@@ -102,7 +102,7 @@ public abstract class AbstractMagick implements IMagick
 			ConvertCmd cmd = new ConvertCmd();
 			IMOperation op = new IMOperation();
 			op.size(10, 100);
-			op.addImage("gradient:black-white", gradientPath);
+			op.addImage("gradient:gray70-white", gradientPath);
 			try
 			{
 				// execute the operation
