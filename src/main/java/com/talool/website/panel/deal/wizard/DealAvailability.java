@@ -1,5 +1,8 @@
 package com.talool.website.panel.deal.wizard;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.datetime.DateConverter;
@@ -43,6 +46,13 @@ public class DealAvailability extends DynamicWizardStep
 		((DynamicWizardModel) getWizardModel()).setLastVisible(false);
 
 		Deal deal = (Deal) getDefaultModelObject();
+		if (deal.getExpires() == null)
+		{
+			// temp date to help with loading deals
+			Calendar c = Calendar.getInstance();
+			c.set(2014, 8, 1);
+			deal.setExpires(c.getTime());
+		}
 
 		final DealPreview dealPreview = new DealPreview("dealBuilder", deal);
 		dealPreview.setOutputMarkupId(true);

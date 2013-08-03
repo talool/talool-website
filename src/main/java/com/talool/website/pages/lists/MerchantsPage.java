@@ -87,7 +87,7 @@ public class MerchantsPage extends BasePage
 						new PropertyModel<String>(merchant, "name"));
 
 				item.add(namelLink);
-				
+				item.add(new Label("category.name"));
 				item.add(new Label("primaryLocation.address1"));
 				item.add(new Label("primaryLocation.address2"));
 				item.add(new Label("primaryLocation.niceCityState"));

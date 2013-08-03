@@ -117,7 +117,7 @@ abstract public class DealTemplatePanel extends Panel {
 	private String cookUpDetails() {
 		StringBuilder sb = new StringBuilder();
 		if (valid) {
-			sb.append("Valid anytime (excluding holidays)");
+			sb.append("May not be combined with any other offer, discount or promotion. Not valid on holidays, and subject to rules of use.");
 		}
 		return sb.toString();
 	}
