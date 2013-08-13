@@ -3,8 +3,12 @@
 	margin: 20px auto;
 	width: 950px;
 	background-color: white;
-	color: black;
 	font-size:16px;
+}
+
+.hp a 
+{
+	color: rgb(25, 188, 185);
 }
 
 .hp .header {
@@ -33,9 +37,9 @@
 
 .hp .appDesc 
 {
-	padding: 10px 450px 10px 40px;
-	height: 730px;
-	background: url(/img/homepage/iPhone5Vancouver.png) no-repeat 450px 10px;
+	padding: 10px 450px 10px 60px;
+	height: 690px;
+	background: url(/img/homepage/iPhone5Vancouver3.png) no-repeat left -50px;
 }
 
 .hp .partnershipDesc 
@@ -44,7 +48,11 @@
 }
 .hp .footer
 {
-	text-align: right;
+	text-align: left;
 	padding: 10px 0;
 	font-size: 12px;
+}
+.hp .footer span
+{
+	float: right;
 }
