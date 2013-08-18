@@ -45,6 +45,8 @@ import com.talool.website.pages.lists.MerchantAccountsPage;
 import com.talool.website.pages.lists.MerchantDealOffersPage;
 import com.talool.website.pages.lists.MerchantLocationsPage;
 import com.talool.website.pages.lists.MerchantsPage;
+import com.talool.website.pages.payment.braintree.VenmoSaveCardPage;
+import com.talool.website.pages.payment.braintree.VenmoUseCardPage;
 import com.talool.website.panel.image.upload.FileManageResourceReference;
 import com.talool.website.panel.image.upload.FileUploadResourceReference;
 
@@ -133,6 +135,9 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/services/merchants", MerchantServices.class);
 		mountPage("/services/publishers", PublisherServices.class);
 		mountPage("/services/consumers", ConsumerServices.class);
+		
+		mountPage("/mobile/payment/save", VenmoSaveCardPage.class);
+		mountPage("/mobile/payment/use", VenmoUseCardPage.class);
 
 		/*
 		 * We need a ONE_PASS_RENDER strategy because pages like search need
