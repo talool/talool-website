@@ -50,6 +50,7 @@ import com.talool.website.pages.lists.MerchantsPage;
 import com.talool.website.pages.payment.braintree.VenmoSaveCardPage;
 import com.talool.website.pages.payment.braintree.VenmoUseCardPage;
 import com.talool.website.pages.sales.ContactPage;
+import com.talool.website.pages.sales.FundraiserBenefits;
 import com.talool.website.pages.sales.MerchantBenefits;
 import com.talool.website.pages.sales.PublisherBenefits;
 import com.talool.website.panel.image.upload.FileManageResourceReference;
@@ -145,6 +146,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/corp/terms", WWWTermsOfService.class);
 		mountPage("/contactus", ContactPage.class);
 		mountPage("/benefits/publishers", PublisherBenefits.class);
+		mountPage("/benefits/fundraisers", FundraiserBenefits.class);
 		mountPage("/benefits/merchants", MerchantBenefits.class);
 		
 		mountPage("/mobile/payment/save", VenmoSaveCardPage.class);

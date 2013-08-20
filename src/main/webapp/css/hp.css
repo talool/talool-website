@@ -91,8 +91,8 @@
 {
 	float: right;
 }
-.hp .footer.true-gray-font, .hp .footer.true-gray-font a, .hp .footer.true-gray-font a:visited {
-	color: rgb(190, 190, 190);
+.hp .footer.gray2-font, .hp .footer.gray2-font a, .hp .footer.gray2-font a:visited {
+	color: rgb(153, 134, 117);
 }
 .hp .benefitsDesc
 {
