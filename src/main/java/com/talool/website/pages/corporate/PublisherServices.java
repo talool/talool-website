@@ -2,6 +2,8 @@ package com.talool.website.pages.corporate;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.talool.website.panel.sales.PublisherPanel;
+
 
 public class PublisherServices extends BaseCorporatePage {
 
@@ -16,7 +18,7 @@ public class PublisherServices extends BaseCorporatePage {
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		
+		add(new PublisherPanel("benefits"));
 	}
 
 }

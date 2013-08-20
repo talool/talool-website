@@ -1,68 +1,16 @@
-<html>
-	<head>
-		<title>Talool</title>
-	    <meta name="keywords" content="keyword1,keyword2,keyword3">
-	    <meta name="description" content="this is my page">
-	    <meta name="content-type" content="text/html; charset=UTF-8">
-	    <link rel="stylesheet" type="text/css" href="/css/global.css">
-	    <link rel="stylesheet" type="text/css" href="/css/hp.css">
-	</head>
-	<body class="gray0-bg">
-		<div class="hp gray4-font">
-			<div class="header">
-				<span class="appicons">
-					<img alt="Comming Soon to the App Store" src="/img/homepage/ComingSoonApple.png" width="148" height="81"/>
-					<img alt="Comming Soon to the Google Play" src="/img/homepage/ComingSoonGoogle.png" width="148" height="81"/>
-				</span>
-				<img alt="Talool" src="/img/homepage/talool_logo_white_hp.png" width="147" height="50"/>
-			</div>
-			<div class="appDesc">
-				<h2>"I visit these merchants every week, but I never have my coupon book with me!"</h2>
-				<p>
-					Talool supports the fundraising efforts of schools and organizations in Vancouver, WA and Boulder, CO 
-					by migrating traditional paper coupon books they sell into a fun and convenient mobile app. 
-					If you enjoy saving money as much as you like supporting your local community, please 
-					join us on Talool.
-				</p>
-				<h2>Never be without your deals again!</h2>
-				<p>
-					You may occasionally leave the house without your coupon book, but you seldom leave 
-					without your mobile phone.  With Talool you will always be ready to save money when 
-					you visit our participating merchants. 
-				</p>
-				<h2>Share your deals!</h2>
-				<p>
-					Talool makes it easy to give your deals to friends, just like a paper coupon.  
-					Now all you have to do is pick an email or Facebook friend from your phone.  Your 
-					friends will thank you for the gift! 
-				</p>
-			</div>
-			<img alt="Payback Book" src="/img/homepage/PaybackBookMock_simple_brown.png" width="950" height="369"/>
-			<div class="partnershipDesc">
-				<!-- 
-				<h2>"This time David needs help beating Goliath.  We’re giving him more than just a slingshot."</h2>
-				 -->
-				<h2>"We'd like to help you make your coupon book Mobile!"</h2>
-				<p>
-					If you're in the business of publishing deals without a mobile app, you know at least 3 big companies 
-					eating your lunch.  You need stay competitive by giving your customers the experience they have come 
-					to expect.  The Talool platform was built on the idea that by working together we can create something 
-					more powerful than an individual Coupon app.  We can create stronger relationships between buyers and sellers.
-				</p>
-				<p>
-					The Payback Book has partnered with Talool for its 2013-2014 edition in Vancouver, WA and Boulder, CO.  
-					By integrating the Talool app with their product, the Payback Book gets to experience the benefits of 
-					Mobile without the financial risk of building and maintaining their own app.
-				</p>
-				<h2>Contact Us</h2>
-				<p>
- 					If you have any questions about our platform, please contact us at <a href="mailto://sales@talool.com">sales@talool.com</a>
-				</p>
-			</div>
-			<div class="footer gray0-bg true-gray-font">
-				<span> <a href="/privacy">Privacy Policy</a> | <a href="/termsofservice">Terms of Use</a> </span>
-				© 2013 Talool, Inc | Boulder, CO
-			</div>
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:extend>
+		<div class="appDesc">
+			<div wicket:id="benefits"></div>
+			
 		</div>
-	</body>
+		<div class="learnMore gray4-bg">
+			<h2 class="gray1-font">Learn how we can help your business</h2>
+			
+			<a class="btn btn-action" href="/benefits/publishers"><b>Publishing paper coupons?</b><br/>Go Mobile!</a>
+			<a class="btn btn-action" href="/benefits/merchants"><b>Own a business?</b><br/>Connect with your customers!</a>
+			
+		</div>
+	</wicket:extend>
 </html>

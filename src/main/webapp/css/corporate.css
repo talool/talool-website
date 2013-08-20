@@ -4,6 +4,9 @@
 	max-width: 950px;
 	margin: 0 auto;
 }
+.mobile .notOnMobile {
+	display:none;
+}
 .services li {
 	text-align: left;
 	margin-bottom: 15px;

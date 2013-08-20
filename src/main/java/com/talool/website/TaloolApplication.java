@@ -33,6 +33,8 @@ import com.talool.website.pages.corporate.MerchantServices;
 import com.talool.website.pages.corporate.PrivacyPolicy;
 import com.talool.website.pages.corporate.PublisherServices;
 import com.talool.website.pages.corporate.TermsOfService;
+import com.talool.website.pages.corporate.WWWPrivacyPolicy;
+import com.talool.website.pages.corporate.WWWTermsOfService;
 import com.talool.website.pages.dashboard.MerchantDashboard;
 import com.talool.website.pages.facebook.OpenGraphDeal;
 import com.talool.website.pages.facebook.OpenGraphDealOffer;
@@ -47,6 +49,9 @@ import com.talool.website.pages.lists.MerchantLocationsPage;
 import com.talool.website.pages.lists.MerchantsPage;
 import com.talool.website.pages.payment.braintree.VenmoSaveCardPage;
 import com.talool.website.pages.payment.braintree.VenmoUseCardPage;
+import com.talool.website.pages.sales.ContactPage;
+import com.talool.website.pages.sales.MerchantBenefits;
+import com.talool.website.pages.sales.PublisherBenefits;
 import com.talool.website.panel.image.upload.FileManageResourceReference;
 import com.talool.website.panel.image.upload.FileUploadResourceReference;
 
@@ -135,6 +140,12 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/services/merchants", MerchantServices.class);
 		mountPage("/services/publishers", PublisherServices.class);
 		mountPage("/services/consumers", ConsumerServices.class);
+		
+		mountPage("/corp/privacy", WWWPrivacyPolicy.class);
+		mountPage("/corp/terms", WWWTermsOfService.class);
+		mountPage("/contactus", ContactPage.class);
+		mountPage("/benefits/publishers", PublisherBenefits.class);
+		mountPage("/benefits/merchants", MerchantBenefits.class);
 		
 		mountPage("/mobile/payment/save", VenmoSaveCardPage.class);
 		mountPage("/mobile/payment/use", VenmoUseCardPage.class);

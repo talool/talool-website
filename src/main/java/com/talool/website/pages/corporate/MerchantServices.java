@@ -2,6 +2,8 @@ package com.talool.website.pages.corporate;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.talool.website.panel.sales.MerchantPanel;
+
 
 public class MerchantServices extends BaseCorporatePage {
 
@@ -15,7 +17,7 @@ public class MerchantServices extends BaseCorporatePage {
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		
+		add(new MerchantPanel("benefits"));
 	}
 
 }

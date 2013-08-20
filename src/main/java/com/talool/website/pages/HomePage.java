@@ -1,13 +1,14 @@
 package com.talool.website.pages;
 
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import com.talool.website.panel.sales.CustomerPanel;
 
 /**
  * @author clintz
  * 
  */
-public class HomePage extends WebPage
+public class HomePage extends WWWBasePage
 {
 	private static final long serialVersionUID = 8390824646913457971L;
 
@@ -22,5 +23,10 @@ public class HomePage extends WebPage
 		super(parameters);
 	}
 
-
+	@Override
+	protected void onInitialize()
+	{
+		super.onInitialize();
+		add(new CustomerPanel("benefits"));
+	}
 }
