@@ -2,7 +2,7 @@ package com.talool.website.pages;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.talool.website.panel.sales.CustomerPanel;
+import com.talool.website.panel.sales.HomepagePanel;
 
 /**
  * @author clintz
@@ -27,6 +27,6 @@ public class HomePage extends WWWBasePage
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		add(new CustomerPanel("benefits"));
+		add(new HomepagePanel("benefits"));
 	}
 }

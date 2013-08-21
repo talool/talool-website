@@ -44,12 +44,15 @@ $(function() {
 		
 		this.appRedirect = function()
 		{
+			
+			// TODO how do we detect ios vs android?  useragent?
+			
 			  document.location = 'taloolmydeals://';
 			  setTimeout( function()
 			  {
 			      if( confirm( 'You do not seem to have Your App installed, do you want to go download it now?'))
 			      {
-			        document.location = 'http://itunes.apple.com/us/app/yourAppId';
+			        document.location = 'http://itunes.apple.com/us/app/669529943';
 			      }
 			  }, 300);
 		};

@@ -5,17 +5,21 @@
 	    <meta name="keywords" content="keyword1,keyword2,keyword3">
 	    <meta name="description" content="this is my page">
 	    <meta name="content-type" content="text/html; charset=UTF-8">
+	    <link href='http://fonts.googleapis.com/css?family=Ubuntu:400,700' rel='stylesheet' type='text/css'>
 	    <link rel="stylesheet" type="text/css" href="/css/global.css">
 	    <link rel="stylesheet" type="text/css" href="/css/hp.css">
 	</head>
 	<body class="talool gray0-bg">
 		<div class="hp gray4-font">
 			<div class="header gray5-font">
-				<a href="/"><img class="logo" alt="Talool" src="/img/homepage/TaloolLogoIcon.png" width="199" height="50"/></a>
+				<a href="/"><img class="logo" alt="Talool" src="/img/homepage/TaloolLogoIcon2.png" width="199" height="50"/></a>
 				<span class="nav">
-					<a href="/benefits/publishers">Publishers</a>
-					<a href="/benefits/fundraisers">Fundraisers</a>
-					<a href="/benefits/merchants">Merchants</a>
+					<wicket:link>
+				  		<a href="/com/talool/website/pages/sales/CustomerBenefits.html">Customers</a>
+				 		<a href="/com/talool/website/pages/sales/PublisherBenefits.html">Publishers</a>
+				  		<a href="/com/talool/website/pages/sales/FundraiserBenefits.html">Fundraisers</a>
+				  		<a href="/com/talool/website/pages/sales/MerchantBenefits.html">Merchants</a>
+			  		</wicket:link>
 				</span>
 			</div>
 			
