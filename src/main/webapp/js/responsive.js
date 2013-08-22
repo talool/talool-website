@@ -46,15 +46,19 @@ $(function() {
 		{
 			
 			// TODO how do we detect ios vs android?  useragent?
-			
-			  document.location = 'taloolmydeals://';
-			  setTimeout( function()
-			  {
-			      if( confirm( 'You do not seem to have Your App installed, do you want to go download it now?'))
-			      {
+			var loc = document.location;
+			document.location = 'taloolmydeals://';
+			setTimeout( function()
+			{
+			    if( confirm( 'You do not seem to have Talool installed, do you want to go download it now?'))
+			    {
 			        document.location = 'https://itunes.apple.com/us/app/talool/id669529943';
-			      }
-			  }, 300);
+			    }
+			    else
+			    {
+			    	document.location = loc;
+			    }
+			}, 300);
 		};
 		    
 		this.init();
