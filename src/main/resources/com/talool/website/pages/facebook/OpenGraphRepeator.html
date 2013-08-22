@@ -21,29 +21,26 @@
 	    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 	    <script src="/js/core.js"></script>
-		<script src="/js/letters.js"></script>
-		<script src="/js/logo.js"></script>
 		<script src="/js/responsive.js"></script>
 		<script>
 	    	window.ooConfig = {
-				logo:{target:"#canvas",bAdmin:false, scale: .30, color:"rgba(255,255,255,1)"},
 				responsive: {mobileClass:"mobile", tabletClass:"tablet", mobileWidth: 750, tabletWidth: 1400, redirectToApp: true}
 			};
 	    </script>
 	</head>
     <body>
-    	<div class="header teal-bg">
-	  		<canvas id="canvas" height="25"></canvas>
+    	<div class="header">
+	  		<a href="/"><img class="logo" alt="Talool" src="/img/homepage/TaloolLogoIcon2.png" width="199" height="50"/></a>
 	  	</div>
 	    <div class="gift">
     		<wicket:child/>
     		<div class="footer">
 				<div class="links teal-font">
-		          	<a href="http://talool.com/support/">Support</a> |
-		            <a href="http://talool.com/legal/">Terms and Conditions</a> |
-		            <a href="http://talool.com/privacy/">Privacy Policy</a>
+		          	<a href="/contactus">Contact Us</a> |
+		            <a href="/corp/privacy">Terms of Use</a> |
+		            <a href="/corp/terms">Privacy Policy</a>
 				</div>
-		        <div class="copyright true-gray-font">Copyright © 2013, Talool, Inc., Boulder, Colorado, USA</div>
+		        <div class="copyright true-gray-font">© 2013 Talool, Inc | Boulder, CO</div>
 		    </div>
     		<div id='debug'></div>
 	    </div>

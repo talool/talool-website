@@ -52,7 +52,7 @@ $(function() {
 			  {
 			      if( confirm( 'You do not seem to have Your App installed, do you want to go download it now?'))
 			      {
-			        document.location = 'http://itunes.apple.com/us/app/669529943';
+			        document.location = 'https://itunes.apple.com/us/app/talool/id669529943';
 			      }
 			  }, 300);
 		};
