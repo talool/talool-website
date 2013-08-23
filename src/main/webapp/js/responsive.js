@@ -45,20 +45,13 @@ $(function() {
 		this.appRedirect = function()
 		{
 			
-			// TODO how do we detect ios vs android?  useragent?
-			var loc = document.location;
-			document.location = 'taloolmydeals://';
-			setTimeout( function()
+			// detect ios vs android via useragent
+			if (oo.isMobile = navigator.userAgent.match(/(iPhone|iPod|iPad)/))
 			{
-			    if( confirm( 'You do not seem to have Talool installed, do you want to go download it now?'))
-			    {
-			        document.location = 'https://itunes.apple.com/us/app/talool/id669529943';
-			    }
-			    else
-			    {
-			    	document.location = loc;
-			    }
-			}, 300);
+				document.location = 'taloolmydeals://';
+			}
+			
+			
 		};
 		    
 		this.init();

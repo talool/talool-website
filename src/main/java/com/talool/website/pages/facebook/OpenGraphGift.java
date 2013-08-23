@@ -56,7 +56,7 @@ public class OpenGraphGift extends OpenGraphRepeator {
 			merchantName = deal.getMerchant().getName();
 			
 			// check the share type
-			StringBuilder instructionsSB = new StringBuilder("To accept your deal, install Talool for iOS or Android and");
+			StringBuilder instructionsSB = new StringBuilder("To accept your gift, install Talool for iOS or Android and");
 			if (gift instanceof FaceBookGift)
 			{
 				instructionsSB.append(" login with Facebook.");
