@@ -48,11 +48,7 @@
 .hp .appicons a
 {
 	display: inline-block;
-	height: 81px;
-}
-.hp .appicons a.download img
-{
-	margin-bottom: 35px;
+	margin: 0 10px;
 }
 
 .hp h1 {
