@@ -5,6 +5,8 @@ import java.util.UUID;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.datetime.DateConverter;
+import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -67,6 +69,10 @@ public class CustomersPage extends BasePage
 
 				item.add(new Label("firstName"));
 				item.add(new Label("lastName"));
+				
+				DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
+				String createdOn = converter.convertToString(customer.getCreated(), getLocale());
+				item.add(new Label("creationDate", createdOn));
 
 				PageParameters customerParams = new PageParameters();
 				customerParams.set("id", customer.getId());
