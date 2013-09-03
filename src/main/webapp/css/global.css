@@ -9,18 +9,24 @@ body {
 p {
 	line-height: 21px;
 }
-
-.content {
-	padding: 5px 10px 40px;
-	margin: 5px 20px;
+table.contentWrapper {
+	width: 100%;
+	border: none;
+	padding: 0;
+	margin: 0;
+	border-collapse:collapse; 
+	border-spacing: 0;
+}
+.talool .content {
+	padding: 25px 35px 40px 30px;
+	margin:  0 0 0 170px;
+	background: white;
+	vertical-align: top;
 }
 
 .header {
-	padding: 10px 25px;
+	padding: 10px 7px;
 	position: relative;
-}
-.header canvas {
-	display:block;
 }
 
 h2 {
@@ -30,19 +36,38 @@ h2 {
 iframe {
 	border:none;
 }
-
-/* GLOBAL MENU BAR */
-.menu {
-	color: white;
-	list-style: none;
-	margin: 0 0 25px 0;
-	padding: 2px 30px 2px 20px;
-	border-top: 1px solid;
+.sidebar
+{
+	width: 185px;
+	padding: 0px;
+	vertical-align: top;
 }
-.menu li {
-	display: inline-block;
-	padding: 8px 5px;
-	margin-right: 20px;
+.sidebar ul
+{
+	list-style:none;
+	margin: 0;
+	padding: 0px;
+}
+.sidebar ul li
+{
+	font-weight: bold;
+	background-color: #ddd;
+	padding: 10px 10px;
+	display: block;
+}
+.sidebar ul ul li
+{
+	font-weight: normal;
+	background-color: #eee;
+}
+.sidebar ul ul li i
+{
+	margin-right: 5px;
+}
+.sidebar ul ul li.selected
+{
+	background-color: rgba(25, 188, 185, .4);
+	color: white;
 }
 
 /* USER INFO BUTTON */
@@ -51,26 +76,16 @@ iframe {
 	margin-right: 0;
 	padding: 0;
 	position: absolute;
-	top: 17px;
-	right: 25px;
+	top: 7px;
+	right: 10px;
 }
 a {
 	text-decoration: none;
 }
 body.talool .menu a, 
 body.talool .menu a:visited {
-	color: white;
+	color: rgb(185, 172, 151);
 }
-.menu em {
-	font-weight: bold;
-	font-style: normal;
-	background: rgb(153, 134, 117);
-	border: 1px solid rgb(153, 134, 117);
-	padding: 5px 10px;
-	border-radius: 10px;
-	color: white;
-}
-
 
 /* COLORS */
 .orange-font, 
@@ -80,6 +95,10 @@ body.talool a,
 body.talool a:visited {
 	color: rgb(241, 90, 36);
 
+}
+body.talool .sidebar a, 
+body.talool .sidebar a:visited {
+	color: rgb(83, 71, 65);
 }
 .orange-bg {
 	background-color: rgb(241, 90, 36);
@@ -161,6 +180,11 @@ body.talool a:visited {
 .true-gray-font, .true-gray-font a, .true-gray-font a:visited {
 	color: rgb(190, 190, 190);
 }
+.true-gray-bg
+{
+	background-color: rgb(220,220,220);
+}
+
 body.talool .btn.btn-primary {
 	background-image: linear-gradient(to bottom,#fff,#ddd);
 	background-image: -moz-linear-gradient(top,#fff,#ddd);
@@ -168,7 +192,7 @@ body.talool .btn.btn-primary {
 	background-image: -webkit-linear-gradient(top,#fff,#ddd);
 	background-image: -o-linear-gradient(top,#fff,#ddd);
 	border: 1px solid #bbb;
-	color: rgb(241, 90, 36);
+	color: rgb(83, 71, 65);
 }
 body.talool .btn.btn-primary:hover {
 	background-image: linear-gradient(to bottom,#fff,#ccc);

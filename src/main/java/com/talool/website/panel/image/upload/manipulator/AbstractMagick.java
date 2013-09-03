@@ -73,7 +73,7 @@ public abstract class AbstractMagick implements IMagick
 			// execute the operation
 			cmd.run(getOperation(),inputFilePath,outputFilePath);
 			
-			//debug();
+			debug();
 		}
 		catch (IM4JavaException ime)
 		{

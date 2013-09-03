@@ -4,32 +4,25 @@
     <meta name="keywords" content="keyword1,keyword2,keyword3">
     <meta name="description" content="this is my page">
     <meta name="content-type" content="text/html; charset=UTF-8">
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="/css/global.css">
     <link rel="stylesheet" type="text/css" href="/css/login.css">
-    <link rel="stylesheet" type="text/css" href="/css/font-awesome.css">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script src="/js/core.js"></script>
-	<script src="/js/letters.js"></script>
-	<script src="/js/logo.js"></script>
-	<script src="/js/background.js"></script>
-	<script language="javascript">
-		window.ooConfig = {
-			logo:{target:"#canvas",bAdmin:true, scale: 1.1, color:"rgba(255,255,255,1)"},
-			background:{word:"talool tools", scale: .3, color:"rgba(255,255,255,.1)", animationColor: "rgba(255,255,255,.1)"}
-		};
-	</script>
 </head>
-	<body class="teal-bg talool">
-		<canvas id="bgCanvas" height="77" width="60"></canvas>
-		<canvas id="fgCanvas" height="77" width="60"></canvas>
-		<div class="cmain orange-border">
-			<canvas id="canvas" height="95" width="575"></canvas>
+	<body class="talool gray4-bg">
+		<div class="cmain">
 			<form wicket:id="loginForm" class="login">
 				<table>
-					<tr><td>Email:</td><td><input wicket:id="email" id="email" type="text"></td></tr>
-					<tr><td>Password:</td><td><input wicket:id="pass" type="password"></td></tr>
+					<thead>
+						<tr>
+							<th colspan="2"><img class="logo" alt="Talool" src="/img/TaloolToolsLogoAndIcon.png" width="336" height="50"/></th>
+						</tr>
+					</thead>
+					<tr><td>Email:</td><td align="right"><input class="txt" wicket:id="email" id="email" type="text"></td></tr>
+					<tr><td>Password:</td><td align="right"><input class="txt" wicket:id="pass" type="password"></td></tr>
 					<tr><td colspan="2" align="right">
-					<input type="submit" class="btn btn-primary btn-large" value="Login">
+					<input type="submit" class="btn btn-action btn-large" value="Login">
 				    </td></tr>
 				</table>
 			</form>

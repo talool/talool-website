@@ -56,7 +56,7 @@ public class AdminMenuPanel extends Panel
 	{
 		final StringBuilder sb = new StringBuilder();
 		sb.append(SessionUtils.getSession().getMerchantAccount().getEmail()).append(" / ");
-		sb.append(SessionUtils.getSession().getMerchantAccount().getRoleTitle()).append(" / ");
+		//sb.append(SessionUtils.getSession().getMerchantAccount().getRoleTitle()).append(" / ");
 		sb.append(SessionUtils.getSession().getMerchantAccount().getMerchant().getName());
 		return sb.toString();
 	}

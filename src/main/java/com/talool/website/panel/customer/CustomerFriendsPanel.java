@@ -46,7 +46,7 @@ public class CustomerFriendsPanel extends Panel
 
 				if (item.getIndex() % 2 == 0)
 				{
-					item.add(new AttributeModifier("class", "gray0-bg"));
+					item.add(new AttributeModifier("class", "odd-row-bg"));
 				}
 
 				item.add(new Label("firstName"));

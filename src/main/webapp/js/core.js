@@ -7,6 +7,7 @@ $(function() {
 		
 		this.init = function() {
 			// global method setup
+			$(".sidebar li:has(em)").addClass("selected");
 		};
 		
 		this.getTempCanvas = function(width, height) {
@@ -31,9 +32,7 @@ $(function() {
 		this.init();
 	};
 
-	if (window.ooConfig) {
-		window.oo = new Talool(window.ooConfig);
-	} 
+	window.oo = new Talool();
 	
 });
 

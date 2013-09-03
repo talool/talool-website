@@ -1,7 +1,8 @@
-<wicket:panel>
+<!DOCTYPE html>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
 	<div>
-	  	<div class="header teal-bg">
-	  		<canvas id="canvas" height="45"></canvas>
+		<div class="header gray4-bg">
+	  		<a href="/admin"><img class="logo" alt="Talool Tools" src="/img/TaloolToolsLogoAndIcon2.png" width="168" height="25"/></a>
 	  		<div class="userInfo">
 	  			<div class="btn-group" id="userDropdownContainer">
 		  			<a class="btn btn-primary" href="#"><i class="icon-user"></i> 
@@ -19,13 +20,5 @@
 			    </div>
 	  		</div>
 	  	</div>
-	  	<ol class="menu gray1-bg gray0-border">
-	  		<wicket:link>
-		  		<li><a href="/com/talool/website/pages/lists/MerchantsPage.html"><i class="icon-shopping-cart icon-large"></i> Merchants</a></li>
-		 		<li><a href="/com/talool/website/pages/lists/DealOffersPage.html"><i class="icon-money icon-large"></i> Deal Offers</a></li>
-		  		<li><a href="/com/talool/website/pages/lists/CustomersPage.html"><i class="icon-user icon-large"></i> Customers</a></li>
-		  		<li><a href="/com/talool/website/pages/lists/DealHistoryPage.html"><i class="icon-time icon-large"></i> Deal Acquire History</a></li>
-	  		</wicket:link>
-	  	</ol>
-  	</div>
- </wicket:panel>
+	</div>
+</wicket:panel>
