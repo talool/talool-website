@@ -12,6 +12,13 @@
 
 	<name>Talool Website</name>
 	<url>http://www.talool.com</url>
+	
+	<repositories>
+		<repository>
+			<id>talool-maven-ftp</id>
+			<url>ftp://syslog1/repository</url>
+		</repository>
+	</repositories>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
