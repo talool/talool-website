@@ -36,6 +36,8 @@ public class HealthCheckPage extends WebPage
 
 		final HttpServletRequest request = ((HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest());
 
+		String userAgent = request.getHeader("User-Agent");
+
 		for (String ipStartsWith : Config.get().getAllowableHealthCheckIps())
 		{
 			if (request.getRemoteAddr().startsWith(ipStartsWith))

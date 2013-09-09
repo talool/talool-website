@@ -5,6 +5,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -17,6 +18,8 @@ import com.talool.website.panel.AdminMenuPanel;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.NiceFeedbackPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.service.PermissionService;
+import com.talool.website.util.SessionUtils;
 
 /**
  * 
@@ -59,6 +62,7 @@ public abstract class BasePage extends WebPage
 		init();
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void init()
 	{
 		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
@@ -103,6 +107,11 @@ public abstract class BasePage extends WebPage
 		_actionLink.setOutputMarkupId(true);
 		_action.add(_actionLink);
 		add(_action.setVisible(hasActionLink()));
+
+		boolean canViewAnalytics = PermissionService.get().canViewAnalytics(
+				SessionUtils.getSession().getMerchantAccount().getEmail());
+
+		add(new BookmarkablePageLink("analyticsLink", AnalyticsPage.class).setVisible(canViewAnalytics));
 
 	}
 

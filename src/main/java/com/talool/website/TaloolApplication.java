@@ -21,6 +21,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.talool.website.converter.UUIDConverter;
 import com.talool.website.pages.AdminLoginPage;
+import com.talool.website.pages.AnalyticsPage;
 import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.pages.CustomerSettingsPage;
 import com.talool.website.pages.HealthCheckPage;
@@ -121,6 +122,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/admin/books", DealOffersPage.class);
 		mountPage("/admin/dh", DealHistoryPage.class);
 		mountPage("/admin/customers", CustomersPage.class);
+		mountPage("/admin/analytics", AnalyticsPage.class);
 		mountPage("/admin/customer/settings", CustomerSettingsPage.class);
 		mountPage("/admin/customer-management", CustomerManagementPage.class);
 		mountPage("/admin/merchants", MerchantsPage.class);
@@ -135,14 +137,14 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/deal", OpenGraphDeal.class);
 		mountPage("/offer", OpenGraphDealOffer.class);
 		mountPage("/location", OpenGraphLocation.class);
-		
+
 		mountPage("/privacy", PrivacyPolicy.class);
 		mountPage("/termsofservice", TermsOfService.class);
 		mountPage("/feedback", Feedback.class);
 		mountPage("/services/merchants", MerchantServices.class);
 		mountPage("/services/publishers", PublisherServices.class);
 		mountPage("/services/consumers", ConsumerServices.class);
-		
+
 		mountPage("/corp/privacy", WWWPrivacyPolicy.class);
 		mountPage("/corp/terms", WWWTermsOfService.class);
 		mountPage("/contactus", ContactPage.class);
@@ -150,7 +152,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/benefits/fundraisers", FundraiserBenefits.class);
 		mountPage("/benefits/merchants", MerchantBenefits.class);
 		mountPage("/benefits/customers", CustomerBenefits.class);
-		
+
 		mountPage("/mobile/payment/save", VenmoSaveCardPage.class);
 		mountPage("/mobile/payment/use", VenmoUseCardPage.class);
 

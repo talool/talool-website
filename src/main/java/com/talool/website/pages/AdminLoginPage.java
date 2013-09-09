@@ -13,6 +13,7 @@ import com.talool.core.MerchantAccount;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.website.pages.lists.MerchantsPage;
+import com.talool.website.service.PermissionService;
 import com.talool.website.util.SessionUtils;
 
 /**
@@ -50,7 +51,16 @@ public class AdminLoginPage extends WebPage
 					{
 						SessionUtils.getSession().setMerchantAccount(mAccnt);
 						continueToOriginalDestination();
-						setResponsePage(MerchantsPage.class);
+
+						if (PermissionService.get().canViewAnalytics(mAccnt.getEmail()))
+						{
+							setResponsePage(AnalyticsPage.class);
+						}
+						else
+						{
+							setResponsePage(MerchantsPage.class);
+						}
+
 					}
 				}
 				catch (ServiceException e)
