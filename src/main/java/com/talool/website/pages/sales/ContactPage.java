@@ -3,6 +3,7 @@ package com.talool.website.pages.sales;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.website.pages.WWWBasePage;
+import com.talool.website.panel.sales.ContactPanel;
 
 public class ContactPage extends WWWBasePage
 {
@@ -19,5 +20,11 @@ public class ContactPage extends WWWBasePage
 		super(parameters);
 	}
 
-
+	@Override
+	protected void onInitialize()
+	{
+		super.onInitialize();
+		
+		add(new ContactPanel("content"));
+	}
 }

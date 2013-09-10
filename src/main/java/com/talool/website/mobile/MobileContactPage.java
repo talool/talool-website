@@ -2,7 +2,7 @@ package com.talool.website.mobile;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.talool.website.panel.corporate.TermsPanel;
+import com.talool.website.panel.sales.ContactPanel;
 
 
 public class MobileContactPage extends MobilePage {
@@ -19,6 +19,6 @@ public class MobileContactPage extends MobilePage {
 	{
 		super.onInitialize();
 		
-		add(new TermsPanel("content"));
+		add(new ContactPanel("content"));
 	}
 }
