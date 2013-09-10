@@ -1,0 +1,72 @@
+.talool.mobile .ui-header .ui-btn
+{
+	border: none;
+	background-color: transparent;
+	margin: 6px;
+	color: rgba(115, 115, 115, .7);
+}
+
+.talool.mobile #menu
+{
+	background-color: #fff;
+	background-image: linear-gradient(rgba(185, 172, 151, .1), rgba(185, 172, 151, 1));
+}
+
+.talool.mobile .ui-body-c
+{
+	background-color: #fff;
+	background-image: linear-gradient(rgba(185, 172, 151, 0), rgba(185, 172, 151, .3));
+}
+
+.talool.mobile .logo
+{
+	height: 25px;
+	display: block;
+	margin: 10px auto;
+}
+
+body.apple .android,
+body.android .apple
+{
+	display:none;
+}
+
+.appicons,
+.learnmore
+{
+	margin-top: 40px;
+	text-align: center;
+}
+.appicon
+{
+	margin: 15px 0;
+}
+
+.mobile .ui-content.og
+{
+	padding: 0;
+	margin-bottom: 30px;
+}
+.mobile .ui-content.og h1,
+.mobile .ui-content.og table
+{
+	margin-right: 15px;
+	margin-left: 15px;
+}
+.mobile .ui-content.og .hero
+{
+	display: block;
+	width: 100%;
+}
+td.label
+{
+	vertical-align: top;
+	font-weight: bold;
+	padding-right: 15px;
+	color: rgba(90,90,90,.6);
+}
+
+.details table td
+{
+	padding-bottom: 15px;
+}

@@ -26,26 +26,30 @@
   		<tr>
 	  	<td class="sidebar">
 	  		<ul>
-	  			<li>Talool Admin</li>
-	  			<ul>
-	  			    <wicket:enclosure child="analyticsLink">
-	  			    <li><a href="#" wicket:id="analyticsLink"><i class="icon-dashboard icon-large"></i> Analytics</a></li>
-	  			    </wicket:enclosure>
-	  				<wicket:link>
-	  					<li><a href="/com/talool/website/pages/lists/MerchantsPage.html"><i class="icon-shopping-cart icon-large"></i> Merchants</a></li>
-		 				<li><a href="/com/talool/website/pages/lists/DealOffersPage.html"><i class="icon-money icon-large"></i> Deal Offers</a></li>
-		  				<li><a href="/com/talool/website/pages/lists/CustomersPage.html"><i class="icon-user icon-large"></i> Customers</a></li>
-		  				<li><a href="/com/talool/website/pages/lists/DealHistoryPage.html"><i class="icon-time icon-large"></i> Deal History</a></li>
-	  				</wicket:link>
-	  			</ul>
-	  			<!-- 
-	  			<li>Publisher Tools</li>
-	  			<ul>
-	  				<li><a><i class="icon-shopping-cart icon-large"></i> My Merchants</a></li>
-	  				<li><a><i class="icon-shopping-cart icon-large"></i> My Customers</a></li>
-	  				<li><a><i class="icon-shopping-cart icon-large"></i> My Deals</a></li>
-	  				<li><a><i class="icon-shopping-cart icon-large"></i> My Books</a></li>
-	  			</ul>
+	  			<wicket:container wicket:id="adminMenu">
+		  			<li>Talool Admin</li>
+		  			<ul>
+		  				<wicket:link>
+		  					<li><a href="/com/talool/website/pages/AnalyticsPage.html"><i class="icon-dashboard icon-large"></i> Analytics</a></li>
+		  					<li><a href="/com/talool/website/pages/lists/MerchantsPage.html"><i class="icon-shopping-cart icon-large"></i> Merchants</a></li>
+			 				<li><a href="/com/talool/website/pages/lists/DealOffersPage.html"><i class="icon-money icon-large"></i> Deal Offers</a></li>
+			  				<li><a href="/com/talool/website/pages/lists/CustomersPage.html"><i class="icon-user icon-large"></i> Customers</a></li>
+			  				<li><a href="/com/talool/website/pages/lists/DealHistoryPage.html"><i class="icon-time icon-large"></i> Deal History</a></li>
+		  				</wicket:link>
+		  			</ul>
+	  			</wicket:container>
+	  			<wicket:container wicket:id="publisherMenu">
+		  			<li>Publisher Tools</li>
+		  			<ul>
+		  				<wicket:link>
+		  					<li><a href="/com/talool/website/pages/lists/MerchantsPage.html"><i class="icon-shopping-cart icon-large"></i> My Merchants</a></li>
+		  					<li><a href="/com/talool/website/pages/lists/CustomersPage.html"><i class="icon-shopping-cart icon-large"></i> My Customers</a></li>
+		  					<li><a href="/com/talool/website/pages/lists/DealHistoryPage.html"><i class="icon-shopping-cart icon-large"></i> My Deals</a></li>
+		  					<li><a href="/com/talool/website/pages/lists/DealOffersPage.html"><i class="icon-shopping-cart icon-large"></i> My Books</a></li>
+		  				</wicket:link>
+		  			</ul>
+	  			</wicket:container>
+	  			<!--
 	  			<li>Fundraiser Tools</li>
 	  			<ul>
 	  				<li><a><i class="icon-shopping-cart icon-large"></i> My Schools</a></li>

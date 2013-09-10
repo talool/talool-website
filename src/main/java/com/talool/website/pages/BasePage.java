@@ -111,7 +111,19 @@ public abstract class BasePage extends WebPage
 		boolean canViewAnalytics = PermissionService.get().canViewAnalytics(
 				SessionUtils.getSession().getMerchantAccount().getEmail());
 
-		add(new BookmarkablePageLink("analyticsLink", AnalyticsPage.class).setVisible(canViewAnalytics));
+		WebMarkupContainer adminMenu = new WebMarkupContainer("adminMenu");
+		add(adminMenu);
+		WebMarkupContainer publisherMenu = new WebMarkupContainer("publisherMenu");
+		add(publisherMenu);
+		
+		if (canViewAnalytics) 
+		{
+			publisherMenu.setVisible(false);
+		}
+		else
+		{
+			adminMenu.setVisible(false);
+		}
 
 	}
 

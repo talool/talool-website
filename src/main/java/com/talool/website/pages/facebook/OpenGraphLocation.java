@@ -1,18 +1,17 @@
 package com.talool.website.pages.facebook;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.gmap.api.GLatLng;
 
-import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
-import com.talool.website.component.StaticImage;
+import com.talool.website.mobile.opengraph.MobileOpenGraphLocation;
+import com.talool.website.panel.opengraph.LocationPanel;
 import com.vividsolutions.jts.geom.Point;
 
 public class OpenGraphLocation extends OpenGraphRepeator
@@ -21,37 +20,33 @@ public class OpenGraphLocation extends OpenGraphRepeator
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(OpenGraphLocation.class);
 
-	private Merchant merchant = null;
 	private MerchantLocation location = null;
-	private String title;
 
-	@SuppressWarnings("unused")
 	public OpenGraphLocation(PageParameters parameters)
 	{
 		super(parameters);
 
+		if (isMobile())
+		{
+			// redirect to mobile web
+			throw new RestartResponseException(MobileOpenGraphLocation.class, parameters); 
+		}
+		
 		long locId = parameters.get(0).toLong();
 
 		try
 		{
 			location = taloolService.getMerchantLocationById(locId);
-			merchant = location.getMerchant();
+			setOgDescription("");
+			setOgTitle(location.getMerchant().getName());
+			setOgType("location"); // TODO not sure about this
+			setOgImage(location.getMerchantImage().getMediaUrl());
 		}
 		catch (ServiceException se)
 		{
 			LOG.error("Failed to get gift for Facebook:", se);
 		}
 
-		if (location != null)
-		{
-			setOgDescription("");
-			setOgTitle(merchant.getName());
-			setOgType("location"); // TODO not sure about this
-			setOgImage(location.getMerchantImage().getMediaUrl());
-
-			StringBuilder titleSB = new StringBuilder(merchant.getName());
-			title = titleSB.toString();
-		}
 	}
 
 	@Override
@@ -98,11 +93,7 @@ public class OpenGraphLocation extends OpenGraphRepeator
 		longitude.add(new AttributeModifier("content", center.getLng()));
 		add(longitude);
 
-		StaticImage image = new StaticImage("merchImage", false, new PropertyModel<String>(this, "ogImage"));
-		add(image);
-
-		Label titleLabel = new Label("titleLabel", new PropertyModel<String>(this, "title"));
-		add(titleLabel);
+		add(new LocationPanel("object",location));
 	}
 
 	@Override

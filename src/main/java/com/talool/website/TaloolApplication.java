@@ -20,6 +20,19 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.talool.website.converter.UUIDConverter;
+import com.talool.website.mobile.MobileContactPage;
+import com.talool.website.mobile.MobileCustomerPage;
+import com.talool.website.mobile.MobileFundraiserPage;
+import com.talool.website.mobile.MobileHomePage;
+import com.talool.website.mobile.MobileMerchantPage;
+import com.talool.website.mobile.MobilePasswordPage;
+import com.talool.website.mobile.MobilePrivacyPage;
+import com.talool.website.mobile.MobilePublisherPage;
+import com.talool.website.mobile.MobileTermsPage;
+import com.talool.website.mobile.opengraph.MobileOpenGraphDeal;
+import com.talool.website.mobile.opengraph.MobileOpenGraphDealOffer;
+import com.talool.website.mobile.opengraph.MobileOpenGraphGift;
+import com.talool.website.mobile.opengraph.MobileOpenGraphLocation;
 import com.talool.website.pages.AdminLoginPage;
 import com.talool.website.pages.AnalyticsPage;
 import com.talool.website.pages.CustomerManagementPage;
@@ -133,11 +146,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/admin/merchant/mm", MerchantManagementPage.class);
 		mountPage("/h", HealthCheckPage.class);
 
-		mountPage("/gift", OpenGraphGift.class);
-		mountPage("/deal", OpenGraphDeal.class);
-		mountPage("/offer", OpenGraphDealOffer.class);
-		mountPage("/location", OpenGraphLocation.class);
-
+		// WebViews for the Apps
 		mountPage("/privacy", PrivacyPolicy.class);
 		mountPage("/termsofservice", TermsOfService.class);
 		mountPage("/feedback", Feedback.class);
@@ -145,6 +154,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/services/publishers", PublisherServices.class);
 		mountPage("/services/consumers", ConsumerServices.class);
 
+		// Big Web Pages
 		mountPage("/corp/privacy", WWWPrivacyPolicy.class);
 		mountPage("/corp/terms", WWWTermsOfService.class);
 		mountPage("/contactus", ContactPage.class);
@@ -152,9 +162,29 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/benefits/fundraisers", FundraiserBenefits.class);
 		mountPage("/benefits/merchants", MerchantBenefits.class);
 		mountPage("/benefits/customers", CustomerBenefits.class);
+		mountPage("/gift", OpenGraphGift.class);
+		mountPage("/deal", OpenGraphDeal.class);
+		mountPage("/offer", OpenGraphDealOffer.class);
+		mountPage("/location", OpenGraphLocation.class);
 
+		// Tempory Payment Pages
 		mountPage("/mobile/payment/save", VenmoSaveCardPage.class);
 		mountPage("/mobile/payment/use", VenmoUseCardPage.class);
+		
+		// Mobile Web Pages
+		mountPage("/m",MobileHomePage.class);
+		mountPage("/m/customers",MobileCustomerPage.class);
+		mountPage("/m/publishers",MobilePublisherPage.class);
+		mountPage("/m/fundraisers",MobileFundraiserPage.class);
+		mountPage("/m/merchants",MobileMerchantPage.class);
+		mountPage("/m/terms",MobileTermsPage.class);
+		mountPage("/m/privacy",MobilePrivacyPage.class);
+		mountPage("/m/contact",MobileContactPage.class);
+		mountPage("/m/password",MobilePasswordPage.class);
+		mountPage("/m/gift", MobileOpenGraphGift.class);
+		mountPage("/m/deal", MobileOpenGraphDeal.class);
+		mountPage("/m/offer", MobileOpenGraphDealOffer.class);
+		mountPage("/m/location", MobileOpenGraphLocation.class);
 
 		/*
 		 * We need a ONE_PASS_RENDER strategy because pages like search need

@@ -1,16 +1,22 @@
 package com.talool.website.pages.facebook;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
 import com.talool.core.service.CustomerService;
 import com.talool.core.service.TaloolService;
+import com.talool.website.mobile.MobileHomePage;
 
 public abstract class OpenGraphRepeator extends WebPage {
 
@@ -106,5 +112,15 @@ public abstract class OpenGraphRepeator extends WebPage {
 		if (port > 80) sb.append(":").append(port);
 		
 		return sb.toString();
+	}
+	
+	protected boolean isMobile()
+	{
+		final HttpServletRequest request = ((HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest());
+		String ua = request.getHeader("User-Agent");
+		
+		return (StringUtils.contains(ua, "Android") ||
+			StringUtils.contains(ua, "iPhone") ||
+			StringUtils.contains(ua, "iPad"));
 	}
 }

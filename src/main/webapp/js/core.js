@@ -28,8 +28,14 @@ $(function() {
 			}
 			return pad;
 		};
+		
+		this.isMobile = function()
+		{
+			return navigator.userAgent.match(/(Android|iPhone|iPod|iPad)/);
+		};
 
 		this.init();
+
 	};
 
 	window.oo = new Talool();
