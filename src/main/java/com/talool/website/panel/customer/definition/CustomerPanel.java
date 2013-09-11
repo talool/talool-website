@@ -91,7 +91,14 @@ public class CustomerPanel extends BaseDefinitionPanel
 	public void save() throws ServiceException
 	{
 		final Customer customer = (Customer) form.getDefaultModelObject();
-		customerService.save(customer);
+		if (isNew)
+		{
+			customerService.createAccount(customer, customer.getPassword());
+		}
+		else
+		{
+			customerService.save(customer);
+		}
 		SessionUtils.successMessage("Successfully saved customer '", customer.getEmail(), "'");
 	}
 

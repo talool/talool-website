@@ -12,10 +12,16 @@
 	background-image: linear-gradient(rgba(185, 172, 151, .1), rgba(185, 172, 151, 1));
 }
 
-.talool.mobile .ui-body-c
+.talool.mobile div.ui-body-c
 {
 	background-color: #fff;
 	background-image: linear-gradient(rgba(185, 172, 151, 0), rgba(185, 172, 151, .3));
+}
+
+.talool.mobile div.ui-body-c.ui-input-text
+{
+	background-color: #fff;
+	background-image: none;
 }
 
 .talool.mobile .logo
@@ -69,4 +75,23 @@ td.label
 .details table td
 {
 	padding-bottom: 15px;
+}
+
+/* FEEDBACK PANEL */
+
+.feedbackPanel {                          
+    list-style: none;
+    padding: 10px 15px;
+}
+
+div.error ul.feedbackPanel {         
+    background-color: rgba(237, 28, 36, .05);
+    border: 1px solid rgb(237, 28, 36);
+    color: rgb(237, 28, 36);
+}
+
+div.info ul.feedbackPanel {           
+    border: 1px solid rgb(80, 185, 72);
+    background-color: rgba(80, 185, 72, .09);
+    color: rgb(80, 185, 72);
 }

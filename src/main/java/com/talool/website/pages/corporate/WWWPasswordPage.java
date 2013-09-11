@@ -3,22 +3,22 @@ package com.talool.website.pages.corporate;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.talool.website.mobile.MobilePrivacyPage;
+import com.talool.website.mobile.MobilePasswordPage;
 import com.talool.website.pages.WWWBasePage;
-import com.talool.website.panel.corporate.PrivacyPanel;
+import com.talool.website.panel.customer.ForgotPasswordPanel;
 
 
-public class WWWPrivacyPolicy extends WWWBasePage {
+public class WWWPasswordPage extends WWWBasePage {
 
 	private static final long serialVersionUID = 1L;
 	
-	public WWWPrivacyPolicy()
+	public WWWPasswordPage()
 	{
 		super();
 		init();
 	}
 	
-	public WWWPrivacyPolicy(PageParameters params) {
+	public WWWPasswordPage(PageParameters params) {
 		super(params);
 		init();
 	}
@@ -27,7 +27,7 @@ public class WWWPrivacyPolicy extends WWWBasePage {
 	{
 		if (isMobile())
 		{
-			throw new RestartResponseException(MobilePrivacyPage.class); 
+			throw new RestartResponseException(MobilePasswordPage.class); 
 		}
 	}
 	
@@ -35,7 +35,7 @@ public class WWWPrivacyPolicy extends WWWBasePage {
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		add(new PrivacyPanel("privacy"));
+		add(new ForgotPasswordPanel("content"));
 	}
 
 }

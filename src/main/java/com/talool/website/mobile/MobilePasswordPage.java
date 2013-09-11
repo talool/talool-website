@@ -2,7 +2,7 @@ package com.talool.website.mobile;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.talool.website.panel.sales.HomepagePanel;
+import com.talool.website.panel.customer.ForgotPasswordPanel;
 
 public class MobilePasswordPage extends MobilePage {
 
@@ -16,8 +16,7 @@ public class MobilePasswordPage extends MobilePage {
 	@Override
 	protected void onInitialize()
 	{
-		super.onInitialize();
-		
-		add(new HomepagePanel("content"));
+		super.onInitialize();	
+		add(new ForgotPasswordPanel("content"));
 	}
 }

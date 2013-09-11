@@ -26,6 +26,7 @@ import com.talool.website.mobile.MobileFundraiserPage;
 import com.talool.website.mobile.MobileHomePage;
 import com.talool.website.mobile.MobileMerchantPage;
 import com.talool.website.mobile.MobilePasswordPage;
+import com.talool.website.mobile.MobilePasswordResetPage;
 import com.talool.website.mobile.MobilePrivacyPage;
 import com.talool.website.mobile.MobilePublisherPage;
 import com.talool.website.mobile.MobileTermsPage;
@@ -47,6 +48,8 @@ import com.talool.website.pages.corporate.MerchantServices;
 import com.talool.website.pages.corporate.PrivacyPolicy;
 import com.talool.website.pages.corporate.PublisherServices;
 import com.talool.website.pages.corporate.TermsOfService;
+import com.talool.website.pages.corporate.WWWPasswordPage;
+import com.talool.website.pages.corporate.WWWPasswordResetPage;
 import com.talool.website.pages.corporate.WWWPrivacyPolicy;
 import com.talool.website.pages.corporate.WWWTermsOfService;
 import com.talool.website.pages.dashboard.MerchantDashboard;
@@ -166,6 +169,8 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/deal", OpenGraphDeal.class);
 		mountPage("/offer", OpenGraphDealOffer.class);
 		mountPage("/location", OpenGraphLocation.class);
+		mountPage("/password",WWWPasswordPage.class);
+		mountPage("/rpw",WWWPasswordResetPage.class);
 
 		// Tempory Payment Pages
 		mountPage("/mobile/payment/save", VenmoSaveCardPage.class);
@@ -181,6 +186,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/m/privacy",MobilePrivacyPage.class);
 		mountPage("/m/contact",MobileContactPage.class);
 		mountPage("/m/password",MobilePasswordPage.class);
+		mountPage("/m/rpw",MobilePasswordResetPage.class);
 		mountPage("/m/gift", MobileOpenGraphGift.class);
 		mountPage("/m/deal", MobileOpenGraphDeal.class);
 		mountPage("/m/offer", MobileOpenGraphDealOffer.class);

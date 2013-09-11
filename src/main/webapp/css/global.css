@@ -227,23 +227,20 @@ body.talool .btn.btn-action:hover {
 
 /* FEEDBACK PANEL */
 .feedbackPanel {                          
-    border: 1px solid #099;
-    background-color: #eff;
-    color: #099;
+    list-style: none;
+    padding: 10px 15px;
 }
 
 div.error ul.feedbackPanel {         
-    background-color: #fee;
-    border: 1px solid #900;
-    color: #900;
+    background-color: rgba(237, 28, 36, .05);
+    border: 1px solid rgb(237, 28, 36);
+    color: rgb(237, 28, 36);
 }
 
 div.info ul.feedbackPanel {           
-    border: 1px solid #090;
-    background-color: #efe;
-    color: #090;
-    padding-bottom: 10px;
-    padding-top: 10px;
+    border: 1px solid rgb(80, 185, 72);
+    background-color: rgba(80, 185, 72, .09);
+    color: rgb(80, 185, 72);
 }
 
 /* Modal Window Overrides */

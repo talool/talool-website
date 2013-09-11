@@ -111,3 +111,42 @@
 	padding: 10px 40px;
 	border-top: 1px solid;
 }
+
+.feedbackPanel
+{
+	margin: 50px 50px 20px;
+}
+
+.passwordRecovery
+{
+	margin: 50px 50px 200px;
+}
+.passwordRecovery table
+{
+	
+}
+.passwordRecovery td
+{
+	padding: 0 0 10px;
+}
+.passwordRecovery input.txt
+{
+	width: 230px;
+	line-height: 28px;
+	font-size: 16px;
+}
+.passwordRecovery label
+{
+	line-height: 28px;
+	padding-right: 15px;
+}
+
+.passwordRecovery .btn
+{
+	vertical-align: top;
+	margin-left: 15px;
+}
+.passwordRecovery .controls
+{
+	text-align: right;
+}

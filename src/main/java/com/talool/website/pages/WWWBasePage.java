@@ -9,6 +9,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.website.mobile.MobileHomePage;
+import com.talool.website.panel.customer.ResetPasswordPanel;
 
 /**
  * @author clintz
@@ -21,29 +22,31 @@ public class WWWBasePage extends WebPage
 	public WWWBasePage()
 	{
 		super();
-		init();
 	}
 
 	public WWWBasePage(PageParameters parameters)
 	{
 		super(parameters);
-		init();
 	}
 	
-	private void init()
+	@Override
+	protected void onInitialize()
+	{
+		super.onInitialize();
+		if (isMobile()) 
+		{
+			// redirect to mobile web (doing it late, so subclasses can redirect in the constructor)
+			throw new RestartResponseException(MobileHomePage.class, null);
+		}
+	}
+
+	protected boolean isMobile()
 	{
 		final HttpServletRequest request = ((HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest());
 		String ua = request.getHeader("User-Agent");
 		
-		if (StringUtils.contains(ua, "Android") ||
+		return (StringUtils.contains(ua, "Android") ||
 			StringUtils.contains(ua, "iPhone") ||
-			StringUtils.contains(ua, "iPad")) 
-		{
-			// redirect to mobile web
-			throw new RestartResponseException(MobileHomePage.class, null); 
-			// TODO map requests to a corresponding mobile page, rather than sending all requests to the mobile home page
-		}
+			StringUtils.contains(ua, "iPad"));
 	}
-
-
 }
