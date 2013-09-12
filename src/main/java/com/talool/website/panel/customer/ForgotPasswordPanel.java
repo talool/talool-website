@@ -3,8 +3,8 @@ package com.talool.website.panel.customer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.slf4j.Logger;
@@ -71,6 +71,7 @@ public class ForgotPasswordPanel extends Panel {
 						emailService.sendPasswordRecoveryEmail(customer);
 						SessionUtils.successMessage("An email has been sent with instructions for resetting your password.");
 						target.add(container.setVisible(false));
+						target.appendJavaScript("$('#page').trigger('create');");
 					}
 					else
 					{
@@ -86,6 +87,6 @@ public class ForgotPasswordPanel extends Panel {
 
 		};
 		form.add(submit);
-		form.add(new TextField<String>("email").setRequired(true));
+		form.add(new EmailTextField("email").setRequired(true));
 	}
 }

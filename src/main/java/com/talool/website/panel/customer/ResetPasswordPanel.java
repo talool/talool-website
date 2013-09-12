@@ -78,6 +78,7 @@ public class ResetPasswordPanel extends Panel {
 						customerService.save(customer);
 						SessionUtils.successMessage("Your password has been updated.");
 						target.add(container.setVisible(false));
+						target.appendJavaScript("$('#page').trigger('create');");
 						
 					}
 					else

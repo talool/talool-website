@@ -91,7 +91,10 @@
 	height: 690px;
 	background: url(/img/homepage/iPhone5Vancouver3.png) no-repeat left -50px;
 }
-
+.talool .hp .content 
+{
+	margin: 0;
+}
 .hp .platformBenefits, 
 .hp .content 
 {
