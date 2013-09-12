@@ -95,3 +95,14 @@ div.info ul.feedbackPanel {
     background-color: rgba(80, 185, 72, .09);
     color: rgb(80, 185, 72);
 }
+
+.tablet .bgWrapper
+{
+	background: url(/img/homepage/iPhone5Vancouver4.png) no-repeat right top;
+}
+
+.tablet .contentWrapper
+{
+	margin: 0 400px 0 15px;
+	min-height: 690px;
+}

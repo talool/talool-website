@@ -14,7 +14,7 @@ $(function() {
 				if (cfg && cfg.redirectToApp)
 					document.location = 'taloolmydeals://';
 			}
-			if (isAndroid) 
+			else if (isAndroid) 
 			{
 				$('body').addClass("android");
 			}
@@ -32,6 +32,14 @@ $(function() {
 			});
 			
 			$(".og").parent(".ui-content").addClass("og");
+			
+			// check if this is a table
+			var ww = ( $(window).width() < window.screen.width ) ? $(window).width() : window.screen.width; //get proper width
+			if (ww > 600) 
+			{
+				$('body').addClass("tablet");
+			}
+			
 		};
 
 		this.init();
