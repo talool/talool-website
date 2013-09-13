@@ -1,5 +1,6 @@
 package com.talool.website.pages.lists;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
@@ -20,6 +21,12 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.Customer;
+import com.talool.core.DealOfferPurchase;
+import com.talool.core.FactoryManager;
+import com.talool.core.gift.Gift;
+import com.talool.core.gift.GiftStatus;
+import com.talool.core.service.AnalyticService;
+import com.talool.core.service.CustomerService;
 import com.talool.core.service.ServiceException;
 import com.talool.website.component.ConfirmationLink;
 import com.talool.website.models.CustomerListModel;
@@ -40,6 +47,12 @@ public class CustomersPage extends BasePage
 	private static final Logger LOG = Logger.getLogger(CustomersPage.class);
 
 	private static final long serialVersionUID = 2102415289760762365L;
+	
+	protected transient static final CustomerService customerService = FactoryManager.get()
+			.getServiceFactory().getCustomerService();
+	
+	protected transient static final AnalyticService analyticService = FactoryManager.get()
+			.getServiceFactory().getAnalyticService();
 
 	public CustomersPage()
 	{
@@ -85,6 +98,37 @@ public class CustomersPage extends BasePage
 				DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
 				String createdOn = converter.convertToString(customer.getCreated(), getLocale());
 				item.add(new Label("creationDate", createdOn));
+				
+				String offerTitle = new String();
+				long redemptionCount = 0;
+				long giftCount = 0;
+				try 
+				{
+					List<DealOfferPurchase> offers = customerService.getDealOfferPurchasesByCustomerId(customerId);
+					if (offers.size()==1)
+					{
+						offerTitle = offers.get(0).getDealOffer().getTitle();
+					}
+					else if (offers.size()==0)
+					{
+						offerTitle = "no offers";
+					}
+					else
+					{
+						offerTitle = "multiple offers";
+					}
+					List<Gift> gifts = customerService.getGifts(customerId, GiftStatus.values());
+					giftCount = gifts.size();
+					redemptionCount = analyticService.getTotalRedemptions(customerId);
+				}
+				catch (ServiceException e)
+				{
+					LOG.error(e.getLocalizedMessage(), e);
+					SessionUtils.errorMessage("There was a problem getting stats for " + email);
+				}
+				item.add(new Label("books",offerTitle));
+				item.add(new Label("redemptions",redemptionCount));
+				item.add(new Label("gifts",giftCount));
 
 				PageParameters customerParams = new PageParameters();
 				customerParams.set("id", customer.getId());

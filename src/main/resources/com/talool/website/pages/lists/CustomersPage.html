@@ -2,19 +2,25 @@
 	<table>
   		<thead>
   			<tr>
-  				<th>Email</th>
-  				<th>First Name</th>
-  				<th>Last Name</th>
+  				<th>Customer</th>
   				<th>Registration Date</th>
+  				<th>Deal Offer(s)</th>
+  				<th>Redemptions</th>
+  				<th>Gifts</th>
   				<th class="actionCol">Actions</th>
   			</tr>
   		</thead>
   		<tbody>
   			<tr class="odd" wicket:id="customerRptr">
-  				<td><a href="#" wicket:id="emailLink"></a></td>
-  				<td wicket:id="firstName">Doug</td>
-  				<td wicket:id="lastName">McCuen</td>
+  				<td>
+  					<a href="#" wicket:id="emailLink"></a><br/>
+  					<span wicket:id="firstName"></span>
+  					<span wicket:id="lastName"></span>
+  				</td>
   				<td wicket:id="creationDate">Date</td>
+  				<td wicket:id="books">Title</td>
+  				<td wicket:id="redemptions">Count</td>
+  				<td wicket:id="gifts">Count</td>
   				<td class="orange-font">
   					<a wicket:id="editLink" class="icon icon-large icon-pencil" title="Edit Customer"></a>
   					<a wicket:id="pwLink" class="icon icon-large icon-key" title="Reset Password"></a>

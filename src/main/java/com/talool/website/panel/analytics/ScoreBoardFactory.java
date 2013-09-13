@@ -1,9 +1,12 @@
 package com.talool.website.panel.analytics;
 
+import java.util.UUID;
+
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.talool.core.DealOffer;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 
@@ -18,16 +21,23 @@ public final class ScoreBoardFactory
 
 	private enum MetricType
 	{
-		TotalCustomers, TotalRedemptions, TotalEmailGifts, TotalFacebookGifts
+		TotalCustomers, TotalRedemptions, TotalEmailGifts, TotalFacebookGifts, TotalActivations
 	};
 
 	private static class MetricCountModel extends LoadableDetachableModel<Long>
 	{
 		private MetricType metricType;
+		private UUID id;
 
 		public MetricCountModel(final MetricType metricType)
 		{
 			this.metricType = metricType;
+		}
+		
+		public MetricCountModel(final MetricType metricType, UUID objId)
+		{
+			this.metricType = metricType;
+			this.id = objId;
 		}
 
 		private static final long serialVersionUID = -4968676121844147519L;
@@ -54,6 +64,9 @@ public final class ScoreBoardFactory
 
 					case TotalFacebookGifts:
 						count = ServiceFactory.get().getAnalyticService().getTotalFacebookGifts();
+						break;
+					case TotalActivations:
+						count = ServiceFactory.get().getAnalyticService().getTotalActivatedCodes(this.id);
 						break;
 				}
 
@@ -92,6 +105,14 @@ public final class ScoreBoardFactory
 	{
 		return new ScoreBoardPanel(id, "Facebook Gifts",
 				new MetricCountModel(MetricType.TotalFacebookGifts));
+
+	}
+	
+	public static ScoreBoardPanel createTotalBookActivations(String id, DealOffer offer)
+	{
+		StringBuilder sb = new StringBuilder(offer.getTitle());
+		return new ScoreBoardPanel(id, sb.append(" Activations").toString(),
+				new MetricCountModel(MetricType.TotalActivations, offer.getId()));
 
 	}
 }

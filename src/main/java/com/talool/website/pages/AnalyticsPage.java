@@ -1,8 +1,12 @@
 package com.talool.website.pages;
 
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.talool.core.DealOffer;
+import com.talool.website.models.DealOfferListModel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.analytics.ScoreBoardFactory;
 import com.talool.website.util.SecuredPage;
@@ -40,6 +44,23 @@ public class AnalyticsPage extends BasePage
 		add(ScoreBoardFactory.createTotalEmailGifts("totalEmailGifts").setRenderBodyOnly(true));
 
 		add(ScoreBoardFactory.createTotalFacebookGifts("totalFacebookGifts").setRenderBodyOnly(true));
+		
+		final ListView<DealOffer> activationStats = new ListView<DealOffer>("activationStatRptr",
+				new DealOfferListModel())
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<DealOffer> item)
+			{
+				DealOffer offer = item.getModelObject();
+				item.add(ScoreBoardFactory.createTotalBookActivations("totalActivations", offer));
+			}
+
+		};
+
+		add(activationStats);
 
 	}
 
