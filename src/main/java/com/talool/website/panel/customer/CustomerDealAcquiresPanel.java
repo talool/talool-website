@@ -52,7 +52,7 @@ public class CustomerDealAcquiresPanel extends Panel
 
 				item.add(new Label("deal.title"));
 				item.add(new Label("deal.dealOffer.title"));
-				item.add(new Label("deal.dealOffer.merchant.name"));
+				item.add(new Label("deal.merchant.name"));
 				item.add(new Label("redemptionDate"));
 				item.add(new Label("acquireStatus"));
 
