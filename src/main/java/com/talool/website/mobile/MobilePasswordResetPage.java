@@ -6,22 +6,24 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.website.panel.customer.ResetPasswordPanel;
 
-public class MobilePasswordResetPage extends MobilePage {
+public class MobilePasswordResetPage extends MobilePage
+{
 
 	private static final long serialVersionUID = 1L;
 	private UUID customerId;
+	private String passwordResetCode;
 
 	public MobilePasswordResetPage(PageParameters parameters)
 	{
 		super(parameters);
-		String cId = parameters.get(0).toString();
-		customerId = UUID.fromString(cId);
+		customerId = UUID.fromString(parameters.get(0).toString());
+		passwordResetCode = parameters.get(1).toString();
 	}
-	
+
 	@Override
 	protected void onInitialize()
 	{
-		super.onInitialize();	
-		add(new ResetPasswordPanel("content", customerId));
+		super.onInitialize();
+		add(new ResetPasswordPanel("content", customerId, passwordResetCode));
 	}
 }
