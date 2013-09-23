@@ -14,6 +14,7 @@ import com.talool.core.Customer;
 import com.talool.core.FactoryManager;
 import com.talool.core.service.CustomerService;
 import com.talool.core.service.EmailService;
+import com.talool.core.service.InvalidInputException;
 import com.talool.core.service.ServiceException;
 import com.talool.website.panel.NiceFeedbackPanel;
 import com.talool.website.util.SessionUtils;
@@ -85,6 +86,11 @@ public class ForgotPasswordPanel extends Panel
 				catch (ServiceException e)
 				{
 					SessionUtils.errorMessage("Unable to retrieve account: ", e.getLocalizedMessage());
+					LOG.error(e.getLocalizedMessage(), e);
+				}
+				catch (InvalidInputException e)
+				{
+					SessionUtils.errorMessage(e.getMessage());
 					LOG.error(e.getLocalizedMessage(), e);
 				}
 			}
