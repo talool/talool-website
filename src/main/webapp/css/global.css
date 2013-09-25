@@ -398,3 +398,26 @@ body div.wicket-modal h3.w_captionText {
 	padding: 15px;
 	margin-right: 20px;
 }
+
+.sb-box {
+  float:left;
+  padding:5px;
+  margin:5px;
+  background-color:#E8E8E8;
+  border-radius: 15px;
+  -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.25), 0 1px 0 rgba(255, 255, 255, 0.25);	
+  -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.25), 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.25), 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.sb-title {
+ font-size:200%;
+ text-align:center;	
+}
+
+.sb-score {
+ font-size:300%;
+ text-align:center;
+}
+
+
