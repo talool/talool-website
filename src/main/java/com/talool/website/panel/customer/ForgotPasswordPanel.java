@@ -73,7 +73,6 @@ public class ForgotPasswordPanel extends Panel
 					if (customer != null)
 					{
 						customerService.createPasswordReset(customer);
-						emailService.sendPasswordRecoveryEmail(customer);
 						SessionUtils.successMessage("An email has been sent with instructions for resetting your password.");
 						target.add(container.setVisible(false));
 						target.appendJavaScript("$('#page').trigger('create');");
