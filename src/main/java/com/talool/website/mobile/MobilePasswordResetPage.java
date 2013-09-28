@@ -2,7 +2,6 @@ package com.talool.website.mobile;
 
 import java.util.UUID;
 
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.website.panel.customer.ResetPasswordPanel;
@@ -26,9 +25,5 @@ public class MobilePasswordResetPage extends MobilePage
 	{
 		super.onInitialize();
 		add(new ResetPasswordPanel("content", customerId, passwordResetCode));
-		
-		StringBuilder sb = new StringBuilder("'http://talool/password/");
-		sb.append("'").append(customerId).append("/").append(passwordResetCode).append("'");
-		add(new Label("deeplink",sb.toString()));
 	}
 }

@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -52,6 +53,7 @@ public class ResetPasswordPanel extends Panel
 
 		Customer customer = null;
 		String errorMessage = null;
+		StringBuilder deeplinkJS = new StringBuilder();
 
 		try
 		{
@@ -75,7 +77,14 @@ public class ResetPasswordPanel extends Panel
 		if (errorMessage != null)
 		{
 			SessionUtils.errorMessage(errorMessage);
+		} 
+		else
+		{
+			deeplinkJS.append("window.ooConfig = {mobile:{deeplink:\"talool://password/")
+			  .append(customer_id).append("/").append(passwordResetCode).append("\"}};");
 		}
+		
+		add(new Label("deeplink",deeplinkJS.toString()).setEscapeModelStrings(false));
 
 		final NiceFeedbackPanel feedback = new NiceFeedbackPanel("feedback");
 		add(feedback.setOutputMarkupId(true));
