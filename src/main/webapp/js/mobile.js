@@ -7,6 +7,12 @@ $(function() {
 			// add a class for mobile web
 			var isIOS = navigator.userAgent.match(/(iPhone|iPad)/);
 			var isAndroid = navigator.userAgent.match(/(Android)/);
+			
+			if (cfg && cfg.deeplink)
+			{
+				document.location = cfg.deeplink;
+			}
+			
 			if (isIOS) 
 			{
 				$('body').addClass("apple");
@@ -17,6 +23,9 @@ $(function() {
 			else if (isAndroid) 
 			{
 				$('body').addClass("android");
+				
+				if (cfg && cfg.redirectToApp)
+					document.location = 'talool://';
 			}
 			
 			$("#download").click(function(){
