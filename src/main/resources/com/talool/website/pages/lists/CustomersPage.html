@@ -1,12 +1,14 @@
 <wicket:extend>
+    <div wicket:id="customerContainer">
+	<div wicket:id="navigator" style="float:right;margin-bottom:5px;">[dataview navigator]</div>
 	<table>
   		<thead>
   			<tr>
-  				<th>Customer</th>
-  				<th>Registration Date</th>
+  				<th><a wicket:id="customerLink">Customer</a></th>
+  				<th><a wicket:id="registrationLink">Registration Date</a></th>
   				<th>Deal Offer(s)</th>
-  				<th>Redemptions</th>
-  				<th>Gifts</th>
+  				<th><a wicket:id="redemptionLink" >Redemptions</a></th>
+  				<th><a wicket:id="giftGivesLink">Gifts</a></th>
   				<th class="actionCol">Actions</th>
   			</tr>
   		</thead>
@@ -30,4 +32,5 @@
   			</tr>
   		</tbody>
   	</table>
+  	</div>
 </wicket:extend>

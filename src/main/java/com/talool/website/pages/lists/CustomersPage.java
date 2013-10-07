@@ -11,9 +11,10 @@ import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -22,10 +23,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import com.talool.core.FactoryManager;
 import com.talool.core.service.AnalyticService;
 import com.talool.core.service.CustomerService;
-import com.talool.core.service.CustomerSummary;
 import com.talool.core.service.ServiceException;
+import com.talool.stats.CustomerSummary;
 import com.talool.website.component.ConfirmationLink;
-import com.talool.website.models.CustomerSummaryModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.panel.AdminModalWindow;
@@ -41,6 +41,7 @@ import com.talool.website.util.SessionUtils;
 public class CustomersPage extends BasePage
 {
 	private static final Logger LOG = Logger.getLogger(CustomersPage.class);
+	private static final String CUST_CONTAINER_ID = "customerContainer";
 
 	private static final long serialVersionUID = 2102415289760762365L;
 
@@ -50,6 +51,10 @@ public class CustomersPage extends BasePage
 	protected transient static final AnalyticService analyticService = FactoryManager.get()
 			.getServiceFactory().getAnalyticService();
 
+	private String sortParameter = "redemptions";
+	private boolean isAscending = false;
+	private int itemsPerPage = 50;
+
 	public CustomersPage()
 	{
 		super();
@@ -58,6 +63,10 @@ public class CustomersPage extends BasePage
 	public CustomersPage(PageParameters parameters)
 	{
 		super(parameters);
+		if (parameters.get("sortParam") != null)
+		{
+			sortParameter = parameters.get("sortParam").toString();
+		}
 	}
 
 	@Override
@@ -67,14 +76,17 @@ public class CustomersPage extends BasePage
 
 		final StringBuilder sb = new StringBuilder();
 
-		final ListView<CustomerSummary> customers = new ListView<CustomerSummary>("customerRptr",
-				new CustomerSummaryModel())
+		final WebMarkupContainer customerContainer = new WebMarkupContainer(CUST_CONTAINER_ID);
+		add(customerContainer.setOutputMarkupId(true));
+
+		final DataView<CustomerSummary> customers = new DataView<CustomerSummary>("customerRptr",
+				new CustomerSummaryDataProvider(sortParameter, isAscending))
 		{
 
 			private static final long serialVersionUID = 4104816505968727445L;
 
 			@Override
-			protected void populateItem(ListItem<CustomerSummary> item)
+			protected void populateItem(Item<CustomerSummary> item)
 			{
 				sb.setLength(0);
 				CustomerSummary customer = item.getModelObject();
@@ -198,7 +210,85 @@ public class CustomersPage extends BasePage
 
 		};
 
-		add(customers);
+		customerContainer.add(customers);
+		customers.setItemsPerPage(itemsPerPage);
+
+		final PagingNavigator pagingNavigator = new PagingNavigator("navigator", customers);
+		customerContainer.add(pagingNavigator.setOutputMarkupId(true));
+
+		customerContainer.add(new AjaxLink<Void>("customerLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("lastName", target);
+			}
+		});
+
+		customerContainer.add(new AjaxLink<Void>("registrationLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("registrationDate", target);
+
+			}
+		});
+
+		customerContainer.add(new AjaxLink<Void>("redemptionLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("redemptions", target);
+
+			}
+		});
+
+		customerContainer.add(new AjaxLink<Void>("giftGivesLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("giftGives", target);
+			}
+		});
+
+	}
+
+	@SuppressWarnings("unchecked")
+	private void doAjaxSearchRefresh(final String sortParam, final AjaxRequestTarget target)
+	{
+		WebMarkupContainer container = (WebMarkupContainer) get(CUST_CONTAINER_ID);
+
+		final DataView<CustomerSummary> dataView = ((DataView<CustomerSummary>) container.get("customerRptr"));
+		final CustomerSummaryDataProvider provider = (CustomerSummaryDataProvider) dataView.getDataProvider();
+
+		// toggle asc/desc
+		if (sortParam.equals(sortParameter))
+		{
+			isAscending = isAscending == true ? false : true;
+			provider.setAscending(isAscending);
+		}
+
+		this.sortParameter = sortParam;
+
+		provider.setSortParameter(sortParam);
+
+		final PagingNavigator pagingNavigator = (PagingNavigator) container.get("navigator");
+		pagingNavigator.replaceWith(new PagingNavigator("navigator", dataView));
+
+		target.add(container);
+		target.add(container.get("navigator"));
+
 	}
 
 	@Override
