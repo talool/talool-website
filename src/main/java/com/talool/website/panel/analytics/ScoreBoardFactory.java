@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import com.talool.core.DealOffer;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
+import com.talool.website.Constants;
+import com.talool.website.util.SafeSimpleDecimalFormat;
 
 /**
  * 
@@ -24,7 +26,7 @@ public final class ScoreBoardFactory
 		TotalCustomers, TotalRedemptions, TotalEmailGifts, TotalFacebookGifts, TotalActivations
 	};
 
-	private static class MetricCountModel extends LoadableDetachableModel<Long>
+	private static class MetricCountModel extends LoadableDetachableModel<String>
 	{
 		private MetricType metricType;
 		private UUID id;
@@ -33,7 +35,7 @@ public final class ScoreBoardFactory
 		{
 			this.metricType = metricType;
 		}
-		
+
 		public MetricCountModel(final MetricType metricType, UUID objId)
 		{
 			this.metricType = metricType;
@@ -43,9 +45,10 @@ public final class ScoreBoardFactory
 		private static final long serialVersionUID = -4968676121844147519L;
 
 		@Override
-		protected Long load()
+		protected String load()
 		{
-			Long count = null;
+			long count = 0;
+
 			try
 			{
 				switch (metricType)
@@ -73,10 +76,12 @@ public final class ScoreBoardFactory
 			}
 			catch (ServiceException se)
 			{
-				LOG.error("Pronlem gettting totalCustomers", se);
+				LOG.error("Problem gettting totalCustomers", se);
 			}
 
-			return count;
+			final SafeSimpleDecimalFormat formatter = new SafeSimpleDecimalFormat(Constants.FORMAT_COMMA_NUMBER);
+
+			return formatter.format(count);
 		}
 	}
 
@@ -107,7 +112,7 @@ public final class ScoreBoardFactory
 				new MetricCountModel(MetricType.TotalFacebookGifts));
 
 	}
-	
+
 	public static ScoreBoardPanel createTotalBookActivations(String id, DealOffer offer)
 	{
 		StringBuilder sb = new StringBuilder(offer.getTitle());

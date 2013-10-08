@@ -6,12 +6,12 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -213,7 +213,7 @@ public class CustomersPage extends BasePage
 		customerContainer.add(customers);
 		customers.setItemsPerPage(itemsPerPage);
 
-		final PagingNavigator pagingNavigator = new PagingNavigator("navigator", customers);
+		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator("navigator", customers);
 		customerContainer.add(pagingNavigator.setOutputMarkupId(true));
 
 		customerContainer.add(new AjaxLink<Void>("customerLink")
@@ -235,7 +235,6 @@ public class CustomersPage extends BasePage
 			public void onClick(AjaxRequestTarget target)
 			{
 				doAjaxSearchRefresh("registrationDate", target);
-
 			}
 		});
 
@@ -247,7 +246,6 @@ public class CustomersPage extends BasePage
 			public void onClick(AjaxRequestTarget target)
 			{
 				doAjaxSearchRefresh("redemptions", target);
-
 			}
 		});
 
@@ -283,11 +281,11 @@ public class CustomersPage extends BasePage
 
 		provider.setSortParameter(sortParam);
 
-		final PagingNavigator pagingNavigator = (PagingNavigator) container.get("navigator");
-		pagingNavigator.replaceWith(new PagingNavigator("navigator", dataView));
+		final AjaxPagingNavigator pagingNavigator = (AjaxPagingNavigator) container.get("navigator");
+		pagingNavigator.getPageable().setCurrentPage(0);
 
 		target.add(container);
-		target.add(container.get("navigator"));
+		target.add(pagingNavigator);
 
 	}
 
