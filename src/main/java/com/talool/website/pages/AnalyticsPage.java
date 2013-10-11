@@ -45,6 +45,8 @@ public class AnalyticsPage extends BasePage
 
 		add(ScoreBoardFactory.createTotalFacebookGifts("totalFacebookGifts").setRenderBodyOnly(true));
 
+		add(ScoreBoardFactory.createTotalFacebookCustomers("totalFacebookCustomers").setRenderBodyOnly(true));
+
 		final ListView<DealOffer> activationStats = new ListView<DealOffer>("activationStatRptr",
 				new DealOfferListModel())
 		{

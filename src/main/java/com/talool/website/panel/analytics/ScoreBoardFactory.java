@@ -1,7 +1,9 @@
 package com.talool.website.panel.analytics;
 
+import java.text.NumberFormat;
 import java.util.UUID;
 
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +25,7 @@ public final class ScoreBoardFactory
 
 	private enum MetricType
 	{
-		TotalCustomers, TotalRedemptions, TotalEmailGifts, TotalFacebookGifts, TotalActivations
+		TotalCustomers, TotalRedemptions, TotalEmailGifts, TotalFacebookGifts, TotalActivations, TotalFaceboolCustomers
 	};
 
 	private static class MetricCountModel extends LoadableDetachableModel<String>
@@ -71,6 +73,9 @@ public final class ScoreBoardFactory
 					case TotalActivations:
 						count = ServiceFactory.get().getAnalyticService().getTotalActivatedCodes(this.id);
 						break;
+					case TotalFaceboolCustomers:
+						count = ServiceFactory.get().getAnalyticService().getTotalFacebookCustomers();
+						break;
 				}
 
 			}
@@ -110,6 +115,43 @@ public final class ScoreBoardFactory
 	{
 		return new ScoreBoardPanel(id, "Facebook Gifts",
 				new MetricCountModel(MetricType.TotalFacebookGifts));
+
+	}
+
+	public static ScoreBoardPanel createTotalFacebookCustomers(String id)
+	{
+		return new ScoreBoardPanel(id, "Facebook Customers", new AbstractReadOnlyModel<String>()
+		{
+
+			private static final long serialVersionUID = 4759222549302823144L;
+
+			@Override
+			public String getObject()
+			{
+				StringBuilder sb = new StringBuilder();
+				try
+				{
+					Long fb = ServiceFactory.get().getAnalyticService().getTotalFacebookCustomers();
+					Long count = ServiceFactory.get().getAnalyticService().getTotalCustomers();
+
+					final NumberFormat percentFormat = NumberFormat.getPercentInstance();
+					percentFormat.setMaximumFractionDigits(2);
+
+					final SafeSimpleDecimalFormat formatter = new SafeSimpleDecimalFormat(Constants.FORMAT_COMMA_NUMBER);
+
+					sb.append(formatter.format(fb)).append(" (").append(String.valueOf(percentFormat.format((float) fb / (float) count))).append(")");
+				}
+				catch (ServiceException e)
+				{
+					e.printStackTrace();
+				}
+				return sb.toString();
+			}
+
+		});
+
+		// <String><String>()
+		// new MetricCountModel(MetricType.TotalFaceboolCustomers));
 
 	}
 
