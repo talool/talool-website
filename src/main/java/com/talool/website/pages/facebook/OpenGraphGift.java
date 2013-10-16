@@ -39,7 +39,7 @@ public class OpenGraphGift extends OpenGraphRepeator {
 			if (deal != null)
 			{
 				StringBuilder desc = new StringBuilder();
-				desc.append(deal.getSummary()).append(" for ").append(deal.getMerchant().getName());
+				desc.append(deal.getSummary()).append(" at ").append(deal.getMerchant().getName());
 				setOgDescription(desc.toString());
 				
 				StringBuilder title = new StringBuilder();
