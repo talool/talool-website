@@ -2,6 +2,7 @@ package com.talool.website.pages.facebook;
 
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
@@ -37,8 +38,17 @@ public class OpenGraphGift extends OpenGraphRepeator {
 			Deal deal = gift.getDealAcquire().getDeal();
 			if (deal != null)
 			{
-				setOgDescription(deal.getSummary());
-				setOgTitle(deal.getTitle());
+				StringBuilder desc = new StringBuilder();
+				desc.append(deal.getSummary()).append(" for ").append(deal.getMerchant().getName());
+				setOgDescription(desc.toString());
+				
+				StringBuilder title = new StringBuilder();
+				title.append(deal.getTitle());
+				if (!StringUtils.isEmpty(gift.getReceipientName()))
+				{
+					title.append(" for ").append(gift.getReceipientName());
+				}
+				setOgTitle(title.toString());
 				setOgType("deal");
 				setOgImage(deal.getImage().getMediaUrl());
 			}
