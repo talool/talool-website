@@ -6,10 +6,6 @@ $(function() {
 			var respond = function() {
 				if (window.innerWidth < cfg.mobileWidth) {
 					$('body').addClass(cfg.mobileClass).removeClass(cfg.tabletClass);
-					if (cfg.redirectToApp)
-					{
-						this.appRedirect();
-					}
 				} else if (window.innerWidth < cfg.tabletWidth) {
 					$('body').addClass(cfg.tabletClass).removeClass(cfg.mobileClass);
 				} else {
@@ -41,18 +37,7 @@ $(function() {
 				}
 			}
 		};
-		
-		this.appRedirect = function()
-		{
-			
-			// detect ios vs android via useragent
-			if (oo.isMobile = navigator.userAgent.match(/(iPhone|iPod|iPad)/))
-			{
-				document.location = 'taloolmydeals://';
-			}
-			
-			
-		};
+
 		    
 		this.init();
 	};
