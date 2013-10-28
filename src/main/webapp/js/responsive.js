@@ -20,9 +20,6 @@ $(function() {
 			oo.isMobile = navigator.userAgent.match(/(Android|iPhone|iPod|iPad)/);
 			if (oo.isMobile) 
 			{
-				// try to bust out to the app
-				this.appRedirect();
-				
 				$('body').addClass("mw");
 				var ww = ( $(window).width() < window.screen.width ) ? $(window).width() : window.screen.width; //get proper width
 				var mw = 320; // min width of site
