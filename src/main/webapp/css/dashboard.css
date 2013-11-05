@@ -1,65 +1,22 @@
-.dashboard {
-	padding: 10px 0 0 10px;
-	min-width: 950px;
+.dashboard
+{
+	border-bottom: none;
 }
 
-.dashboard .dashboardColumn {
-	float: left;
-	width: 250px;
+.dashboard th 
+{
+	text-align: left;
 }
-.dashboard .dashboardColumn .moduleContainer {
-	min-width: 250px;
+.dashboard td 
+{
+	vertical-align: top;
 }
-.dashboard .dashboardBody {
-	margin-left: 250px;
-}
-
-.dashboard #debug {
-	position: fixed;
-	bottom: 5px;
-	left: 5px;
-	padding: 10px;
-	background: pink;
+.dashboard .a-r
+{
+	text-align: right;
 }
 
-.dashboard .moduleContainer {
-	min-width: 400px;
-	width: 100%;
-}
-
-.dashboard .module {
-	border: 1px solid;
-	margin: 0 10px 10px 0;
-	border-radius: 10px;
-	overflow: hidden;
-}
-
-.dashboard .module h2 {
-	background: #eee;
-	border-bottom: 1px solid;
-	padding: 5px;
-	margin: 0;
-}
-
-.dashboard .module .content {
-	padding: 5px;
-	margin: 0;
-	overflow: hidden;
-	position: relative;
-	min-height: 300px;
-	max-height: 600px;
-}
-
-.dashboard .module .content .iphone {
-	background-image: url(/img/iPhone5.png);
-	background-repeat: no-repeat;
-	padding: 10px 15px;
-	position: absolute;
-	top: -90px;
-	right: 0;
-	width: 370px;
-	height: 800px;
-}
-.mobile .dashboard .module .content .iphone  {
-	display: none;
+.dashboard .no-bdr
+{
+	border: none;
 }

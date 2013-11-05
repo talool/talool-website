@@ -5,8 +5,6 @@
 	  			<tr>
 	  				<th>Name</th>
 	  				<th>Category</th>
-	  				<th>Address</th>
-	  				<th>Phone</th>
 	  				<th>Website</th>
 	  				<th>Email</th>
 	  				<th>Location Count</th>
@@ -15,21 +13,22 @@
 	  		</thead>
 	  		<tbody>
 	  			<tr class="odd" wicket:id="merchRptr">
-	  				<td><a href="#" wicket:id="nameLink"></a></td>
-	  				<td wicket:id="category.name"></td>
-					<td>
-						<div wicket:id="primaryLocation.address1"></div>
+	  				<td>
+	  					<a href="#" wicket:id="nameLink"></a>
+	  					<div wicket:id="primaryLocation.address1"></div>
 						<div wicket:id="primaryLocation.address2"></div>
 						<div>
 							<span wicket:id="primaryLocation.niceCityState"></span>
 							<span wicket:id="primaryLocation.zip"></span>
 						</div>
-					</td>
-					<td wicket:id="primaryLocation.phone"></td>
-					<td wicket:id="primaryLocation.websiteUrl"></td>
+						<div wicket:id="primaryLocation.phone"></div>
+	  				</td>
+	  				<td wicket:id="category.name"></td>
+					<td wicket:id="primaryLocation.websiteUrl" class="limit-max"></td>
 					<td wicket:id="primaryLocation.email"></td>
 					<td wicket:id="multiple"></td>
 	  				<td class="orange-font">
+	  					<a wicket:id="dashboardLink" class="icon icon-large icon-dashboard" title="Merchant Dashboard"></a>
 	  					<a wicket:id="editLink" class="icon icon-large icon-pencil" title="Edit Merchant"></a>
 	  					<a href="#" class="icon icon-large icon-remove" title="Delete Merchant"></a>
 	  				</td>

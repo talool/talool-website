@@ -3,10 +3,10 @@ package com.talool.website.pages.dashboard;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.website.pages.BaseDashboard;
-import com.talool.website.panel.dashboard.DealsModule;
-import com.talool.website.panel.dashboard.IPhoneModule;
-import com.talool.website.panel.dashboard.LocationsModule;
-import com.talool.website.panel.dashboard.Module;
+import com.talool.website.panel.dashboard.ActiveUsersPanel;
+import com.talool.website.panel.dashboard.AvailableDealsPanel;
+import com.talool.website.panel.dashboard.MerchantReachPanel;
+import com.talool.website.panel.dashboard.RecentRedemptionsPanel;
 import com.talool.website.util.SecuredPage;
 
 @SecuredPage
@@ -28,13 +28,24 @@ public class MerchantDashboard extends BaseDashboard {
 	protected void onInitialize()
 	{
 		super.onInitialize();
-
-		add(new Module("detailsModule", merchantId));
-		add(new Module("accountsModule", merchantId));
-		add(new LocationsModule("locationsModule", merchantId));
-		add(new IPhoneModule("offersModule", merchantId));
-		add(new DealsModule("dealsModule", merchantId));
+		
+		add(new AvailableDealsPanel("availableDeals", merchantId));
+		add(new RecentRedemptionsPanel("recentRedemptions", merchantId));
+		add(new ActiveUsersPanel("activeUsers", merchantId));
+		add(new MerchantReachPanel("merchantReaches", merchantId));
 		
 	}
+
+	@Override
+	public boolean hasActionLink() {
+		return false;
+	}
+
+	@Override
+	public String getHeaderTitle() {
+		return "Dashboard: "+merchant.getName();
+	}
+	
+	
 	
 }

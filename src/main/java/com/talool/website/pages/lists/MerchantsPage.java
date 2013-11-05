@@ -23,9 +23,9 @@ import org.wicketstuff.gmap.GMap;
 import com.talool.core.Merchant;
 import com.talool.website.models.MerchantListModel;
 import com.talool.website.models.MerchantModel;
-import com.talool.website.models.ModelUtil;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.MerchantManagementPage;
+import com.talool.website.pages.dashboard.MerchantDashboard;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.wizard.MerchantWizard;
 import com.talool.website.util.SecuredPage;
@@ -116,6 +116,12 @@ public class MerchantsPage extends BasePage
 						wizard.open(target);
 					}
 				});
+				
+				PageParameters dashboardParams = new PageParameters();
+				dashboardParams.set("id", merchant.getId());
+				String dashboardUrl = (String) urlFor(MerchantDashboard.class, dashboardParams);
+				ExternalLink dashboardLink = new ExternalLink("dashboardLink", Model.of(dashboardUrl));
+				item.add(dashboardLink);
 
 			}
 
