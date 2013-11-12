@@ -2,6 +2,7 @@ package com.talool.website.mobile.opengraph;
 
 import java.util.UUID;
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,11 @@ public class MobileOpenGraphGift extends MobileOpenGraphBase {
 	protected void onInitialize() {
 		super.onInitialize();
 		add(new GiftPanel("object",gift));
+		
+		StringBuilder deeplinkJS = new StringBuilder();
+		deeplinkJS.append("window.ooConfig = {mobile:{deeplink:\"talool://gift/")
+		  .append(gift.getId()).append("\"}};");
+		add(new Label("deeplink",deeplinkJS.toString()).setEscapeModelStrings(false));
 	}
 
 }

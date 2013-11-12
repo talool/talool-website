@@ -5,7 +5,6 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -66,7 +65,6 @@ public abstract class BasePage extends WebPage
 	private void init()
 	{
 		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
-		add(new Label("headerTitle", getHeaderTitle()));
 
 		feedback = new NiceFeedbackPanel("feedback");
 		add(feedback.setOutputMarkupId(true));
@@ -125,6 +123,13 @@ public abstract class BasePage extends WebPage
 			adminMenu.setVisible(false);
 		}
 
+	}
+	
+	
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		add(new Label("headerTitle", getHeaderTitle()));
 	}
 
 	public boolean hasActionLink()
