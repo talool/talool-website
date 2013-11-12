@@ -89,7 +89,7 @@
 {
 	padding: 10px 450px 10px 60px;
 	height: 690px;
-	background: url(/img/homepage/iPhone5Vancouver3.png) no-repeat left -50px;
+	background: url(/img/homepage/iPhone5Boulder6.png) no-repeat left -50px;
 }
 .talool .hp .content 
 {
@@ -111,8 +111,8 @@
 {
 	float: right;
 }
-.hp .footer.gray2-font, .hp .footer.gray2-font a, .hp .footer.gray2-font a:visited {
-	color: rgb(153, 134, 117);
+.hp .footer.true-gray-font, .hp .footer.true-gray-font a, .hp .footer.true-gray-font a:visited {
+	color: rgb(190, 190, 190);
 }
 .hp .benefitsDesc
 {

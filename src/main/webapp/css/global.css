@@ -185,6 +185,10 @@ body.talool .sidebar a:visited {
 	background-color: rgb(220,220,220);
 }
 
+.true-light-gray-bg {
+	background-color: rgba(222,222,222,.2);
+}
+
 body.talool .btn.btn-primary {
 	background-image: linear-gradient(to bottom,#fff,#ddd);
 	background-image: -moz-linear-gradient(top,#fff,#ddd);
