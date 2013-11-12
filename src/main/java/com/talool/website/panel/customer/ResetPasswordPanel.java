@@ -27,7 +27,7 @@ public class ResetPasswordPanel extends Panel
 {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(ResetPasswordPanel.class);
-	private static final String RESET_CODE_ERR = "Your password reset link is not invalid.  Please issue another reset request";
+	private static final String RESET_CODE_ERR = "Your password reset link is invalid.  Please issue another reset request";
 	private static final String RESET_EXPIRED_ERR = "For your security, your password reset has expired.  Please issue another reset request";
 	private static final String UNABLE_TO_RETRIEVE_ERR = "Unable to retrieve account";
 
@@ -77,14 +77,14 @@ public class ResetPasswordPanel extends Panel
 		if (errorMessage != null)
 		{
 			SessionUtils.errorMessage(errorMessage);
-		} 
+		}
 		else
 		{
 			deeplinkJS.append("window.ooConfig = {mobile:{deeplink:\"talool://password/")
-			  .append(customer_id).append("/").append(passwordResetCode).append("\"}};");
+					.append(customer_id).append("/").append(passwordResetCode).append("\"}};");
 		}
-		
-		add(new Label("deeplink",deeplinkJS.toString()).setEscapeModelStrings(false));
+
+		add(new Label("deeplink", deeplinkJS.toString()).setEscapeModelStrings(false));
 
 		final NiceFeedbackPanel feedback = new NiceFeedbackPanel("feedback");
 		add(feedback.setOutputMarkupId(true));
