@@ -28,7 +28,9 @@ import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.pages.dashboard.MerchantDashboard;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.wizard.MerchantWizard;
+import com.talool.website.service.PermissionService;
 import com.talool.website.util.SecuredPage;
+import com.talool.website.util.SessionUtils;
 
 /**
  * 
@@ -60,8 +62,17 @@ public class MerchantsPage extends BasePage
 		final WebMarkupContainer container = new WebMarkupContainer("merchantList");
 		container.setOutputMarkupId(true);
 		add(container);
+		
+		boolean canViewAllMerchants = PermissionService.get().canViewAnalytics(
+				SessionUtils.getSession().getMerchantAccount().getEmail());
+		
+		MerchantListModel model = new MerchantListModel();
+		if (!canViewAllMerchants)
+		{
+			model.setMerchantId(SessionUtils.getSession().getMerchantAccount().getMerchant().getId());
+		}
 
-		final ListView<Merchant> mechants = new ListView<Merchant>("merchRptr", new MerchantListModel())
+		final ListView<Merchant> mechants = new ListView<Merchant>("merchRptr", model)
 		{
 
 			private static final long serialVersionUID = 8844000843574646422L;
@@ -93,8 +104,20 @@ public class MerchantsPage extends BasePage
 				item.add(new Label("primaryLocation.niceCityState"));
 				item.add(new Label("primaryLocation.zip"));
 				item.add(new Label("primaryLocation.phone"));
-				item.add(new Label("primaryLocation.websiteUrl"));
+				
 				item.add(new Label("primaryLocation.email"));
+				
+				String websiteUrl = new String();
+				try
+				{
+					websiteUrl = merchant.getPrimaryLocation().getWebsiteUrl();
+				}
+				catch (Exception e)
+				{
+					websiteUrl = "empty";
+				}
+				ExternalLink webpage = new ExternalLink("website", websiteUrl, websiteUrl);
+				item.add(webpage);
 				
 				StringBuilder hasMultiple = new StringBuilder();
 				hasMultiple.append(merchant.getLocations().size());

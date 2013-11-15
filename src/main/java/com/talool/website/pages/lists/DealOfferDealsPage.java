@@ -71,6 +71,7 @@ public class DealOfferDealsPage extends BasePage
 
 				item.add(new Label("merchant.name"));
 				item.add(new Label("summary"));
+				item.add(new Label("image.mediaName"));
 
 				item.add(new AjaxLink<Void>("editLink")
 				{

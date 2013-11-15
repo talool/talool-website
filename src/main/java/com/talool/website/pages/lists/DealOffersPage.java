@@ -22,6 +22,7 @@ import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.definition.MerchantDealOfferPanel;
+import com.talool.website.service.PermissionService;
 import com.talool.website.util.SecuredPage;
 import com.talool.website.util.SessionUtils;
 
@@ -45,8 +46,17 @@ public class DealOffersPage extends BasePage
 	{
 		super.onInitialize();
 
+		boolean canViewAllBooks = PermissionService.get().canViewAnalytics(
+				SessionUtils.getSession().getMerchantAccount().getEmail());
+		
+		DealOfferListModel model = new DealOfferListModel();
+		if (!canViewAllBooks)
+		{
+			model.setMerchantId(SessionUtils.getSession().getMerchantAccount().getMerchant().getId());
+		}
+		
 		final ListView<DealOffer> customers = new ListView<DealOffer>("offerRptr",
-				new DealOfferListModel())
+				model)
 		{
 
 			private static final long serialVersionUID = 4104816505968727445L;
