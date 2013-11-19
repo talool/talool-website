@@ -82,7 +82,7 @@ public class DealPreviewUpdatingBehavior extends AjaxFormComponentUpdatingBehavi
 			DealOffer offer = taloolService.getDealOffer(dealOfferId);
 			if (offer != null)
 			{
-				url = offer.getImage().getMediaUrl();
+				url = offer.getDealOfferLogo().getMediaUrl();
 			}
 		}
 		catch(ServiceException se)

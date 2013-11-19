@@ -5,7 +5,8 @@
 	  });
 	</script>
 	<div class="panel right dealOfferLogoSelectContainer">
-		<div wicket:id="dealOfferLogo"></div>
+		<div wicket:id="dealOfferIcon"></div>
+		<div wicket:id="dealOfferBackground"></div>
 	</div>
 	<div class="panel left">
 		<h3>Deal Offer</h3>
@@ -38,6 +39,9 @@
 	    		<input wicket:id="isActive" class="chbx" type="checkbox">Is Active</input>
 	    	</div>
 	    </fieldset>
+	    
+	    <div wicket:id="dealOfferLogo"></div>
+	    
 	   <script>
 	    $("#dt").change(function () {
 			var str = "";

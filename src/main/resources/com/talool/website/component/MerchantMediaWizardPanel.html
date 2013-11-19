@@ -1,13 +1,13 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
 	<div class="wicketExtensionsWizardHeaderTitle">
-		<wicket:message key="merchant.media.title"></wicket:message>
+		<h3 wicket:id="mediaPanelTitle"></h3>
 	</div>
 	<div class="wicketExtensionsWizardHeaderSummary">
-		<wicket:message key="merchant.media.summary"></wicket:message>
+		<div wicket:id="mediaPanelSummary"></div>
 	</div>
 	<fieldset class="imageDetails">
     	<div>
-    		<label><i class="hint-font icon-asterisk"></i> <wicket:message key="merchant.media.label"></wicket:message></label>
+    		<label><i class="hint-font icon-asterisk"></i> <span wicket:id="mediaLabel"></span></label>
  			<select wicket:id="availableMedia"><option>Default Media</option></select>
     	</div>
 		<iframe wicket:id="uploaderIFrame" width="325" height="110" scrolling="no"></iframe>

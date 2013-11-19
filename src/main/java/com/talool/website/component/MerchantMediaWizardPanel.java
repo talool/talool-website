@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,6 +97,32 @@ abstract public class MerchantMediaWizardPanel extends Panel
 			}
 
 		});
+		
+		// Labels and text
+		add(new Label("mediaPanelTitle",new StringResourceModel(getResourceKey("title"), this, null)));
+		add(new Label("mediaPanelSummary",new StringResourceModel(getResourceKey("summary"), this, null)));
+		add(new Label("mediaLabel",new StringResourceModel(getResourceKey("label"), this, null)));
+		
+		
+	}
+	
+	private String getResourceKey(String field)
+	{
+		StringBuilder sb = new StringBuilder("dealOffer.media.");
+		if (mediaType.equals(MediaType.DEAL_OFFER_LOGO))
+		{
+			sb.append("logo.");
+		}
+		else if (mediaType.equals(MediaType.DEAL_OFFER_MERCHANT_LOGO))
+		{
+			sb.append("icon.");
+		}
+		else
+		{
+			sb.append("background.");
+		}
+		sb.append(field);
+		return sb.toString();
 	}
 
 	private void saveMedia(MerchantMedia media)

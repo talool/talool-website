@@ -42,8 +42,12 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 	private static final long serialVersionUID = 661849211369766802L;
 
 	private MerchantIdentity owningMerchant;
-	private MerchantMedia image;
-	private MerchantMediaWizardPanel mediaPanel;
+	private MerchantMedia publisherLogo;
+	private MerchantMedia publisherIcon;
+	private MerchantMedia publisherBackgroundImage;
+	private MerchantMediaWizardPanel mediaPanelPublisherLogo;
+	private MerchantMediaWizardPanel mediaPanelPublisherIcon;
+	private MerchantMediaWizardPanel mediaPanelPublisherBackgroundImage;
 
 	public MerchantDealOfferPanel(final String id, final MerchantIdentity merchantIdentity,
 			final SubmitCallBack callback)
@@ -108,11 +112,12 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		form.add(new CheckBox("isActive"));
 
 		DealOffer dealOffer = (DealOffer) getDefaultModelObject();
-		image = dealOffer.getImage();
-		PropertyModel<MerchantMedia> selectedMediaModel = new PropertyModel<MerchantMedia>(this, "image");
-		mediaPanel =
+		
+		publisherLogo = dealOffer.getDealOfferLogo();
+		PropertyModel<MerchantMedia> logoModel = new PropertyModel<MerchantMedia>(this, "publisherLogo");
+		mediaPanelPublisherLogo =
 				new MerchantMediaWizardPanel("dealOfferLogo", dealOffer.getMerchant().getId(), MediaType.DEAL_OFFER_LOGO,
-						selectedMediaModel)
+						logoModel)
 				{
 					private static final long serialVersionUID = 1L;
 
@@ -121,7 +126,37 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 					{}
 
 				};
-		form.add(mediaPanel);
+		form.add(mediaPanelPublisherLogo);
+		
+		publisherIcon = dealOffer.getDealOfferMerchantLogo();
+		PropertyModel<MerchantMedia> iconModel = new PropertyModel<MerchantMedia>(this, "publisherIcon");
+		mediaPanelPublisherIcon =
+				new MerchantMediaWizardPanel("dealOfferIcon", dealOffer.getMerchant().getId(), MediaType.DEAL_OFFER_MERCHANT_LOGO,
+						iconModel)
+				{
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media)
+					{}
+
+				};
+		form.add(mediaPanelPublisherIcon);
+		
+		publisherBackgroundImage = dealOffer.getDealOfferBackgroundImage();
+		PropertyModel<MerchantMedia> backgroundModel = new PropertyModel<MerchantMedia>(this, "publisherBackgroundImage");
+		mediaPanelPublisherBackgroundImage =
+				new MerchantMediaWizardPanel("dealOfferBackground", dealOffer.getMerchant().getId(), MediaType.DEAL_OFFER_BACKGROUND_IMAGE,
+						backgroundModel)
+				{
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media)
+					{}
+
+				};
+		form.add(mediaPanelPublisherBackgroundImage);
 
 	}
 
@@ -152,9 +187,19 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 
 		dealOffer.setUpdatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
 
-		if (image != null)
+		if (publisherLogo != null)
 		{
-			dealOffer.setImage(image);
+			dealOffer.setDealOfferLogo(publisherLogo);
+		}
+		
+		if (publisherIcon != null)
+		{
+			dealOffer.setDealOfferMerchantLogo(publisherIcon);
+		}
+		
+		if (publisherBackgroundImage != null)
+		{
+			dealOffer.setDealOfferBackgroundImage(publisherBackgroundImage);
 		}
 
 		// merchant could of changed, make sure to reset it

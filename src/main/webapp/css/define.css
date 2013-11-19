@@ -108,3 +108,9 @@ optgroup option {
 .conditionsContainer.show {
 	display: block;
 }
+
+.panel.left,
+.panel.right
+{
+	max-width: 375px;
+}
