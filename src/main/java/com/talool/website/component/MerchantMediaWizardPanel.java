@@ -108,8 +108,8 @@ abstract public class MerchantMediaWizardPanel extends Panel
 	
 	private String getResourceKey(String field)
 	{
-		StringBuilder sb = new StringBuilder("dealOffer.media.");
-		if (mediaType.equals(MediaType.DEAL_OFFER_LOGO))
+		StringBuilder sb = new StringBuilder("media.");
+		if (mediaType.equals(MediaType.DEAL_OFFER_LOGO) || mediaType.equals(MediaType.MERCHANT_LOGO))
 		{
 			sb.append("logo.");
 		}
@@ -117,9 +117,13 @@ abstract public class MerchantMediaWizardPanel extends Panel
 		{
 			sb.append("icon.");
 		}
-		else
+		else if (mediaType.equals(MediaType.DEAL_OFFER_BACKGROUND_IMAGE))
 		{
 			sb.append("background.");
+		}
+		else if (mediaType.equals(MediaType.MERCHANT_IMAGE) || mediaType.equals(MediaType.DEAL_IMAGE))
+		{
+			sb.append("image.");
 		}
 		sb.append(field);
 		return sb.toString();
