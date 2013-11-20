@@ -134,7 +134,7 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 				new MerchantMediaWizardPanel("dealOfferIcon", dealOffer.getMerchant().getId(), MediaType.DEAL_OFFER_MERCHANT_LOGO,
 						iconModel)
 				{
-					private static final long serialVersionUID = 1L;
+					private static final long serialVersionUID = 5504461189222207917L;
 
 					@Override
 					public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media)
@@ -149,7 +149,8 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 				new MerchantMediaWizardPanel("dealOfferBackground", dealOffer.getMerchant().getId(), MediaType.DEAL_OFFER_BACKGROUND_IMAGE,
 						backgroundModel)
 				{
-					private static final long serialVersionUID = 1L;
+
+					private static final long serialVersionUID = -2503252861939156978L;
 
 					@Override
 					public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media)
