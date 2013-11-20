@@ -54,6 +54,7 @@ public class ResetPasswordPanel extends Panel
 		Customer customer = null;
 		String errorMessage = null;
 		StringBuilder deeplinkJS = new StringBuilder();
+		boolean isError = false;
 
 		try
 		{
@@ -62,7 +63,8 @@ public class ResetPasswordPanel extends Panel
 			{
 				errorMessage = RESET_CODE_ERR;
 			}
-			else if (System.currentTimeMillis() > customer.getResetPasswordExpires().getTime())
+
+			if (System.currentTimeMillis() > customer.getResetPasswordExpires().getTime())
 			{
 				errorMessage = RESET_EXPIRED_ERR;
 			}
@@ -76,6 +78,7 @@ public class ResetPasswordPanel extends Panel
 
 		if (errorMessage != null)
 		{
+			isError = true;
 			SessionUtils.errorMessage(errorMessage);
 		}
 		else

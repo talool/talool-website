@@ -70,7 +70,7 @@ public class DealPreview extends Panel
 		merchantLogoUrl = (loc.getLogo() == null) ? defaultMerchantLogoUrl : loc.getLogo().getMediaUrl();
 
 		DealOffer offer = deal.getDealOffer();
-		dealOfferLogoUrl = (offer == null || offer.getImage() == null) ? defaultDealOfferLogoUrl : offer.getImage().getMediaUrl();
+		dealOfferLogoUrl = (offer == null || offer.getDealOfferLogo() == null) ? defaultDealOfferLogoUrl : offer.getDealOfferLogo().getMediaUrl();
 	}
 
 	@Override

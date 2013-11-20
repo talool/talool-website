@@ -108,7 +108,7 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		form.add(new CheckBox("isActive"));
 
 		DealOffer dealOffer = (DealOffer) getDefaultModelObject();
-		image = dealOffer.getImage();
+		image = dealOffer.getDealOfferLogo();
 		PropertyModel<MerchantMedia> selectedMediaModel = new PropertyModel<MerchantMedia>(this, "image");
 		mediaPanel =
 				new MerchantMediaWizardPanel("dealOfferLogo", dealOffer.getMerchant().getId(), MediaType.DEAL_OFFER_LOGO,
@@ -154,7 +154,7 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 
 		if (image != null)
 		{
-			dealOffer.setImage(image);
+			dealOffer.setDealOfferLogo(image);
 		}
 
 		// merchant could of changed, make sure to reset it

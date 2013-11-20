@@ -3,7 +3,7 @@ window.oo = null;
 $(function() {
 	var Talool = function(cfg) {
 		this.appStoreLink = "https://itunes.apple.com/us/app/talool/id669529943";
-		this.playStoreLink = "https://play.google.com/store/apps/details?id=com.talool.mobile.android";
+		this.playStoreLink = "https://play.google.com/store/apps/details?id=com.talool.android";
 		this.deepLinkKillSwitch = "nl=1";
 		this.init = function() {
 			// add a class for mobile web

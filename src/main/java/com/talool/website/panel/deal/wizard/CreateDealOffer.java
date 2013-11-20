@@ -83,7 +83,7 @@ public class CreateDealOffer extends DynamicWizardStep {
 
 		addOrReplace(new CheckBox("dealOffer.isActive"));
 		
-		image = dealOffer.getImage();
+		image = dealOffer.getDealOfferLogo();
 		PropertyModel<MerchantMedia> selectedMediaModel = new PropertyModel<MerchantMedia>(this,"image");
 		MerchantMediaWizardPanel mediaPanel = 
 				new MerchantMediaWizardPanel("dealOfferLogo", dealOffer.getMerchant().getId(), MediaType.DEAL_OFFER_LOGO, selectedMediaModel) {
@@ -92,7 +92,7 @@ public class CreateDealOffer extends DynamicWizardStep {
 			@Override
 			public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media) {
 				image = media;
-				dealOffer.setImage(media);
+				dealOffer.setDealOfferLogo(media);
 				deal.setDealOffer(dealOffer);
 				// re-init the preview
 				dealPreview.init(deal);
@@ -138,7 +138,7 @@ public class CreateDealOffer extends DynamicWizardStep {
 		}
 		if (image != null)
 		{
-			dealOffer.setImage(image);
+			dealOffer.setDealOfferLogo(image);
 		}
 		try
 		{
