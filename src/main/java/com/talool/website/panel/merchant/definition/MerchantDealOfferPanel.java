@@ -71,7 +71,7 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		}
 
 	}
-	
+
 	public MerchantDealOfferPanel(final String id, final Merchant merchant,
 			final SubmitCallBack callback)
 	{
@@ -112,7 +112,7 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		form.add(new CheckBox("isActive"));
 
 		DealOffer dealOffer = (DealOffer) getDefaultModelObject();
-		
+
 		publisherLogo = dealOffer.getDealOfferLogo();
 		PropertyModel<MerchantMedia> logoModel = new PropertyModel<MerchantMedia>(this, "publisherLogo");
 		mediaPanelPublisherLogo =
@@ -127,8 +127,8 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 
 				};
 		form.add(mediaPanelPublisherLogo);
-		
-		publisherIcon = dealOffer.getDealOfferMerchantLogo();
+
+		publisherIcon = dealOffer.getDealOfferIcon();
 		PropertyModel<MerchantMedia> iconModel = new PropertyModel<MerchantMedia>(this, "publisherIcon");
 		mediaPanelPublisherIcon =
 				new MerchantMediaWizardPanel("dealOfferIcon", dealOffer.getMerchant().getId(), MediaType.DEAL_OFFER_MERCHANT_LOGO,
@@ -142,8 +142,8 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 
 				};
 		form.add(mediaPanelPublisherIcon);
-		
-		publisherBackgroundImage = dealOffer.getDealOfferBackgroundImage();
+
+		publisherBackgroundImage = dealOffer.getDealOfferBackground();
 		PropertyModel<MerchantMedia> backgroundModel = new PropertyModel<MerchantMedia>(this, "publisherBackgroundImage");
 		mediaPanelPublisherBackgroundImage =
 				new MerchantMediaWizardPanel("dealOfferBackground", dealOffer.getMerchant().getId(), MediaType.DEAL_OFFER_BACKGROUND_IMAGE,
@@ -192,15 +192,15 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		{
 			dealOffer.setDealOfferLogo(publisherLogo);
 		}
-		
+
 		if (publisherIcon != null)
 		{
-			dealOffer.setDealOfferMerchantLogo(publisherIcon);
+			dealOffer.setDealOfferIcon(publisherIcon);
 		}
-		
+
 		if (publisherBackgroundImage != null)
 		{
-			dealOffer.setDealOfferBackgroundImage(publisherBackgroundImage);
+			dealOffer.setDealOfferBackground(publisherBackgroundImage);
 		}
 
 		// merchant could of changed, make sure to reset it
