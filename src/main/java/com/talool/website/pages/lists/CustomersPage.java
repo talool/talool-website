@@ -25,7 +25,7 @@ import com.talool.core.service.AnalyticService;
 import com.talool.core.service.CustomerService;
 import com.talool.core.service.ServiceException;
 import com.talool.stats.CustomerSummary;
-import com.talool.website.component.ConfirmationLink;
+import com.talool.website.component.ConfirmationAjaxLink;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.panel.AdminModalWindow;
@@ -126,7 +126,7 @@ public class CustomersPage extends BasePage
 						SessionUtils.getSession().getMerchantAccount().getEmail()))
 				{
 					sb.append("Are you sure you want to delete ").append(email).append(" ?");
-					item.add(new ConfirmationLink<Void>("deleteCustomer", sb.toString())
+					item.add(new ConfirmationAjaxLink<Void>("deleteCustomer", sb.toString())
 					{
 
 						private static final long serialVersionUID = -4592149231430681542L;

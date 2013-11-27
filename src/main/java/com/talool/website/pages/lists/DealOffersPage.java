@@ -2,9 +2,11 @@ package com.talool.website.pages.lists;
 
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -17,6 +19,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.DealOffer;
 import com.talool.core.Merchant;
+import com.talool.core.service.ServiceException;
+import com.talool.website.component.ConfirmationIndicatingAjaxLink;
 import com.talool.website.models.DealOfferListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminModalWindow;
@@ -29,6 +33,7 @@ import com.talool.website.util.SessionUtils;
 @SecuredPage
 public class DealOffersPage extends BasePage
 {
+	private static final Logger LOG = Logger.getLogger(DealOffersPage.class);
 	private static final long serialVersionUID = 2102415289760762365L;
 
 	public DealOffersPage()
@@ -48,13 +53,15 @@ public class DealOffersPage extends BasePage
 
 		boolean canViewAllBooks = PermissionService.get().canViewAnalytics(
 				SessionUtils.getSession().getMerchantAccount().getEmail());
-		
+
 		DealOfferListModel model = new DealOfferListModel();
+		final StringBuilder sb = new StringBuilder();
+
 		if (!canViewAllBooks)
 		{
 			model.setMerchantId(SessionUtils.getSession().getMerchantAccount().getMerchant().getId());
 		}
-		
+
 		final ListView<DealOffer> customers = new ListView<DealOffer>("offerRptr",
 				model)
 		{
@@ -64,8 +71,10 @@ public class DealOffersPage extends BasePage
 			@Override
 			protected void populateItem(ListItem<DealOffer> item)
 			{
+				sb.setLength(0);
 				DealOffer dealOffer = item.getModelObject();
 				final UUID dealOfferId = dealOffer.getId();
+				final String title = dealOffer.getTitle();
 
 				item.setModel(new CompoundPropertyModel<DealOffer>(dealOffer));
 
@@ -104,6 +113,30 @@ public class DealOffersPage extends BasePage
 						modal.setContent(panel);
 						modal.setTitle("Edit Merchant Deal Offer");
 						modal.show(target);
+					}
+				});
+
+				sb.append("Are you sure you want to copy \"").append(title).append("\" and all deals related?");
+				item.add(new ConfirmationIndicatingAjaxLink<Void>("copyLink",
+						JavaScriptUtils.escapeQuotes(sb.toString()).toString())
+				{
+					private static final long serialVersionUID = 268692101349122303L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target)
+					{
+						getSession().getFeedbackMessages().clear();
+						try
+						{
+							taloolService.deepCopyDealOffer(dealOfferId);
+							setResponsePage(DealOffersPage.class);
+						}
+						catch (ServiceException e)
+						{
+							LOG.error("Problem copying deal offer", e);
+							SessionUtils.errorMessage("Problem copying deal offer '" + title);
+						}
+
 					}
 				});
 
