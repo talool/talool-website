@@ -111,7 +111,8 @@ public class MerchantManagementPage extends BaseManagementPage
 		 * Yes i am doing this very special case. Payback book codes only render
 		 * this tab!
 		 */
-		if (getPageParameters().get("name").toString().equalsIgnoreCase("Payback Book"))
+		if (getPageParameters().get("name").toString().equalsIgnoreCase("Payback Book") ||
+				getPageParameters().get("name").toString().equalsIgnoreCase("SaveAround"))
 		{
 			tabs.add(new AbstractTab(new Model<String>("Book Codes"))
 			{
