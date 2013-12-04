@@ -16,8 +16,24 @@
 	
 	<repositories>
 		<repository>
-			<id>talool-maven-ftp</id>
-			<url>ftp://syslog1/repository</url>
+			<id>talool-maven-releases</id>
+			<url>http://maven.talool.com:8081/nexus/content/repositories/releases/</url>
+			<releases>
+			   <enabled>true</enabled>
+			</releases>
+			<snapshots>
+			   <enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>talool-maven-snapshots</id>
+			<url>http://maven.talool.com:8081/nexus/content/repositories/snapshots/</url>
+			<releases>
+			   <enabled>false</enabled>
+			</releases>
+			<snapshots>
+			   <enabled>true</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 
