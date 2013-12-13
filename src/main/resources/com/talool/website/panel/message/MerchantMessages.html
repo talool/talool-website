@@ -1,0 +1,37 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+
+	<table>
+  		<thead>
+  			<tr>
+  				<th>Message</th>
+  				<th>Delivery Radius</th>
+  				<th>Delivery Criteria</th>
+  				<th>Delivered</th>
+  				<th>Is Active</th>
+  				<th>Expires On</th>
+  				<th>Created By</th>
+  				<th>Edited By</th>
+  				<th class="actionCol">Actions</th>
+  			</tr>
+  		</thead>
+  		<tbody>
+  			<tr wicket:id="messageRptr">
+  				<td wicket:id="message"></td>
+  				<td wicket:id="radius"></td>
+  				<td wicket:id="criteria"></td>
+  				<td wicket:id="deliveryStats"></td>
+  				<td wicket:id="isActive"></td>
+  				<td wicket:id="expiresOn"></td>
+  				<td wicket:id="createdBy"></td>
+  				<td wicket:id="editedBy"></td>
+  				<td class="orange-font">
+  					<a wicket:id="editLink" href="#" class="icon icon-large icon-pencil"></a>
+  					<a href="#" class="icon icon-large icon-dashboard" title="Message Metrics"></a>
+  					<a href="#" class="icon icon-large icon-remove"></a>
+  				</td>
+  			</tr>
+  		</tbody>
+  	</table>
+	
+</wicket:panel>
+

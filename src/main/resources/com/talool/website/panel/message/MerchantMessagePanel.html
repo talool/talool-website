@@ -1,0 +1,73 @@
+<wicket:extend xmlns:wicket="http://wicket.apache.org">
+	<script>
+	  $(function() {
+	    $( "#datepicker" ).datepicker();
+	  });
+	</script>
+	<div class="panel">
+		<fieldset class="right">
+			<div>
+		    	<label><i class="hint-font icon-asterisk"></i> Radius</label><select name="radius">
+		    		<option>1 mile</option>
+		    		<option>2 miles</option>
+		    		<option>3 miles</option>
+		    		<option>5 miles</option>
+		    		<option>8 miles</option>
+		    		<option>13 miles</option>
+		    		<option>21 miles</option>
+		    		<option>34 miles</option>
+		    		<option>55 miles</option>
+		    		<option>unlimited</option>
+		    	</select>
+		    </div>
+		    <div>
+		    	<label><i class="hint-font icon-asterisk"></i> Criteria</label><select name="criteria">
+		    		<option>All Customers</option>
+		    		<option>Customers with my Deals</option>
+		    		<option>Customers who Like me</option>
+		    		<option>Active Customers in my Category</option>
+		    		<option>Potential (new) Customers</option>
+		    		<option>Past Customers</option>
+		    		<option>Customers with Expiring Deals (2 weeks)</option>
+		    	</select>
+		    </div>
+		    <div>
+	    		<label><i class="hint-font icon-asterisk"></i> Message Count</label><select name="count">
+		    		<option>unlimited</option>
+		    		<option>1000</option>
+		    		<option>500</option>
+		    		<option>100</option>
+		    		<option>50</option>
+		    		<option>25</option>
+		    	</select>
+	    	</div>
+	    	<div>
+	    		<label><i class="optional-font icon-asterisk"></i> Gift</label><select name="offers">
+		    		<option>none</option>
+		    		<option>Offer 1</option>
+		    		<option>Offer 2</option>
+		    		<option>Offer 3</option>
+		    		<option>Offer 4</option>
+		    		<option>Offer 5</option>
+		    	</select>
+	    	</div>
+		    <div>
+	    		<label><i class="optional-font icon-asterisk"></i> Link</label><input name="link" type="text">
+	    	</div>
+	    </fieldset>
+	    <fieldset>
+			<div>
+		    	<label><i class="hint-font icon-asterisk"></i> Message</label><textarea name="message"></textarea>
+		    </div>
+		    <div>
+	    		<label><i class="hint-font icon-asterisk"></i> Expires On</label><input id="datepicker" name="expires" type="text">
+	    	</div>
+		    <div>
+	    		<label></label>
+	    		<input class="chbx" name="active" type="checkbox">Is Active
+	    	</div>
+	    </fieldset>
+	</div>
+	
+</wicket:extend>
+
