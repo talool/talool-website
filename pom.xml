@@ -7,7 +7,7 @@
 		<relativePath />
 	</parent>
 	<artifactId>talool-website</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.4</version>
 	<packaging>war</packaging>
 
 	<name>Talool Website</name>
