@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -ex
+set -e
 server=$1
 buildDir=/opt/talool/builds
 
