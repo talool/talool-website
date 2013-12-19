@@ -1,38 +1,43 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.talool</groupId>
 		<artifactId>talool-base</artifactId>
-		<version>1.0.3</version>
-                <relativePath/>
+		<version>1.0.4</version>
+		<relativePath />
 	</parent>
 	<artifactId>talool-website</artifactId>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.5-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>Talool Website</name>
 	<url>http://www.talool.com</url>
-	
+
+	<scm>
+		<connection>scm:git:git@github.com:talool/talool-website.git</connection>
+		<url>scm:git:git@github.com:talool/talool-website.git</url>
+		<developerConnection>scm:git:git@github.com:talool/talool-website.git</developerConnection>
+		<tag>talool-website-1.0.3</tag>
+	</scm>
 	<repositories>
 		<repository>
 			<id>talool-maven-releases</id>
 			<url>http://maven.talool.com:8081/nexus/content/repositories/releases/</url>
 			<releases>
-			   <enabled>true</enabled>
+				<enabled>true</enabled>
 			</releases>
 			<snapshots>
-			   <enabled>false</enabled>
+				<enabled>false</enabled>
 			</snapshots>
 		</repository>
 		<repository>
 			<id>talool-maven-snapshots</id>
 			<url>http://maven.talool.com:8081/nexus/content/repositories/snapshots/</url>
 			<releases>
-			   <enabled>false</enabled>
+				<enabled>false</enabled>
 			</releases>
 			<snapshots>
-			   <enabled>true</enabled>
+				<enabled>true</enabled>
 			</snapshots>
 		</repository>
 	</repositories>
@@ -50,7 +55,7 @@
 		<dependency>
 			<groupId>com.talool</groupId>
 			<artifactId>talool-service</artifactId>
-			<version>1.0.6-SNAPSHOT</version>
+			<version>1.0.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
@@ -63,9 +68,9 @@
 			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.wicketstuff</groupId>
-		    <artifactId>wicketstuff-gmap3</artifactId>
-		    <version>6.9.0</version>
+			<groupId>org.wicketstuff</groupId>
+			<artifactId>wicketstuff-gmap3</artifactId>
+			<version>6.9.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
@@ -83,20 +88,20 @@
 			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.googlecode.wicket-jquery-ui</groupId>
-		    <artifactId>wicket-jquery-ui-core</artifactId>
-		    <version>6.7.0</version>
+			<groupId>com.googlecode.wicket-jquery-ui</groupId>
+			<artifactId>wicket-jquery-ui-core</artifactId>
+			<version>6.7.0</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.googlecode.wicket-jquery-ui</groupId>
-		    <artifactId>wicket-jquery-ui</artifactId>
-		    <version>6.7.0</version>
+			<groupId>com.googlecode.wicket-jquery-ui</groupId>
+			<artifactId>wicket-jquery-ui</artifactId>
+			<version>6.7.0</version>
 		</dependency>
 		<dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-bootstrap</artifactId>
-            <version>0.2</version>
-        </dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-bootstrap</artifactId>
+			<version>0.2</version>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
@@ -136,11 +141,9 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
-			<version>1.4.3</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-configuration</groupId>
@@ -157,9 +160,9 @@
 			<version>1.4.0</version>
 		</dependency>
 		<dependency>
-		  <groupId>com.braintreepayments.gateway</groupId>
-		  <artifactId>braintree-java</artifactId>
-		  <version>2.24.0</version>
+			<groupId>com.braintreepayments.gateway</groupId>
+			<artifactId>braintree-java</artifactId>
+			<version>2.24.0</version>
 		</dependency>
 	</dependencies>
 	<build>
