@@ -1,11 +1,11 @@
 #!/bin/sh
 
-set -e
+set -ex
 server=$1
 buildDir=/opt/talool/builds
 
 if [ -n "$2" ]; then
-  warFile="$1"
+  warFile="$2"
 else
  warFile=$(ls target/*SNAPSHOT.war)
 fi
