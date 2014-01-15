@@ -38,7 +38,7 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 		wizardModel.add(this.newLocation);
 		wizardModel.add(new MerchantLocationImage());
 		wizardModel.add(new MerchantLocationLogo());
-		
+
 		wizardModel.add(new MerchantMap(this));
 		wizardModel.setLastVisible(false);
 

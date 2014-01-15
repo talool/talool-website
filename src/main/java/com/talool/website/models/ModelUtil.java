@@ -20,6 +20,7 @@ import com.talool.core.Deal;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.Tag;
+import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.website.Config;
 import com.talool.website.models.TagListModel.CATEGORY;
@@ -79,6 +80,15 @@ public final class ModelUtil
 	public static Category getCategory(final Merchant merchant)
 	{
 		Category cat = null;
+		try
+		{
+			taloolService.reattach(merchant);
+		}
+		catch (ServiceException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Set<Tag> tags = merchant.getTags();
 		if (CollectionUtils.isNotEmpty(tags))
 		{

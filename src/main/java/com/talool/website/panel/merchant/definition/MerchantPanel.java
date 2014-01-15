@@ -74,6 +74,9 @@ public class MerchantPanel extends BaseDefinitionPanel
 		Merchant merchant = domainFactory.newMerchant();
 		MerchantLocation location = domainFactory.newMerchantLocation();
 		location.setLogo(domainFactory.newMedia(merchant.getId(), "", MediaType.MERCHANT_LOGO));
+
+		location.setCreatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
+
 		merchant.addLocation(location);
 
 		setDefaultModel(Model.of(merchant));

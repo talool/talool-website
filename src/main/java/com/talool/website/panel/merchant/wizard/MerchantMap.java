@@ -25,6 +25,7 @@ import com.talool.core.MerchantMedia;
 import com.talool.website.models.MerchantLocationListModel;
 import com.talool.website.panel.merchant.wizard.MerchantWizard.WizardMarker;
 import com.talool.website.util.HttpUtils;
+import com.talool.website.util.SessionUtils;
 import com.vividsolutions.jts.geom.Point;
 
 public class MerchantMap extends WizardStep
@@ -50,8 +51,8 @@ public class MerchantMap extends WizardStep
 
 		final Merchant merchant = (Merchant) getDefaultModelObject();
 
-		addOrReplace(new Label("merchantName",merchant.getName()));
-		
+		addOrReplace(new Label("merchantName", merchant.getName()));
+
 		GMap map = new GMap("map");
 		map.setStreetViewControlEnabled(false);
 		map.setScaleControlEnabled(true);
@@ -124,6 +125,8 @@ public class MerchantMap extends WizardStep
 				{
 					location.setMerchantImage(merchImage);
 				}
+
+				location.setCreatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
 				merchant.addLocation(location);
 				merchant.setCurrentLocation(location);
 
