@@ -23,7 +23,7 @@ public class MerchantListModel extends LoadableDetachableModel<List<Merchant>>
 
 	private static final long serialVersionUID = -1571731014724589519L;
 
-	private static UUID merchantId;
+	private UUID merchantId;
 
 	@Override
 	protected List<Merchant> load()

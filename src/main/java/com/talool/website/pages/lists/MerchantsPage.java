@@ -62,13 +62,14 @@ public class MerchantsPage extends BasePage
 		final WebMarkupContainer container = new WebMarkupContainer("merchantList");
 		container.setOutputMarkupId(true);
 		add(container);
-		
+
 		boolean canViewAllMerchants = PermissionService.get().canViewAnalytics(
 				SessionUtils.getSession().getMerchantAccount().getEmail());
-		
+
 		MerchantListModel model = new MerchantListModel();
 		if (!canViewAllMerchants)
 		{
+			LOG.info(SessionUtils.getSession().getMerchantAccount().getEmail());
 			model.setMerchantId(SessionUtils.getSession().getMerchantAccount().getMerchant().getId());
 		}
 
@@ -104,9 +105,9 @@ public class MerchantsPage extends BasePage
 				item.add(new Label("primaryLocation.niceCityState"));
 				item.add(new Label("primaryLocation.zip"));
 				item.add(new Label("primaryLocation.phone"));
-				
+
 				item.add(new Label("primaryLocation.email"));
-				
+
 				String websiteUrl = new String();
 				try
 				{
@@ -118,13 +119,13 @@ public class MerchantsPage extends BasePage
 				}
 				ExternalLink webpage = new ExternalLink("website", websiteUrl, websiteUrl);
 				item.add(webpage);
-				
+
 				StringBuilder hasMultiple = new StringBuilder();
 				hasMultiple.append(merchant.getLocations().size());
 				item.add(new Label("multiple", hasMultiple.toString()));
 
 				// TODO - at some point, this tags label can be based on a model
-				//item.add(new Label("tags", ModelUtil.geTagSummary(merchant)));
+				// item.add(new Label("tags", ModelUtil.geTagSummary(merchant)));
 
 				item.add(new AjaxLink<Void>("editLink")
 				{
@@ -139,7 +140,7 @@ public class MerchantsPage extends BasePage
 						wizard.open(target);
 					}
 				});
-				
+
 				PageParameters dashboardParams = new PageParameters();
 				dashboardParams.set("id", merchant.getId());
 				String dashboardUrl = (String) urlFor(MerchantDashboard.class, dashboardParams);
@@ -161,9 +162,8 @@ public class MerchantsPage extends BasePage
 			public void onClick(AjaxRequestTarget target)
 			{
 				getSession().getFeedbackMessages().clear();
-
-				Merchant merchant = domainFactory.newMerchant();
-
+				final Merchant merchant = domainFactory.newMerchant();
+				merchant.getLocations().get(0).setCreatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
 				wizard.setModelObject(merchant);
 				wizard.open(target);
 			}
