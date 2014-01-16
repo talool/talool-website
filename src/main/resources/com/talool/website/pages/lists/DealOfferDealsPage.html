@@ -4,16 +4,22 @@
 	  		<thead>
 	  			<tr>
 	  				<th>Merchant</th>
-	  				<th>Summary</th>
-	  				<th>Media Name</th>
+	  				<th>Deals</th>
+	  				<th>Image</th>
 	  				<th class="actionCol">Actions</th>
 	  			</tr>
 	  		</thead>
 	  		<tbody>
 	  			<tr class="odd" wicket:id="dealRptr">
 	  				<td wicket:id="merchant.name"></td>
-	  				<td wicket:id="summary"></td>
-	  				<td wicket:id="image.mediaName"></td>
+	  				<td class="dealListItem">
+	  					<div class="title" wicket:id="title"></div>
+	  					<div class="summary" wicket:id="summary"></div>
+	  					<div class="details" wicket:id="details"></div>
+	  				</td>
+	  				<td>
+	  					<img wicket:id="myimage"/>
+	  				</td>
 	  				<td class="orange-font">
 	  					<a wicket:id="editLink" class="icon icon-large icon-pencil" title="Edit Merchant"></a>
 	  					<a href="#" class="icon icon-large icon-remove" title="Delete Merchant"></a>

@@ -3,26 +3,28 @@
 	  	<table>
 	  		<thead>
 	  			<tr>
-	  			  	<th>Merchant</th>
-	  				<th>Title</th>
-	  				<th>Summary</th>
-	  				<th>Expires</th>
+	  				<th>Image</th>
+	  			  	<th>Summary</th>
 	  				<th>Deal Offer</th>
-	  				<th>Created By</th>
 	  				<th>Last Updated By</th>
+	  				<th>Expires</th>
 	  				<th>Is Active</th>
 	  				<th class="actionCol">Actions</th>
 	  			</tr>
 	  		</thead>
 	  		<tbody>
 	  			<tr wicket:id="dealRptr">
-	  			  	<td wicket:id="merchant.name"></td>
-	  				<td wicket:id="title"></td>
-	  				<td wicket:id="summary"></td>
-	  				<td wicket:id="expires"></td>
+	  				<td>
+	  					<img wicket:id="myimage"/>
+	  				</td>
+	  				<td class="dealListItem">
+	  					<div class="title" wicket:id="title"></div>
+	  					<div class="summary" wicket:id="summary"></div>
+	  					<div class="details" wicket:id="details"></div>
+	  				</td>
 					<td wicket:id="dealOffer.title"></td>
-	  				<td wicket:id="createdBy"></td>
 	  				<td wicket:id="lastUpdatedBy"></td>
+	  				<td wicket:id="expires"></td>
 	  				<td wicket:id="isActive"></td>
 	  				<td class="orange-font">
 	  					<a wicket:id="editLink" href="#" class="icon icon-large icon-pencil" title="edit deal"></a>

@@ -11,12 +11,14 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
 import com.talool.core.MerchantAccount;
+import com.talool.website.component.StaticImage;
 import com.talool.website.models.DealListModel;
 import com.talool.website.models.DealModel;
 import com.talool.website.pages.BasePage;
@@ -68,10 +70,11 @@ public class DealOfferDealsPage extends BasePage
 				{
 					item.add(new AttributeModifier("class", "odd-row-bg"));
 				}
-
 				item.add(new Label("merchant.name"));
+				item.add(new Label("title"));
 				item.add(new Label("summary"));
-				item.add(new Label("image.mediaName"));
+				item.add(new Label("details"));
+				item.add(new StaticImage("myimage", false, deal.getImage().getMediaUrl()));
 
 				item.add(new AjaxLink<Void>("editLink")
 				{

@@ -19,6 +19,7 @@ import com.talool.core.Deal;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
 import com.talool.core.service.ServiceException;
+import com.talool.website.component.StaticImage;
 import com.talool.website.models.DealListModel;
 import com.talool.website.models.DealModel;
 import com.talool.website.pages.BasePage;
@@ -75,12 +76,11 @@ public class MerchantDealsPanel extends BaseTabPanel
 
 				item.add(new Label("title"));
 				item.add(new Label("summary"));
+				item.add(new Label("details"));
+				item.add(new StaticImage("myimage", false, deal.getImage().getMediaUrl()));
 				item.add(new Label("expires"));
 				item.add(new Label("isActive"));
-				item.add(new Label("merchant.name"));
 				item.add(new Label("dealOffer.title"));
-				item.add(new Label("createdBy", deal.getCreatedByEmail() + " / "
-						+ deal.getCreatedByMerchantName()));
 
 				item.add(new Label("lastUpdatedBy", deal.getUpdatedByEmail() + " / "
 						+ deal.getUpdatedByMerchantName()));

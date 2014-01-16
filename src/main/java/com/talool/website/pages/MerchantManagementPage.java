@@ -120,25 +120,19 @@ public class MerchantManagementPage extends BaseManagementPage
 			}
 		});
 
-		/*
-		 * Yes i am doing this very special case. Payback book codes only render
-		 * this tab!
-		 */
-		if (getPageParameters().get("name").toString().equalsIgnoreCase("Payback Book") ||
-				getPageParameters().get("name").toString().equalsIgnoreCase("SaveAround"))
+
+		tabs.add(new AbstractTab(new Model<String>("Book Codes"))
 		{
-			tabs.add(new AbstractTab(new Model<String>("Book Codes"))
+
+			private static final long serialVersionUID = 5853871222415506440L;
+
+			@Override
+			public Panel getPanel(String panelId)
 			{
-
-				private static final long serialVersionUID = 5853871222415506440L;
-
-				@Override
-				public Panel getPanel(String panelId)
-				{
-					return new BookCodesPanel(panelId, getPageParameters());
-				}
-			});
-		}
+				return new BookCodesPanel(panelId, getPageParameters());
+			}
+		});
+		
 
 		final AjaxTabbedPanel<ITab> tabbedPanel = new AjaxTabbedPanel<ITab>("tabs", tabs)
 		{

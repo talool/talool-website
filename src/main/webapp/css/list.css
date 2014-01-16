@@ -49,6 +49,21 @@ tr
 	width: 125px;
 }
 
+/* Deals */
+td.dealListItem .title
+{
+	font-weight: bold;
+}
+td.dealListItem .summary
+{
+	padding: 5px 0;
+}
+td.dealListItem .details
+{
+	color: rgba(180,180,180,1);
+	font-style: italic;
+}
+
 /* TAB OVERRIDES */
 div.tabpanel div.tab-row ul {
     background: url("/img/tab_bottom.gif") repeat-x scroll center bottom transparent; 

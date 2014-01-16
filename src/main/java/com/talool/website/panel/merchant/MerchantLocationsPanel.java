@@ -13,6 +13,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.MerchantLocation;
+import com.talool.website.component.StaticImage;
 import com.talool.website.models.MerchantLocationListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminModalWindow;
@@ -62,12 +63,17 @@ public class MerchantLocationsPanel extends BaseTabPanel
 					item.add(new AttributeModifier("class", "odd-row-bg"));
 				}
 
+				item.add(new StaticImage("myimage", false, managedLocation.getMerchantImage().getMediaUrl()));
+				item.add(new Label("merchantImage.mediaUrl"));
 				item.add(new Label("locationName"));
 				item.add(new Label("websiteUrl"));
 				item.add(new Label("email"));
 				item.add(new Label("phone"));
+				item.add(new Label("address1"));
+				item.add(new Label("address2"));
 				item.add(new Label("city"));
 				item.add(new Label("stateProvinceCounty"));
+				item.add(new Label("zip"));
 
 				BasePage page = (BasePage) this.getPage();
 				final AdminModalWindow modal = page.getModal();

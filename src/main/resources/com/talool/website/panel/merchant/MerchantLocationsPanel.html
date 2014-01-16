@@ -2,23 +2,31 @@
   	<table>
   		<thead>
   			<tr>
-  				<th>Name</th>
+  				<th>Image</th>
+  				<th>Address</th>
   				<th>Email</th>
   				<th>Website</th>
   				<th>Phone</th>
-  				<th>City</th>
-  				<th>State</th>
   				<th class="actionCol">Actions</th>
   			</tr>
   		</thead>
   		<tbody>
   			<tr wicket:id="locationRptr">
-  				<td wicket:id="locationName">North Boulder</td>
+  				<td>
+	  				<img wicket:id="myimage"/>
+	  				<div class="tiny" wicket:id="merchantImage.mediaUrl"></div>
+	  			</td>
+  				<td>
+  					<div wicket:id="locationName"></div>
+  					<div wicket:id="address1"></div>
+  					<div wicket:id="address2"></div>
+					<span wicket:id="city"></span>,
+					<span wicket:id="stateProvinceCounty"></span>
+					<span wicket:id="zip"></span>
+				</td>
   				<td wicket:id="email">name@website.com</td>
   				<td wicket:id="websiteUrl">http://www.website.com</td>
   				<td wicket:id="phone">111-222-3333</td>
-  				<td wicket:id="city">Boulder</td>
-  				<td wicket:id="stateProvinceCounty">Colorado</td>
   				<td class="orange-font">
   					<a wicket:id="editLink" href="#" class="icon icon-large icon-pencil"></a>
   					<a href="#" class="icon icon-large icon-remove"></a>
