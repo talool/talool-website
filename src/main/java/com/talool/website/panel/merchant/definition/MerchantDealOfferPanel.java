@@ -103,7 +103,6 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		form.add(new DealTypeDropDownChoice("dealType").setRequired(true));
 		form.add(new TextField<String>("title").setRequired(true));
 		form.add(new TextField<String>("summary"));
-		form.add(new TextField<String>("locationName"));
 		form.add(new TextField<String>("price"));
 
 		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);

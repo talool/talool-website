@@ -2,31 +2,28 @@
 
 	<div = wicket:id="locationPanel">
 		<div class="panel left">
-			<h3>Address</h3>
+			<h3>Address & Contact Info</h3>
 			<fieldset>
-			    <div><label>Address1</label><input wicket:id="address1" name="address1" type="text"/></div>
-			    <div><label>Address2</label><input wicket:id="address2" name="address2" type="text"/></div>
-			    <div><label>City</label><input wicket:id="city" name="city" type="text"/></div>
-			    <div><label>State</label>
+				<div><label><i class="optional-font icon-asterisk"></i> Location Name</label><input wicket:id="locationName" name="merchant_location_name"/></div>
+			    <div><label><i class="hint-font icon-asterisk"></i> Address1</label><input wicket:id="address1" name="address1" type="text"/></div>
+			    <div><label><i class="optional-font icon-asterisk"></i> Address2</label><input wicket:id="address2" name="address2" type="text"/></div>
+			    <div><label><i class="hint-font icon-asterisk"></i> City</label><input wicket:id="city" name="city" type="text"/></div>
+			    <div><label><i class="hint-font icon-asterisk"></i> State</label>
 			     <select wicket:id="stateProvinceCounty">
 		          <option>CO</option>
 		          <option>NV</option>
 		         </select>
 			     </div>
-			    <div><label>Zip</label><input wicket:id="zip"  name="zip" type="text"/></div>
-			    <div><label>Country</label><input wicket:id="country"  name="country" type="text"/></div>
+			    <div><label><i class="hint-font icon-asterisk"></i> Zip</label><input wicket:id="zip"  name="zip" type="text"/></div>
+			    <div><label><i class="hint-font icon-asterisk"></i> Phone</label><input wicket:id="phone"  name="phone" type="text"/></div>
+		    	<div><label><i class="hint-font icon-asterisk"></i> Email</label><input wicket:id="email"  name="email" type="text"/></div>
+		    	<div><label><i class="hint-font icon-asterisk"></i> Website</label><input wicket:id="websiteUrl"  name="web_url" type="text"/></div>
 		    </fieldset>
 		</div>
 		
 		<div class="panel right">
-			<h3>Additional Information</h3>
-			<fieldset>
-				<div><label>Location Name</label><input wicket:id="locationName" name="merchant_location_name"/></div>
-				<div><label>Phone</label><input wicket:id="phone"  name="phone" type="text"/></div>
-		    	<div><label>Email</label><input wicket:id="email"  name="email" type="text"/></div>
-		    	<div><label>Website</label><input wicket:id="websiteUrl"  name="web_url" type="text"/></div>
-		    	<div><label>Logo</label><input name="logo" type="file"/></div>
-		    </fieldset>
+			<div wicket:id="merchantMediaImage"></div>
+		    <div wicket:id="merchantMediaLogo"></div>
 		</div>
 	</div>
 		

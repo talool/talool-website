@@ -2,6 +2,7 @@ package com.talool.website.panel.merchant.definition;
 
 import java.util.UUID;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -16,6 +17,7 @@ import com.talool.core.MerchantLocation;
 import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
 import com.talool.website.behaviors.OnChangeAjaxFormBehavior;
+import com.talool.website.component.MerchantMediaWizardPanel;
 import com.talool.website.component.StateOption;
 import com.talool.website.component.StateSelect;
 import com.talool.website.models.MerchantLocationModel;
@@ -33,6 +35,8 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 	private static final long serialVersionUID = 661849211369766802L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocationPanel.class);
 	private UUID merchantId;
+	private MerchantMedia selectedImage;
+	private MerchantMedia selectedLogo;
 
 	public MerchantLocationPanel(final String id, final UUID merchantId, final SubmitCallBack callback)
 	{
@@ -83,7 +87,6 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 		locationPanel.add(new TextField<String>("address2"));
 		locationPanel.add(new TextField<String>("city").setRequired(true));
 		locationPanel.add(new TextField<String>("zip").setRequired(true));
-		locationPanel.add(new TextField<String>("country").setRequired(true));
 		locationPanel.add(new TextField<String>("locationName"));
 		locationPanel.add(new TextField<String>("phone").setRequired(true));
 		locationPanel.add(new TextField<String>("email").setRequired(true));
@@ -93,6 +96,43 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 				new PropertyModel<StateOption>(this, "stateOption"));
 		state.add(new OnChangeAjaxFormBehavior());
 		locationPanel.add(state.setRequired(true));
+		
+		MerchantLocation loc = (MerchantLocation) getDefaultModelObject();
+		selectedImage = loc.getMerchantImage();
+		selectedLogo = loc.getLogo();
+		
+		if (merchantId == null)
+		{
+			merchantId = loc.getMerchant().getId();
+		}
+		
+		PropertyModel<MerchantMedia> selectedImageModel = new PropertyModel<MerchantMedia>(this,"selectedImage");
+		MerchantMediaWizardPanel imagePanel = new MerchantMediaWizardPanel("merchantMediaImage", merchantId, MediaType.MERCHANT_IMAGE, selectedImageModel)
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media) {
+				// TODO show the uploaded image
+			}
+			
+		};
+		locationPanel.add(imagePanel);
+		
+		PropertyModel<MerchantMedia> selectedLogoModel = new PropertyModel<MerchantMedia>(this,"selectedLogo");
+		MerchantMediaWizardPanel logoPanel = new MerchantMediaWizardPanel("merchantMediaLogo", merchantId, MediaType.MERCHANT_LOGO, selectedLogoModel)
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media) {
+				// TODO show the uploaded logo
+			}
+			
+		};
+		locationPanel.add(logoPanel);
 
 	}
 
@@ -123,7 +163,11 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 			// we are creating, not updating
 			// TODO Optimize this save so we don't pull in the whole merchant
 			merchantLocation.setMerchant(taloolService.getMerchantById(merchantId));
+			merchantLocation.setCreatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
 		}
+		
+		merchantLocation.setMerchantImage(selectedImage);
+		merchantLocation.setLogo(selectedLogo);
 
 		taloolService.save(merchantLocation);
 		SessionUtils.successMessage("Successfully saved location");

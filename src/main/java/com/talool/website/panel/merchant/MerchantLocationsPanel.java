@@ -6,6 +6,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -64,9 +65,10 @@ public class MerchantLocationsPanel extends BaseTabPanel
 				}
 
 				item.add(new StaticImage("myimage", false, managedLocation.getMerchantImage().getMediaUrl()));
-				item.add(new Label("merchantImage.mediaUrl"));
+				
+				item.add(new StaticImage("mylogo", false, managedLocation.getLogo().getMediaUrl()));
+				
 				item.add(new Label("locationName"));
-				item.add(new Label("websiteUrl"));
 				item.add(new Label("email"));
 				item.add(new Label("phone"));
 				item.add(new Label("address1"));
@@ -74,6 +76,18 @@ public class MerchantLocationsPanel extends BaseTabPanel
 				item.add(new Label("city"));
 				item.add(new Label("stateProvinceCounty"));
 				item.add(new Label("zip"));
+				
+				String websiteUrl = new String();
+				try
+				{
+					websiteUrl = managedLocation.getWebsiteUrl();
+				}
+				catch (Exception e)
+				{
+					websiteUrl = "empty";
+				}
+				ExternalLink webpage = new ExternalLink("website", websiteUrl, websiteUrl);
+				item.add(webpage);
 
 				BasePage page = (BasePage) this.getPage();
 				final AdminModalWindow modal = page.getModal();
