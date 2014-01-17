@@ -17,57 +17,37 @@
 	line-height: 40px;
 	height: 40px;
 }
-.newMerchant .nav.mapView {
-	margin-top: -25px;
+.newMerchant .mapPanel
+{
+	position: absolute;
+	top: 30px;
+	right: 15px;
+}
+.newMerchant .mapPanel .nav {
 	width: 320px;
 	margin-left: 10px;
 	height: 65px;
 }
 
-.deal2 .bbuttonbar {
-	background-image: url(/img/deal/buttonBar3Brown.png);
-	background-repeat: no-repeat;
-	height: 70px;
-	padding: 5px 5px 0;
-	overflow: hidden;
-}
-
-.deal2 .bbuttonbar .icon
-{
-	margin: 15px auto 5px;
-	height: 30px;
-	width: 103px;
-	text-align: center;
-}
-.deal2 .bbuttonbar .bbtn
-{
-	float: left;
-	width: 103px;
-	height: 70px;
-}
-.deal2 .bbuttonbar .label
-{
-	font-size: 8px;
-	text-align: center;
-}
-
 .deal2 .image 
 {
-	margin: 5px 0 0;
+	margin: 0;
 	height: 95px;
 	position: relative;
 	overflow: hidden;
 }
 
-.deal2 .image .outline
+table.actionbar
 {
-	top: 0;
-	left: 0;
-	height: 95px;
-	position: absolute;
+	margin: 0;
 }
+
+table.actionbar td
+{
+	text-align: center;
+}
+
 .deal2 .location {
-	background-image: url(/img/deal/webTileTop.png);
 	height: 40px;
 	padding: 8px 20px 0;
 }
@@ -88,7 +68,6 @@
 }
 
 .deal2 .details .summary {
-	background-image: url(/img/deal/webTileTop.png);
 	text-align: center;
 	padding: 30px 20px;
 	font-family: "MarkerFelt";
@@ -97,7 +76,6 @@
 }
 
 .deal2 .details .restrictions {
-	background-image: url(/img/deal/webTileMiddle.png);
 	background-repeat: no-repeat;
 	height: 89px;
 	font-family: "MarkerFelt";
@@ -113,7 +91,6 @@
 }
 
 .deal2 .footer {
-	background-image: url(/img/deal/dealBottom.png);
 	background-repeat: no-repeat;
 	height: 40px;
 	padding:0 20px 0;
@@ -126,8 +103,8 @@
 }
 
 .dealList .deal {
-	background-image: url(/img/deal/tableCell60.png);
 	background-repeat: no-repeat;
 	height: 60px;
-	padding:0 15px 0;
+	padding:0;
+	margin-left: 15px;
 }

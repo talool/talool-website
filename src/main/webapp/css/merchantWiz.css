@@ -3,7 +3,7 @@
 	width: 350px;
 }
 .merchantWiz .panel .map {
-	height: 250px;
+	height: 320px;
 	width: 320px;
 	margin-left: 9px;
 	margin-top: -24px;
@@ -29,6 +29,8 @@ body.talool .merchantWiz .panel.iPhonePanel {
 }
 .merchantWiz .dealList .deal {
 	border: none;
+	border-radius: none;
+	border-bottom: 1px solid #ebebeb;
 	text-align: left;
 	color: black;
 }
@@ -38,7 +40,7 @@ body.talool .merchantWiz .panel.iPhonePanel {
 .merchantWiz .dealList.locList {
 	margin-left: 9px;
 	overflow:hidden;
-	height:254px;
+	height:185px;
 	width: 320px;
 }
 .merchantWiz .dealList .deal .title {
@@ -60,6 +62,18 @@ body.talool .merchantWiz .panel.iPhonePanel {
 	border-radius: 22px;	
 	margin: 3px;
 }
+
+.merchantWiz .dealList .deal .categoryIcon .circle .icon {
+	position: relative;
+	top: 9px;
+	left: 9px;
+}
+
+.merchantWiz .locList .deal .categoryIcon .circle .icon {
+	top: 10px;
+	left: 15px;
+}
+
 .merchantWiz .colterra {
 	background-image: url(/img/iPhone5_Colterra_boulder.png);
 	background-repeat: no-repeat;

@@ -5,34 +5,29 @@
 
 <wicket:panel>
 <div class="iphone">
-	<div class="deal2 gray4-bg gray4-font">
+	<div class="deal2 gray4-font">
 		<div wicket:id="merchantName"  class="nav teal-bg">Merchant Name</div>
-		<div class="bbuttonbar">
-			<div class="bbtn">
-				<div class="icon"><i class="icon-2x icon-money"></i></div>
-				<div class="label gray2-font">Use Deal Now</div>
-			</div>
-			<div class="bbtn">
-				<div class="icon"><i class="icon-2x icon-facebook"></i></div>
-				<div class="label gray2-font">Gift Via Facebook</div>
-			</div>
-			<div class="bbtn">
-				<div class="icon"><i class="icon-2x icon-envelope-alt"></i></div>
-				<div class="label gray2-font">Gift Via Email</div>
-			</div>
-		</div>
 		<div class="image"><img wicket:id="image" src=""/><img class="outline" src="/img/deal/imageMaskOutlineWeb.png"/></div>
+		<table class="actionbar true-light-gray-bg teal-font">
+			<tr>
+				<td class="orange-font"><i class="icon icon-money"></i>Redeem Now</td>
+				<td><i class="icon icon-gift"></i>Give As Gift</td>
+			</tr>
+		</table>
+		
+		<div class="details gray4-font">
+			<div wicket:id="title" class="title"></div>
+			<div class="summary"><div wicket:id="summary"></div></div>
+			<div class="restrictions"><div wicket:id="details"></div></div>
+		</div>
+		
 		<div class="location  gray4-font">
 			<img wicket:id="merchantLogo" class="merchantLogo" src=""/>
 			<div class="address">
 				<b>offer valid at:</b><br/>
 			</div>
 		</div>
-		<div class="details gray4-font">
-			<div wicket:id="title" class="title"></div>
-			<div class="summary"><div wicket:id="summary"></div></div>
-			<div class="restrictions"><div wicket:id="details"></div></div>
-		</div>
+		
 		<div class="footer gray4-font">
 			<div class="expires">Expires <span wicket:id="expires"></span></div>
 			<div class="dealOfferLogoContainer"><img wicket:id="dealOfferLogo" class="dealOfferLogo" src=""/></div>
