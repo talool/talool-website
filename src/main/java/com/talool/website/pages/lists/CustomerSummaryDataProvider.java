@@ -11,6 +11,8 @@ import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 import com.talool.stats.CustomerSummary;
 import com.talool.stats.PaginatedResult;
+import com.talool.website.service.PermissionService;
+import com.talool.website.util.SessionUtils;
 
 /**
  * 
@@ -24,6 +26,8 @@ public class CustomerSummaryDataProvider implements IDataProvider<CustomerSummar
 	private boolean isAscending = false;
 	private String sortParameter;
 
+	private Long size = null;
+
 	public CustomerSummaryDataProvider(final String sortParameter, final boolean isAscending)
 	{
 		this.isAscending = isAscending;
@@ -34,6 +38,7 @@ public class CustomerSummaryDataProvider implements IDataProvider<CustomerSummar
 	public Iterator<? extends CustomerSummary> iterator(long first, long count)
 	{
 		Iterator<? extends CustomerSummary> iter = null;
+		PaginatedResult<CustomerSummary> results = null;
 
 		final SearchOptions searchOpts = new SearchOptions.Builder().
 				sortProperty(sortParameter).ascending(isAscending).maxResults(Integer.valueOf(String.valueOf(count)))
@@ -41,10 +46,19 @@ public class CustomerSummaryDataProvider implements IDataProvider<CustomerSummar
 
 		try
 		{
-			PaginatedResult<CustomerSummary> result = ServiceFactory.get().getCustomerService().getCustomerSummary(searchOpts, false);
-			if (result != null)
+			if (PermissionService.get().canViewAllCustomers(SessionUtils.getSession().getMerchantAccount().getEmail()))
 			{
-				iter = result.getResults().iterator();
+				results = ServiceFactory.get().getCustomerService().getCustomerSummary(searchOpts, false);
+			}
+			else
+			{
+				results = ServiceFactory.get().getCustomerService().getPublisherCustomerSummary(
+						SessionUtils.getSession().getMerchantAccount().getMerchant().getId(), searchOpts, false);
+			}
+
+			if (results != null)
+			{
+				iter = results.getResults().iterator();
 			}
 		}
 		catch (ServiceException e)
@@ -59,16 +73,29 @@ public class CustomerSummaryDataProvider implements IDataProvider<CustomerSummar
 	@Override
 	public long size()
 	{
-		long cnt = 0;
+		if (size != null)
+		{
+			return size;
+		}
+
 		try
 		{
-			cnt = ServiceFactory.get().getCustomerService().getCustomerSummaryCount();
+			if (PermissionService.get().canViewAllCustomers(SessionUtils.getSession().getMerchantAccount().getEmail()))
+			{
+				size = ServiceFactory.get().getCustomerService().getCustomerSummaryCount();
+			}
+			else
+			{
+				size = ServiceFactory.get().getCustomerService()
+						.getPublisherCustomerSummaryCount(SessionUtils.getSession().getMerchantAccount().getMerchant().getId());
+			}
+
 		}
 		catch (ServiceException e)
 		{
 			e.printStackTrace();
 		}
-		return cnt;
+		return size;
 	}
 
 	@Override
