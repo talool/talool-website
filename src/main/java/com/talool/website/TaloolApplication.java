@@ -37,6 +37,7 @@ import com.talool.website.mobile.opengraph.MobileOpenGraphLocation;
 import com.talool.website.pages.AdminLoginPage;
 import com.talool.website.pages.AnalyticsPage;
 import com.talool.website.pages.CustomerManagementPage;
+import com.talool.website.pages.CustomerSearchPage;
 import com.talool.website.pages.CustomerSettingsPage;
 import com.talool.website.pages.HealthCheckPage;
 import com.talool.website.pages.HomePage;
@@ -147,6 +148,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/admin/merchant/locations", MerchantLocationsPage.class);
 		mountPage("/admin/merchant/dashboard", MerchantDashboard.class);
 		mountPage("/admin/merchant/mm", MerchantManagementPage.class);
+		mountPage("/admin/customer-search", CustomerSearchPage.class);
 		mountPage("/h", HealthCheckPage.class);
 
 		// WebViews for the Apps
@@ -169,24 +171,24 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/deal", OpenGraphDeal.class);
 		mountPage("/offer", OpenGraphDealOffer.class);
 		mountPage("/location", OpenGraphLocation.class);
-		mountPage("/password",WWWPasswordPage.class);
-		mountPage("/rpw",WWWPasswordResetPage.class);
+		mountPage("/password", WWWPasswordPage.class);
+		mountPage("/rpw", WWWPasswordResetPage.class);
 
 		// Tempory Payment Pages
 		mountPage("/mobile/payment/save", VenmoSaveCardPage.class);
 		mountPage("/mobile/payment/use", VenmoUseCardPage.class);
-		
+
 		// Mobile Web Pages
-		mountPage("/m",MobileHomePage.class);
-		mountPage("/m/customers",MobileCustomerPage.class);
-		mountPage("/m/publishers",MobilePublisherPage.class);
-		mountPage("/m/fundraisers",MobileFundraiserPage.class);
-		mountPage("/m/merchants",MobileMerchantPage.class);
-		mountPage("/m/terms",MobileTermsPage.class);
-		mountPage("/m/privacy",MobilePrivacyPage.class);
-		mountPage("/m/contact",MobileContactPage.class);
-		mountPage("/m/password",MobilePasswordPage.class);
-		mountPage("/m/rpw",MobilePasswordResetPage.class);
+		mountPage("/m", MobileHomePage.class);
+		mountPage("/m/customers", MobileCustomerPage.class);
+		mountPage("/m/publishers", MobilePublisherPage.class);
+		mountPage("/m/fundraisers", MobileFundraiserPage.class);
+		mountPage("/m/merchants", MobileMerchantPage.class);
+		mountPage("/m/terms", MobileTermsPage.class);
+		mountPage("/m/privacy", MobilePrivacyPage.class);
+		mountPage("/m/contact", MobileContactPage.class);
+		mountPage("/m/password", MobilePasswordPage.class);
+		mountPage("/m/rpw", MobilePasswordResetPage.class);
 		mountPage("/m/gift", MobileOpenGraphGift.class);
 		mountPage("/m/deal", MobileOpenGraphDeal.class);
 		mountPage("/m/offer", MobileOpenGraphDealOffer.class);

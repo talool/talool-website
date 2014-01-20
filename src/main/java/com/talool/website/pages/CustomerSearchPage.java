@@ -1,19 +1,21 @@
-package com.talool.website.pages.lists;
+package com.talool.website.pages;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
-import org.apache.wicket.core.request.handler.PageProvider;
-import org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectPolicy;
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
@@ -23,15 +25,11 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.talool.core.FactoryManager;
-import com.talool.core.service.AnalyticService;
-import com.talool.core.service.CustomerService;
 import com.talool.core.service.ServiceException;
 import com.talool.stats.CustomerSummary;
 import com.talool.website.component.ConfirmationAjaxLink;
-import com.talool.website.pages.BasePage;
-import com.talool.website.pages.CustomerManagementPage;
-import com.talool.website.pages.CustomerSearchPage;
+import com.talool.website.pages.lists.CustomerSummaryDataProvider;
+import com.talool.website.pages.lists.CustomersPage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.customer.definition.CustomerPanel;
@@ -41,44 +39,64 @@ import com.talool.website.service.PermissionService;
 import com.talool.website.util.SecuredPage;
 import com.talool.website.util.SessionUtils;
 
+/**
+ * History page. Keep in mind a DealAcquire object only has history records when
+ * updates occur. In other words, if a DealAcquire record is created, that
+ * record represent the current state.
+ * 
+ * It isn't until a state change, gift, etc take place (an update) which forms a
+ * DealAcquireHistory record. This saves persistence space by not forming
+ * duplicate records until updates occur. Therefore special cases occur when
+ * looking into the history: either a DealAcquire record exists (current state)
+ * or a DealAcquire record + any DealAcquireHistory formed from updates.
+ * 
+ * 
+ * @author clintz
+ * 
+ */
 @SecuredPage
-public class CustomersPage extends BasePage
+public class CustomerSearchPage extends BasePage
 {
-	private static final Logger LOG = Logger.getLogger(CustomersPage.class);
-	private static final String CUST_CONTAINER_ID = "customerContainer";
-
 	private static final long serialVersionUID = 2102415289760762365L;
-
-	protected transient static final CustomerService customerService = FactoryManager.get()
-			.getServiceFactory().getCustomerService();
-
-	protected transient static final AnalyticService analyticService = FactoryManager.get()
-			.getServiceFactory().getAnalyticService();
+	private static final Logger LOG = Logger.getLogger(CustomerSearchPage.class);
+	private static final int ITEMS_PER_PAGE = 50;
+	private static final String CUST_CONTAINER_ID = "customerContainer";
 
 	private String sortParameter = "redemptions";
 	private boolean isAscending = false;
-	private int itemsPerPage = 50;
 
-	public CustomersPage()
+	private static final ChoiceRenderer<SearchType> searchChoiceRenderer = new ChoiceRenderer<SearchType>(
+			"displayVal", "name");
+
+	private enum SearchType
+	{
+		emailAddress("Email Address"), mostRecent("Most Recent");
+
+		private String displayVal;
+
+		private SearchType(String displayVal)
+		{
+			this.displayVal = displayVal;
+		}
+
+		public String getDisplayVal()
+		{
+			return displayVal;
+		}
+	};
+
+	private SearchType selectedSearchType = SearchType.emailAddress;
+
+	private String elementId;
+
+	public CustomerSearchPage()
 	{
 		super();
-		if (!PermissionService.get().canViewAllCustomers(SessionUtils.getSession().getMerchantAccount().getEmail()))
-		{
-			throw new RestartResponseException(
-					new PageProvider(
-							CustomerSearchPage.class,
-							new PageParameters().set("param1", "value1")),
-					RedirectPolicy.NEVER_REDIRECT);
-		}
 	}
 
-	public CustomersPage(PageParameters parameters)
+	public CustomerSearchPage(PageParameters parameters)
 	{
 		super(parameters);
-		if (parameters.get("sortParam") != null)
-		{
-			sortParameter = parameters.get("sortParam").toString();
-		}
 	}
 
 	@Override
@@ -86,21 +104,91 @@ public class CustomersPage extends BasePage
 	{
 		super.onInitialize();
 
-		final StringBuilder sb = new StringBuilder();
+		Form<Void> form = new Form<Void>("searchForm")
+		{
+			private static final long serialVersionUID = -477362909507132959L;
+
+			@Override
+			protected void onSubmit()
+			{
+				doSearch();
+			}
+		};
+
+		form.add(new DropDownChoice<SearchType>("searchSelect",
+				new PropertyModel<SearchType>(this, "selectedSearchType"), Arrays.asList(SearchType.values()),
+				searchChoiceRenderer));
+
+		add(form);
+		form.add(new TextField<String>("elementId", new PropertyModel<String>(this, "elementId"), String.class).setRequired(true));
 
 		final WebMarkupContainer customerContainer = new WebMarkupContainer(CUST_CONTAINER_ID);
-		add(customerContainer.setOutputMarkupId(true));
+		add(customerContainer.setOutputMarkupId(true).setVisible(false).setOutputMarkupPlaceholderTag(true));
+
+		WebMarkupContainer customers = new WebMarkupContainer("customerRptr");
+		WebMarkupContainer navigator = new WebMarkupContainer("navigator");
+
+		customerContainer.add(navigator.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
+
+		customerContainer.add(customers);
+
+		customerContainer.add(new AjaxLink<Void>("customerLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("lastName", target);
+			}
+		});
+
+		customerContainer.add(new AjaxLink<Void>("registrationLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("registrationDate", target);
+			}
+		});
+
+		customerContainer.add(new AjaxLink<Void>("redemptionLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("redemptions", target);
+			}
+		});
+
+		if (elementId != null)
+		{
+			doSearch();
+		}
+
+	}
+
+	public boolean hasActionLink()
+	{
+		return false;
+	}
+
+	private void doSearch()
+	{
 
 		final DataView<CustomerSummary> customers = new DataView<CustomerSummary>("customerRptr",
-				new CustomerSummaryDataProvider(sortParameter, isAscending))
+				new CustomerSearchDataProvider(sortParameter, isAscending, elementId))
 		{
 
-			private static final long serialVersionUID = 4104816505968727445L;
+			private static final long serialVersionUID = -5170887821646081691L;
 
 			@Override
 			protected void populateItem(Item<CustomerSummary> item)
 			{
-				sb.setLength(0);
 				CustomerSummary customer = item.getModelObject();
 				final String email = customer.getEmail();
 				final UUID customerId = customer.getCustomerId();
@@ -136,8 +224,8 @@ public class CustomersPage extends BasePage
 				if (PermissionService.get().canDeleteCustomer(
 						SessionUtils.getSession().getMerchantAccount().getEmail()))
 				{
-					sb.append("Are you sure you want to delete ").append(email).append(" ?");
-					item.add(new ConfirmationAjaxLink<Void>("deleteCustomer", sb.toString())
+
+					item.add(new ConfirmationAjaxLink<Void>("deleteCustomer", "Are you sure you want to delete " + email + " ?")
 					{
 
 						private static final long serialVersionUID = -4592149231430681542L;
@@ -221,48 +309,44 @@ public class CustomersPage extends BasePage
 
 		};
 
-		customerContainer.add(customers);
-		customers.setItemsPerPage(itemsPerPage);
+		WebMarkupContainer customerContainer = (WebMarkupContainer) CustomerSearchPage.this.get(CUST_CONTAINER_ID);
 
-		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator("navigator", customers);
+		customers.setItemsPerPage(ITEMS_PER_PAGE);
+		customerContainer.replace(customers);
 
-		// pagingNavigator.setVisible(customers.size() > 0);
+		final AjaxPagingNavigator pagingNavigator = new
+				AjaxPagingNavigator("navigator", customers);
 
-		customerContainer.add(pagingNavigator.setOutputMarkupId(true));
+		customerContainer.replace(pagingNavigator);
 
-		customerContainer.add(new AjaxLink<Void>("customerLink")
+		if (customers.getDataProvider().size() == 0)
 		{
-			private static final long serialVersionUID = -4528179721619677443L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				doAjaxSearchRefresh("lastName", target);
-			}
-		});
-
-		customerContainer.add(new AjaxLink<Void>("registrationLink")
+			customerContainer.setVisible(false);
+			SessionUtils.errorMessage("There are no customers matching '" + elementId + "'");
+		}
+		else
 		{
-			private static final long serialVersionUID = -4528179721619677443L;
+			customerContainer.setVisible(true);
+		}
 
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				doAjaxSearchRefresh("registrationDate", target);
-			}
-		});
+	}
 
-		customerContainer.add(new AjaxLink<Void>("redemptionLink")
-		{
-			private static final long serialVersionUID = -4528179721619677443L;
+	@Override
+	public String getHeaderTitle()
+	{
+		return "Customer Search";
+	}
 
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				doAjaxSearchRefresh("redemptions", target);
-			}
-		});
+	@Override
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
+	{
+		return null;
+	}
 
+	@Override
+	public String getNewDefinitionPanelTitle()
+	{
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -290,24 +374,6 @@ public class CustomersPage extends BasePage
 		target.add(container);
 		target.add(pagingNavigator);
 
-	}
-
-	@Override
-	public String getHeaderTitle()
-	{
-		return "Customers";
-	}
-
-	@Override
-	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
-	{
-		return new CustomerPanel(contentId, callback);
-	}
-
-	@Override
-	public String getNewDefinitionPanelTitle()
-	{
-		return "Create New Customer";
 	}
 
 }
