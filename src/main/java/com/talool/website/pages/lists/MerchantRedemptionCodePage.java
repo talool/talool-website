@@ -6,23 +6,20 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.Merchant;
-import com.talool.core.MerchantIdentity;
-import com.talool.domain.MerchantIdentityImpl;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.merchant.MerchantDealOffersPanel;
-import com.talool.website.panel.merchant.definition.MerchantDealOfferPanel;
+import com.talool.website.panel.merchant.RedemptionCodeLookupPanel;
 import com.talool.website.util.SecuredPage;
 import com.talool.website.util.SessionUtils;
 
 @SecuredPage
-public class MerchantDealOffersPage extends BasePage
+public class MerchantRedemptionCodePage extends BasePage
 {
 
-	private static final long serialVersionUID = 2930251149366666038L;
+	private static final long serialVersionUID = -3832602225330266637L;
 	private UUID _merchantId;
 
-	public MerchantDealOffersPage()
+	public MerchantRedemptionCodePage()
 	{
 		_merchantId = SessionUtils.getSession().getMerchantAccount().getMerchant().getId();
 	}
@@ -34,7 +31,7 @@ public class MerchantDealOffersPage extends BasePage
 
 		PageParameters params = new PageParameters();
 		params.add("id", _merchantId);
-		MerchantDealOffersPanel panel = new MerchantDealOffersPanel("list", params);
+		RedemptionCodeLookupPanel panel = new RedemptionCodeLookupPanel("searchPanel", params);
 		add(panel);
 
 	}
@@ -42,23 +39,25 @@ public class MerchantDealOffersPage extends BasePage
 	@Override
 	public String getHeaderTitle()
 	{
-		Merchant m = SessionUtils.getSession().getMerchantAccount().getMerchant();
-		StringBuilder sb = new StringBuilder(m.getName());
-		sb.append(" > My Books");
-		return sb.toString();
+		return "Redemption Code Search";
 	}
 
 	@Override
 	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
 	{
-		Merchant m = SessionUtils.getSession().getMerchantAccount().getMerchant();
-		MerchantIdentity mi = new MerchantIdentityImpl(m.getId(), m.getName());
-		return new MerchantDealOfferPanel(contentId, mi, callback);
+		return null;
 	}
 
 	@Override
 	public String getNewDefinitionPanelTitle()
 	{
-		return "Create New Book";
+		return null;
 	}
+
+	@Override
+	public boolean hasActionLink() {
+		return false;
+	}
+	
+	
 }

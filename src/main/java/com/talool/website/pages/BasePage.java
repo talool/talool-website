@@ -42,6 +42,9 @@ public abstract class BasePage extends WebPage
 	private WebMarkupContainer _action;
 	private AjaxLink<Void> _actionLink;
 	private Label _actionLabel;
+	
+	public final Boolean isTaloolUserLoggedIn = PermissionService.get().canViewAnalytics(
+			SessionUtils.getSession().getMerchantAccount().getEmail());
 
 	public BasePage()
 	{

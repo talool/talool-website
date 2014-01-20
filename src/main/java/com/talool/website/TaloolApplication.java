@@ -64,6 +64,7 @@ import com.talool.website.pages.lists.DealOffersPage;
 import com.talool.website.pages.lists.MerchantAccountsPage;
 import com.talool.website.pages.lists.MerchantDealOffersPage;
 import com.talool.website.pages.lists.MerchantLocationsPage;
+import com.talool.website.pages.lists.MerchantRedemptionCodePage;
 import com.talool.website.pages.lists.MerchantsPage;
 import com.talool.website.pages.payment.braintree.VenmoSaveCardPage;
 import com.talool.website.pages.payment.braintree.VenmoUseCardPage;
@@ -144,6 +145,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/admin/customer-management", CustomerManagementPage.class);
 		mountPage("/admin/merchants", MerchantsPage.class);
 		mountPage("/admin/merchant/accounts", MerchantAccountsPage.class);
+		mountPage("/admin/merchant/redemptions", MerchantRedemptionCodePage.class);
 		mountPage("/admin/merchant/books", MerchantDealOffersPage.class);
 		mountPage("/admin/merchant/locations", MerchantLocationsPage.class);
 		mountPage("/admin/merchant/dashboard", MerchantDashboard.class);

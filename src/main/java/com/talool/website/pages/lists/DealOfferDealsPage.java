@@ -155,4 +155,10 @@ public class DealOfferDealsPage extends BasePage
 	{
 		return "New Deal";
 	}
+	
+	@Override
+	public boolean hasActionLink() {
+		// TODO return false for Publishers and true for Merchants
+		return false;
+	}
 }

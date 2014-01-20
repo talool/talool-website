@@ -146,6 +146,8 @@ public class MerchantsPage extends BasePage
 				String dashboardUrl = (String) urlFor(MerchantDashboard.class, dashboardParams);
 				ExternalLink dashboardLink = new ExternalLink("dashboardLink", Model.of(dashboardUrl));
 				item.add(dashboardLink);
+				// Only show this link for Talool users... for now.
+				dashboardLink.setVisible(isTaloolUserLoggedIn);
 
 			}
 

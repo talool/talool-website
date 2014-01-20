@@ -5,7 +5,7 @@
   				<th>Title</th>
   				<th>Publisher</th>
   				<th>Price</th>
-  				<th>Deal Type</th>
+  				<th>Book Type</th>
   				<th>Expires</th>
   				<th>Is Active</th>
   				<th class="actionCol">Actions</th>
@@ -20,9 +20,10 @@
   				<td wicket:id="expires"></td>
   				<td wicket:id="isActive"></td>
   				<td class="orange-font">
-  					<a wicket:id="editLink" href="#" class="icon icon-large icon-pencil"></a>
-  					<a wicket:id="copyLink" class="icon icon-large icon-copy"></a>
-  					<!-- <a href="#" class="icon icon-large icon-remove"></a> -->
+  					<a wicket:id="editLink" title="edit book" class="icon icon-large icon-pencil"></a>
+  					<a wicket:id="copyLink" title="copy book" class="icon icon-large icon-copy"></a>
+  					<a wicket:id="codeLink" title="download access codes" class="icon icon-large icon-download"></a>
+  					<a href="#" title="delete book" class="icon icon-large icon-remove"></a>
   				</td>
   			</tr>
   		</tbody>

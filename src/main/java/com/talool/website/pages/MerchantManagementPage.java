@@ -49,7 +49,7 @@ public class MerchantManagementPage extends BaseManagementPage
 
 		List<ITab> tabs = new ArrayList<ITab>();
 
-		tabs.add(new AbstractTab(new Model<String>("My Deals"))
+		tabs.add(new AbstractTab(new Model<String>("Deals"))
 		{
 			private static final long serialVersionUID = 6405610365875810783L;
 
@@ -57,18 +57,6 @@ public class MerchantManagementPage extends BaseManagementPage
 			public Panel getPanel(String panelId)
 			{
 				return new MerchantDealsPanel(panelId, getPageParameters());
-			}
-		});
-
-		tabs.add(new AbstractTab(new Model<String>("My Deal Offers"))
-		{
-
-			private static final long serialVersionUID = 6405610365875810783L;
-
-			@Override
-			public Panel getPanel(String panelId)
-			{
-				return new MerchantDealOffersPanel(panelId, getPageParameters());
 			}
 		});
 
@@ -95,44 +83,21 @@ public class MerchantManagementPage extends BaseManagementPage
 				return new MerchantAccountsPanel(panelId, getPageParameters());
 			}
 		});
-
-		tabs.add(new AbstractTab(new Model<String>("Redemption Codes"))
-		{
-
-			private static final long serialVersionUID = 5853871222415506440L;
-
-			@Override
-			public Panel getPanel(String panelId)
-			{
-				return new RedemptionCodeLookupPanel(panelId, getPageParameters());
-			}
-		});
 		
-		tabs.add(new AbstractTab(new Model<String>("Messages"))
+		if (isTaloolUserLoggedIn)
 		{
-
-			private static final long serialVersionUID = 5853871222415506440L;
-
-			@Override
-			public Panel getPanel(String panelId)
+			tabs.add(new AbstractTab(new Model<String>("Messages"))
 			{
-				return new MerchantMessages(panelId, getPageParameters());
-			}
-		});
 
+				private static final long serialVersionUID = 5853871222415506440L;
 
-		tabs.add(new AbstractTab(new Model<String>("Book Codes"))
-		{
-
-			private static final long serialVersionUID = 5853871222415506440L;
-
-			@Override
-			public Panel getPanel(String panelId)
-			{
-				return new BookCodesPanel(panelId, getPageParameters());
-			}
-		});
-		
+				@Override
+				public Panel getPanel(String panelId)
+				{
+					return new MerchantMessages(panelId, getPageParameters());
+				}
+			});
+		}
 
 		final AjaxTabbedPanel<ITab> tabbedPanel = new AjaxTabbedPanel<ITab>("tabs", tabs)
 		{

@@ -49,7 +49,6 @@ public class AdminMenuPanel extends Panel
 		add(new BookmarkablePageLink<MerchantAccountsPage>("accountsLink",MerchantAccountsPage.class));
 		add(new BookmarkablePageLink<MerchantDealOffersPage>("dealOffersLink",MerchantDealOffersPage.class));
 		add(new BookmarkablePageLink<MerchantLocationsPage>("locationsLink",MerchantLocationsPage.class));
-		add(new BookmarkablePageLink<MerchantLocationsPage>("settingsLink",CustomerSettingsPage.class));
 	}
 
 	public String getSignedInAs()
