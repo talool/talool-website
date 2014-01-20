@@ -46,4 +46,15 @@ public final class PermissionService
 		return false;
 
 	}
+
+	public boolean canViewAllCustomers(final String signedInEmail)
+	{
+		if (signedInEmail.contains("@talool.com"))
+		{
+			return true;
+		}
+
+		return false;
+
+	}
 }

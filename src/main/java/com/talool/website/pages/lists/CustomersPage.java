@@ -109,7 +109,6 @@ public class CustomersPage extends BasePage
 
 				item.add(new Label("commaSeperatedDealOfferTitles"));
 				item.add(new Label("redemptions"));
-				item.add(new Label("giftGives"));
 
 				PageParameters customerParams = new PageParameters();
 				customerParams.set("id", customer.getCustomerId());
@@ -214,6 +213,8 @@ public class CustomersPage extends BasePage
 		customers.setItemsPerPage(itemsPerPage);
 
 		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator("navigator", customers);
+		pagingNavigator.setVisible(customers.size() > 0);
+
 		customerContainer.add(pagingNavigator.setOutputMarkupId(true));
 
 		customerContainer.add(new AjaxLink<Void>("customerLink")
@@ -246,17 +247,6 @@ public class CustomersPage extends BasePage
 			public void onClick(AjaxRequestTarget target)
 			{
 				doAjaxSearchRefresh("redemptions", target);
-			}
-		});
-
-		customerContainer.add(new AjaxLink<Void>("giftGivesLink")
-		{
-			private static final long serialVersionUID = -4528179721619677443L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				doAjaxSearchRefresh("giftGives", target);
 			}
 		});
 
