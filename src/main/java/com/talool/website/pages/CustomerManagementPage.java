@@ -68,18 +68,6 @@ public class CustomerManagementPage extends BaseManagementPage
 			}
 		});
 
-		tabs.add(new AbstractTab(new Model<String>("Friends"))
-		{
-
-			private static final long serialVersionUID = 8257729247356926661L;
-
-			@Override
-			public Panel getPanel(String panelId)
-			{
-				return new CustomerFriendsPanel(panelId, getPageParameters());
-			}
-		});
-
 		final AjaxTabbedPanel<ITab> tabbedPanel = new AjaxTabbedPanel<ITab>("tabs", tabs);
 		tabbedPanel.setSelectedTab(0);
 		add(tabbedPanel);
@@ -103,4 +91,11 @@ public class CustomerManagementPage extends BaseManagementPage
 		// Returning null because these will be handled by the tab panels, if at all
 		return null;
 	}
+
+	@Override
+	public boolean hasActionLink() {
+		return false;
+	}
+	
+	
 }

@@ -56,23 +56,7 @@ public class CustomerDealAcquiresPanel extends Panel
 				item.add(new Label("redemptionDate"));
 				item.add(new Label("acquireStatus"));
 
-				item.add(new AjaxLink<Void>("editLink")
-				{
-
-					private static final long serialVersionUID = 7374491672077050118L;
-
-					@Override
-					public void onClick(AjaxRequestTarget target)
-					{
-						getSession().getFeedbackMessages().clear();
-						/*
-						 * DealAcquirePanel panel = new
-						 * DealAcquirePanel(modal.getContentId(), callback, dealAcquireId);
-						 * modal.setContent(panel);
-						 * modal.setTitle("Edit Deal Acquire Status"); modal.show(target);
-						 */
-					}
-				});
+				
 			}
 
 		};

@@ -104,13 +104,14 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 	@Override
 	public String getActionLabel()
 	{
-		return "Create Account";
+		return null;
 	}
 
 	@Override
 	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
 	{
-		return new MerchantAccountPanel(contentId, merchantId, callback);
+		return null;
 	}
+
 
 }

@@ -98,7 +98,7 @@ public class MerchantDealOffersPanel extends BaseTabPanel
 						MerchantDealOfferPanel panel = new MerchantDealOfferPanel(modal.getContentId(),
 								callback, dealOfferId);
 						modal.setContent(panel);
-						modal.setTitle("Edit Merchant Deal Offer");
+						modal.setTitle("Edit Book");
 						modal.show(target);
 					}
 				});
@@ -112,7 +112,7 @@ public class MerchantDealOffersPanel extends BaseTabPanel
 	@Override
 	public String getActionLabel()
 	{
-		return "Create Deal Offer";
+		return "Create Book";
 	}
 
 	@Override
