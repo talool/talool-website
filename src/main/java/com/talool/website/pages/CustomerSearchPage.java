@@ -247,63 +247,72 @@ public class CustomerSearchPage extends BasePage
 
 						}
 					});
+					
+					item.add(new AjaxLink<Void>("editLink")
+					{
+
+						private static final long serialVersionUID = -4592149231430681542L;
+
+						@Override
+						public void onClick(AjaxRequestTarget target)
+						{
+							getSession().getFeedbackMessages().clear();
+							CustomerPanel panel = new CustomerPanel(definitionModal.getContentId(), callback,
+									customerId);
+							definitionModal.setContent(panel);
+							definitionModal.setTitle("Edit Customer");
+							definitionModal.show(target);
+						}
+					});
+					
+					item.add(new AjaxLink<Void>("pwLink")
+					{
+
+						private static final long serialVersionUID = 8581489018535203283L;
+
+						@Override
+						public void onClick(AjaxRequestTarget target)
+						{
+							getSession().getFeedbackMessages().clear();
+							CustomerResetPasswordPanel panel = new CustomerResetPasswordPanel(definitionModal
+									.getContentId(), callback, customerId);
+							definitionModal.setContent(panel);
+							definitionModal.setTitle("Reset Password");
+							definitionModal.show(target);
+						}
+					});
+
+					item.add(new AjaxLink<Void>("dealOfferLink")
+					{
+
+						private static final long serialVersionUID = 7381871678482983865L;
+
+						@Override
+						public void onClick(AjaxRequestTarget target)
+						{
+							getSession().getFeedbackMessages().clear();
+							CustomerPurchaseDealOfferPanel panel = new CustomerPurchaseDealOfferPanel(
+									definitionModal.getContentId(), callback, customerId);
+							definitionModal.setContent(panel);
+							definitionModal.setTitle("Purchase Deal Offer");
+							definitionModal.show(target);
+						}
+					});
 				}
 				else
 				{
 					WebMarkupContainer deleteCustomer = new WebMarkupContainer("deleteCustomer");
 					item.add(deleteCustomer.setVisible(false));
+					
+					WebMarkupContainer editLink = new WebMarkupContainer("editLink");
+					item.add(editLink.setVisible(false));
+					
+					WebMarkupContainer pwLink = new WebMarkupContainer("pwLink");
+					item.add(pwLink.setVisible(false));
+					
+					WebMarkupContainer dealOfferLink = new WebMarkupContainer("dealOfferLink");
+					item.add(dealOfferLink.setVisible(false));
 				}
-
-				item.add(new AjaxLink<Void>("editLink")
-				{
-
-					private static final long serialVersionUID = -4592149231430681542L;
-
-					@Override
-					public void onClick(AjaxRequestTarget target)
-					{
-						getSession().getFeedbackMessages().clear();
-						CustomerPanel panel = new CustomerPanel(definitionModal.getContentId(), callback,
-								customerId);
-						definitionModal.setContent(panel);
-						definitionModal.setTitle("Edit Customer");
-						definitionModal.show(target);
-					}
-				});
-
-				item.add(new AjaxLink<Void>("pwLink")
-				{
-
-					private static final long serialVersionUID = 8581489018535203283L;
-
-					@Override
-					public void onClick(AjaxRequestTarget target)
-					{
-						getSession().getFeedbackMessages().clear();
-						CustomerResetPasswordPanel panel = new CustomerResetPasswordPanel(definitionModal
-								.getContentId(), callback, customerId);
-						definitionModal.setContent(panel);
-						definitionModal.setTitle("Reset Password");
-						definitionModal.show(target);
-					}
-				});
-
-				item.add(new AjaxLink<Void>("dealOfferLink")
-				{
-
-					private static final long serialVersionUID = 7381871678482983865L;
-
-					@Override
-					public void onClick(AjaxRequestTarget target)
-					{
-						getSession().getFeedbackMessages().clear();
-						CustomerPurchaseDealOfferPanel panel = new CustomerPurchaseDealOfferPanel(
-								definitionModal.getContentId(), callback, customerId);
-						definitionModal.setContent(panel);
-						definitionModal.setTitle("Purchase Deal Offer");
-						definitionModal.show(target);
-					}
-				});
 
 			}
 

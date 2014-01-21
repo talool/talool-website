@@ -73,6 +73,11 @@
 			<version>6.9.0</version>
 		</dependency>
 		<dependency>
+	        <groupId>org.wicketstuff</groupId>
+	        <artifactId>wicketstuff-objectautocomplete</artifactId>
+	        <version>6.9.0</version>
+      </dependency>
+		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-spring</artifactId>
 			<version>${wicket.version}</version>

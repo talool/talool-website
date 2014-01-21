@@ -430,4 +430,33 @@ body div.wicket-modal h3.w_captionText {
  text-align:center;
 }
 
+/* auto complete styles */
+.ac_container
+{
+	display: inline-block;
+	margin: 5px 5px 0 0;
+}
 
+.wicket-aa-container
+{
+	background-color: rgba(245, 245, 245, 1);
+	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 1px 0 rgba(255, 255, 255, 0.25);	
+  	-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 1px 0 rgba(255, 255, 255, 0.25);
+  	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.wicket-aa-container ul
+{
+	list-style: none;
+	margin: 0;
+	padding: 5px;
+}
+.wicket-aa-container li
+{
+	padding: 5px;
+}
+.wicket-aa-container li.selected,
+.wicket-aa-container li:hover
+{
+	background-color: rgba(200, 200, 200, 0.25);
+}

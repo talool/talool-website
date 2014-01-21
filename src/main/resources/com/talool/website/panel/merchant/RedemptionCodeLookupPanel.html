@@ -1,32 +1,43 @@
 <wicket:extend>
-<form wicket:id="searchForm">
-<div style="padding-bottom:10px;">
-<label>Enter Code:</label>
-<input type="text" wicket:id="redemptionCode" id="code">
-<input type="submit" class="btn btn-action" value="Search">
-</div>
-</form>
-<wicket:enclosure child="redeemedRptr">
-  	<table>
-  	<thead>
-  			<tr>
-  				<th>Deal Title</th>
-  				<th>Redemption Date</th>
-  				<th>Redeemed Location</th>
-  				<th>Customer Name</th>
-  				<th>Customr Email</th>	
-  			</tr>
-  		</thead>
-  		<tbody>
-  			<tr wicket:id="redeemedRptr">
-  				<td wicket:id="dealTitle"></td>
-  				<td wicket:id="redemptionDate"></td>
-  				<td wicket:id="redeemedLocation"></td>
-  				<td wicket:id="customerName"></td>
-  				<td wicket:id="customerEmail"></td>
-  			</tr>
-  		</tbody>
-  	</table>
- </wicket:enclosure>
-<script type="text/javascript">$("#code").focus();</script>
+
+	<form wicket:id="searchForm">
+	
+		<div style="padding-bottom:10px;">
+			<label>Merchant: </label>
+			<div class="ac_container">
+				<input type="text" wicket:id="ac"/>
+			</div>
+		</div>
+		
+		<div style="padding-bottom:10px;">
+			<label>Code:</label>
+			<input type="text" wicket:id="redemptionCode" id="code">
+			<input type="submit" class="btn btn-action" value="Search" style="width:auto; margin-left: 10px">
+		</div>
+		
+	</form>
+	
+	<wicket:enclosure child="redeemedRptr">
+	  	<table>
+	  	<thead>
+	  			<tr>
+	  				<th>Deal</th>
+	  				<th>Customer</th>	
+	  				<th>Redemption Date</th>
+	  				<th>Redemption Location</th>
+	  			</tr>
+	  		</thead>
+	  		<tbody>
+	  			<tr wicket:id="redeemedRptr">
+	  				<td><a wicket:id="dealLink"></a> <div wicket:id="offerName"></div></td>
+	  				<td><a wicket:id="emailLink"></a> <div wicket:id="customerName"></div></td>
+	  				<td wicket:id="redemptionDate"></td>
+	  				<td wicket:id="redeemedLocation"></td>
+	  			</tr>
+	  		</tbody>
+	  	</table>
+	</wicket:enclosure>
+	
+	<script type="text/javascript">$("#code").focus();</script>
+	
 </wicket:extend>
