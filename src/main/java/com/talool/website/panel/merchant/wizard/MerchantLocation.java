@@ -64,11 +64,14 @@ public class MerchantLocation extends WizardStep
 
 		locationPanel.add(new TextField<String>("currentLocation.phone").setRequired(true));
 
-		locationPanel.add(new TextField<String>("currentLocation.email").setRequired(true).add(
-				EmailAddressValidator.getInstance()));
-
 		locationPanel.add(new TextField<String>("currentLocation.websiteUrl").setRequired(true).add(new UrlValidator()));
-
+		
+		// TODO drop the email from the data model
+		Merchant merch = (Merchant) getDefaultModelObject();
+		if (merch.getCurrentLocation().getEmail() == null)
+		{
+			merch.getCurrentLocation().setEmail("foo@talool.com");
+		}
 	}
 
 	public StateOption getStateOption()
