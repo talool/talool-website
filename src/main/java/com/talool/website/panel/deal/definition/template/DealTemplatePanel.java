@@ -9,8 +9,10 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
+import com.talool.core.Deal;
 import com.talool.website.panel.deal.DealPreview;
 import com.talool.website.panel.deal.DealPreviewUpdatingBehavior;
 
@@ -20,14 +22,12 @@ abstract public class DealTemplatePanel extends Panel {
 	protected DealPreview dealPreview;
 	private HiddenField<String> title, summary;
 	private TextArea<String> detailsField;
-	private Boolean valid;
 
 	public DealTemplatePanel(String id, DealPreview preview) {
 		super(id);
 		dealPreview = preview;
 		setMarkupId(id);
 		setOutputMarkupId(true);
-		valid = false;
 	}
 	
 	@Override
@@ -39,62 +39,30 @@ abstract public class DealTemplatePanel extends Panel {
 		add(title.setOutputMarkupId(true));
 		summary = new HiddenField<String>("summary");
 		add(summary.setOutputMarkupId(true));
-		
-		final WebMarkupContainer addMoreConditionsContainer = new WebMarkupContainer("addMoreConditionsContainer");
-		add(addMoreConditionsContainer.setOutputMarkupId(true));
-		final WebMarkupContainer conditionsContainer = new WebMarkupContainer("conditionsContainer");
-		add(conditionsContainer.setOutputMarkupId(true));
-		
-		// add checkbox for "valid anytime"
-		final CheckBox validAnytime = new CheckBox("valid", new PropertyModel<Boolean>(this,"valid"));
-		validAnytime.add(new AjaxFormComponentUpdatingBehavior("onChange"){
 
-			private static final long serialVersionUID = 6020047659100023077L;
-
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				syncDetails(target);
-			}
-			
-		});
-		addMoreConditionsContainer.add(validAnytime);
-		
 		detailsField = new TextArea<String>("details");
 		detailsField.add(new DealPreviewUpdatingBehavior(dealPreview,
 				DealPreviewUpdatingBehavior.DealComponent.DETAILS, "onChange"));
-		conditionsContainer.add(detailsField);
+		add(detailsField);
 		
 		// TODO need to open the details fld by default if the user has defined more details.
 		@SuppressWarnings("rawtypes")
-		AjaxLink showMoreConditions = new AjaxLink("addMoreConditions") {
+		AjaxLink addDefaultConditions = new AjaxLink("addDefaultConditions") {
 
 			private static final long serialVersionUID = -5901764992551535378L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				syncDetails(target);
-				addMoreConditionsContainer.setVisible(false);
-				conditionsContainer.add(new AttributeAppender("class","show"));
-				target.add(conditionsContainer);
-				target.add(addMoreConditionsContainer);	
+				syncDetails(target, true);	
 			}
 			
 		};
-		addMoreConditionsContainer.add(showMoreConditions);
+		add(addDefaultConditions);
 		 
 	}
 	
-	
-	public Boolean getValid() {
-		return valid;
-	}
-
-	public void setValid(Boolean valid) {
-		this.valid = valid;
-	}
-	
-	private void syncDetails(AjaxRequestTarget target) {
-		detailsField.setModelValue(new String[]{cookUpDetails()});
+	private void syncDetails(AjaxRequestTarget target, boolean useDefault) {
+		detailsField.setModelValue(new String[]{cookUpDetails(useDefault)});
 		dealPreview.details = detailsField.getValue();
 		target.add(dealPreview.detailsLabel);
 		target.add(detailsField);
@@ -114,11 +82,21 @@ abstract public class DealTemplatePanel extends Panel {
 		target.add(summary);
 	}
 	
-	private String cookUpDetails() {
+	private String cookUpDetails(boolean useDefault) {
 		StringBuilder sb = new StringBuilder();
-		if (valid) {
+		
+		Deal deal = (Deal) getDefaultModelObject();
+		String details = deal.geDetails();
+		
+		if (useDefault) 
+		{
 			sb.append("May not be combined with any other offer, discount or promotion. Not valid on holidays, and subject to rules of use.");
 		}
+		else if (!details.isEmpty())
+		{
+			sb.append(details);
+		}
+		
 		return sb.toString();
 	}
 	

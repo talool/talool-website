@@ -2,6 +2,7 @@ package com.talool.website.pages.lists;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,6 +27,9 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.apache.wicket.util.resource.IResourceStream;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.talool.core.DealOffer;
 import com.talool.core.Merchant;
@@ -103,10 +107,17 @@ public class DealOffersPage extends BasePage
 						new PropertyModel<String>(dealOffer, "title"));
 				item.add(titleLink);
 
-				item.add(new Label("merchant.name"));
-				item.add(new Label("price"));
+				NumberFormat formatter = NumberFormat.getCurrencyInstance();
+				String moneyString = formatter.format(dealOffer.getPrice());
+				item.add(new Label("price", moneyString));
+				
 				item.add(new Label("dealType"));
-				item.add(new Label("expires"));
+				
+				DateTime localDate = new DateTime(dealOffer.getExpires().getTime());
+				DateTimeFormatter dateformatter = DateTimeFormat.forPattern("MMM d, yyyy");
+				String expDate = dateformatter.print(localDate);
+				item.add(new Label("expires", expDate));
+				
 				item.add(new Label("isActive"));
 
 				BasePage page = (BasePage) this.getPage();

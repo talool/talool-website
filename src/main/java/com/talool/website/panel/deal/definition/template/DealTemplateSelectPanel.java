@@ -3,6 +3,7 @@ package com.talool.website.panel.deal.definition.template;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import com.talool.core.Deal;
@@ -37,6 +38,7 @@ public class DealTemplateSelectPanel extends Panel {
 		// TODO this should be driven off of a property on the deal or the user
 		DealTemplatePanel dTemplate = new OtherDealTemplatePanel(dealTemplateMarkupId, preview, deal.getTitle(), deal.getSummary());
 		add(dTemplate.setOutputMarkupId(true));
+		dTemplate.setDefaultModel(getDefaultModel());
 
 		final DealTemplateSelectPanel self = this;
 		
@@ -68,6 +70,7 @@ public class DealTemplateSelectPanel extends Panel {
 				}
 				
 				// swap the panels
+				panel1.setDefaultModel(getDefaultModel());
 				panel0.replaceWith(panel1.setOutputMarkupId(true));
 				target.add(panel1);
 			}

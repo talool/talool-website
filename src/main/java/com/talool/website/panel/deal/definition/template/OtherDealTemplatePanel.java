@@ -6,7 +6,6 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 
-import com.talool.core.Deal;
 import com.talool.website.panel.deal.DealPreview;
 
 public class OtherDealTemplatePanel extends DealTemplatePanel {

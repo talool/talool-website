@@ -104,21 +104,6 @@ public class MerchantsPage extends BasePage
 				item.add(new Label("primaryLocation.address2"));
 				item.add(new Label("primaryLocation.niceCityState"));
 				item.add(new Label("primaryLocation.zip"));
-				item.add(new Label("primaryLocation.phone"));
-
-				item.add(new Label("primaryLocation.email"));
-
-				String websiteUrl = new String();
-				try
-				{
-					websiteUrl = merchant.getPrimaryLocation().getWebsiteUrl();
-				}
-				catch (Exception e)
-				{
-					websiteUrl = "empty";
-				}
-				ExternalLink webpage = new ExternalLink("website", websiteUrl, websiteUrl);
-				item.add(webpage);
 
 				StringBuilder hasMultiple = new StringBuilder();
 				hasMultiple.append(merchant.getLocations().size());

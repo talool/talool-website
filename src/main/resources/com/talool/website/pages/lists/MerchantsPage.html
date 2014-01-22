@@ -5,8 +5,7 @@
 	  			<tr>
 	  				<th>Name</th>
 	  				<th>Category</th>
-	  				<th>Website</th>
-	  				<th>Email</th>
+	  				<th>Primary Location</th>
 	  				<th>Location Count</th>
 	  				<th class="actionCol">Actions</th>
 	  			</tr>
@@ -15,17 +14,16 @@
 	  			<tr class="odd" wicket:id="merchRptr">
 	  				<td>
 	  					<a href="#" wicket:id="nameLink"></a>
+	  				</td>
+	  				<td wicket:id="category.name"></td>
+	  				<td>
 	  					<div wicket:id="primaryLocation.address1"></div>
 						<div wicket:id="primaryLocation.address2"></div>
 						<div>
 							<span wicket:id="primaryLocation.niceCityState"></span>
 							<span wicket:id="primaryLocation.zip"></span>
 						</div>
-						<div wicket:id="primaryLocation.phone"></div>
 	  				</td>
-	  				<td wicket:id="category.name"></td>
-					<td class="limit-max"><a wicket:id="website"></a></td>
-					<td wicket:id="primaryLocation.email"></td>
 					<td wicket:id="multiple"></td>
 	  				<td class="orange-font">
 	  					<a wicket:id="dashboardLink" class="icon icon-large icon-dashboard" title="Merchant Dashboard"></a>

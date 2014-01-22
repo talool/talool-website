@@ -1,5 +1,6 @@
 package com.talool.website.panel.merchant;
 
+import java.util.Date;
 import java.util.UUID;
 
 import org.apache.wicket.AttributeModifier;
@@ -12,6 +13,9 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,7 +82,21 @@ public class MerchantDealsPanel extends BaseTabPanel
 				item.add(new Label("summary"));
 				item.add(new Label("details"));
 				item.add(new StaticImage("myimage", false, deal.getImage().getMediaUrl()));
-				item.add(new Label("expires"));
+				
+				Date exp = deal.getExpires();
+				if (exp != null)
+				{
+					DateTime localDate = new DateTime(exp.getTime());
+					DateTimeFormatter formatter = DateTimeFormat.forPattern("MMM d, yyyy");
+					String expDate = formatter.print(localDate);
+					item.add(new Label("expires",expDate));
+				}
+				else
+				{
+					item.add(new Label("expires"));
+				}
+				
+				
 				item.add(new Label("isActive"));
 				item.add(new Label("dealOffer.title"));
 

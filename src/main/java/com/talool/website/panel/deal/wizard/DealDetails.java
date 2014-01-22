@@ -13,7 +13,9 @@ import com.talool.website.component.MerchantMediaWizardPanel;
 import com.talool.website.panel.deal.DealPreview;
 import com.talool.website.panel.deal.DealPreviewUpdatingBehavior;
 import com.talool.website.panel.deal.DealPreviewUpdatingBehavior.DealComponent;
+import com.talool.website.panel.deal.definition.template.DealTemplatePanel;
 import com.talool.website.panel.deal.definition.template.DealTemplateSelectPanel;
+import com.talool.website.panel.deal.definition.template.OtherDealTemplatePanel;
 
 public class DealDetails extends DynamicWizardStep
 {
@@ -57,9 +59,10 @@ public class DealDetails extends DynamicWizardStep
 			.add(new DealPreviewUpdatingBehavior(dealPreview, DealComponent.IMAGE, "onChange"));
 		addOrReplace(mediaPanel);
 
-		DealTemplateSelectPanel templates = new DealTemplateSelectPanel("templateSelectPanel", dealPreview);
-		templates.setDefaultModel(getDefaultModel());
-		addOrReplace(templates);
+		DealTemplatePanel dTemplate = new OtherDealTemplatePanel("templateSelectPanel", dealPreview, deal.getTitle(), deal.getSummary());
+		dTemplate.setDefaultModel(getDefaultModel());
+		addOrReplace(dTemplate);
+		
 	}
 
 	public MerchantMedia getImage()

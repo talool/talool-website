@@ -88,12 +88,6 @@ public class DealAvailability extends DynamicWizardStep
 
 		addOrReplace(new CheckBox("isActive"));
 
-		// TODO we need a validator for strings that feed a type 39 bar code
-		TextField<String> codeField = new TextField<String>("code");
-		codeField.add(new DealPreviewUpdatingBehavior(dealPreview,
-				DealPreviewUpdatingBehavior.DealComponent.CODE, "onBlur"));
-		addOrReplace(codeField);
-
 	}
 
 	public DealOffer getDealOffer()
