@@ -1,6 +1,6 @@
 package com.talool.website.panel.merchant;
 
-import java.util.Calendar;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -23,13 +23,16 @@ import org.wicketstuff.objectautocomplete.ObjectAutoCompleteField;
 
 import com.talool.core.DealAcquire;
 import com.talool.core.Merchant;
+import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
 import com.talool.website.component.MerchantAutoCompleteBuilder;
 import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.util.DistanceUtils;
 import com.talool.website.util.SessionUtils;
+import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * 
@@ -97,10 +100,6 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 				
 				Date redemptionDate = dac.getRedemptionDate();
 				
-				//SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy 'at' h:mm:ss a z");
-				//sdf.setTimeZone(TimeZone.getDefault());
-				//String rDate = sdf.format(now);
-				
 				DateTime localDate = new DateTime(redemptionDate.getTime());
 				DateTimeFormatter formatter = DateTimeFormat.forPattern("EEE, MMM d, yyyy 'at' h:mm:ss a z");
 				String rDate = formatter.print(localDate);
@@ -109,13 +108,42 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 				
 				if (dac.getRedeemedAtGeometry() != null)
 				{
-					// TODO lookup the closest merchant location
-					item.add(new Label("redeemedLocation", "longitude: " + dac.getRedeemedAtGeometry().getCoordinate().x + " latitude:"
-							+ dac.getRedeemedAtGeometry().getCoordinate().x));
+					// lookup the closest merchant location
+					Geometry geo = dac.getRedeemedAtGeometry();
+					MerchantLocation loc = DistanceUtils.getClosestLocation(geo, dac.getDeal().getMerchant());
+					Geometry locGeo = loc.getGeometry();
+					double distanceInMiles = DistanceUtils.distance(geo, locGeo, "M");
+					
+					StringBuilder sb;
+					if (distanceInMiles < .2)
+					{
+						// pretty close, so we'll say they redeemed at this location
+						sb = new StringBuilder(loc.getAddress1());
+						sb.append(", ").append(loc.getCity()).append(", ").append(loc.getStateProvinceCounty()).append(" ").append(loc.getZip());
+						PageParameters locParams = new PageParameters();
+						locParams.set("id", dac.getDeal().getMerchant().getId());
+						String locUrl = (String) urlFor(MerchantManagementPage.class, locParams);
+						ExternalLink locLink = new ExternalLink("location", Model.of(locUrl),
+								new Model<String>(sb.toString()));
+						item.add(locLink);
+						item.add(new Label("distance", ""));
+					}
+					else
+					{
+						DecimalFormat distanceFormater = new DecimalFormat("###,###.##");
+						sb = new StringBuilder();
+						sb.append("WARNING: ");
+						sb.append(distanceFormater.format(distanceInMiles)).append(" miles from the closest location");
+						item.add(new Label("distance", sb.toString()));
+						item.add(new Label("location", ""));
+					}
+					
+					
 				}
 				else
 				{
-					item.add(new Label("redeemedLocation", "Unknown"));
+					item.add(new Label("distance", ""));
+					item.add(new Label("location", "Unknown"));
 				}
 
 				PageParameters dealParams = new PageParameters();
