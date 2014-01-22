@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -13,6 +14,7 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -20,6 +22,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.wicketstuff.objectautocomplete.ObjectAutoCompleteField;
+import org.wicketstuff.objectautocomplete.ObjectAutoCompleteSelectionChangeListener;
 
 import com.talool.core.DealAcquire;
 import com.talool.core.Merchant;
@@ -86,7 +89,8 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 
 		};
 
-		form.add(new TextField<String>("redemptionCode", new PropertyModel<String>(this, "redemptionCode")).setRequired(true));
+		final TextField<String> codeField = new TextField<String>("redemptionCode", new PropertyModel<String>(this, "redemptionCode"));
+		form.add(codeField.setRequired(true).setOutputMarkupId(true));
 		add(form);
 
 		add(new ListView<DealAcquire>("redeemedRptr")
@@ -173,6 +177,16 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 	    ObjectAutoCompleteField<Merchant, UUID> acField = acBuilder.build("ac", new PropertyModel<UUID>(this, "redemptionMerchantId"));
 	    acField.setRequired(true);
 	    form.add(acField);
+	    acField.registerForUpdateOnSelectionChange(new ObjectAutoCompleteSelectionChangeListener<UUID>(){
+			private static final long serialVersionUID = -2873351122556896745L;
+
+			@Override
+			public void selectionChanged(AjaxRequestTarget target, IModel<UUID> model) {
+				// set the focus on redemption code field
+				target.focusComponent(codeField);
+			}
+	    	
+	    });
 	    
 	}
 
