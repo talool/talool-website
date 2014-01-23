@@ -1,5 +1,6 @@
 package com.talool.website.pages;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 import org.apache.wicket.markup.repeater.data.IDataProvider;
@@ -11,6 +12,7 @@ import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 import com.talool.stats.CustomerSummary;
 import com.talool.stats.PaginatedResult;
+import com.talool.website.pages.CustomerSearchDataProvider.CustomerSearchOpts.CustomerSearchType;
 import com.talool.website.util.SessionUtils;
 
 /**
@@ -21,18 +23,52 @@ import com.talool.website.util.SessionUtils;
 public class CustomerSearchDataProvider implements IDataProvider<CustomerSummary>
 {
 	private static final long serialVersionUID = 5376503635036180549L;
-
-	private boolean isAscending = false;
-	private String sortParameter;
-	private String email;
-
+	private CustomerSearchOpts customerSearchOpts;
 	private Long size = null;
 
-	public CustomerSearchDataProvider(final String sortParameter, final boolean isAscending, final String email)
+	public static class CustomerSearchOpts implements Serializable
 	{
-		this.isAscending = isAscending;
-		this.sortParameter = sortParameter;
-		this.email = email;
+		private static final long serialVersionUID = -4791731426403002313L;
+
+		String email;
+		String sortParameter;
+		boolean isAscending;
+		CustomerSearchType customerSearchType;
+
+		public enum CustomerSearchType
+		{
+			PublisherCustomerSummaryByEmail("Email Address"), MostRecent("Most Recent");
+			private String displayVal;
+
+			private CustomerSearchType(String displayVal)
+			{
+				this.displayVal = displayVal;
+			}
+
+			public String getDisplayVal()
+			{
+				return displayVal;
+			}
+		}
+
+		public CustomerSearchOpts(final CustomerSearchType searchType, final String sortParameter, final boolean isAscending)
+		{
+			this.sortParameter = sortParameter;
+			this.isAscending = isAscending;
+			this.customerSearchType = searchType;
+		}
+
+		public CustomerSearchOpts setEmail(String email)
+		{
+			this.email = email;
+			return this;
+		}
+
+	}
+
+	public CustomerSearchDataProvider(final CustomerSearchOpts customerSearchOpts)
+	{
+		this.customerSearchOpts = customerSearchOpts;
 	}
 
 	@Override
@@ -40,17 +76,32 @@ public class CustomerSearchDataProvider implements IDataProvider<CustomerSummary
 	{
 		Iterator<? extends CustomerSummary> iter = null;
 		PaginatedResult<CustomerSummary> results = null;
-
-		final SearchOptions searchOpts = new SearchOptions.Builder().
-				sortProperty(sortParameter).ascending(isAscending).maxResults(Integer.valueOf(String.valueOf(count)))
-				.firstResult(first).build();
+		SearchOptions searchOpts = null;
 
 		try
 		{
+			if (customerSearchOpts.customerSearchType == CustomerSearchType.PublisherCustomerSummaryByEmail)
+			{
+				searchOpts = new SearchOptions.Builder().
+						sortProperty(customerSearchOpts.sortParameter).ascending(customerSearchOpts.isAscending)
+						.maxResults(Integer.valueOf(String.valueOf(count)))
+						.firstResult(first).build();
 
-			results = ServiceFactory.get().getCustomerService()
-					.getPublisherCustomerSummaryByEmail(SessionUtils.getSession().getMerchantAccount().getMerchant().getId(),
-							searchOpts, email, false);
+				results = ServiceFactory.get().getCustomerService()
+						.getPublisherCustomerSummaryByEmail(SessionUtils.getSession().getMerchantAccount().getMerchant().getId(),
+								searchOpts, customerSearchOpts.email, false);
+			}
+			else if (customerSearchOpts.customerSearchType == CustomerSearchType.MostRecent)
+			{
+				searchOpts = new SearchOptions.Builder().
+						sortProperty(customerSearchOpts.sortParameter).ascending(customerSearchOpts.isAscending)
+						.maxResults(Integer.valueOf(String.valueOf(count)))
+						.firstResult(first).build();
+
+				results = ServiceFactory.get().getCustomerService()
+						.getPublisherCustomerSummary(SessionUtils.getSession().getMerchantAccount().getMerchant().getId(),
+								searchOpts, false);
+			}
 
 			if (results != null)
 			{
@@ -76,9 +127,16 @@ public class CustomerSearchDataProvider implements IDataProvider<CustomerSummary
 
 		try
 		{
-
-			size = ServiceFactory.get().getCustomerService()
-					.getPublisherCustomerSummaryEmailCount(SessionUtils.getSession().getMerchantAccount().getMerchant().getId(), email);
+			if (customerSearchOpts.customerSearchType == CustomerSearchType.PublisherCustomerSummaryByEmail)
+			{
+				size = ServiceFactory.get().getCustomerService()
+						.getPublisherCustomerSummaryEmailCount(SessionUtils.getSession().getMerchantAccount().getMerchant().getId(), customerSearchOpts.email);
+			}
+			else if (customerSearchOpts.customerSearchType == CustomerSearchType.MostRecent)
+			{
+				size = ServiceFactory.get().getCustomerService()
+						.getPublisherCustomerSummaryCount(SessionUtils.getSession().getMerchantAccount().getMerchant().getId());
+			}
 
 		}
 		catch (ServiceException e)
@@ -96,28 +154,26 @@ public class CustomerSearchDataProvider implements IDataProvider<CustomerSummary
 
 	public boolean isAscending()
 	{
-		return isAscending;
+		return customerSearchOpts.isAscending;
 	}
 
 	public void setAscending(boolean isAscending)
 	{
-		this.isAscending = isAscending;
+		customerSearchOpts.isAscending = isAscending;
 	}
 
 	public String getSortParameter()
 	{
-		return sortParameter;
+		return customerSearchOpts.sortParameter;
 	}
 
 	public void setSortParameter(String sortParameter)
 	{
-		this.sortParameter = sortParameter;
+		customerSearchOpts.sortParameter = sortParameter;
 	}
 
 	@Override
 	public void detach()
-	{
-		// TODO Auto-generated method stub
-	}
+	{}
 
 }

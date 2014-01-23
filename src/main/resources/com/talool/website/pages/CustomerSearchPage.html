@@ -5,8 +5,10 @@
   <option value="Email Address">Email Address</option>
   <option value="Most Recent">Most Recent</option>
 </select> 
+<wicket:enclosure child="elementId">
 <input wicket:id="elementId" type="text" id="elementId" size="64">
 <input type="submit" class="btn btn-action" value="Search" style="width:auto; margin-left: 10px">
+</wicket:enclosure>
 </div>
 </form>
 <div wicket:id="customerContainer">
