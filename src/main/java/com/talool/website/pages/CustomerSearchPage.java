@@ -3,6 +3,7 @@ package com.talool.website.pages;
 import java.util.Arrays;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -28,7 +29,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import com.talool.core.service.ServiceException;
 import com.talool.stats.CustomerSummary;
 import com.talool.website.component.ConfirmationAjaxLink;
-import com.talool.website.pages.lists.CustomerSummaryDataProvider;
+import com.talool.website.pages.CustomerSearchDataProvider.CustomerSearchOpts;
+import com.talool.website.pages.CustomerSearchDataProvider.CustomerSearchOpts.CustomerSearchType;
 import com.talool.website.pages.lists.CustomersPage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
@@ -65,27 +67,10 @@ public class CustomerSearchPage extends BasePage
 	private String sortParameter = "redemptions";
 	private boolean isAscending = false;
 
-	private static final ChoiceRenderer<SearchType> searchChoiceRenderer = new ChoiceRenderer<SearchType>(
+	private static final ChoiceRenderer<CustomerSearchType> searchChoiceRenderer = new ChoiceRenderer<CustomerSearchType>(
 			"displayVal", "name");
 
-	private enum SearchType
-	{
-		emailAddress("Email Address"), mostRecent("Most Recent");
-
-		private String displayVal;
-
-		private SearchType(String displayVal)
-		{
-			this.displayVal = displayVal;
-		}
-
-		public String getDisplayVal()
-		{
-			return displayVal;
-		}
-	};
-
-	private SearchType selectedSearchType = SearchType.emailAddress;
+	private CustomerSearchType selectedSearchType = CustomerSearchType.PublisherCustomerSummaryByEmail;
 
 	private String elementId;
 
@@ -115,12 +100,39 @@ public class CustomerSearchPage extends BasePage
 			}
 		};
 
-		form.add(new DropDownChoice<SearchType>("searchSelect",
-				new PropertyModel<SearchType>(this, "selectedSearchType"), Arrays.asList(SearchType.values()),
-				searchChoiceRenderer));
+		// TODO use email validator, not String.class
+		final TextField<String> elementId = new TextField<String>("elementId", new PropertyModel<String>(this, "elementId"), String.class);
+		form.add(elementId.setRequired(true));
+
+		form.add(new DropDownChoice<CustomerSearchType>("searchSelect",
+				new PropertyModel<CustomerSearchType>(this, "selectedSearchType"), Arrays.asList(CustomerSearchType.values()),
+				searchChoiceRenderer)
+		{
+			@Override
+			protected boolean wantOnSelectionChangedNotifications()
+			{
+				return true;
+			}
+
+			private static final long serialVersionUID = -6001513999757037735L;
+
+			@Override
+			protected void onSelectionChanged(CustomerSearchType newSelection)
+			{
+				if (selectedSearchType == CustomerSearchType.MostRecent)
+				{
+					elementId.setVisible(false);
+					doSearch();
+				}
+				else
+				{
+					elementId.setVisible(true);
+				}
+
+			}
+		});
 
 		add(form);
-		form.add(new TextField<String>("elementId", new PropertyModel<String>(this, "elementId"), String.class).setRequired(true));
 
 		final WebMarkupContainer customerContainer = new WebMarkupContainer(CUST_CONTAINER_ID);
 		add(customerContainer.setOutputMarkupId(true).setVisible(false).setOutputMarkupPlaceholderTag(true));
@@ -165,7 +177,7 @@ public class CustomerSearchPage extends BasePage
 			}
 		});
 
-		if (elementId != null)
+		if (StringUtils.isNotEmpty(this.elementId))
 		{
 			doSearch();
 		}
@@ -179,9 +191,22 @@ public class CustomerSearchPage extends BasePage
 
 	private void doSearch()
 	{
+		CustomerSearchDataProvider provider = null;
 
-		final DataView<CustomerSummary> customers = new DataView<CustomerSummary>("customerRptr",
-				new CustomerSearchDataProvider(sortParameter, isAscending, elementId))
+		switch (selectedSearchType)
+		{
+			case PublisherCustomerSummaryByEmail:
+				provider = new CustomerSearchDataProvider(new CustomerSearchOpts(
+						CustomerSearchType.PublisherCustomerSummaryByEmail, sortParameter, isAscending).setEmail(elementId));
+				break;
+
+			case MostRecent:
+				provider = new CustomerSearchDataProvider(new CustomerSearchOpts(
+						CustomerSearchType.MostRecent, sortParameter, isAscending));
+				break;
+		}
+
+		final DataView<CustomerSummary> customers = new DataView<CustomerSummary>("customerRptr", provider)
 		{
 
 			private static final long serialVersionUID = -5170887821646081691L;
@@ -247,7 +272,7 @@ public class CustomerSearchPage extends BasePage
 
 						}
 					});
-					
+
 					item.add(new AjaxLink<Void>("editLink")
 					{
 
@@ -264,7 +289,7 @@ public class CustomerSearchPage extends BasePage
 							definitionModal.show(target);
 						}
 					});
-					
+
 					item.add(new AjaxLink<Void>("pwLink")
 					{
 
@@ -303,13 +328,13 @@ public class CustomerSearchPage extends BasePage
 				{
 					WebMarkupContainer deleteCustomer = new WebMarkupContainer("deleteCustomer");
 					item.add(deleteCustomer.setVisible(false));
-					
+
 					WebMarkupContainer editLink = new WebMarkupContainer("editLink");
 					item.add(editLink.setVisible(false));
-					
+
 					WebMarkupContainer pwLink = new WebMarkupContainer("pwLink");
 					item.add(pwLink.setVisible(false));
-					
+
 					WebMarkupContainer dealOfferLink = new WebMarkupContainer("dealOfferLink");
 					item.add(dealOfferLink.setVisible(false));
 				}
@@ -364,7 +389,7 @@ public class CustomerSearchPage extends BasePage
 		WebMarkupContainer container = (WebMarkupContainer) get(CUST_CONTAINER_ID);
 
 		final DataView<CustomerSummary> dataView = ((DataView<CustomerSummary>) container.get("customerRptr"));
-		final CustomerSummaryDataProvider provider = (CustomerSummaryDataProvider) dataView.getDataProvider();
+		final CustomerSearchDataProvider provider = (CustomerSearchDataProvider) dataView.getDataProvider();
 
 		// toggle asc/desc
 		if (sortParam.equals(sortParameter))

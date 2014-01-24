@@ -66,8 +66,7 @@ public class CustomersPage extends BasePage
 		{
 			throw new RestartResponseException(
 					new PageProvider(
-							CustomerSearchPage.class,
-							new PageParameters().set("param1", "value1")),
+							CustomerSearchPage.class, null),
 					RedirectPolicy.NEVER_REDIRECT);
 		}
 	}
@@ -159,7 +158,7 @@ public class CustomersPage extends BasePage
 
 						}
 					});
-					
+
 					item.add(new AjaxLink<Void>("editLink")
 					{
 
@@ -215,18 +214,16 @@ public class CustomersPage extends BasePage
 				{
 					WebMarkupContainer deleteCustomer = new WebMarkupContainer("deleteCustomer");
 					item.add(deleteCustomer.setVisible(false));
-					
+
 					WebMarkupContainer editLink = new WebMarkupContainer("editLink");
 					item.add(editLink.setVisible(false));
-					
+
 					WebMarkupContainer pwLink = new WebMarkupContainer("pwLink");
 					item.add(pwLink.setVisible(false));
-					
+
 					WebMarkupContainer dealOfferLink = new WebMarkupContainer("dealOfferLink");
 					item.add(dealOfferLink.setVisible(false));
 				}
-
-				
 
 			}
 
@@ -320,9 +317,10 @@ public class CustomersPage extends BasePage
 	{
 		return null;
 	}
-	
+
 	@Override
-	public boolean hasActionLink() {
+	public boolean hasActionLink()
+	{
 		return false;
 	}
 
