@@ -13,7 +13,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.customer.CustomerDealAcquiresPanel;
 import com.talool.website.panel.customer.CustomerDealOfferPurchasesPanel;
-import com.talool.website.panel.customer.CustomerFriendsPanel;
+import com.talool.website.panel.customer.CustomerSummaryPanel;
 import com.talool.website.util.SecuredPage;
 
 /**
@@ -44,6 +44,18 @@ public class CustomerManagementPage extends BaseManagementPage
 
 		List<ITab> tabs = new ArrayList<ITab>();
 		
+		tabs.add(new AbstractTab(new Model<String>("Summary"))
+		{
+
+			private static final long serialVersionUID = -6020689518505770059L;
+
+			@Override
+			public Panel getPanel(String panelId)
+			{
+				return new CustomerSummaryPanel(panelId, getPageParameters());
+			}
+		});
+		
 		tabs.add(new AbstractTab(new Model<String>("Acquired Deals"))
 		{
 
@@ -56,7 +68,7 @@ public class CustomerManagementPage extends BaseManagementPage
 			}
 		});
 		
-		tabs.add(new AbstractTab(new Model<String>("Purchased Deal Offers"))
+		tabs.add(new AbstractTab(new Model<String>("Purchased Books"))
 		{
 
 			private static final long serialVersionUID = 6987956481004749921L;

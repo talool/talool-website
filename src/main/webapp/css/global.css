@@ -36,6 +36,16 @@ h2 {
 iframe {
 	border:none;
 }
+
+dl dt
+{
+	font-weight: bold;
+	margin: 0 0 5px;
+}
+dl dd
+{
+	margin: 0 0 25px;
+}
 .sidebar
 {
 	width: 185px;
