@@ -7,7 +7,7 @@
 <div class="iphone">
 	<div class="deal2 gray4-font">
 		<div wicket:id="merchantName"  class="nav teal-bg">Merchant Name</div>
-		<div class="image"><img wicket:id="image" src=""/><img class="outline" src="/img/deal/imageMaskOutlineWeb.png"/></div>
+		<div class="image"><img wicket:id="image" src=""/></div>
 		<table class="actionbar true-light-gray-bg teal-font">
 			<tr>
 				<td class="orange-font"><i class="icon icon-money"></i>Redeem Now</td>
@@ -25,6 +25,7 @@
 			<img wicket:id="merchantLogo" class="merchantLogo" src=""/>
 			<div class="address">
 				<b>offer valid at:</b><br/>
+				multiple locations
 			</div>
 		</div>
 		
@@ -32,6 +33,14 @@
 			<div class="expires">Expires <span wicket:id="expires"></span></div>
 			<div class="dealOfferLogoContainer"><img wicket:id="dealOfferLogo" class="dealOfferLogo" src=""/></div>
 		</div>
+		
+		<table class="tabbar">
+			<tr>
+				<td class="selected"><i class="icon icon-user icon-2x"></i><br/>My Deals</td>
+				<td class=""><i class="icon icon-search icon-2x"></i><br/>Find Deals</td>
+				<td><i class="icon icon-time icon-2x"></i><br/>Activity</td>
+			</tr>
+		</table>
 	</div>
 </div>
 </wicket:panel>

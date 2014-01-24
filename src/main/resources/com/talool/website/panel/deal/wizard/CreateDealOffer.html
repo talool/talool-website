@@ -6,22 +6,19 @@
 	
 		<div class="panel">
 		    <fieldset class="">
-				<div>
-			    	<label><i class="hint-font icon-asterisk"></i> Deal Type</label>
-			    	<select id="dt" wicket:id="dealOffer.dealType"></select>
-			    </div>
-			    <div>
-			    	<label><i class="hint-font icon-asterisk"></i> Price</label>
-			    	<input id="price" wicket:id="dealOffer.price" type="text"/>
-				</div>
+			    
 				<div>
 			    	<label><i class="hint-font icon-asterisk"></i> Title</label>
 			    	<input wicket:id="dealOffer.title" type="text"/>
 			    </div>
 			    <div>
-			    	<label><i class="optional-font icon-asterisk"></i> Summary</label>
-			    	<input wicket:id="dealOffer.summary" type="text"/>
+			    	<label><i class="hint-font icon-asterisk"></i> Summary</label>
+			    	<textarea wicket:id="dealOffer.summary"></textarea>
 			    </div>
+			    <div>
+			    	<label><i class="hint-font icon-asterisk"></i> Price</label>
+			    	<input id="price" wicket:id="dealOffer.price" type="text"/>
+				</div>
 			  
 				<div>
 			    	<label><i class="optional-font icon-asterisk"></i> Expires</label>

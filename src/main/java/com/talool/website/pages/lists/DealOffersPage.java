@@ -14,6 +14,7 @@ import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -32,15 +33,19 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.talool.core.DealOffer;
-import com.talool.core.Merchant;
+import com.talool.core.DealType;
+import com.talool.core.MerchantAccount;
+import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
 import com.talool.website.behaviors.AJAXDownload;
 import com.talool.website.component.ConfirmationIndicatingAjaxLink;
 import com.talool.website.models.DealOfferListModel;
+import com.talool.website.models.DealOfferModel;
 import com.talool.website.pages.BasePage;
+import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.merchant.definition.MerchantDealOfferPanel;
+import com.talool.website.panel.dealoffer.wizard.DealOfferWizard;
 import com.talool.website.service.PermissionService;
 import com.talool.website.util.SecuredPage;
 import com.talool.website.util.SessionUtils;
@@ -51,6 +56,7 @@ public class DealOffersPage extends BasePage
 	private static final Logger LOG = Logger.getLogger(DealOffersPage.class);
 	private static final long serialVersionUID = 2102415289760762365L;
 	private int downloadCodeCount;
+	private DealOfferWizard wizard;
 
 	public DealOffersPage()
 	{
@@ -77,8 +83,16 @@ public class DealOffersPage extends BasePage
 		{
 			model.setMerchantId(SessionUtils.getSession().getMerchantAccount().getMerchant().getId());
 		}
+		
+		final WebMarkupContainer container = new WebMarkupContainer("bookList");
+		container.setOutputMarkupId(true);
+		add(container);
+		
+		WebMarkupContainer pubCol = new WebMarkupContainer("pubColHead");
+		container.add(pubCol.setOutputMarkupId(true));
+		pubCol.setVisible(isTaloolUserLoggedIn);
 
-		final ListView<DealOffer> customers = new ListView<DealOffer>("offerRptr",
+		final ListView<DealOffer> books = new ListView<DealOffer>("offerRptr",
 				model)
 		{
 
@@ -106,6 +120,19 @@ public class DealOffersPage extends BasePage
 				ExternalLink titleLink = new ExternalLink("titleLink", Model.of(url),
 						new PropertyModel<String>(dealOffer, "title"));
 				item.add(titleLink);
+				
+				// Publisher link.  Only show it for Talool users
+				WebMarkupContainer pubColCell = new WebMarkupContainer("pubColCell");
+				item.add(pubColCell.setOutputMarkupId(true));
+				pubColCell.setVisible(isTaloolUserLoggedIn);
+				PageParameters merchantParams = new PageParameters();
+				merchantParams.set("id", dealOffer.getMerchant().getId());
+				merchantParams.set("name", dealOffer.getMerchant().getName());
+				String mUrl = (String) urlFor(MerchantManagementPage.class, merchantParams);
+				ExternalLink merchantLink = new ExternalLink("merchantLink", Model.of(mUrl),
+						new PropertyModel<String>(dealOffer, "merchant.name"));
+				pubColCell.add(merchantLink);
+				
 
 				NumberFormat formatter = NumberFormat.getCurrencyInstance();
 				String moneyString = formatter.format(dealOffer.getPrice());
@@ -113,10 +140,18 @@ public class DealOffersPage extends BasePage
 				
 				item.add(new Label("dealType"));
 				
-				DateTime localDate = new DateTime(dealOffer.getExpires().getTime());
-				DateTimeFormatter dateformatter = DateTimeFormat.forPattern("MMM d, yyyy");
-				String expDate = dateformatter.print(localDate);
-				item.add(new Label("expires", expDate));
+				if (dealOffer.getExpires() != null)
+				{
+					DateTime localDate = new DateTime(dealOffer.getExpires().getTime());
+					DateTimeFormatter dateformatter = DateTimeFormat.forPattern("MMM d, yyyy");
+					String expDate = dateformatter.print(localDate);
+					item.add(new Label("expires", expDate));
+				}
+				else
+				{
+					item.add(new Label("expires"));
+				}
+				
 				
 				item.add(new Label("isActive"));
 
@@ -131,11 +166,8 @@ public class DealOffersPage extends BasePage
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						MerchantDealOfferPanel panel = new MerchantDealOfferPanel(modal.getContentId(),
-								callback, dealOfferId);
-						modal.setContent(panel);
-						modal.setTitle("Edit Merchant Deal Offer");
-						modal.show(target);
+						wizard.setModelObject(new DealOfferModel(dealOfferId).getObject());
+						wizard.open(target);
 					}
 				});
 
@@ -286,26 +318,84 @@ public class DealOffersPage extends BasePage
 
 		};
 
-		add(customers);
+		container.add(books);
+		
+		// override the action button
+		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				getSession().getFeedbackMessages().clear();
+				MerchantAccount merchantAccount = SessionUtils.getSession().getMerchantAccount();
+				final DealOffer offer = domainFactory.newDealOffer(merchantAccount.getMerchant(), merchantAccount);
+				
+				// set defaults
+				offer.setDealType(DealType.PAID_BOOK);
+				MerchantLocation offerLocation = offer.getMerchant().getPrimaryLocation();
+				offer.setGeometry(offerLocation.getGeometry());
+				
+				wizard.setModelObject(offer);
+				wizard.open(target);
+			}
+		};
+		setActionLink(actionLink);
+		Label actionLabel = new Label("actionLabel", getNewDefinitionPanelTitle());
+		actionLabel.setOutputMarkupId(true);
+		actionLink.add(actionLabel);
+		actionLink.setOutputMarkupId(true);
+				
+		// Wizard
+		wizard = new DealOfferWizard("wiz", "Book Wizard")
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onFinish(AjaxRequestTarget target)
+			{
+				super.onFinish(target);
+				// refresh the list after a deal is edited
+				target.add(container);
+			}
+		};
+		add(wizard);
 	}
 
 	@Override
 	public String getHeaderTitle()
 	{
-		return "My Books";
+		if (isTaloolUserLoggedIn)
+		{
+			return "Deal Offers";
+		}
+		else
+		{
+			return "My Books";
+		}
 	}
 
 	@Override
 	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
 	{
-		Merchant m = SessionUtils.getSession().getMerchantAccount().getMerchant();
-		return new MerchantDealOfferPanel(contentId, m, callback);
+		// intentionally null
+		return null;
 	}
 
 	@Override
 	public String getNewDefinitionPanelTitle()
 	{
-		return "Create New Book";
+		if (isTaloolUserLoggedIn)
+		{
+			return "New Deal Offer";
+		}
+		else
+		{
+			return "New Books";
+		}
 	}
 	
 

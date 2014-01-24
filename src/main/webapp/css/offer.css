@@ -1,0 +1,109 @@
+
+.offerPreview,
+.findDealsPreview
+{
+	width: 320px;
+	height: 543px;
+	border:1px solid black;
+	position: relative;
+	overflow:hidden;
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+}
+
+.offerPreview .nav,
+.findDealsPreview .nav 
+{
+	text-align: center;
+	color: white;
+	font-weight: bold;
+	line-height: 40px;
+	height: 40px;
+}
+
+.offerPreview .book,
+.findDealsPreview .book
+{
+	position: relative;
+	height: 192px;
+}
+
+.offerPreview .book .background
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
+	width: 100%;
+	height: 192px;
+	opacity:0.5;
+	filter:alpha(opacity=50);
+}
+
+.offerPreview .book div
+{
+	padding: 15px 15px 0;
+}
+.offerPreview .book .summary
+{
+	font-size: 14px;
+}
+.offerPreview .book .price
+{
+	font-weight: bold;
+	position: absolute;
+	bottom: 15px;
+	left: 0;
+}
+
+.findDealsPreview .book
+{
+	margin: 8px;
+}
+.findDealsPreview .book .background
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
+	height: 192px;
+	opacity:0.5;
+	filter:alpha(opacity=50);
+}
+
+.findDealsPreview .book .icon
+{
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	z-index: 0;
+}
+
+.findDealsPreview .book div
+{
+	padding: 15px 15px 0 70px;
+}
+
+.findDealsPreview .book .title
+{
+	font-weight: bold;
+}
+
+.findDealsPreview .book .price,
+.findDealsPreview .book .summary,
+.findDealsPreview .book .stats
+{
+	font-size: 11px;
+}
+
+.merchantWiz .offerPreview .dealList .deal .categoryIcon .circle .icon {
+	position: relative;
+	top: 9px;
+	left: 12px;
+}
+.merchantWiz .offerPreview .dealList .deal .categoryIcon.cart .circle .icon {
+	left: 10px;
+}
+.merchantWiz .offerPreview .dealList .deal .categoryIcon.ticket .circle .icon {
+	left: 10px;
+}

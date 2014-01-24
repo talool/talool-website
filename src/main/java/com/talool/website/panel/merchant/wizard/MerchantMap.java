@@ -156,7 +156,6 @@ public class MerchantMap extends WizardStep
 
 				item.add(new Label("locationName"));
 				item.add(new Label("websiteUrl"));
-				item.add(new Label("email"));
 				item.add(new Label("phone"));
 				item.add(new Label("address1"));
 				item.add(new Label("address2"));

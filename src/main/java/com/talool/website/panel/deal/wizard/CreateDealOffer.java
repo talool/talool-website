@@ -7,6 +7,7 @@ import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardStep;
 import org.apache.wicket.extensions.wizard.dynamic.IDynamicWizardStep;
 import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -22,10 +23,10 @@ import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
 import com.talool.core.MediaType;
 import com.talool.core.MerchantAccount;
+import com.talool.core.MerchantLocation;
 import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
-import com.talool.website.component.DealTypeDropDownChoice;
 import com.talool.website.component.MerchantMediaWizardPanel;
 import com.talool.website.panel.deal.DealPreview;
 import com.talool.website.panel.deal.DealPreviewUpdatingBehavior;
@@ -55,6 +56,9 @@ public class CreateDealOffer extends DynamicWizardStep {
 		
 		final MerchantAccount ma = SessionUtils.getSession().getMerchantAccount();
 		this.dealOffer = domainFactory.newDealOffer(ma.getMerchant(), ma);
+		this.dealOffer.setDealType(DealType.PAID_BOOK);
+		MerchantLocation offerLocation = dealOffer.getMerchant().getPrimaryLocation();
+		this.dealOffer.setGeometry(offerLocation.getGeometry());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -63,7 +67,7 @@ public class CreateDealOffer extends DynamicWizardStep {
 		super.onConfigure();
 		
 		final Deal deal = (Deal) getDefaultModelObject();
-		dealOffer.setMerchant(deal.getMerchant());
+		
 		deal.setDealOffer(dealOffer);
 		setDefaultModel(new CompoundPropertyModel<Deal>((IModel<Deal>) getDefaultModel()));
 
@@ -71,9 +75,8 @@ public class CreateDealOffer extends DynamicWizardStep {
 		dealPreview.setOutputMarkupId(true);
 		addOrReplace(dealPreview);
 
-		addOrReplace(new DealTypeDropDownChoice("dealOffer.dealType").setRequired(true));
 		addOrReplace(new TextField<String>("dealOffer.title").setRequired(true));
-		addOrReplace(new TextField<String>("dealOffer.summary"));
+		addOrReplace(new TextArea<String>("dealOffer.summary"));
 		
 		// TODO price format
 		addOrReplace(new TextField<String>("dealOffer.price"));

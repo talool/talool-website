@@ -206,7 +206,6 @@ public class MerchantsPage extends BasePage
 	@Override
 	public String getNewDefinitionPanelTitle()
 	{
-		// intentionally null
 		return "New Merchant";
 	}
 }

@@ -1,29 +1,34 @@
 <wicket:extend>
-  	<table>
-  		<thead>
-  			<tr>
-  				<th>Title</th>
-  				<th>Price</th>
-  				<th>Book Type</th>
-  				<th>Expires</th>
-  				<th>Is Active</th>
-  				<th class="actionCol">Actions</th>
-  			</tr>
-  		</thead>
-  		<tbody>
-  			<tr wicket:id="offerRptr">
-  				<td><a wicket:id="titleLink"></a></td>
-  				<td wicket:id="price"></td>
-  				<td wicket:id="dealType"></td>
-  				<td wicket:id="expires"></td>
-  				<td wicket:id="isActive"></td>
-  				<td class="orange-font">
-  					<a wicket:id="editLink" title="edit book" class="icon icon-large icon-pencil"></a>
-  					<a wicket:id="copyLink" title="copy book" class="icon icon-large icon-copy"></a>
-  					<a wicket:id="codeLink" title="download access codes" class="icon icon-large icon-download"></a>
-  					<a href="#" title="delete book" class="icon icon-large icon-remove"></a>
-  				</td>
-  			</tr>
-  		</tbody>
-  	</table>
+	<div wicket:id="bookList">
+		<table>
+	  		<thead>
+	  			<tr>
+	  				<th>Title</th>
+	  				<th wicket:id="pubColHead">Publisher</th>
+	  				<th>Price</th>
+	  				<th>Book Type</th>
+	  				<th>Expires</th>
+	  				<th>Is Active</th>
+	  				<th class="actionCol">Actions</th>
+	  			</tr>
+	  		</thead>
+	  		<tbody>
+	  			<tr wicket:id="offerRptr">
+	  				<td><a wicket:id="titleLink"></a></td>
+	  				<td wicket:id="pubColCell"><a wicket:id="merchantLink"></a></td>
+	  				<td wicket:id="price"></td>
+	  				<td wicket:id="dealType"></td>
+	  				<td wicket:id="expires"></td>
+	  				<td wicket:id="isActive"></td>
+	  				<td class="orange-font">
+	  					<a wicket:id="editLink" title="edit book" class="icon icon-large icon-pencil"></a>
+	  					<a wicket:id="copyLink" title="copy book" class="icon icon-large icon-copy"></a>
+	  					<a wicket:id="codeLink" title="download access codes" class="icon icon-large icon-download"></a>
+	  					<a href="#" title="delete book" class="icon icon-large icon-remove"></a>
+	  				</td>
+	  			</tr>
+	  		</tbody>
+	  	</table>
+	</div>
+	<div wicket:id="wiz" class="wiz merchantWiz"></div>
 </wicket:extend>

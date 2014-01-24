@@ -1,0 +1,118 @@
+package com.talool.website.panel.dealoffer.wizard;
+
+import java.util.List;
+
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.wizard.WizardStep;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
+
+import com.talool.core.DealOffer;
+import com.talool.core.MediaType;
+import com.talool.core.MerchantLocation;
+import com.talool.core.MerchantMedia;
+import com.talool.website.component.MerchantMediaWizardPanel;
+import com.talool.website.models.MerchantLocationListModel;
+import com.talool.website.panel.dealoffer.FindDealsPreview;
+import com.talool.website.panel.dealoffer.FindDealsPreviewUpdatingBehavior;
+import com.talool.website.panel.dealoffer.FindDealsPreviewUpdatingBehavior.FindDealsComponent;
+import com.vividsolutions.jts.geom.Geometry;
+
+public class DealOfferIcon extends WizardStep
+{
+
+	private static final long serialVersionUID = 1L;
+	private MerchantMedia icon;
+	private MerchantLocation geoCenter;
+
+	public DealOfferIcon()
+	{
+		super(new ResourceModel("title"), new ResourceModel("summary"));
+	}
+	
+	@Override
+	protected void onConfigure()
+	{
+		super.onConfigure();
+
+		final DealOffer offer = (DealOffer) getDefaultModelObject();
+		
+		final FindDealsPreview preview = new FindDealsPreview("findDealsBuilder", offer);
+		preview.setOutputMarkupId(true);
+		addOrReplace(preview);
+		
+		// define the Geo for this offer
+		MerchantLocationListModel choices = new MerchantLocationListModel();
+		choices.setMerchantId(offer.getMerchant().getId());
+		ChoiceRenderer<MerchantLocation> choiceRenderer = 
+				new ChoiceRenderer<MerchantLocation>("address1", "id");
+		DropDownChoice<MerchantLocation> locations = 
+				new DropDownChoice<MerchantLocation>("locations", new PropertyModel<MerchantLocation>(this,"geoCenter"), choices, choiceRenderer);
+		addOrReplace(locations.setRequired(true));
+		
+		icon = offer.getDealOfferIcon();
+		PropertyModel<MerchantMedia> iconModel = new PropertyModel<MerchantMedia>(this, "icon");
+		MerchantMediaWizardPanel iconPanel =
+				new MerchantMediaWizardPanel("dealOfferIcon", offer.getMerchant().getId(), MediaType.DEAL_OFFER_MERCHANT_LOGO,
+						iconModel)
+				{
+					private static final long serialVersionUID = 5504461189222207917L;
+
+					@Override
+					public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media)
+					{
+						// re-init the preview
+						preview.init(offer);
+						target.add(preview);
+					}
+
+				};
+		addOrReplace(iconPanel);
+		iconPanel.getMediaSelect()
+			.add(new FindDealsPreviewUpdatingBehavior(preview, FindDealsComponent.ICON, "onChange"));
+
+	}
+	
+	public MerchantMedia getIcon()
+	{
+		final DealOffer offer = (DealOffer) getDefaultModelObject();
+		return offer.getDealOfferIcon();
+	}
+
+	public void setIcon(final MerchantMedia image)
+	{
+		this.icon = image;
+		DealOffer offer = (DealOffer) getDefaultModelObject();
+		offer.setDealOfferIcon(image);
+	}
+
+	public MerchantLocation getGeoCenter() 
+	{
+		final DealOffer offer = (DealOffer) getDefaultModelObject();
+		Geometry geo = offer.getGeometry();
+		List<MerchantLocation> locations = offer.getMerchant().getLocations();
+		MerchantLocation loc = null;
+		for (MerchantLocation location : locations)
+		{
+			if (location.getGeometry().equalsNorm(geo))
+			{
+				loc = location;
+				break;
+			}
+		}
+		if (loc==null)
+		{
+			loc = offer.getMerchant().getPrimaryLocation();
+		}
+		return loc;
+	}
+
+	public void setGeoCenter(MerchantLocation geoCenter) {
+		this.geoCenter = geoCenter;
+		DealOffer offer = (DealOffer) getDefaultModelObject();
+		offer.setGeometry(geoCenter.getGeometry());
+	}
+	
+}
