@@ -64,7 +64,7 @@ public class CustomerSearchPage extends BasePage
 	private static final int ITEMS_PER_PAGE = 50;
 	private static final String CUST_CONTAINER_ID = "customerContainer";
 
-	private String sortParameter = "redemptions";
+	private String sortParameter = "registrationDate";
 	private boolean isAscending = false;
 
 	private static final ChoiceRenderer<CustomerSearchType> searchChoiceRenderer = new ChoiceRenderer<CustomerSearchType>(
@@ -104,6 +104,9 @@ public class CustomerSearchPage extends BasePage
 		final TextField<String> elementId = new TextField<String>("elementId", new PropertyModel<String>(this, "elementId"), String.class);
 		form.add(elementId.setRequired(true));
 
+		final WebMarkupContainer customerContainer = new WebMarkupContainer(CUST_CONTAINER_ID);
+		add(customerContainer.setOutputMarkupId(true).setVisible(false).setOutputMarkupPlaceholderTag(true));
+
 		form.add(new DropDownChoice<CustomerSearchType>("searchSelect",
 				new PropertyModel<CustomerSearchType>(this, "selectedSearchType"), Arrays.asList(CustomerSearchType.values()),
 				searchChoiceRenderer)
@@ -127,6 +130,7 @@ public class CustomerSearchPage extends BasePage
 				else
 				{
 					elementId.setVisible(true);
+					customerContainer.setVisible(false);
 				}
 
 			}
@@ -134,48 +138,12 @@ public class CustomerSearchPage extends BasePage
 
 		add(form);
 
-		final WebMarkupContainer customerContainer = new WebMarkupContainer(CUST_CONTAINER_ID);
-		add(customerContainer.setOutputMarkupId(true).setVisible(false).setOutputMarkupPlaceholderTag(true));
-
 		WebMarkupContainer customers = new WebMarkupContainer("customerRptr");
 		WebMarkupContainer navigator = new WebMarkupContainer("navigator");
 
 		customerContainer.add(navigator.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
 
 		customerContainer.add(customers);
-
-		customerContainer.add(new AjaxLink<Void>("customerLink")
-		{
-			private static final long serialVersionUID = -4528179721619677443L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				doAjaxSearchRefresh("lastName", target);
-			}
-		});
-
-		customerContainer.add(new AjaxLink<Void>("registrationLink")
-		{
-			private static final long serialVersionUID = -4528179721619677443L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				doAjaxSearchRefresh("registrationDate", target);
-			}
-		});
-
-		customerContainer.add(new AjaxLink<Void>("redemptionLink")
-		{
-			private static final long serialVersionUID = -4528179721619677443L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				doAjaxSearchRefresh("redemptions", target);
-			}
-		});
 
 		if (StringUtils.isNotEmpty(this.elementId))
 		{
@@ -382,32 +350,4 @@ public class CustomerSearchPage extends BasePage
 	{
 		return null;
 	}
-
-	@SuppressWarnings("unchecked")
-	private void doAjaxSearchRefresh(final String sortParam, final AjaxRequestTarget target)
-	{
-		WebMarkupContainer container = (WebMarkupContainer) get(CUST_CONTAINER_ID);
-
-		final DataView<CustomerSummary> dataView = ((DataView<CustomerSummary>) container.get("customerRptr"));
-		final CustomerSearchDataProvider provider = (CustomerSearchDataProvider) dataView.getDataProvider();
-
-		// toggle asc/desc
-		if (sortParam.equals(sortParameter))
-		{
-			isAscending = isAscending == true ? false : true;
-			provider.setAscending(isAscending);
-		}
-
-		this.sortParameter = sortParam;
-
-		provider.setSortParameter(sortParam);
-
-		final AjaxPagingNavigator pagingNavigator = (AjaxPagingNavigator) container.get("navigator");
-		pagingNavigator.getPageable().setCurrentPage(0);
-
-		target.add(container);
-		target.add(pagingNavigator);
-
-	}
-
 }

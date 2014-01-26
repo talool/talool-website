@@ -1,6 +1,7 @@
 <wicket:extend>
 <form wicket:id="searchForm">
 <div style="padding-bottom:10px;">
+<span>Search By </span>
 <select wicket:id="searchSelect">
   <option value="Email Address">Email Address</option>
   <option value="Most Recent">Most Recent</option>
@@ -16,10 +17,10 @@
 	<table>
   		<thead>
   			<tr>
-  				<th><a wicket:id="customerLink">Customer</a></th>
-  				<th><a wicket:id="registrationLink">Registration Date</a></th>
-  				<th>Deal Offer(s)</th>
-  				<th><a wicket:id="redemptionLink" >Redemptions</a></th>
+  				<th>Customer</th>
+  				<th>Registration Date</th>
+  				<th>Deal Offers</th>
+  				<th>Redemptions</th>
   				<th class="actionCol"></th>
   			</tr>
   		</thead>
