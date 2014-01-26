@@ -12,7 +12,9 @@ import com.talool.core.DealOffer;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 import com.talool.website.Constants;
+import com.talool.website.service.PermissionService;
 import com.talool.website.util.SafeSimpleDecimalFormat;
+import com.talool.website.util.SessionUtils;
 
 /**
  * 
@@ -30,8 +32,13 @@ public final class ScoreBoardFactory
 
 	private static class MetricCountModel extends LoadableDetachableModel<String>
 	{
+		private static final long serialVersionUID = -4968676121844147519L;
+
 		private MetricType metricType;
 		private UUID id;
+
+		final String signedInEmail = SessionUtils.getSession().getMerchantAccount().getEmail();
+		final UUID merchantId = SessionUtils.getSession().getMerchantAccount().getMerchant().getId();
 
 		public MetricCountModel(final MetricType metricType)
 		{
@@ -44,8 +51,6 @@ public final class ScoreBoardFactory
 			this.id = objId;
 		}
 
-		private static final long serialVersionUID = -4968676121844147519L;
-
 		@Override
 		protected String load()
 		{
@@ -56,11 +61,27 @@ public final class ScoreBoardFactory
 				switch (metricType)
 				{
 					case TotalCustomers:
-						count = ServiceFactory.get().getAnalyticService().getTotalCustomers();
+						if (PermissionService.get().isTaloolEmail(signedInEmail))
+						{
+							count = ServiceFactory.get().getAnalyticService().getTotalCustomers();
+						}
+						else
+						{
+							count = ServiceFactory.get().getAnalyticService().getPublishersCustomerTotal(merchantId);
+						}
+
 						break;
 
 					case TotalRedemptions:
-						count = ServiceFactory.get().getAnalyticService().getTotalRedemptions();
+						if (PermissionService.get().isTaloolEmail(signedInEmail))
+						{
+							count = ServiceFactory.get().getAnalyticService().getTotalRedemptions();
+						}
+						else
+						{
+							count = ServiceFactory.get().getAnalyticService().getPublishersCustomerRedemptionTotal(merchantId);
+						}
+
 						break;
 
 					case TotalEmailGifts:
