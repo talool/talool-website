@@ -1,0 +1,35 @@
+.statsModule
+{
+	float: left;
+	width: 522px;
+	margin: 0 20px 30px 0;
+}
+
+.statsModule h3
+{
+	background-color: rgba(222,222,222,1.0);
+	padding: 5px 10px;
+	margin: 0;
+}
+.statsModule table em
+{
+	color: rgba(25, 188, 185, 0.7);
+	font-style: normal;
+}
+
+.statsModule .chart
+{
+	border: 1px solid rgba(222,222,222,1.0);
+	padding: 10px;
+}
+.statsModule .metricName
+{
+	width: 80%;
+}
+.statsModule .key
+{
+	display: inline-block;
+	height: 10px;
+	width: 10px;
+	margin-right: 10px;
+}
