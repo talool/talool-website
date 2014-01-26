@@ -85,11 +85,24 @@ public final class ScoreBoardFactory
 						break;
 
 					case TotalEmailGifts:
-						count = ServiceFactory.get().getAnalyticService().getTotalEmailGifts();
+						if (PermissionService.get().isTaloolEmail(signedInEmail))
+						{
+							count = ServiceFactory.get().getAnalyticService().getTotalEmailGifts();
+						}
+						else
+						{
+							count = ServiceFactory.get().getAnalyticService().getPublishersEmailGiftTotal(merchantId);
+						}
 						break;
-
 					case TotalFacebookGifts:
-						count = ServiceFactory.get().getAnalyticService().getTotalFacebookGifts();
+						if (PermissionService.get().isTaloolEmail(signedInEmail))
+						{
+							count = ServiceFactory.get().getAnalyticService().getTotalFacebookGifts();
+						}
+						else
+						{
+							count = ServiceFactory.get().getAnalyticService().getPublishersFacebookGiftTotal(merchantId);
+						}
 						break;
 					case TotalActivations:
 						count = ServiceFactory.get().getAnalyticService().getTotalActivatedCodes(this.id);
@@ -149,11 +162,23 @@ public final class ScoreBoardFactory
 			@Override
 			public String getObject()
 			{
-				StringBuilder sb = new StringBuilder();
+				final StringBuilder sb = new StringBuilder();
+				Long fb = null;
+				Long count = null;
+
 				try
 				{
-					Long fb = ServiceFactory.get().getAnalyticService().getTotalFacebookCustomers();
-					Long count = ServiceFactory.get().getAnalyticService().getTotalCustomers();
+					if (PermissionService.get().isTaloolEmail(SessionUtils.getSession().getMerchantAccount().getEmail()))
+					{
+						fb = ServiceFactory.get().getAnalyticService().getTotalFacebookCustomers();
+						count = ServiceFactory.get().getAnalyticService().getTotalCustomers();
+					}
+					else
+					{
+						final UUID publisherMerchantId = SessionUtils.getSession().getMerchantAccount().getMerchant().getId();
+						fb = ServiceFactory.get().getAnalyticService().getPublishersFacebookCustomerTotal(publisherMerchantId);
+						count = ServiceFactory.get().getAnalyticService().getPublishersCustomerTotal(publisherMerchantId);
+					}
 
 					final NumberFormat percentFormat = NumberFormat.getPercentInstance();
 					percentFormat.setMaximumFractionDigits(2);
