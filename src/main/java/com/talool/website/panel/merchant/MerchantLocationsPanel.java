@@ -69,7 +69,6 @@ public class MerchantLocationsPanel extends BaseTabPanel
 				item.add(new StaticImage("mylogo", false, managedLocation.getLogo().getMediaUrl()));
 				
 				item.add(new Label("locationName"));
-				item.add(new Label("email"));
 				item.add(new Label("phone"));
 				item.add(new Label("address1"));
 				item.add(new Label("address2"));

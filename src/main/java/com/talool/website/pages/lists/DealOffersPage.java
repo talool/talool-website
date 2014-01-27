@@ -91,6 +91,10 @@ public class DealOffersPage extends BasePage
 		WebMarkupContainer pubCol = new WebMarkupContainer("pubColHead");
 		container.add(pubCol.setOutputMarkupId(true));
 		pubCol.setVisible(isTaloolUserLoggedIn);
+		
+		WebMarkupContainer bookTypeColHead = new WebMarkupContainer("bookTypeColHead");
+		container.add(bookTypeColHead.setOutputMarkupId(true));
+		bookTypeColHead.setVisible(isTaloolUserLoggedIn);
 
 		final ListView<DealOffer> books = new ListView<DealOffer>("offerRptr",
 				model)
@@ -138,7 +142,9 @@ public class DealOffersPage extends BasePage
 				String moneyString = formatter.format(dealOffer.getPrice());
 				item.add(new Label("price", moneyString));
 				
-				item.add(new Label("dealType"));
+				Label dealType = new Label("dealType");
+				item.add(dealType.setOutputMarkupId(true));
+				dealType.setVisible(isTaloolUserLoggedIn);
 				
 				if (dealOffer.getExpires() != null)
 				{
