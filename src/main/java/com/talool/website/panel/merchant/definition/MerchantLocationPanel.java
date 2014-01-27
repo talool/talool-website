@@ -89,7 +89,6 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 		locationPanel.add(new TextField<String>("zip").setRequired(true));
 		locationPanel.add(new TextField<String>("locationName"));
 		locationPanel.add(new TextField<String>("phone").setRequired(true));
-		locationPanel.add(new TextField<String>("email").setRequired(true));
 		locationPanel.add(new TextField<String>("websiteUrl"));
 
 		final StateSelect state = new StateSelect("stateProvinceCounty",
@@ -165,7 +164,10 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 			merchantLocation.setMerchant(taloolService.getMerchantById(merchantId));
 			merchantLocation.setCreatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
 		}
-		
+		if (merchantLocation.getEmail() == null)
+		{
+			merchantLocation.setEmail("foo@talool.com");
+		}
 		merchantLocation.setMerchantImage(selectedImage);
 		merchantLocation.setLogo(selectedLogo);
 
