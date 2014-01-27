@@ -1,14 +1,17 @@
 package com.talool.website.panel.analytics;
 
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.UUID;
 
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.talool.core.DealOffer;
+import com.talool.core.service.AnalyticService.ActivationCodeSummary;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 import com.talool.website.Constants;
@@ -29,6 +32,31 @@ public final class ScoreBoardFactory
 	{
 		TotalCustomers, TotalRedemptions, TotalEmailGifts, TotalFacebookGifts, TotalActivations, TotalFaceboolCustomers
 	};
+
+	public class ActivationCodeSummaryModel extends LoadableDetachableModel<List<ActivationCodeSummary>>
+	{
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected List<ActivationCodeSummary> load()
+		{
+			List<ActivationCodeSummary> summaries = null;
+			try
+			{
+				summaries = ServiceFactory.get().getAnalyticService().getPublishersActivationCodeSummaries(
+						SessionUtils.getSession().getMerchantAccount().getMerchant().getId());
+
+				return summaries;
+			}
+			catch (ServiceException e)
+			{
+				LOG.error("Problem loading activationCodeSummaries: " + e.getLocalizedMessage());
+			}
+			return summaries;
+		}
+
+	}
 
 	private static class MetricCountModel extends LoadableDetachableModel<String>
 	{
@@ -108,7 +136,14 @@ public final class ScoreBoardFactory
 						count = ServiceFactory.get().getAnalyticService().getTotalActivatedCodes(this.id);
 						break;
 					case TotalFaceboolCustomers:
-						count = ServiceFactory.get().getAnalyticService().getTotalFacebookCustomers();
+						if (PermissionService.get().isTaloolEmail(signedInEmail))
+						{
+							count = ServiceFactory.get().getAnalyticService().getTotalFacebookCustomers();
+						}
+						else
+						{
+							count = ServiceFactory.get().getAnalyticService().getPublishersFacebookCustomerTotal(merchantId);
+						}
 						break;
 				}
 
@@ -150,6 +185,33 @@ public final class ScoreBoardFactory
 		return new ScoreBoardPanel(id, "Facebook Gifts",
 				new MetricCountModel(MetricType.TotalFacebookGifts));
 
+	}
+
+	public static void createBookActivationPanels(final MarkupContainer container)
+	{
+
+		if (PermissionService.get().isTaloolEmail(SessionUtils.getSession().getMerchantAccount().getEmail()))
+		{
+
+		}
+		else
+		{
+			try
+			{
+				final List<ActivationCodeSummary> summaries = ServiceFactory.get().getAnalyticService().getPublishersActivationCodeSummaries(
+						SessionUtils.getSession().getMerchantAccount().getMerchant().getId());
+
+				for (final ActivationCodeSummary summary : summaries)
+				{
+					container.add(ScoreBoardFactory.createTotalBookActivations("totalActivations", summary));
+				}
+			}
+			catch (ServiceException e)
+			{
+
+			}
+
+		}
 	}
 
 	public static ScoreBoardPanel createTotalFacebookCustomers(String id)
@@ -196,16 +258,22 @@ public final class ScoreBoardFactory
 
 		});
 
-		// <String><String>()
-		// new MetricCountModel(MetricType.TotalFaceboolCustomers));
-
 	}
 
-	public static ScoreBoardPanel createTotalBookActivations(String id, DealOffer offer)
+	public static ScoreBoardPanel createTotalBookActivations(final String id, final ActivationCodeSummary summary)
 	{
-		StringBuilder sb = new StringBuilder(offer.getTitle());
-		return new ScoreBoardPanel(id, sb.append(" Activations").toString(),
-				new MetricCountModel(MetricType.TotalActivations, offer.getId()));
+		final StringBuilder sb = new StringBuilder(summary.dealOfferTitle);
+		final String title = sb.append(" Activations").toString();
+		sb.setLength(0);
+
+		final NumberFormat percentFormat = NumberFormat.getPercentInstance();
+		percentFormat.setMaximumFractionDigits(2);
+
+		final SafeSimpleDecimalFormat formatter = new SafeSimpleDecimalFormat(Constants.FORMAT_COMMA_NUMBER);
+		sb.append(formatter.format(summary.totalActivatedCodes)).append("/").append(formatter.format(summary.totalCodes)).append(" (").
+				append(String.valueOf(percentFormat.format((float) summary.totalActivatedCodes / (float) summary.totalCodes))).append(")");
+
+		return new ScoreBoardPanel(id, title, Model.of(sb.toString()));
 
 	}
 }
