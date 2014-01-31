@@ -1,6 +1,7 @@
 package com.talool.website.panel.merchant.wizard;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -62,7 +63,7 @@ public class MerchantMap extends WizardStep
 		/*
 		 * Center the map
 		 */
-		MerchantLocation loc = merchant.getLocations().get(0);
+		MerchantLocation loc = merchant.getLocations().iterator().next();
 
 		try
 		{
@@ -80,7 +81,7 @@ public class MerchantMap extends WizardStep
 		/*
 		 * Put the pins on the map
 		 */
-		List<MerchantLocation> locs = merchant.getLocations();
+		Set<MerchantLocation> locs = merchant.getLocations();
 		Point pin;
 
 		for (final MerchantLocation location : locs)
@@ -140,7 +141,7 @@ public class MerchantMap extends WizardStep
 		 */
 		MerchantLocationListModel model = new MerchantLocationListModel();
 		model.setMerchantId(merchant.getId());
-		model.setObject(merchant.getLocations());
+		model.setObject(new ArrayList<MerchantLocation>(merchant.getLocations()));
 		final ListView<MerchantLocation> locations = new ListView<MerchantLocation>(
 				"locationRptr", model)
 		{

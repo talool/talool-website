@@ -150,7 +150,9 @@ public class MerchantsPage extends BasePage
 			{
 				getSession().getFeedbackMessages().clear();
 				final Merchant merchant = domainFactory.newMerchant();
-				merchant.getLocations().get(0).setCreatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
+
+				merchant.getLocations().iterator().next().
+						setCreatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
 				wizard.setModelObject(merchant);
 				wizard.open(target);
 			}

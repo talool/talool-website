@@ -1,6 +1,6 @@
 package com.talool.website.panel.dealoffer.wizard;
 
-import java.util.List;
+import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.wizard.WizardStep;
@@ -31,27 +31,27 @@ public class DealOfferIcon extends WizardStep
 	{
 		super(new ResourceModel("title"), new ResourceModel("summary"));
 	}
-	
+
 	@Override
 	protected void onConfigure()
 	{
 		super.onConfigure();
 
 		final DealOffer offer = (DealOffer) getDefaultModelObject();
-		
+
 		final FindDealsPreview preview = new FindDealsPreview("findDealsBuilder", offer);
 		preview.setOutputMarkupId(true);
 		addOrReplace(preview);
-		
+
 		// define the Geo for this offer
 		MerchantLocationListModel choices = new MerchantLocationListModel();
 		choices.setMerchantId(offer.getMerchant().getId());
-		ChoiceRenderer<MerchantLocation> choiceRenderer = 
+		ChoiceRenderer<MerchantLocation> choiceRenderer =
 				new ChoiceRenderer<MerchantLocation>("address1", "id");
-		DropDownChoice<MerchantLocation> locations = 
-				new DropDownChoice<MerchantLocation>("locations", new PropertyModel<MerchantLocation>(this,"geoCenter"), choices, choiceRenderer);
+		DropDownChoice<MerchantLocation> locations =
+				new DropDownChoice<MerchantLocation>("locations", new PropertyModel<MerchantLocation>(this, "geoCenter"), choices, choiceRenderer);
 		addOrReplace(locations.setRequired(true));
-		
+
 		icon = offer.getDealOfferIcon();
 		PropertyModel<MerchantMedia> iconModel = new PropertyModel<MerchantMedia>(this, "icon");
 		MerchantMediaWizardPanel iconPanel =
@@ -71,10 +71,10 @@ public class DealOfferIcon extends WizardStep
 				};
 		addOrReplace(iconPanel);
 		iconPanel.getMediaSelect()
-			.add(new FindDealsPreviewUpdatingBehavior(preview, FindDealsComponent.ICON, "onChange"));
+				.add(new FindDealsPreviewUpdatingBehavior(preview, FindDealsComponent.ICON, "onChange"));
 
 	}
-	
+
 	public MerchantMedia getIcon()
 	{
 		final DealOffer offer = (DealOffer) getDefaultModelObject();
@@ -88,11 +88,11 @@ public class DealOfferIcon extends WizardStep
 		offer.setDealOfferIcon(image);
 	}
 
-	public MerchantLocation getGeoCenter() 
+	public MerchantLocation getGeoCenter()
 	{
 		final DealOffer offer = (DealOffer) getDefaultModelObject();
 		Geometry geo = offer.getGeometry();
-		List<MerchantLocation> locations = offer.getMerchant().getLocations();
+		Set<MerchantLocation> locations = offer.getMerchant().getLocations();
 		MerchantLocation loc = null;
 		for (MerchantLocation location : locations)
 		{
@@ -102,17 +102,18 @@ public class DealOfferIcon extends WizardStep
 				break;
 			}
 		}
-		if (loc==null)
+		if (loc == null)
 		{
 			loc = offer.getMerchant().getPrimaryLocation();
 		}
 		return loc;
 	}
 
-	public void setGeoCenter(MerchantLocation geoCenter) {
+	public void setGeoCenter(MerchantLocation geoCenter)
+	{
 		this.geoCenter = geoCenter;
 		DealOffer offer = (DealOffer) getDefaultModelObject();
 		offer.setGeometry(geoCenter.getGeometry());
 	}
-	
+
 }
