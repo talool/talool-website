@@ -5,7 +5,9 @@ body.talool .wiz {
 	padding: 10px 15px;
 	position: relative;
 }
-.dealOfferLogoSelectContainer .wicketExtensionsWizardHeaderTitle {
+.dealOfferLogoSelectContainer .wicketExtensionsWizardHeaderTitle,
+.newMerchantLocation .wicketExtensionsWizardHeaderTitle 
+{
 	font-weight: bold;
 	font-size: 1.17em;
 	-webkit-margin-before: 1em;
@@ -13,7 +15,9 @@ body.talool .wiz {
 	-webkit-margin-start: 0px;
 	-webkit-margin-end: 0px;
 }
-.dealOfferLogoSelectContainer .wicketExtensionsWizardHeaderSummary {
+.dealOfferLogoSelectContainer .wicketExtensionsWizardHeaderSummary,
+.newMerchantLocation  .wicketExtensionsWizardHeaderSummary
+{
 	display: none;
 }
 .wiz .panel.iPhonePanel {
@@ -26,11 +30,13 @@ body.talool .wiz {
 .wiz form {
 	height: 580px;
 }
-.abstractWizard .wicketExtensionsWizardHeaderTitle {
+.abstractWizard .wicketExtensionsWizardHeaderTitle
+{
 	font-weight: bold;
 }
 
-.abstractWizard .wicketExtensionsWizardHeaderSummary {
+.abstractWizard .wicketExtensionsWizardHeaderSummary
+{
 	font-style: italic;
 	margin-bottom: 1em;
 }

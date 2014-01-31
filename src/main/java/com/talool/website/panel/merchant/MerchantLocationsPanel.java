@@ -14,6 +14,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.MerchantLocation;
+import com.talool.core.MerchantMedia;
 import com.talool.website.component.StaticImage;
 import com.talool.website.models.MerchantLocationListModel;
 import com.talool.website.pages.BasePage;
@@ -64,12 +65,19 @@ public class MerchantLocationsPanel extends BaseTabPanel
 					item.add(new AttributeModifier("class", "odd-row-bg"));
 				}
 
-				item.add(new StaticImage("myimage", false, managedLocation.getMerchantImage().getMediaUrl()));
+				MerchantMedia media = managedLocation.getMerchantImage();
+				if (media==null)
+				{
+					item.add(new StaticImage("myimage", false, "/img/000.png"));
+				}
+				else
+				{
+					item.add(new StaticImage("myimage", false, managedLocation.getMerchantImage().getMediaUrl()));
+				}
 				
 				item.add(new StaticImage("mylogo", false, managedLocation.getLogo().getMediaUrl()));
 				
 				item.add(new Label("locationName"));
-				item.add(new Label("email"));
 				item.add(new Label("phone"));
 				item.add(new Label("address1"));
 				item.add(new Label("address2"));
