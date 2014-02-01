@@ -93,17 +93,18 @@ public class MerchantLocationsPanel extends BaseTabPanel
 				item.add(new Label("stateProvinceCounty"));
 				item.add(new Label("zip"));
 				
-				String websiteUrl = new String();
-				try
+				String websiteUrl = managedLocation.getWebsiteUrl();
+				if (websiteUrl != null && !websiteUrl.isEmpty())
 				{
-					websiteUrl = managedLocation.getWebsiteUrl();
+					ExternalLink webpage = new ExternalLink("websiteLink", websiteUrl, websiteUrl);
+					item.add(webpage);
 				}
-				catch (Exception e)
+				else
 				{
-					websiteUrl = "empty";
+					websiteUrl = "";
+					Label webpage = new Label("websiteLink", websiteUrl);
+					item.add(webpage);
 				}
-				ExternalLink webpage = new ExternalLink("website", websiteUrl, websiteUrl);
-				item.add(webpage);
 
 				BasePage page = (BasePage) this.getPage();
 				final AdminModalWindow modal = page.getModal();

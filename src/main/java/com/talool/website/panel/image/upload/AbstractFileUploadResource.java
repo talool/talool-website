@@ -22,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.MediaType;
+import com.talool.image.upload.FileManager;
+import com.talool.image.upload.FileNameUtils;
 
 /**
  * The resource that handles the file uploads. Reads the file items from the
@@ -149,7 +151,9 @@ public abstract class AbstractFileUploadResource extends AbstractResource
 	{
 		for (FileItem fileItem : fileItems)
 		{
-			fileManager.save(fileItem);
+			File file = FileNameUtils.getFile(fileItem.getName());
+			fileItem.write(file);
+			fileManager.save(file);
 		}
 	}
 
@@ -157,6 +161,8 @@ public abstract class AbstractFileUploadResource extends AbstractResource
 	 * Delegates to FileManager to store the uploaded files
 	 * 
 	 * @param fileItems
+	 * @param merchantId
+	 * @param mediaType
 	 * @return The File objects representing the stored files on disk
 	 * @throws IOException
 	 */
@@ -166,7 +172,9 @@ public abstract class AbstractFileUploadResource extends AbstractResource
 
 		for (FileItem fileItem : fileItems)
 		{
-			outFiles.add(fileManager.process(fileItem, mediaType, merchantId));
+			File file = FileNameUtils.getFile(fileItem.getName());
+			fileItem.write(file);
+			outFiles.add(fileManager.process(file, mediaType, merchantId));
 		}
 
 		return outFiles;

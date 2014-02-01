@@ -15,10 +15,10 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.upload.FileItem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.talool.core.MediaType;
+import com.talool.image.upload.FileManager;
+import com.talool.image.upload.FileNameUtils;
 import com.talool.website.Config;
 
 /**
@@ -32,7 +32,6 @@ public class FileUploadResourceReference extends ResourceReference
 {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOG = LoggerFactory.getLogger(FileUploadResourceReference.class);
 	private final FileManager fileManager;
 
 	public FileUploadResourceReference(String baseFolder)
@@ -103,7 +102,7 @@ public class FileUploadResourceReference extends ResourceReference
 
 	private CharSequence getViewUrl(File file, UUID merchantId)
 	{
-		return FileUploadUtils.getImageUrl(file, merchantId);
+		return FileNameUtils.getImageUrl(file, merchantId);
 	}
 
 	// NOTE we're not using this, but it's probably broken now
