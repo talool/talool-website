@@ -164,7 +164,7 @@ public class DealOffersPage extends BasePage
 				BasePage page = (BasePage) this.getPage();
 				final AdminModalWindow modal = page.getModal();
 				final SubmitCallBack callback = page.getCallback(modal);
-				item.add(new AjaxLink<Void>("editLink")
+				AjaxLink<Void> editLink = new AjaxLink<Void>("editLink")
 				{
 					private static final long serialVersionUID = 268692101349122303L;
 
@@ -175,7 +175,8 @@ public class DealOffersPage extends BasePage
 						wizard.setModelObject(new DealOfferModel(dealOfferId).getObject());
 						wizard.open(target);
 					}
-				});
+				};
+				item.add(editLink.setVisible(dealOffer.getType() != DealType.KIRKE_BOOK));
 
 				sb.append("Are you sure you want to copy \"").append(title).append("\" and all deals related?");
 				item.add(new ConfirmationIndicatingAjaxLink<Void>("copyLink",

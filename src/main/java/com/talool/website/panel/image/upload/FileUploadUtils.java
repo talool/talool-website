@@ -11,8 +11,8 @@ import org.apache.wicket.util.upload.FileItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.talool.utils.SafeSimpleDateFormat;
 import com.talool.website.Config;
-import com.talool.website.util.SafeSimpleDateFormat;
 
 public class FileUploadUtils
 {

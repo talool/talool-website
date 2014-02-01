@@ -13,8 +13,8 @@ import org.apache.wicket.model.PropertyModel;
 import com.talool.core.Deal;
 import com.talool.core.DealOffer;
 import com.talool.core.MerchantLocation;
+import com.talool.utils.SafeSimpleDateFormat;
 import com.talool.website.component.StaticImage;
-import com.talool.website.util.SafeSimpleDateFormat;
 
 public class DealPreview extends Panel
 {

@@ -1,21 +1,13 @@
 package com.talool.website.panel.dealoffer;
 
 import java.text.NumberFormat;
-import java.util.Date;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.datetime.DateConverter;
-import org.apache.wicket.datetime.PatternDateConverter;
-import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
-import com.talool.core.Deal;
 import com.talool.core.DealOffer;
-import com.talool.core.MerchantLocation;
 import com.talool.website.component.StaticImage;
-import com.talool.website.util.SafeSimpleDateFormat;
 
 public class DealOfferPreview extends Panel
 {
