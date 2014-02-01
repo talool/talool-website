@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.talool.core.Deal;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
+import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
 import com.talool.website.component.StaticImage;
 import com.talool.website.models.DealListModel;
@@ -81,8 +82,16 @@ public class MerchantDealsPanel extends BaseTabPanel
 				item.add(new Label("title"));
 				item.add(new Label("summary"));
 				item.add(new Label("details"));
-				item.add(new StaticImage("myimage", false, deal.getImage().getMediaUrl()));
 				
+				MerchantMedia image = deal.getImage();
+				if (image == null)
+				{
+					item.add(new StaticImage("myimage", false, "/img/000.png"));
+				}
+				else
+				{
+					item.add(new StaticImage("myimage", false, image.getMediaUrl()));
+				}
 				Date exp = deal.getExpires();
 				if (exp != null)
 				{

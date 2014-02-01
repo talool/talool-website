@@ -72,10 +72,18 @@ public class MerchantLocationsPanel extends BaseTabPanel
 				}
 				else
 				{
-					item.add(new StaticImage("myimage", false, managedLocation.getMerchantImage().getMediaUrl()));
+					item.add(new StaticImage("myimage", false, media.getMediaUrl()));
 				}
 				
-				item.add(new StaticImage("mylogo", false, managedLocation.getLogo().getMediaUrl()));
+				MerchantMedia logo = managedLocation.getLogo();
+				if (logo==null)
+				{
+					item.add(new StaticImage("mylogo", false, "/img/000.png"));
+				}
+				else
+				{
+					item.add(new StaticImage("mylogo", false, logo.getMediaUrl()));
+				}
 				
 				item.add(new Label("locationName"));
 				item.add(new Label("phone"));

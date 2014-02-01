@@ -11,13 +11,11 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
 import com.talool.core.MerchantAccount;
+import com.talool.core.MerchantMedia;
 import com.talool.website.component.StaticImage;
 import com.talool.website.models.DealListModel;
 import com.talool.website.models.DealModel;
@@ -31,7 +29,6 @@ import com.talool.website.util.SessionUtils;
 public class DealOfferDealsPage extends BasePage
 {
 	private static final long serialVersionUID = 6008230892463177176L;
-	private static final Logger LOG = LoggerFactory.getLogger(DealOfferDealsPage.class);
 	private UUID _dealOfferId;
 	private DealWizard wizard;
 
@@ -74,7 +71,17 @@ public class DealOfferDealsPage extends BasePage
 				item.add(new Label("title"));
 				item.add(new Label("summary"));
 				item.add(new Label("details"));
-				item.add(new StaticImage("myimage", false, deal.getImage().getMediaUrl()));
+				
+				MerchantMedia image = deal.getImage();
+				if (image==null)
+				{
+					item.add(new StaticImage("myimage", false, "/img/000.png"));
+				}
+				else
+				{
+					item.add(new StaticImage("myimage", false, image.getMediaUrl()));
+				}
+				
 
 				item.add(new AjaxLink<Void>("editLink")
 				{
