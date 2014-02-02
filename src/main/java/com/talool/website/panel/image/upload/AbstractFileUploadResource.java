@@ -174,7 +174,7 @@ public abstract class AbstractFileUploadResource extends AbstractResource
 		{
 			File file = FileNameUtils.getFile(fileItem.getName());
 			fileItem.write(file);
-			outFiles.add(fileManager.process(file, mediaType, merchantId));
+			outFiles.add(fileManager.process(file, null, mediaType, merchantId));
 		}
 
 		return outFiles;
