@@ -11,11 +11,11 @@ $(function () {
         singleFileUploads: true,
         autoUpload: true,
         maxFileSize: 5000000,
-        acceptFileTypes: /(\.|\/)(eps|jpe?g|png|tif)$/i,
+        acceptFileTypes: /(\.|\/)(jpe?g|png)$/i,
         process: [
             {
                 action: 'load',
-                fileTypes: /^image\/(eps|jpeg|png|tif)$/,
+                fileTypes: /^image\/(jpeg|png)$/,
                 maxFileSize: 20000000 // 20MB
             },
             {
