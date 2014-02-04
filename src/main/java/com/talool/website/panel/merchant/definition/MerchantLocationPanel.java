@@ -1,5 +1,6 @@
 package com.talool.website.panel.merchant.definition;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -12,6 +13,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.talool.core.DealOffer;
 import com.talool.core.MediaType;
 import com.talool.core.MerchantLocation;
 import com.talool.core.MerchantMedia;
@@ -23,7 +25,9 @@ import com.talool.website.component.StateSelect;
 import com.talool.website.models.MerchantLocationModel;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.util.HttpUtils;
 import com.talool.website.util.SessionUtils;
+import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * 
@@ -170,8 +174,25 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 		}
 		merchantLocation.setMerchantImage(selectedImage);
 		merchantLocation.setLogo(selectedLogo);
+		
+		final Geometry oldGeo = merchantLocation.getGeometry();
+		Geometry newGeo = null;
+		try
+		{
+			newGeo = HttpUtils.getGeometry(merchantLocation.getAddress1(), merchantLocation.getAddress2(),
+					merchantLocation.getCity(), merchantLocation.getStateProvinceCounty());
+			merchantLocation.setGeometry(newGeo);
+		}
+		catch (Exception e)
+		{
+			LOG.error("There was an exception resolving lat/long of location: " + e.getLocalizedMessage(), e);
+		}
 
 		taloolService.save(merchantLocation);
+		
+		// update any offers using this geo
+		updateOfferGeo(oldGeo, newGeo);
+		
 		SessionUtils.successMessage("Successfully saved location");
 	}
 
@@ -179,5 +200,21 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 	public String getSaveButtonLabel()
 	{
 		return "Save Merchant Location";
+	}
+	
+	private void updateOfferGeo(Geometry oldGeo, Geometry newGeo) throws ServiceException
+	{
+		if (oldGeo == null || newGeo == null || oldGeo.equals(newGeo)) return;
+		
+		List<DealOffer> offers = taloolService.getDealOffersByMerchantId(merchantId);
+		for (DealOffer offer:offers)
+		{
+			Geometry geo = offer.getGeometry();
+			if (geo != null && geo.equals(oldGeo))
+			{
+				offer.setGeometry(newGeo);
+				taloolService.save(offer);
+			}
+		}
 	}
 }
