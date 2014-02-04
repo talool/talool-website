@@ -46,8 +46,26 @@ public class DealOfferIcon extends WizardStep
 		// define the Geo for this offer
 		MerchantLocationListModel choices = new MerchantLocationListModel();
 		choices.setMerchantId(offer.getMerchant().getId());
-		ChoiceRenderer<MerchantLocation> choiceRenderer =
-				new ChoiceRenderer<MerchantLocation>("address1", "id");
+		ChoiceRenderer<MerchantLocation> choiceRenderer = new ChoiceRenderer<MerchantLocation>("address1", "id")
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Object getDisplayValue(MerchantLocation loc) {
+				StringBuilder val = new StringBuilder();
+				if (loc.getLocationName() == null || loc.getLocationName().isEmpty())
+				{
+					val.append(loc.getAddress1()).append(", ").append(loc.getNiceCityState());
+				}
+				else
+				{
+					val.append(loc.getLocationName());
+				}
+				return val.toString();
+			}
+			
+		};
 		DropDownChoice<MerchantLocation> locations =
 				new DropDownChoice<MerchantLocation>("locations", new PropertyModel<MerchantLocation>(this, "geoCenter"), choices, choiceRenderer);
 		addOrReplace(locations.setRequired(true));
