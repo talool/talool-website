@@ -114,7 +114,7 @@ public class DealOfferIcon extends WizardStep
 		MerchantLocation loc = null;
 		for (MerchantLocation location : locations)
 		{
-			if (location.getGeometry().equalsNorm(geo))
+			if (location.getGeometry() != null && location.getGeometry().equalsNorm(geo))
 			{
 				loc = location;
 				break;
