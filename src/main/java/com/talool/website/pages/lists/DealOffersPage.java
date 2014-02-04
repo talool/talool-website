@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
@@ -49,6 +50,7 @@ import com.talool.website.panel.dealoffer.wizard.DealOfferWizard;
 import com.talool.website.service.PermissionService;
 import com.talool.website.util.SecuredPage;
 import com.talool.website.util.SessionUtils;
+import com.vividsolutions.jts.geom.Geometry;
 
 @SecuredPage
 public class DealOffersPage extends BasePage
@@ -137,6 +139,38 @@ public class DealOffersPage extends BasePage
 						new PropertyModel<String>(dealOffer, "merchant.name"));
 				pubColCell.add(merchantLink);
 				
+				
+				Geometry geo = dealOffer.getGeometry();
+				if (geo == null)
+				{
+					item.add(new Label("location",""));
+				}
+				else
+				{
+					Set<MerchantLocation> locations = dealOffer.getMerchant().getLocations();
+					MerchantLocation loc = null;
+					StringBuilder locationLabel = new StringBuilder();
+					for (MerchantLocation l:locations)
+					{
+						if (l.getGeometry()!=null && geo.equals(l.getGeometry()))
+						{
+							loc = l;
+							break;
+						}
+					}
+					if (loc != null)
+					{
+						if (loc.getLocationName() == null)
+						{
+							locationLabel.append(loc.getAddress1()).append(", ").append(loc.getNiceCityState());
+						}
+						else
+						{
+							locationLabel.append(loc.getLocationName());
+						}
+					}
+					item.add(new Label("location",locationLabel.toString()));
+				}
 
 				NumberFormat formatter = NumberFormat.getCurrencyInstance();
 				String moneyString = formatter.format(dealOffer.getPrice());
