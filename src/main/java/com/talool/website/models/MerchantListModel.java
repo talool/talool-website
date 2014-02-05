@@ -24,6 +24,7 @@ public class MerchantListModel extends LoadableDetachableModel<List<Merchant>>
 	private static final long serialVersionUID = -1571731014724589519L;
 
 	private UUID merchantId;
+	private boolean includeCurrentMerchant = false;
 
 	@Override
 	protected List<Merchant> load()
@@ -40,6 +41,18 @@ public class MerchantListModel extends LoadableDetachableModel<List<Merchant>>
 			{
 				merchants = ServiceFactory.get().getTaloolService().getMerchantsCreatedByMerchant(merchantId);
 			}
+			
+			if (!includeCurrentMerchant)
+			{
+				for (Merchant m:merchants)
+				{
+					if (m.getId().equals(merchantId))
+					{
+						merchants.remove(m);
+						break;
+					}
+				}
+			}
 		}
 		catch (ServiceException e)
 		{
@@ -52,6 +65,11 @@ public class MerchantListModel extends LoadableDetachableModel<List<Merchant>>
 	public void setMerchantId(UUID id)
 	{
 		merchantId = id;
+	}
+	
+	public void setIncludeCurrentMerchantId(boolean b)
+	{
+		includeCurrentMerchant = b;
 	}
 
 	class MerchantComparator implements Comparator<Merchant>

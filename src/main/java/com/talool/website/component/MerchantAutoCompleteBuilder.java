@@ -33,6 +33,7 @@ public class MerchantAutoCompleteBuilder extends ObjectAutoCompleteBuilder<Merch
 			{
 				// limit the search with a merchant id
 				merchantModel.setMerchantId(merchant.getId());
+				merchantModel.setIncludeCurrentMerchantId(true);
 				
 				List<Merchant> ret = new ArrayList<Merchant>();
 				for (Merchant m : merchantModel.getObject())
