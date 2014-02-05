@@ -34,10 +34,8 @@ public class DealListModel extends LoadableDetachableModel<List<Deal>>
 		{
 			if (_method == LOAD_METHOD.MERHCANT)
 			{
-				// deals =
-				// ServiceFactory.get().getTaloolService().getDealsByMerchantId(_merchantId);
-				deals = ServiceFactory.get().getTaloolService()
-						.getAllRelatedDealsForMerchantId(_merchantId);
+				deals = ServiceFactory.get().getTaloolService().getDealsByMerchantId(_merchantId);
+				//deals = ServiceFactory.get().getTaloolService().getAllRelatedDealsForMerchantId(_merchantId);
 
 			}
 			else if (_method == LOAD_METHOD.DEAL_OFFER)

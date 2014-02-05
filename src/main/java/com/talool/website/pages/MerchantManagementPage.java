@@ -49,6 +49,21 @@ public class MerchantManagementPage extends BaseManagementPage
 
 		List<ITab> tabs = new ArrayList<ITab>();
 
+		if (isTaloolUserLoggedIn)
+		{
+			tabs.add(new AbstractTab(new Model<String>("Deal Offers"))
+			{
+
+				private static final long serialVersionUID = 5853871222415506440L;
+
+				@Override
+				public Panel getPanel(String panelId)
+				{
+					return new MerchantDealOffersPanel(panelId, getPageParameters());
+				}
+			});
+		}
+		
 		tabs.add(new AbstractTab(new Model<String>("Deals"))
 		{
 			private static final long serialVersionUID = 6405610365875810783L;
