@@ -62,6 +62,7 @@ public class CustomerSearchPage extends BasePage
 	private static final long serialVersionUID = 2102415289760762365L;
 	private static final Logger LOG = Logger.getLogger(CustomerSearchPage.class);
 	private static final int ITEMS_PER_PAGE = 50;
+	private static final int MOS_RECENT_MAX_RESULTS = 10;
 	private static final String CUST_CONTAINER_ID = "customerContainer";
 
 	private String sortParameter = "registrationDate";
@@ -122,7 +123,7 @@ public class CustomerSearchPage extends BasePage
 			@Override
 			protected void onSelectionChanged(CustomerSearchType newSelection)
 			{
-				if (selectedSearchType == CustomerSearchType.MostRecent)
+				if (selectedSearchType == CustomerSearchType.RecentRegistrations)
 				{
 					elementId.setVisible(false);
 					doSearch();
@@ -168,9 +169,9 @@ public class CustomerSearchPage extends BasePage
 						CustomerSearchType.PublisherCustomerSummaryByEmail, sortParameter, isAscending).setEmail(elementId));
 				break;
 
-			case MostRecent:
+			case RecentRegistrations:
 				provider = new CustomerSearchDataProvider(new CustomerSearchOpts(
-						CustomerSearchType.MostRecent, sortParameter, isAscending));
+						CustomerSearchType.RecentRegistrations, sortParameter, isAscending).setCappedResultCount(MOS_RECENT_MAX_RESULTS));
 				break;
 		}
 
