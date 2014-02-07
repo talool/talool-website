@@ -18,6 +18,8 @@ import com.talool.core.MediaType;
 import com.talool.core.MerchantLocation;
 import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
+import com.talool.service.ErrorCode;
+import com.talool.utils.HttpUtils;
 import com.talool.website.behaviors.OnChangeAjaxFormBehavior;
 import com.talool.website.component.MerchantMediaWizardPanel;
 import com.talool.website.component.StateOption;
@@ -25,7 +27,6 @@ import com.talool.website.component.StateSelect;
 import com.talool.website.models.MerchantLocationModel;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.util.HttpUtils;
 import com.talool.website.util.SessionUtils;
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -179,21 +180,33 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 		Geometry newGeo = null;
 		try
 		{
-			newGeo = HttpUtils.getGeometry(merchantLocation.getAddress1(), merchantLocation.getAddress2(),
-					merchantLocation.getCity(), merchantLocation.getStateProvinceCounty());
+			newGeo = HttpUtils.getGeometry(merchantLocation);
 			merchantLocation.setGeometry(newGeo);
+		}
+		catch (ServiceException se)
+		{
+			error(se.getErrorCode().getMessage());
+			LOG.error("There was an exception resolving lat/long of location: " + se.getLocalizedMessage(), se);
 		}
 		catch (Exception e)
 		{
 			LOG.error("There was an exception resolving lat/long of location: " + e.getLocalizedMessage(), e);
 		}
 
-		taloolService.save(merchantLocation);
-		
-		// update any offers using this geo
-		updateOfferGeo(oldGeo, newGeo);
-		
-		SessionUtils.successMessage("Successfully saved location");
+		if (newGeo != null)
+		{
+			taloolService.save(merchantLocation);
+			
+			// update any offers using this geo
+			updateOfferGeo(oldGeo, newGeo);
+			
+			SessionUtils.successMessage("Successfully saved location");
+		}
+		else
+		{
+			throw new ServiceException(ErrorCode.MERCHANT_LOCATION_GEOMETRY_NULL);
+		}
+
 	}
 
 	@Override

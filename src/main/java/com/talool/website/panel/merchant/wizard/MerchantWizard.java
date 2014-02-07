@@ -31,7 +31,7 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 	{
 		super(id, title);
 
-		this.newLocation = new MerchantLocation();
+		this.newLocation = new MerchantLocationStep();
 
 		WizardModel wizardModel = new WizardModel();
 		wizardModel.add(new MerchantDetails());
@@ -128,6 +128,12 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 		// reconfigure buttons and refresh the form //
 		this.onConfigure(target);
 
+	}
+
+	@Override
+	protected void onSubmit(AjaxRequestTarget target) {
+		super.onSubmit(target);
+		target.add(this.getFeedbackPanel());
 	}
 
 }

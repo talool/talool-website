@@ -23,9 +23,9 @@ import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.MerchantMedia;
+import com.talool.utils.HttpUtils;
 import com.talool.website.models.MerchantLocationListModel;
 import com.talool.website.panel.merchant.wizard.MerchantWizard.WizardMarker;
-import com.talool.website.util.HttpUtils;
 import com.talool.website.util.SessionUtils;
 import com.vividsolutions.jts.geom.Point;
 
@@ -86,20 +86,26 @@ public class MerchantMap extends WizardStep
 
 		for (final MerchantLocation location : locs)
 		{
-
-			try
+			if (location.getGeometry() == null)
 			{
-				pin = HttpUtils.getGeometry(location.getAddress1(), location.getAddress2(),
-						location.getCity(), location.getStateProvinceCounty());
+				try
+				{
+					pin = HttpUtils.getGeometry(location.getAddress1(), location.getAddress2(),
+							location.getCity(), location.getStateProvinceCounty());
 
-				map.addOverlay(new GMarker(new GMarkerOptions(map, new GLatLng(pin.getY(), pin.getX()))));
-
-				location.setGeometry(pin);
+					location.setGeometry(pin);
+				}
+				catch (Exception e)
+				{
+					LOG.error("There was an exception resolving lat/long to pin the map: " + e.getLocalizedMessage(), e);
+					continue;
+				}
 			}
-			catch (Exception e)
+			else
 			{
-				LOG.error("There was an exception resolving lat/long to pin the map: " + e.getLocalizedMessage(), e);
+				pin = (Point) location.getGeometry();
 			}
+			map.addOverlay(new GMarker(new GMarkerOptions(map, new GLatLng(pin.getY(), pin.getX()))));
 		}
 
 		/*

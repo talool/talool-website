@@ -7,31 +7,33 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
+import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
+import com.talool.utils.HttpUtils;
 import com.talool.website.component.StateOption;
 import com.talool.website.component.StateSelect;
+import com.vividsolutions.jts.geom.Geometry;
 
-public class MerchantLocation extends WizardStep
+public class MerchantLocationStep extends WizardStep
 {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocation.class);
-
+	private static final Logger LOG = LoggerFactory.getLogger(MerchantLocationStep.class);
+	
 	private transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
 
-	public MerchantLocation()
+	public MerchantLocationStep()
 	{
 		super(new ResourceModel("title"), new ResourceModel("summary"));
-
+		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -102,12 +104,31 @@ public class MerchantLocation extends WizardStep
 		super.applyState();
 
 		final Merchant merch = (Merchant) getDefaultModelObject();
-
-		if (merch.getId() == null)
+		MerchantLocation merchantLocation = merch.getCurrentLocation();
+		Geometry newGeo = null;
+		try
+		{
+			newGeo = HttpUtils.getGeometry(merchantLocation);
+			merchantLocation.setGeometry(newGeo);
+			// TODO update any offers using this geo
+		}
+		catch (ServiceException se)
+		{
+			error(se.getErrorCode().getMessage());
+			LOG.error("There was an exception resolving lat/long of location: " + se.getLocalizedMessage(), se);
+		}
+		catch (Exception e)
+		{
+			error("We were unable to process your location.");
+			LOG.error("There was an exception resolving lat/long of location: " + e.getLocalizedMessage(), e);
+		}
+		
+		// Only save if we have to and the geo is not null
+		if (merch.getId() == null && newGeo != null)
 		{
 			try
 			{
-				// New users need to be saved before we can save the logos, images, geo,
+				// New locations need to be saved before we can save the logos, images, geo,
 				// etc
 				taloolService.save(merch);
 				StringBuilder sb = new StringBuilder("Saved Merchant with id:");
@@ -122,6 +143,11 @@ public class MerchantLocation extends WizardStep
 				// duplicate merchant name?
 				LOG.error("random-ass-exception saving new merchant:", e);
 			}
+		}
+		else if (newGeo == null)
+		{
+			// this shouldn't be possible, but let's log it just in case
+			LOG.error("Somehow we got a null location for merchant: "+merch.getId());
 		}
 
 	}
