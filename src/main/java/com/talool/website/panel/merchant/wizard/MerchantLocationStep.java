@@ -22,6 +22,9 @@ import com.talool.core.service.TaloolService;
 import com.talool.utils.HttpUtils;
 import com.talool.website.component.StateOption;
 import com.talool.website.component.StateSelect;
+import com.talool.website.panel.merchant.MapPreview;
+import com.talool.website.panel.merchant.MapPreviewUpdatingBehaviorController;
+import com.talool.website.panel.merchant.MapPreviewUpdatingBehaviorController.MapComponent;
 import com.vividsolutions.jts.geom.Geometry;
 
 public class MerchantLocationStep extends WizardStep
@@ -49,22 +52,34 @@ public class MerchantLocationStep extends WizardStep
 		super.onConfigure();
 
 		setDefaultModel(new CompoundPropertyModel<Merchant>((IModel<Merchant>) getDefaultModel()));
-
+		
+		final Merchant merchant = (Merchant) getDefaultModelObject();
+		
+		final MapPreview mapPerview = new MapPreview("mapBuilder", merchant);
+		mapPerview.setOutputMarkupId(true);
+		addOrReplace(mapPerview);
+		
+		MapPreviewUpdatingBehaviorController previewController = new MapPreviewUpdatingBehaviorController(mapPerview, merchant.getCurrentLocation());
+		
 		WebMarkupContainer locationPanel = new WebMarkupContainer("locationPanel");
 		addOrReplace(locationPanel);
 
 		final TextField<String> addr1 = new TextField<String>("currentLocation.address1");
 		locationPanel.add(addr1.setRequired(true));
+		addr1.add(previewController.getBehaviorForComponent(MapComponent.ADDRESS1, "onChange"));
 
 		final TextField<String> addr2 = new TextField<String>("currentLocation.address2");
 		locationPanel.add(addr2);
+		addr2.add(previewController.getBehaviorForComponent(MapComponent.ADDRESS2, "onChange"));
 
 		final TextField<String> city = new TextField<String>("currentLocation.city");
 		locationPanel.add(city.setRequired(true));
+		city.add(previewController.getBehaviorForComponent(MapComponent.CITY, "onChange"));
 
 		final StateSelect state = new StateSelect("currentLocation.stateProvinceCounty",
 				new PropertyModel<StateOption>(this, "stateOption"));
 		locationPanel.add(state.setRequired(true));
+		state.add(previewController.getBehaviorForComponent(MapComponent.STATE, "onChange"));
 
 		locationPanel.add(new TextField<String>("currentLocation.zip").setRequired(true));
 

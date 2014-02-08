@@ -29,6 +29,12 @@
 	height: 65px;
 }
 
+.newMerchant .mapPanel.iPhonePanel .nav,
+.newMerchant .mapPanel.iPhonePanel .map,
+.newMerchant .mapPanel.iPhonePanel .locList {
+	margin-left: 0px;
+}
+
 .deal2 .image 
 {
 	margin: 0;
