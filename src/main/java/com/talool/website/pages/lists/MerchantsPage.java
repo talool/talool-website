@@ -28,6 +28,7 @@ import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.pages.dashboard.MerchantDashboard;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.wizard.MerchantWizard;
+import com.talool.website.panel.merchant.wizard.MerchantWizard.MerchantWizardMode;
 import com.talool.website.service.PermissionService;
 import com.talool.website.util.SecuredPage;
 import com.talool.website.util.SessionUtils;
@@ -164,7 +165,7 @@ public class MerchantsPage extends BasePage
 		actionLink.setOutputMarkupId(true);
 
 		// Wizard
-		wizard = new MerchantWizard("wiz", "Merchant Wizard")
+		wizard = new MerchantWizard("wiz", "Merchant Wizard", MerchantWizardMode.MERCHANT)
 		{
 
 			private static final long serialVersionUID = 1L;

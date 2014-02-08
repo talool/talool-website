@@ -1,5 +1,7 @@
 package com.talool.website.panel.merchant.wizard;
 
+import java.util.List;
+
 import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.TextField;
@@ -11,6 +13,7 @@ import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.talool.core.DealOffer;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
@@ -29,6 +32,9 @@ public class MerchantLocationStep extends WizardStep
 	
 	private transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
+	
+	private String originalLocation;
+	private Geometry oldGeo;
 
 	public MerchantLocationStep()
 	{
@@ -74,6 +80,14 @@ public class MerchantLocationStep extends WizardStep
 		{
 			merch.getCurrentLocation().setEmail("foo@talool.com");
 		}
+		
+		if (merch.getCurrentLocation().getCountry() == null)
+		{
+			merch.getCurrentLocation().setCountry("US");
+		}
+		
+		originalLocation = HttpUtils.buildAddress(merch.getCurrentLocation());
+		oldGeo = merch.getCurrentLocation().getGeometry();
 	}
 
 	public StateOption getStateOption()
@@ -106,25 +120,30 @@ public class MerchantLocationStep extends WizardStep
 		final Merchant merch = (Merchant) getDefaultModelObject();
 		MerchantLocation merchantLocation = merch.getCurrentLocation();
 		Geometry newGeo = null;
-		try
+		boolean locationChanged = !originalLocation.equals(HttpUtils.buildAddress(merchantLocation));
+		if (locationChanged)
 		{
-			newGeo = HttpUtils.getGeometry(merchantLocation);
-			merchantLocation.setGeometry(newGeo);
-			// TODO update any offers using this geo
-		}
-		catch (ServiceException se)
-		{
-			error(se.getErrorCode().getMessage());
-			LOG.error("There was an exception resolving lat/long of location: " + se.getLocalizedMessage(), se);
-		}
-		catch (Exception e)
-		{
-			error("We were unable to process your location.");
-			LOG.error("There was an exception resolving lat/long of location: " + e.getLocalizedMessage(), e);
+			// the location has changed
+			try
+			{
+				newGeo = HttpUtils.getGeometry(merchantLocation);
+				merchantLocation.setGeometry(newGeo);
+			}
+			catch (ServiceException se)
+			{
+				error(se.getErrorCode().getMessage());
+				LOG.error("There was an exception resolving lat/long of location for merchant: " + merch.getId(), se);
+			}
+			catch (Exception e)
+			{
+				error("We were unable to process your location.");
+				LOG.error("There was an exception resolving lat/long of location for merchant: " + merch.getId(), e);
+			}
 		}
 		
+		
 		// Only save if we have to and the geo is not null
-		if (merch.getId() == null && newGeo != null)
+		if (merchantLocation.getId() == null && newGeo != null)
 		{
 			try
 			{
@@ -133,21 +152,33 @@ public class MerchantLocationStep extends WizardStep
 				taloolService.save(merch);
 				StringBuilder sb = new StringBuilder("Saved Merchant with id:");
 				LOG.debug(sb.append(merch.getId()).toString());
+				
+				// update any offers using this geo
+				if (oldGeo != null && locationChanged)
+				{
+					List<DealOffer> offers = taloolService.getDealOffersByMerchantId(merch.getId());
+					for (DealOffer offer:offers)
+					{
+						Geometry geo = offer.getGeometry();
+						if (geo != null && geo.equals(oldGeo))
+						{
+							offer.setGeometry(newGeo);
+							taloolService.save(offer);
+						}
+					}
+				}
 			}
 			catch (ServiceException se)
 			{
+				error("We were unable to process your location.");
 				LOG.error("failed to save new merchant:", se);
 			}
 			catch (Exception e)
 			{
+				error("We were unable to process your location.");
 				// duplicate merchant name?
 				LOG.error("random-ass-exception saving new merchant:", e);
 			}
-		}
-		else if (newGeo == null)
-		{
-			// this shouldn't be possible, but let's log it just in case
-			LOG.error("Somehow we got a null location for merchant: "+merch.getId());
 		}
 
 	}

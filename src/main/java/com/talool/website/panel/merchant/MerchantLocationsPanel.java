@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -13,6 +14,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.MerchantMedia;
 import com.talool.website.component.StaticImage;
@@ -22,6 +24,9 @@ import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.definition.MerchantLocationPanel;
+import com.talool.website.panel.merchant.wizard.MerchantWizard;
+import com.talool.website.panel.merchant.wizard.MerchantWizard.MerchantWizardMode;
+import com.talool.website.util.SessionUtils;
 
 /**
  * 
@@ -32,6 +37,7 @@ public class MerchantLocationsPanel extends BaseTabPanel
 {
 	private static final long serialVersionUID = 3634980968241854373L;
 	private UUID _merchantId;
+	private MerchantWizard wizard;
 
 	public MerchantLocationsPanel(String id, PageParameters parameters)
 	{
@@ -46,6 +52,11 @@ public class MerchantLocationsPanel extends BaseTabPanel
 
 		MerchantLocationListModel model = new MerchantLocationListModel();
 		model.setMerchantId(_merchantId);
+		
+		final WebMarkupContainer container = new WebMarkupContainer("list");
+		container.setOutputMarkupId(true);
+		add(container);
+		
 		final ListView<MerchantLocation> locations = new ListView<MerchantLocation>(
 				"locationRptr", model)
 		{
@@ -55,8 +66,7 @@ public class MerchantLocationsPanel extends BaseTabPanel
 			@Override
 			protected void populateItem(ListItem<MerchantLocation> item)
 			{
-				MerchantLocation managedLocation = item.getModelObject();
-				final Long merchantLocationId = managedLocation.getId();
+				final MerchantLocation managedLocation = item.getModelObject();
 
 				item.setModel(new CompoundPropertyModel<MerchantLocation>(managedLocation));
 
@@ -118,30 +128,85 @@ public class MerchantLocationsPanel extends BaseTabPanel
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						MerchantLocationPanel panel = new MerchantLocationPanel(modal.getContentId(), callback,
-								merchantLocationId);
-						modal.setContent(panel);
-						modal.setTitle("Edit Merchant Location");
-						modal.show(target);
+						Merchant merchant = SessionUtils.getSession().getMerchantAccount().getMerchant();
+						merchant.setCurrentLocation(managedLocation);
+						wizard.setModelObject(merchant);
+						wizard.open(target);
 					}
 				});
 			}
 
 		};
+		container.add(locations);
+		
+		// override the action button
+		final BasePage page = (BasePage) this.getPage();
+		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
+		{
 
-		add(locations);
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				getSession().getFeedbackMessages().clear();
+				
+				Merchant merchant = SessionUtils.getSession().getMerchantAccount().getMerchant();
+				
+				// create a new location and add it to the merchant
+				MerchantLocation location = domainFactory.newMerchantLocation();
+				MerchantMedia merchLogo = merchant.getCurrentLocation().getLogo();
+				if (merchLogo != null)
+				{
+					location.setLogo(merchLogo);
+				}
+				MerchantMedia merchImage = merchant.getCurrentLocation().getMerchantImage();
+				if (merchImage != null)
+				{
+					location.setMerchantImage(merchImage);
+				}
+
+				location.setCreatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
+				merchant.addLocation(location);
+				merchant.setCurrentLocation(location);
+				
+				wizard.setModelObject(merchant);
+				wizard.open(target);
+			}
+		};
+		page.setActionLink(actionLink);
+		Label actionLabel = new Label("actionLabel", getActionLabel());
+		actionLabel.setOutputMarkupId(true);
+		actionLink.add(actionLabel);
+		actionLink.setOutputMarkupId(true);
+
+		// Wizard
+		wizard = new MerchantWizard("wiz", "Merchant Wizard", MerchantWizardMode.MERCHANT_LOCATION)
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onFinish(AjaxRequestTarget target)
+			{
+				super.onFinish(target);
+				// refresh the list after a deal is edited
+				target.add(container);
+			}
+		};
+		add(wizard);
 	}
 
 	@Override
 	public String getActionLabel()
 	{
-		return "Create Location";
+		return "Create New Location";
 	}
 
 	@Override
 	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
 	{
-		return new MerchantLocationPanel(contentId, _merchantId, callback);
+		return null;
 	}
 
 }

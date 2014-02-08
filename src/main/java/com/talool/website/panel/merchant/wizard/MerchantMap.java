@@ -11,8 +11,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.wicketstuff.gmap.GMap;
 import org.wicketstuff.gmap.api.GLatLng;
 import org.wicketstuff.gmap.api.GMarker;
@@ -23,7 +21,6 @@ import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.MerchantMedia;
-import com.talool.utils.HttpUtils;
 import com.talool.website.models.MerchantLocationListModel;
 import com.talool.website.panel.merchant.wizard.MerchantWizard.WizardMarker;
 import com.talool.website.util.SessionUtils;
@@ -33,7 +30,6 @@ public class MerchantMap extends WizardStep
 {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOG = LoggerFactory.getLogger(MerchantMap.class);
 	private final MerchantWizard wizard;
 
 	private transient static final DomainFactory domainFactory = FactoryManager.get()
@@ -58,54 +54,28 @@ public class MerchantMap extends WizardStep
 		map.setStreetViewControlEnabled(false);
 		map.setScaleControlEnabled(true);
 		map.setScrollWheelZoomEnabled(true);
+		map.setZoom(10);
 		addOrReplace(map);
 
 		/*
-		 * Center the map
-		 */
-		MerchantLocation loc = merchant.getLocations().iterator().next();
-
-		try
-		{
-			final Point point = HttpUtils.getGeometry(loc.getAddress1(), loc.getAddress2(),
-					loc.getCity(), loc.getStateProvinceCounty());
-
-			GLatLng center = new GLatLng(point.getY(), point.getX());
-			map.setCenter(center);
-		}
-		catch (Exception e)
-		{
-			LOG.error("There was an exception resolving lat/long to center the map: " + e.getLocalizedMessage(), e);
-		}
-
-		/*
-		 * Put the pins on the map
+		 * Put the pins on the map and center the map
 		 */
 		Set<MerchantLocation> locs = merchant.getLocations();
 		Point pin;
-
+		boolean centerMap = true;
 		for (final MerchantLocation location : locs)
 		{
-			if (location.getGeometry() == null)
+			pin = (Point) location.getGeometry();
+			if (pin != null)
 			{
-				try
+				if (centerMap)
 				{
-					pin = HttpUtils.getGeometry(location.getAddress1(), location.getAddress2(),
-							location.getCity(), location.getStateProvinceCounty());
-
-					location.setGeometry(pin);
+					GLatLng center = new GLatLng(pin.getY(), pin.getX());
+					map.setCenter(center);
+					centerMap = false;
 				}
-				catch (Exception e)
-				{
-					LOG.error("There was an exception resolving lat/long to pin the map: " + e.getLocalizedMessage(), e);
-					continue;
-				}
+				map.addOverlay(new GMarker(new GMarkerOptions(map, new GLatLng(pin.getY(), pin.getX()))));
 			}
-			else
-			{
-				pin = (Point) location.getGeometry();
-			}
-			map.addOverlay(new GMarker(new GMarkerOptions(map, new GLatLng(pin.getY(), pin.getX()))));
 		}
 
 		/*

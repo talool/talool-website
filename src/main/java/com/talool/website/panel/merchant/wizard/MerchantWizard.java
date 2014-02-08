@@ -12,8 +12,10 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.wizard.AbstractWizard;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
+import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
+import com.talool.utils.HttpUtils;
 import com.talool.website.pages.BasePage;
 
 public class MerchantWizard extends AbstractWizard<Merchant>
@@ -25,21 +27,34 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 	{
 		NewLocation
 	};
+	public static enum MerchantWizardMode
+	{
+		MERCHANT, MERCHANT_LOCATION
+	};
 	private WizardStep newLocation;
-
-	public MerchantWizard(String id, String title)
+	private MerchantWizardMode mode;
+	
+	public MerchantWizard(String id, String title, MerchantWizardMode mode)
 	{
 		super(id, title);
-
+		this.mode = mode;
 		this.newLocation = new MerchantLocationStep();
 
 		WizardModel wizardModel = new WizardModel();
-		wizardModel.add(new MerchantDetails());
-		wizardModel.add(this.newLocation);
-		wizardModel.add(new MerchantLocationImage());
-		wizardModel.add(new MerchantLocationLogo());
-
-		wizardModel.add(new MerchantMap(this));
+		if (this.mode.equals(MerchantWizardMode.MERCHANT))
+		{
+			wizardModel.add(new MerchantDetails());
+			wizardModel.add(this.newLocation);
+			wizardModel.add(new MerchantLocationImage());
+			wizardModel.add(new MerchantLocationLogo());
+			wizardModel.add(new MerchantMap(this));
+		}
+		else
+		{
+			wizardModel.add(this.newLocation);
+			wizardModel.add(new MerchantLocationImage());
+			wizardModel.add(new MerchantLocationLogo());
+		}
 		wizardModel.setLastVisible(false);
 
 		// TODO allow the user to save immediately if this is an edit flow
@@ -79,10 +94,19 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 		TaloolService taloolService = FactoryManager.get().getServiceFactory().getTaloolService();
 		try
 		{
-			taloolService.merge(merchant);
-
-			StringBuilder sb = new StringBuilder("Succesfully saved merchant: ");
-			this.info(sb.append(merchant.getName()).toString());
+			if (mode.equals(MerchantWizardMode.MERCHANT))
+			{
+				taloolService.merge(merchant);
+				StringBuilder sb = new StringBuilder("Succesfully saved merchant: ");
+				this.info(sb.append(merchant.getName()).toString());
+			}
+			else
+			{
+				MerchantLocation loc = merchant.getCurrentLocation();
+				taloolService.merge(loc);
+				StringBuilder sb = new StringBuilder("Succesfully saved merchant location: ");
+				this.info(sb.append(HttpUtils.buildAddress(merchant.getCurrentLocation())).toString());
+			}
 
 		}
 		catch (ServiceException se)
