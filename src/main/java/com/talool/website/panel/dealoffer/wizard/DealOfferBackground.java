@@ -62,6 +62,7 @@ public class DealOfferBackground extends WizardStep
 
 	public void setBackground(final MerchantMedia image)
 	{
+		if (image==null) return;
 		this.background = image;
 		DealOffer offer = (DealOffer) getDefaultModelObject();
 		offer.setDealOfferBackground(image);

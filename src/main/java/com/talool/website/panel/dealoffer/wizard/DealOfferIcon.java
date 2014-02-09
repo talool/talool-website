@@ -95,6 +95,7 @@ public class DealOfferIcon extends WizardStep
 
 	public void setIcon(final MerchantMedia image)
 	{
+		if (image==null) return;
 		this.icon = image;
 		DealOffer offer = (DealOffer) getDefaultModelObject();
 		offer.setDealOfferIcon(image);

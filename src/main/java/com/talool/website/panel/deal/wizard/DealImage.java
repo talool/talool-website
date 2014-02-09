@@ -62,6 +62,7 @@ public class DealImage extends DynamicWizardStep
 
 	public void setImage(final MerchantMedia image)
 	{
+		if (image==null) return;
 		this.image = image;
 		Deal deal = (Deal) getDefaultModelObject();
 		deal.setImage(image);

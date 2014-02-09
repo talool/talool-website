@@ -2,11 +2,15 @@ package com.talool.website.panel.merchant;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.talool.core.FactoryManager;
 import com.talool.core.MerchantLocation;
+import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.utils.HttpUtils;
 import com.vividsolutions.jts.geom.Point;
@@ -15,6 +19,8 @@ import com.vividsolutions.jts.geom.Point;
 public class MapPreviewUpdatingBehaviorController implements Serializable {
 	
 	private static final long serialVersionUID = -3393286731188590664L;
+	
+	private static final Logger LOG = LoggerFactory.getLogger(MapPreviewUpdatingBehaviorController.class);
 
 	public static enum MapComponent {ADDRESS1, ADDRESS2, CITY, STATE};
 	private MapPreview preview;
@@ -77,7 +83,10 @@ public class MapPreviewUpdatingBehaviorController implements Serializable {
 	
 	private boolean isAddressComplete()
 	{
-		return (!address1.isEmpty() && !address2.isEmpty() && !city.isEmpty() && !state.isEmpty());
+		return (!StringUtils.isEmpty(address1) && 
+				!StringUtils.isEmpty(address2) && 
+				!StringUtils.isEmpty(city) && 
+				!StringUtils.isEmpty(state));
 	}
 	
 	private boolean hasLocationChanged()
@@ -94,9 +103,14 @@ public class MapPreviewUpdatingBehaviorController implements Serializable {
 			// TODO discuss ways to throttle these calls.  possibly use a cache.
 			pt = HttpUtils.getGeometry(address1, address2, city, state);
 		}
+		catch (ServiceException se)
+		{
+			// these errors will be reported to the user when the location step is submitted
+			LOG.error("There was an exception resolving lat/long of location: " + currentLocation, se);
+		}
 		catch (Exception e)
 		{
-			// TODO log and report errors
+			LOG.error("There was an exception resolving lat/long of location: " + currentLocation, e);
 		}
 		return pt;
 	}

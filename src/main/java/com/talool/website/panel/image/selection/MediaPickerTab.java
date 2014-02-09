@@ -34,6 +34,9 @@ abstract public class MediaPickerTab extends Panel
 		ChoiceRenderer<MerchantMedia> cr = new ChoiceRenderer<MerchantMedia>("mediaName", "mediaUrl");
 
 		selectedMediaModel = model;
+		
+		// TODO not sure I really want to set the default like this...
+		/*
 		if (model.getObject()==null)
 		{
 			List<MerchantMedia> list = mediaListModel.getObject();
@@ -42,9 +45,10 @@ abstract public class MediaPickerTab extends Panel
 				selectedMediaModel.setObject(list.get(0));
 			}
 		}
+		*/
 
 		mediaSelect = new DropDownChoice<MerchantMedia>("availableMedia", selectedMediaModel, mediaListModel, cr);
-		mediaSelect.setNullValid(false);
+		mediaSelect.setNullValid(true);
 	}
 
 	@Override

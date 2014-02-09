@@ -96,6 +96,7 @@ public class DealOfferLogo extends WizardStep
 
 	public void setLogo(final MerchantMedia image)
 	{
+		if (image==null) return;
 		this.logo = image;
 		DealOffer offer = (DealOffer) getDefaultModelObject();
 		offer.setDealOfferLogo(image);
