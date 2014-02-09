@@ -27,6 +27,7 @@ public class DealOfferWizard extends AbstractWizard<DealOffer> {
 		
 		WizardModel wizardModel = new WizardModel();
 		wizardModel.add(new DealOfferDetails());
+		wizardModel.add(new DealOfferBackground());
 		wizardModel.add(new DealOfferIcon());
 		wizardModel.add(new DealOfferLogo());
 		

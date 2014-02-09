@@ -1,0 +1,48 @@
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+	    <link rel="stylesheet" type="text/css" href="/css/image-picker.css"/>
+	    <script src="/js/image-picker.min.js"></script>
+	</wicket:head>
+	<wicket:panel>
+
+		<div class="selectContainer">
+			<select class="merchantMediaSelector" wicket:id="availableMedia" style="display:none"><option>Default Media</option></select>
+		</div>
+
+		<script>
+		
+		$(function(){
+			$("select.merchantMediaSelector option").attr("data-img-src", function(){
+				return this.value;
+			});
+			
+			$("select.merchantMediaSelector").imagepicker();
+			
+			// TODO not used, but may be good to review for a bit
+			$(".openStock").click(function(){
+				var selector = "select.merchantMediaSelector";
+				var picker = $(selector).data("picker");
+				if (picker) 
+				{
+					// pickup any changes from uploads
+					$("select.merchantMediaSelector option").attr("data-img-src", function(){
+						return this.value;
+					});
+					picker.sync_picker_with_select();
+					
+					// show/hide the picker
+					picker.picker.toggle(); 
+					// or call picker.destroy() if they start colliding
+					//picker.destroy();
+				}
+				else 
+				{
+					$(selector).imagepicker();
+			    }
+			});
+		});
+	       
+		</script>
+	</wicket:panel>
+	
+</html>

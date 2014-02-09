@@ -13,11 +13,9 @@ import com.talool.core.DealOffer;
 import com.talool.core.MediaType;
 import com.talool.core.MerchantLocation;
 import com.talool.core.MerchantMedia;
-import com.talool.website.component.MerchantMediaWizardPanel;
 import com.talool.website.models.MerchantLocationListModel;
 import com.talool.website.panel.dealoffer.FindDealsPreview;
-import com.talool.website.panel.dealoffer.FindDealsPreviewUpdatingBehavior;
-import com.talool.website.panel.dealoffer.FindDealsPreviewUpdatingBehavior.FindDealsComponent;
+import com.talool.website.panel.image.selection.MediaSelectionPanel;
 import com.vividsolutions.jts.geom.Geometry;
 
 public class DealOfferIcon extends WizardStep
@@ -72,24 +70,20 @@ public class DealOfferIcon extends WizardStep
 
 		icon = offer.getDealOfferIcon();
 		PropertyModel<MerchantMedia> iconModel = new PropertyModel<MerchantMedia>(this, "icon");
-		MerchantMediaWizardPanel iconPanel =
-				new MerchantMediaWizardPanel("dealOfferIcon", offer.getMerchant().getId(), MediaType.DEAL_OFFER_MERCHANT_LOGO,
-						iconModel)
-				{
-					private static final long serialVersionUID = 5504461189222207917L;
 
-					@Override
-					public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media)
-					{
-						// re-init the preview
-						preview.init(offer);
-						target.add(preview);
-					}
+		MediaSelectionPanel imagePanel = new MediaSelectionPanel("dealOfferIcon", offer.getMerchant().getId(), MediaType.DEAL_OFFER_MERCHANT_LOGO, iconModel)
+		{
 
-				};
-		addOrReplace(iconPanel);
-		iconPanel.getMediaSelect()
-				.add(new FindDealsPreviewUpdatingBehavior(preview, FindDealsComponent.ICON, "onChange"));
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public void onMediaPicked(AjaxRequestTarget target, MerchantMedia media) {
+				preview.init(offer);
+				target.add(preview);
+			}
+			
+		};
+		addOrReplace(imagePanel);
 
 	}
 

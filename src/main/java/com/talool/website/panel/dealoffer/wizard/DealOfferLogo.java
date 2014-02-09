@@ -13,10 +13,8 @@ import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.MerchantMedia;
-import com.talool.website.component.MerchantMediaWizardPanel;
 import com.talool.website.panel.deal.DealPreview;
-import com.talool.website.panel.deal.DealPreviewUpdatingBehavior;
-import com.talool.website.panel.deal.DealPreviewUpdatingBehavior.DealComponent;
+import com.talool.website.panel.image.selection.MediaSelectionPanel;
 import com.talool.website.util.SessionUtils;
 
 public class DealOfferLogo extends WizardStep
@@ -46,24 +44,21 @@ public class DealOfferLogo extends WizardStep
 		
 		logo = offer.getDealOfferLogo();
 		PropertyModel<MerchantMedia> iconModel = new PropertyModel<MerchantMedia>(this, "logo");
-		MerchantMediaWizardPanel iconPanel =
-				new MerchantMediaWizardPanel("dealOfferLogo", offer.getMerchant().getId(), MediaType.DEAL_OFFER_LOGO,
-						iconModel)
-				{
-					private static final long serialVersionUID = 5504461189222207917L;
+		
+		MediaSelectionPanel imagePanel = new MediaSelectionPanel("dealOfferLogo", offer.getMerchant().getId(), MediaType.DEAL_OFFER_LOGO, iconModel)
+		{
 
-					@Override
-					public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media)
-					{
-						// re-init the preview
-						dummyDeal.getDealOffer().setDealOfferLogo(media);
-						dealPreview.init(dummyDeal);
-						target.add(dealPreview);
-					}
-
-				};
-		addOrReplace(iconPanel);
-		iconPanel.getMediaSelect().add(new DealPreviewUpdatingBehavior(dealPreview, DealComponent.DEAL_OFFER, "onChange"));
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public void onMediaPicked(AjaxRequestTarget target, MerchantMedia media) {
+				dummyDeal.getDealOffer().setDealOfferLogo(media);
+				dealPreview.init(dummyDeal);
+				target.add(dealPreview);
+			}
+			
+		};
+		addOrReplace(imagePanel);
 	}
 	
 	private Deal getDummyDeal()

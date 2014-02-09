@@ -10,10 +10,8 @@ import org.apache.wicket.model.ResourceModel;
 import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantMedia;
-import com.talool.website.component.MerchantMediaWizardPanel;
+import com.talool.website.panel.image.selection.MediaSelectionPanel;
 import com.talool.website.panel.merchant.MerchantPreview;
-import com.talool.website.panel.merchant.MerchantPreviewUpdatingBehavior;
-import com.talool.website.panel.merchant.MerchantPreviewUpdatingBehavior.MerchantComponent;
 
 public class MerchantLocationImage extends WizardStep
 {
@@ -43,13 +41,13 @@ public class MerchantLocationImage extends WizardStep
 
 		selectedImage = merchant.getCurrentLocation().getMerchantImage();
 		PropertyModel<MerchantMedia> selectedImageModel = new PropertyModel<MerchantMedia>(this,"selectedImage");
-		MerchantMediaWizardPanel imagePanel = new MerchantMediaWizardPanel("merchantMediaImage", merchant.getId(), MediaType.MERCHANT_IMAGE, selectedImageModel)
+		MediaSelectionPanel imagePanel = new MediaSelectionPanel("merchantMediaImage", merchant.getId(), MediaType.MERCHANT_IMAGE, selectedImageModel)
 		{
 
 			private static final long serialVersionUID = 1L;
-
+			
 			@Override
-			public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media) {
+			public void onMediaPicked(AjaxRequestTarget target, MerchantMedia media) {
 				selectedImage = media;
 				merchant.getCurrentLocation().setMerchantImage(media);
 				merchantPerview.init(merchant);
@@ -58,10 +56,7 @@ public class MerchantLocationImage extends WizardStep
 			
 		};
 		addOrReplace(imagePanel);
-		imagePanel.getMediaSelect()
-			.add(new MerchantPreviewUpdatingBehavior(merchantPerview, MerchantComponent.IMAGE, "onChange"));
 		
-
 	}
 
 	/*
