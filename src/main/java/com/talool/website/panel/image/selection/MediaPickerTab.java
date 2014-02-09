@@ -1,6 +1,5 @@
 package com.talool.website.panel.image.selection;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -21,7 +20,6 @@ abstract public class MediaPickerTab extends Panel
 
 	private MerchantMediaListModel mediaListModel;
 	private IModel<MerchantMedia> selectedMediaModel;
-	private DropDownChoice<MerchantMedia> mediaSelect;
 
 	public MediaPickerTab(String id, UUID merchantId, MediaType mediaType, IModel<MerchantMedia> model)
 	{
@@ -30,32 +28,23 @@ abstract public class MediaPickerTab extends Panel
 		mediaListModel = new MerchantMediaListModel();
 		mediaListModel.setMerchantId(merchantId);
 		mediaListModel.setMediaType(mediaType);
-
-		ChoiceRenderer<MerchantMedia> cr = new ChoiceRenderer<MerchantMedia>("mediaName", "mediaUrl");
-
+		
 		selectedMediaModel = model;
 		
-		// TODO not sure I really want to set the default like this...
-		/*
-		if (model.getObject()==null)
-		{
-			List<MerchantMedia> list = mediaListModel.getObject();
-			if (!list.isEmpty())
-			{
-				selectedMediaModel.setObject(list.get(0));
-			}
-		}
-		*/
-
-		mediaSelect = new DropDownChoice<MerchantMedia>("availableMedia", selectedMediaModel, mediaListModel, cr);
-		mediaSelect.setNullValid(true);
 	}
 
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		add(mediaSelect.setOutputMarkupId(true));
+
+		ChoiceRenderer<MerchantMedia> cr = new ChoiceRenderer<MerchantMedia>("mediaName", "mediaUrl");
+		
+		DropDownChoice<MerchantMedia> mediaSelect = new DropDownChoice<MerchantMedia>("availableMedia", selectedMediaModel, mediaListModel, cr);
+		mediaSelect.setNullValid(true);
+		mediaSelect.setOutputMarkupId(true);
+		add(mediaSelect);
+		
 		mediaSelect.add(new AjaxFormComponentUpdatingBehavior("onChange"){
 
 			private static final long serialVersionUID = 1L;
@@ -66,11 +55,6 @@ abstract public class MediaPickerTab extends Panel
 			}
 			
 		});
-	}
-
-	public DropDownChoice<MerchantMedia> getMediaSelect()
-	{
-		return mediaSelect;
 	}
 
 	abstract public void onMediaSelectionComplete(AjaxRequestTarget target, MerchantMedia media);

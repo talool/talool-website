@@ -20,10 +20,8 @@ import com.talool.core.MerchantMedia;
 import com.talool.website.component.StaticImage;
 import com.talool.website.models.MerchantLocationListModel;
 import com.talool.website.pages.BasePage;
-import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.merchant.definition.MerchantLocationPanel;
 import com.talool.website.panel.merchant.wizard.MerchantWizard;
 import com.talool.website.panel.merchant.wizard.MerchantWizard.MerchantWizardMode;
 import com.talool.website.util.SessionUtils;
@@ -116,9 +114,6 @@ public class MerchantLocationsPanel extends BaseTabPanel
 					item.add(webpage);
 				}
 
-				BasePage page = (BasePage) this.getPage();
-				final AdminModalWindow modal = page.getModal();
-				final SubmitCallBack callback = page.getCallback(modal);
 				item.add(new AjaxLink<Void>("editLink")
 				{
 

@@ -64,4 +64,16 @@ body.talool .wiz {
 .wiz iframe
 {
 	margin-top: 10px;
+	border: 2px solid #eee;
+	border-radius: 10px;
+}
+
+.wiz .mediaSelectionPanel
+{
+	margin-top: 20px;
+}
+
+.wiz .offerWiz .panel.left 
+{
+	width: 380px;
 }

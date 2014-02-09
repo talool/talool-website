@@ -24,6 +24,7 @@ public abstract class MediaSelectionPanel extends Panel {
 	private MediaType mediaType;
 	private IModel<MerchantMedia> merchantMediaModel;
 	private AjaxTabbedPanel<ITab> tabbedPanel;
+	private int iframeHeight = 300;
 	
 	public MediaSelectionPanel(String id, UUID mid, MediaType mt, IModel<MerchantMedia> model) {
 		super(id);
@@ -51,6 +52,11 @@ public abstract class MediaSelectionPanel extends Panel {
 		}
 		
 
+	}
+	
+	public void setIFrameHeight(int h)
+	{
+		iframeHeight = h;
 	}
 	
 	private List<ITab> getTabs()
@@ -124,7 +130,7 @@ public abstract class MediaSelectionPanel extends Panel {
 			public Panel getPanel(String panelId)
 			{
 
-				return new MediaUploadTab(panelId, merchantId, mediaType)
+				MediaUploadTab uploadTab = new MediaUploadTab(panelId, merchantId, mediaType)
 				{
 
 					private static final long serialVersionUID = 1L;
@@ -143,6 +149,8 @@ public abstract class MediaSelectionPanel extends Panel {
 					}
 					
 				};
+				uploadTab.setIFrameHeight(iframeHeight);
+				return uploadTab;
 				
 			}
 		});

@@ -3,7 +3,9 @@ package com.talool.website.panel.image.selection;
 import java.util.UUID;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,8 @@ abstract public class MediaUploadTab extends Panel
 	private PageParameters params = new PageParameters();
 	private UUID merchantId;
 	private MediaType mediaType;
+	private int iframeHeight = 300;
+	private int iframeWidth = 376;
 
 	private transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
@@ -45,7 +49,7 @@ abstract public class MediaUploadTab extends Panel
 	{
 		super.onInitialize();
 
-		add(new UploadIFrame("uploaderIFrame", params)
+		UploadIFrame iframe = new UploadIFrame("uploaderIFrame", params)
 		{
 
 			private static final long serialVersionUID = 1L;
@@ -58,16 +62,25 @@ abstract public class MediaUploadTab extends Panel
 				onMediaUploadComplete(target, merchantMedia);
 			}
 
-		});
+		};
 		
+		iframe.add(new AttributeAppender("height", new Model<Integer>(iframeHeight)));
+		iframe.add(new AttributeAppender("width", new Model<Integer>(iframeWidth)));
+		
+		add(iframe);
 		
 	}
-
+	
+	public void setIFrameHeight(int h)
+	{
+		iframeHeight = h;
+	}
 
 	private void saveMedia(MerchantMedia media)
 	{
 		try
 		{
+			// TODO use the image hash to check for duplicate images
 			taloolService.saveMerchantMedia(media);
 		}
 		catch (ServiceException se)

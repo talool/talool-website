@@ -27,10 +27,8 @@ import com.talool.core.MerchantLocation;
 import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
-import com.talool.website.component.MerchantMediaWizardPanel;
 import com.talool.website.panel.deal.DealPreview;
-import com.talool.website.panel.deal.DealPreviewUpdatingBehavior;
-import com.talool.website.panel.deal.DealPreviewUpdatingBehavior.DealComponent;
+import com.talool.website.panel.image.selection.MediaSelectionPanel;
 import com.talool.website.panel.merchant.definition.MerchantDealOfferPanel;
 import com.talool.website.util.SessionUtils;
 
@@ -88,12 +86,14 @@ public class CreateDealOffer extends DynamicWizardStep {
 		
 		image = dealOffer.getDealOfferLogo();
 		PropertyModel<MerchantMedia> selectedMediaModel = new PropertyModel<MerchantMedia>(this,"image");
-		MerchantMediaWizardPanel mediaPanel = 
-				new MerchantMediaWizardPanel("dealOfferLogo", dealOffer.getMerchant().getId(), MediaType.DEAL_OFFER_LOGO, selectedMediaModel) {
-			private static final long serialVersionUID = 1L;
+		
+		MediaSelectionPanel imagePanel = new MediaSelectionPanel("dealOfferLogo", dealOffer.getMerchant().getId(), MediaType.DEAL_OFFER_LOGO, selectedMediaModel)
+		{
 
+			private static final long serialVersionUID = 1L;
+			
 			@Override
-			public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media) {
+			public void onMediaPicked(AjaxRequestTarget target, MerchantMedia media) {
 				image = media;
 				dealOffer.setDealOfferLogo(media);
 				deal.setDealOffer(dealOffer);
@@ -103,9 +103,8 @@ public class CreateDealOffer extends DynamicWizardStep {
 			}
 			
 		};
-		mediaPanel.getMediaSelect()
-			.add(new DealPreviewUpdatingBehavior(dealPreview, DealComponent.DEAL_OFFER, "onChange"));
-		addOrReplace(mediaPanel);
+		imagePanel.setIFrameHeight(150);
+		addOrReplace(imagePanel);
 		
 	}
 

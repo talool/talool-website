@@ -27,7 +27,7 @@
 			    </div>
 			    <div>
 		    		<label></label>
-		    		<input wicket:id="isActive" class="chbx" type="checkbox">Is Active</input>
+		    		<input wicket:id="isActive" class="chbx" type="checkbox"/>Is Active
 		    	</div>
 	    	</fieldset>
 		</div>
@@ -37,17 +37,5 @@
 	  $(function() {
 	    $( "#datepicker_do" ).datepicker();
 	  });
-	  $("#dt").change(function () {
-			var str = "";
-			$("select option:selected").each(function () {
-			   if( $(this).text()=='FREE_BOOK' || $(this).text()=='FREE_DEAL' )
-			   {
-			     $('#price').val("0.0").attr("disabled", "disabled");
-			   }
-			   else {   $('#price').val("").removeAttr("disabled");  }
-			  
-			});
-			
-		})
 	</script>
 </wicket:panel>

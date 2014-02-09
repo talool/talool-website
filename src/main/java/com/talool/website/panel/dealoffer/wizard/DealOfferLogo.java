@@ -58,6 +58,7 @@ public class DealOfferLogo extends WizardStep
 			}
 			
 		};
+		imagePanel.setIFrameHeight(150);
 		addOrReplace(imagePanel);
 	}
 	

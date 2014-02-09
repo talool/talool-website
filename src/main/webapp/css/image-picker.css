@@ -9,6 +9,12 @@ ul.thumbnails.image_picker_selector {
   	border-bottom: 1px solid rgba(215, 215, 215, 1);
   	height: 300px;
 }
+
+.shortMediaPicker ul.thumbnails.image_picker_selector 
+{
+	height: 150px;
+}
+
 ul.thumbnails.image_picker_selector ul {
     overflow: auto;
     list-style-image: none;
@@ -35,7 +41,7 @@ ul.thumbnails.image_picker_selector li .thumbnail {
 }
 ul.thumbnails.image_picker_selector li .thumbnail img {
     -webkit-user-drag: none;
-    height: 34px;
+    max-height: 34px;
 }
 ul.thumbnails.image_picker_selector li .thumbnail.selected {
     border: 3px solid rgb(241, 90, 36);

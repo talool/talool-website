@@ -18,6 +18,7 @@ import com.talool.website.panel.dealoffer.FindDealsPreview;
 import com.talool.website.panel.image.selection.MediaSelectionPanel;
 import com.vividsolutions.jts.geom.Geometry;
 
+@SuppressWarnings("unused")
 public class DealOfferIcon extends WizardStep
 {
 
@@ -83,6 +84,7 @@ public class DealOfferIcon extends WizardStep
 			}
 			
 		};
+		imagePanel.setIFrameHeight(150);
 		addOrReplace(imagePanel);
 
 	}

@@ -12,11 +12,9 @@
  
  /* Doug's overrides */
 .fileupload-buttonbar {
-	border: 2px solid #eee;
-	border-radius: 10px;
 	background: rgb(250,250,250);
 	text-align: center;
-	height: 295px;
+	height: 500px;
 }
 .fileupload-buttonbar b {
 	color: rgb(220,220,220);
