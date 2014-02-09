@@ -13,10 +13,15 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.MerchantMedia;
+import com.talool.core.service.ServiceException;
+import com.talool.core.service.TaloolService;
 import com.talool.website.component.StaticImage;
 import com.talool.website.models.MerchantLocationListModel;
 import com.talool.website.pages.BasePage;
@@ -34,6 +39,7 @@ import com.talool.website.util.SessionUtils;
 public class MerchantLocationsPanel extends BaseTabPanel
 {
 	private static final long serialVersionUID = 3634980968241854373L;
+	private static final Logger LOG = LoggerFactory.getLogger(MerchantDealsPanel.class);
 	private UUID _merchantId;
 	private MerchantWizard wizard;
 
@@ -123,8 +129,19 @@ public class MerchantLocationsPanel extends BaseTabPanel
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						Merchant merchant = SessionUtils.getSession().getMerchantAccount().getMerchant();
-						merchant.setCurrentLocation(managedLocation);
+						Merchant merchant = managedLocation.getMerchant();
+						
+						TaloolService service = FactoryManager.get()
+									.getServiceFactory().getTaloolService();
+						try {
+							service.reattach(merchant);
+							merchant.setCurrentLocation(managedLocation);
+						} catch (ServiceException se) {
+							LOG.error("Failed to reattact merchant",se);
+						} catch (Exception e) {
+							LOG.error("Failed to set current location",e);
+						}
+
 						wizard.setModelObject(merchant);
 						wizard.open(target);
 					}

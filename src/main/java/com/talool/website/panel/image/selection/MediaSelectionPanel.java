@@ -42,7 +42,7 @@ public abstract class MediaSelectionPanel extends Panel {
 		add(tabbedPanel);
 		
 		// selecting the correct tab
-		if (!getMyMedia().isEmpty() && !isCurrentMediaMine())
+		if (!getMyMedia().isEmpty() && !isCurrentMediaMine() && merchantMediaModel.getObject() != null)
 		{
 			tabbedPanel.setSelectedTab(1);
 		}
