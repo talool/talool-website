@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.wicketstuff.gmap.GMap;
 
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
@@ -184,6 +185,11 @@ public class MerchantLocationsPage extends BasePage
 			}
 		};
 		add(wizard);
+		
+		// preload the map to avoid a race condition with the loading of js
+		// dependencies
+		GMap map = new GMap("preloadMap");
+		add(map);
 	}
 
 	@Override
