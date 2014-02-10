@@ -163,7 +163,7 @@ public class MerchantDealsPanel extends BaseTabPanel
 		actionLink.setOutputMarkupId(true);
 
 		// Wizard
-		wizard = new DealWizard("wiz", "Deal Wizard")
+		wizard = new DealWizard("dealWiz", "Deal Wizard")
 		{
 
 			private static final long serialVersionUID = 1L;
@@ -176,7 +176,7 @@ public class MerchantDealsPanel extends BaseTabPanel
 				target.add(container);
 			}
 		};
-		add(wizard);
+		addOrReplace(wizard.setOutputMarkupId(true));
 
 	}
 

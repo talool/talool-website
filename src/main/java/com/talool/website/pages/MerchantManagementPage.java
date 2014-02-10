@@ -10,14 +10,13 @@ import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.wicketstuff.gmap.GMap;
 
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.merchant.BookCodesPanel;
 import com.talool.website.panel.merchant.MerchantAccountsPanel;
 import com.talool.website.panel.merchant.MerchantDealOffersPanel;
 import com.talool.website.panel.merchant.MerchantDealsPanel;
 import com.talool.website.panel.merchant.MerchantLocationsPanel;
-import com.talool.website.panel.merchant.RedemptionCodeLookupPanel;
 import com.talool.website.panel.message.MerchantMessages;
 import com.talool.website.util.SecuredPage;
 
@@ -132,6 +131,11 @@ public class MerchantManagementPage extends BaseManagementPage
 		};
 		tabbedPanel.setSelectedTab(0);
 		add(tabbedPanel);
+		
+		// preload the map to avoid a race condition with the loading of js
+		// dependencies
+		GMap map = new GMap("preloadMap");
+		add(map);
 
 	}
 
