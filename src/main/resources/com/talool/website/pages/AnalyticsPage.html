@@ -1,32 +1,34 @@
-<wicket:head>
-	<link rel="stylesheet" type="text/css" href="/css/stats.css"/>
-</wicket:head>
-
-<wicket:extend>
-	<div>
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+		<link rel="stylesheet" type="text/css" href="/css/stats.css"/>
+	</wicket:head>
 	
-		<div wicket:id="customerChart"></div>
-		<div wicket:id="locationChart"></div>
-		<div wicket:id="bookChart" style="clear:left"></div>
-		<div wicket:id="purchaseChart"></div>
-		<div wicket:id="activationChart" style="clear:left"></div>
-		<div wicket:id="redemptionChart"></div>
-		<div wicket:id="giftChart" style="clear:left"></div>
+	<wicket:extend>
+		<div>
 		
-		<div style="clear:both"></div>
-	</div>	
-	<div wicket:id="totalCustomers"></div>
+			<div id="customerChart"></div>
+			<div id="locationChart"></div>
+			<div id="bookChart" style="clear:left"></div>
+			<div id="purchaseChart"></div>
+			<div id="activationChart" style="clear:left"></div>
+			<div id="redemptionChart"></div>
+			<div id="giftChart" style="clear:left"></div>
+			
+			<div style="clear:both"></div>
+		</div>	
+		<div wicket:id="totalCustomers"></div>
+		
+		<div wicket:id="totalFacebookCustomers"></div>
+		
+		<div wicket:id="totalRedemptions"></div>
+		
+		<div wicket:id="totalEmailGifts"></div>
+		
+		<div wicket:id="totalFacebookGifts"></div>
+		
+		<div wicket:id="activationStatRptr">
+			<div wicket:id="totalActivations"></div>
+		</div>
 	
-	<div wicket:id="totalFacebookCustomers"></div>
-	
-	<div wicket:id="totalRedemptions"></div>
-	
-	<div wicket:id="totalEmailGifts"></div>
-	
-	<div wicket:id="totalFacebookGifts"></div>
-	
-	<div wicket:id="activationStatRptr">
-		<div wicket:id="totalActivations"></div>
-	</div>
-
-</wicket:extend>
+	</wicket:extend>
+</html>

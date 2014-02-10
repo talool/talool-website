@@ -1,7 +1,5 @@
 package com.talool.website.pages;
 
-import java.util.UUID;
-
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -9,14 +7,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.service.AnalyticService.ActivationCodeSummary;
 import com.talool.website.models.ActivationCodeSummaryModel;
-import com.talool.website.models.MetricListModel;
-import com.talool.website.models.MetricListModel.CHART_RANGE;
-import com.talool.website.models.MetricListModel.CHART_TYPE;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.analytics.ChartPanel;
 import com.talool.website.panel.analytics.ScoreBoardFactory;
 import com.talool.website.util.SecuredPage;
-import com.talool.website.util.SessionUtils;
 
 /**
  * 
@@ -44,8 +37,9 @@ public class AnalyticsPage extends BasePage
 	{
 		super.onInitialize();
 
+		/*
 		UUID merchantId = SessionUtils.getSession().getMerchantAccount().getMerchant().getId();
-
+		
 		MetricListModel customerChartModel = new MetricListModel(merchantId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.CUSTOMERS);
 		add(new ChartPanel("customerChart", "Customers", customerChartModel));
 
@@ -66,7 +60,8 @@ public class AnalyticsPage extends BasePage
 
 		MetricListModel giftChartModel = new MetricListModel(merchantId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.GIFTS);
 		add(new ChartPanel("giftChart", "Gifts", giftChartModel));
-
+		*/
+		
 		add(ScoreBoardFactory.createTotalCustomers("totalCustomers").setRenderBodyOnly(true));
 
 		add(ScoreBoardFactory.createTotalRedemptions("totalRedemptions").setRenderBodyOnly(true));
