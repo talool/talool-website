@@ -13,6 +13,7 @@ import com.talool.service.ServiceFactory;
 import com.talool.stats.CustomerSummary;
 import com.talool.stats.PaginatedResult;
 import com.talool.website.pages.CustomerSearchDataProvider.CustomerSearchOpts.CustomerSearchType;
+import com.talool.website.service.PermissionService;
 import com.talool.website.util.SessionUtils;
 
 /**
@@ -34,10 +35,12 @@ public class CustomerSearchDataProvider implements IDataProvider<CustomerSummary
 		String sortParameter;
 		boolean isAscending;
 		CustomerSearchType customerSearchType;
+		private Integer cappedResultCount; // if capped result, size wont report
+																				// more than this amount
 
 		public enum CustomerSearchType
 		{
-			PublisherCustomerSummaryByEmail("Email Address"), MostRecent("Most Recent");
+			PublisherCustomerSummaryByEmail("Email Address"), RecentRegistrations("Recent Registrations");
 			private String displayVal;
 
 			private CustomerSearchType(String displayVal)
@@ -64,6 +67,12 @@ public class CustomerSearchDataProvider implements IDataProvider<CustomerSummary
 			return this;
 		}
 
+		public CustomerSearchOpts setCappedResultCount(final Integer cappedResultCount)
+		{
+			this.cappedResultCount = cappedResultCount;
+			return this;
+		}
+
 	}
 
 	public CustomerSearchDataProvider(final CustomerSearchOpts customerSearchOpts)
@@ -71,36 +80,53 @@ public class CustomerSearchDataProvider implements IDataProvider<CustomerSummary
 		this.customerSearchOpts = customerSearchOpts;
 	}
 
+	private static boolean canViewAllCustomers()
+	{
+		return PermissionService.get().canViewAllCustomers(SessionUtils.getSession().getMerchantAccount().getEmail());
+	}
+
 	@Override
 	public Iterator<? extends CustomerSummary> iterator(long first, long count)
 	{
 		Iterator<? extends CustomerSummary> iter = null;
 		PaginatedResult<CustomerSummary> results = null;
-		SearchOptions searchOpts = null;
+		final SearchOptions searchOpts = new SearchOptions.Builder().
+				sortProperty(customerSearchOpts.sortParameter).ascending(customerSearchOpts.isAscending)
+				.maxResults(Integer.valueOf(String.valueOf(count)))
+				.firstResult(first).build();
+
+		final boolean canViewAllCustomers = canViewAllCustomers();
 
 		try
 		{
 			if (customerSearchOpts.customerSearchType == CustomerSearchType.PublisherCustomerSummaryByEmail)
 			{
-				searchOpts = new SearchOptions.Builder().
-						sortProperty(customerSearchOpts.sortParameter).ascending(customerSearchOpts.isAscending)
-						.maxResults(Integer.valueOf(String.valueOf(count)))
-						.firstResult(first).build();
+				if (canViewAllCustomers)
+				{
+					results = ServiceFactory.get().getCustomerService().getCustomerSummary(searchOpts, customerSearchOpts.email, false);
+				}
+				else
+				{
+					results = ServiceFactory.get().getCustomerService()
+							.getPublisherCustomerSummaryByEmail(SessionUtils.getSession().getMerchantAccount().getMerchant().getId(),
+									searchOpts, customerSearchOpts.email, false);
+				}
 
-				results = ServiceFactory.get().getCustomerService()
-						.getPublisherCustomerSummaryByEmail(SessionUtils.getSession().getMerchantAccount().getMerchant().getId(),
-								searchOpts, customerSearchOpts.email, false);
 			}
-			else if (customerSearchOpts.customerSearchType == CustomerSearchType.MostRecent)
+			else if (customerSearchOpts.customerSearchType == CustomerSearchType.RecentRegistrations)
 			{
-				searchOpts = new SearchOptions.Builder().
-						sortProperty(customerSearchOpts.sortParameter).ascending(customerSearchOpts.isAscending)
-						.maxResults(Integer.valueOf(String.valueOf(count)))
-						.firstResult(first).build();
 
-				results = ServiceFactory.get().getCustomerService()
-						.getPublisherCustomerSummary(SessionUtils.getSession().getMerchantAccount().getMerchant().getId(),
-								searchOpts, false);
+				if (canViewAllCustomers)
+				{
+					results = ServiceFactory.get().getCustomerService().getCustomerSummary(searchOpts, false);
+				}
+				else
+				{
+					results = ServiceFactory.get().getCustomerService()
+							.getPublisherCustomerSummary(SessionUtils.getSession().getMerchantAccount().getMerchant().getId(),
+									searchOpts, false);
+				}
+
 			}
 
 			if (results != null)
@@ -120,22 +146,40 @@ public class CustomerSearchDataProvider implements IDataProvider<CustomerSummary
 	@Override
 	public long size()
 	{
+
 		if (size != null)
 		{
 			return size;
 		}
 
+		final boolean canViewAllCustomers = canViewAllCustomers();
+
 		try
 		{
 			if (customerSearchOpts.customerSearchType == CustomerSearchType.PublisherCustomerSummaryByEmail)
 			{
-				size = ServiceFactory.get().getCustomerService()
-						.getPublisherCustomerSummaryEmailCount(SessionUtils.getSession().getMerchantAccount().getMerchant().getId(), customerSearchOpts.email);
+				if (canViewAllCustomers)
+				{
+					size = ServiceFactory.get().getCustomerService().getCustomerSummaryCount(customerSearchOpts.email);
+				}
+				else
+				{
+					size = ServiceFactory.get().getCustomerService()
+							.getPublisherCustomerSummaryEmailCount(SessionUtils.getSession().getMerchantAccount().getMerchant().getId(), customerSearchOpts.email);
+				}
 			}
-			else if (customerSearchOpts.customerSearchType == CustomerSearchType.MostRecent)
+			else if (customerSearchOpts.customerSearchType == CustomerSearchType.RecentRegistrations)
 			{
-				size = ServiceFactory.get().getCustomerService()
-						.getPublisherCustomerSummaryCount(SessionUtils.getSession().getMerchantAccount().getMerchant().getId());
+				if (canViewAllCustomers)
+				{
+					size = ServiceFactory.get().getCustomerService().getCustomerSummaryCount();
+				}
+				else
+				{
+					size = ServiceFactory.get().getCustomerService()
+							.getPublisherCustomerSummaryCount(SessionUtils.getSession().getMerchantAccount().getMerchant().getId());
+				}
+
 			}
 
 		}
@@ -143,11 +187,18 @@ public class CustomerSearchDataProvider implements IDataProvider<CustomerSummary
 		{
 			e.printStackTrace();
 		}
+
+		if (customerSearchOpts.cappedResultCount != null)
+		{
+			size = Math.min(customerSearchOpts.cappedResultCount, size);
+		}
+
 		return size;
+
 	}
 
 	@Override
-	public IModel<CustomerSummary> model(CustomerSummary object)
+	public IModel<CustomerSummary> model(final CustomerSummary object)
 	{
 		return Model.of(object);
 	}
