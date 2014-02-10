@@ -84,7 +84,6 @@ public class MapPreviewUpdatingBehaviorController implements Serializable {
 	private boolean isAddressComplete()
 	{
 		return (!StringUtils.isEmpty(address1) && 
-				!StringUtils.isEmpty(address2) && 
 				!StringUtils.isEmpty(city) && 
 				!StringUtils.isEmpty(state));
 	}

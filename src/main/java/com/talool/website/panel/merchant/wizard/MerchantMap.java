@@ -1,7 +1,7 @@
 package com.talool.website.panel.merchant.wizard;
 
 import java.util.ArrayList;
-import java.util.Set;
+import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -13,8 +13,6 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.wicketstuff.gmap.GMap;
 import org.wicketstuff.gmap.api.GLatLng;
-import org.wicketstuff.gmap.api.GMarker;
-import org.wicketstuff.gmap.api.GMarkerOptions;
 
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
@@ -54,29 +52,22 @@ public class MerchantMap extends WizardStep
 		map.setStreetViewControlEnabled(false);
 		map.setScaleControlEnabled(true);
 		map.setScrollWheelZoomEnabled(true);
-		map.setZoom(10);
 		addOrReplace(map);
 
 		/*
 		 * Put the pins on the map and center the map
 		 */
-		Set<MerchantLocation> locs = merchant.getLocations();
-		Point pin;
-		boolean centerMap = true;
-		for (final MerchantLocation location : locs)
+		List<GLatLng> markersToShow = new ArrayList<GLatLng>();
+		for (final MerchantLocation location : merchant.getLocations())
 		{
-			pin = (Point) location.getGeometry();
+			Point pin = (Point) location.getGeometry();
 			if (pin != null)
 			{
-				if (centerMap)
-				{
-					GLatLng center = new GLatLng(pin.getY(), pin.getX());
-					map.setCenter(center);
-					centerMap = false;
-				}
-				map.addOverlay(new GMarker(new GMarkerOptions(map, new GLatLng(pin.getY(), pin.getX()))));
+				markersToShow.add(new GLatLng(pin.getY(), pin.getX()));
 			}
 		}
+		map.fitMarkers(markersToShow, true);
+		if (markersToShow.size() == 1) map.setZoom(10);
 
 		/*
 		 * Link to add more locations
