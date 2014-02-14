@@ -35,6 +35,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import com.talool.core.DealOffer;
 import com.talool.core.DealType;
+import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
 import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
@@ -44,7 +45,6 @@ import com.talool.website.models.DealOfferListModel;
 import com.talool.website.models.DealOfferModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.MerchantManagementPage;
-import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.dealoffer.wizard.DealOfferWizard;
 import com.talool.website.service.PermissionService;
@@ -57,6 +57,7 @@ public class DealOffersPage extends BasePage
 {
 	private static final Logger LOG = Logger.getLogger(DealOffersPage.class);
 	private static final long serialVersionUID = 2102415289760762365L;
+	private static final String talool = "Talool";
 	private int downloadCodeCount;
 	private DealOfferWizard wizard;
 
@@ -192,12 +193,44 @@ public class DealOffersPage extends BasePage
 					item.add(new Label("expires"));
 				}
 				
-				
+				// TODO change this to a publish button
 				item.add(new Label("isActive"));
+				
+				StringBuilder confirm = new StringBuilder();
+				confirm.append("Are you sure you want to remove \"").append(title).append("\"?");
+				ConfirmationIndicatingAjaxLink<Void> deleteLink = new ConfirmationIndicatingAjaxLink<Void>("deleteLink", JavaScriptUtils.escapeQuotes(confirm.toString()).toString())
+				{
+					private static final long serialVersionUID = 268692101349122303L;
 
-				BasePage page = (BasePage) this.getPage();
-				final AdminModalWindow modal = page.getModal();
-				final SubmitCallBack callback = page.getCallback(modal);
+					@Override
+					public void onClick(AjaxRequestTarget target)
+					{
+						getSession().getFeedbackMessages().clear();
+						try 
+						{
+							// Make "not active" and assign it to Talool. 
+							// This will hide it from the publisher without deleting the offer.
+							// If it has ever been active, we don't want to delete it because 
+							// we want to preserve the history.
+							// TODO detected if the book was every sold, and delete if possible
+							List<Merchant> merchants = taloolService.getMerchantByName(talool);
+							dealOffer.setMerchant(merchants.get(0));
+							dealOffer.setActive(false);
+							taloolService.merge(dealOffer);
+							target.add(container);
+							Session.get().success(dealOffer.getTitle() + " has been sent back to Talool.  Contact us if you want it back.");
+						} 
+						catch (ServiceException se)
+						{
+							LOG.error("problem fetcing the talool merchant id", se);
+							Session.get().error("There was a problem removing " +dealOffer.getTitle() + ".  Contact us if you want it removed manually.");
+						}
+						target.add(feedback);
+						
+					}
+				};
+				item.add(deleteLink);
+
 				AjaxLink<Void> editLink = new AjaxLink<Void>("editLink")
 				{
 					private static final long serialVersionUID = 268692101349122303L;
