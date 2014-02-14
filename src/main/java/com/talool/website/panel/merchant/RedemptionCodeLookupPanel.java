@@ -3,6 +3,7 @@ package com.talool.website.panel.merchant;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
@@ -17,8 +18,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.wicketstuff.objectautocomplete.ObjectAutoCompleteField;
@@ -105,7 +108,9 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 				Date redemptionDate = dac.getRedemptionDate();
 				
 				DateTime localDate = new DateTime(redemptionDate.getTime());
-				DateTimeFormatter formatter = DateTimeFormat.forPattern("EEE, MMM d, yyyy 'at' h:mm:ss a z");
+				DateTimeZone tz = DateTimeZone.forID(getTimeZone().getID());
+				DateTimeFormatter formatter = DateTimeFormat.forPattern("EEE, MMM d, yyyy 'at' h:mm:ss a z").withZone(tz);
+				
 				String rDate = formatter.print(localDate);
 				
 				item.add(new Label("redemptionDate", rDate));
@@ -200,6 +205,25 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
 	{
 		return null;
+	}
+	
+	public TimeZone getTimeZone() 
+	{
+		// start with the server timezone
+		TimeZone timezone = TimeZone.getDefault();
+		
+		// update with the client's timezone if possible
+		WebClientInfo info = (WebClientInfo)getSession().getClientInfo();
+		if (info != null)
+		{
+			TimeZone tz = info.getProperties().getTimeZone();
+			if (tz != null)
+			{
+				timezone = tz;
+			}
+		}	
+		
+		return timezone;
 	}
 
 

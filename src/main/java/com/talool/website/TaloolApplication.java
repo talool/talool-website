@@ -212,6 +212,8 @@ public class TaloolApplication extends WebApplication implements Serializable
 
 		// getApplicationSettings().setInternalErrorPage(ErrorPage.class);
 
+		getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
+		
 		final AuthStrategy authStrat = new AuthStrategy();
 		getSecuritySettings().setAuthorizationStrategy(authStrat);
 		getSecuritySettings().setUnauthorizedComponentInstantiationListener(authStrat);

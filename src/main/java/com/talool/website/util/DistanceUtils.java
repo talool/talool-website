@@ -48,7 +48,7 @@ public class DistanceUtils {
 	
 	public static double distance(Geometry loc1, Geometry loc2, String unit)
 	{
-		return distance(loc1.getCoordinate().x, loc1.getCoordinate().y, loc2.getCoordinate().x, loc2.getCoordinate().y, unit);
+		return distance(loc1.getCoordinate().y, loc1.getCoordinate().x, loc2.getCoordinate().y, loc2.getCoordinate().x, unit);
 	}
 
 	public static double degToRadians(double deg) {
