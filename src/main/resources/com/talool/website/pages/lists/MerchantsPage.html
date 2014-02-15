@@ -1,5 +1,6 @@
 <wicket:extend xmlns:wicket="http://wicket.apache.org">
 	<div wicket:id="merchantList">
+		<div wicket:id="navigator" style="float:right;margin-bottom:5px;">[dataview navigator]</div>
 	  	<table>
 	  		<thead>
 	  			<tr>
@@ -15,13 +16,13 @@
 	  				<td>
 	  					<a href="#" wicket:id="nameLink"></a>
 	  				</td>
-	  				<td wicket:id="category.name"></td>
+	  				<td wicket:id="category"></td>
 	  				<td>
-	  					<div wicket:id="primaryLocation.address1"></div>
-						<div wicket:id="primaryLocation.address2"></div>
+	  					<div wicket:id="address1"></div>
+						<div wicket:id="address2"></div>
 						<div>
-							<span wicket:id="primaryLocation.niceCityState"></span>
-							<span wicket:id="primaryLocation.zip"></span>
+							<span wicket:id="city"></span>, <span wicket:id="state"></span>
+							<span wicket:id="zip"></span>
 						</div>
 	  				</td>
 					<td wicket:id="multiple"></td>

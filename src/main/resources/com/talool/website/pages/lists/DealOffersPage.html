@@ -1,5 +1,7 @@
-<wicket:extend>
+<wicket:extend xmlns:wicket="http://wicket.apache.org">
+	
 	<div wicket:id="bookList">
+		<div wicket:id="navigator" style="float:right;margin-bottom:5px;">[dataview navigator]</div>
 		<table>
 	  		<thead>
 	  			<tr>
@@ -19,7 +21,7 @@
 	  				<td wicket:id="pubColCell"><a wicket:id="merchantLink"></a></td>
 	  				<td wicket:id="location"></td>
 	  				<td wicket:id="price"></td>
-	  				<td wicket:id="dealType"></td>
+	  				<td wicket:id="offerType"></td>
 	  				<td wicket:id="expires"></td>
 	  				<td wicket:id="isActive"></td>
 	  				<td class="orange-font">
@@ -32,5 +34,7 @@
 	  		</tbody>
 	  	</table>
 	</div>
+	
 	<div wicket:id="wiz" class="wiz merchantWiz"></div>
+	
 </wicket:extend>

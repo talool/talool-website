@@ -4,7 +4,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.NumberFormat;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
@@ -13,14 +12,15 @@ import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -39,6 +39,7 @@ import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
 import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
+import com.talool.stats.DealOfferSummary;
 import com.talool.website.behaviors.AJAXDownload;
 import com.talool.website.component.ConfirmationIndicatingAjaxLink;
 import com.talool.website.models.DealOfferListModel;
@@ -50,7 +51,6 @@ import com.talool.website.panel.dealoffer.wizard.DealOfferWizard;
 import com.talool.website.service.PermissionService;
 import com.talool.website.util.SecuredPage;
 import com.talool.website.util.SessionUtils;
-import com.vividsolutions.jts.geom.Geometry;
 
 @SecuredPage
 public class DealOffersPage extends BasePage
@@ -60,6 +60,10 @@ public class DealOffersPage extends BasePage
 	private static final String talool = "Talool";
 	private int downloadCodeCount;
 	private DealOfferWizard wizard;
+	
+	private String sortParameter = "title";
+	private boolean isAscending = false;
+	private int itemsPerPage = 50;
 
 	public DealOffersPage()
 	{
@@ -99,21 +103,21 @@ public class DealOffersPage extends BasePage
 		container.add(bookTypeColHead.setOutputMarkupId(true));
 		bookTypeColHead.setVisible(isTaloolUserLoggedIn);
 
-		final ListView<DealOffer> books = new ListView<DealOffer>("offerRptr",
-				model)
+		final DataView<DealOfferSummary> books = new DataView<DealOfferSummary>("offerRptr",
+				new DealOfferSummaryDataProvider(sortParameter, isAscending))
 		{
 
 			private static final long serialVersionUID = 4104816505968727445L;
 
 			@Override
-			protected void populateItem(ListItem<DealOffer> item)
+			protected void populateItem(Item<DealOfferSummary> item)
 			{
 				sb.setLength(0);
-				final DealOffer dealOffer = item.getModelObject();
-				final UUID dealOfferId = dealOffer.getId();
+				final DealOfferSummary dealOffer = item.getModelObject();
+				final UUID dealOfferId = dealOffer.getOfferId();
 				final String title = dealOffer.getTitle();
 
-				item.setModel(new CompoundPropertyModel<DealOffer>(dealOffer));
+				item.setModel(new CompoundPropertyModel<DealOfferSummary>(dealOffer));
 
 				if (item.getIndex() % 2 == 0)
 				{
@@ -121,7 +125,7 @@ public class DealOffersPage extends BasePage
 				}
 
 				PageParameters dealsParams = new PageParameters();
-				dealsParams.set("id", dealOffer.getId());
+				dealsParams.set("id", dealOfferId);
 				dealsParams.set("name", dealOffer.getTitle());
 				String url = (String) urlFor(DealOfferDealsPage.class, dealsParams);
 				ExternalLink titleLink = new ExternalLink("titleLink", Model.of(url),
@@ -133,14 +137,16 @@ public class DealOffersPage extends BasePage
 				item.add(pubColCell.setOutputMarkupId(true));
 				pubColCell.setVisible(isTaloolUserLoggedIn);
 				PageParameters merchantParams = new PageParameters();
-				merchantParams.set("id", dealOffer.getMerchant().getId());
-				merchantParams.set("name", dealOffer.getMerchant().getName());
+				merchantParams.set("id", dealOffer.getMerchantId());
+				merchantParams.set("name", dealOffer.getMerchantName());
 				String mUrl = (String) urlFor(MerchantManagementPage.class, merchantParams);
 				ExternalLink merchantLink = new ExternalLink("merchantLink", Model.of(mUrl),
-						new PropertyModel<String>(dealOffer, "merchant.name"));
+						new PropertyModel<String>(dealOffer, "merchantName"));
 				pubColCell.add(merchantLink);
 				
+				item.add(new Label("location"));
 				
+				/*
 				Geometry geo = dealOffer.getGeometry();
 				if (geo == null)
 				{
@@ -171,13 +177,13 @@ public class DealOffersPage extends BasePage
 						}
 					}
 					item.add(new Label("location",locationLabel.toString()));
-				}
+				}*/
 
 				NumberFormat formatter = NumberFormat.getCurrencyInstance();
 				String moneyString = formatter.format(dealOffer.getPrice());
 				item.add(new Label("price", moneyString));
 				
-				Label dealType = new Label("dealType");
+				Label dealType = new Label("offerType");
 				item.add(dealType.setOutputMarkupId(true));
 				dealType.setVisible(isTaloolUserLoggedIn);
 				
@@ -190,7 +196,7 @@ public class DealOffersPage extends BasePage
 				}
 				else
 				{
-					item.add(new Label("expires"));
+					item.add(new Label("expires", ""));
 				}
 				
 				// TODO change this to a publish button
@@ -213,10 +219,11 @@ public class DealOffersPage extends BasePage
 							// If it has ever been active, we don't want to delete it because 
 							// we want to preserve the history.
 							// TODO detected if the book was every sold, and delete if possible
+							DealOffer offer = taloolService.getDealOffer(dealOfferId);
 							List<Merchant> merchants = taloolService.getMerchantByName(talool);
-							dealOffer.setMerchant(merchants.get(0));
-							dealOffer.setActive(false);
-							taloolService.merge(dealOffer);
+							offer.setMerchant(merchants.get(0));
+							offer.setActive(false);
+							taloolService.merge(offer);
 							target.add(container);
 							Session.get().success(dealOffer.getTitle() + " has been sent back to Talool.  Contact us if you want it back.");
 						} 
@@ -243,7 +250,7 @@ public class DealOffersPage extends BasePage
 						wizard.open(target);
 					}
 				};
-				item.add(editLink.setVisible(dealOffer.getType() != DealType.KIRKE_BOOK));
+				item.add(editLink.setVisible(dealOffer.getOfferType().equals(DealType.KIRKE_BOOK.toString())));
 
 				sb.append("Are you sure you want to copy \"").append(title).append("\" and all deals related?");
 				item.add(new ConfirmationIndicatingAjaxLink<Void>("copyLink",
@@ -391,8 +398,11 @@ public class DealOffersPage extends BasePage
 			}
 
 		};
-
+		books.setItemsPerPage(itemsPerPage);
 		container.add(books);
+		
+		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator("navigator", books);
+		container.add(pagingNavigator.setOutputMarkupId(true));
 		
 		// override the action button
 		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
