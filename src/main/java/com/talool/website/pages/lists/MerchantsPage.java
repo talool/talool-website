@@ -44,10 +44,13 @@ public class MerchantsPage extends BasePage
 	private static final long serialVersionUID = 9023714664854633955L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantsPage.class);
 	private static final String talool = "Talool";
+	private static final String CONTAINER_ID = "merchantList";
+	private static final String REPEATER_ID = "merchRptr";
+	private static final String NAVIGATOR_ID = "navigator";
 	private MerchantWizard wizard;
 	
 	private String sortParameter = "name";
-	private boolean isAscending = false;
+	private boolean isAscending = true;
 	private int itemsPerPage = 50;
 
 	public MerchantsPage()
@@ -65,12 +68,11 @@ public class MerchantsPage extends BasePage
 	{
 		super.onInitialize();
 
-		final WebMarkupContainer container = new WebMarkupContainer("merchantList");
+		final WebMarkupContainer container = new WebMarkupContainer(CONTAINER_ID);
 		container.setOutputMarkupId(true);
 		add(container);
-		
-		final DataView<MerchantSummary> merchants = new DataView<MerchantSummary>("merchRptr",
-				new MerchantSummaryDataProvider(sortParameter, isAscending))
+		final MerchantSummaryDataProvider dataProvider = new MerchantSummaryDataProvider(sortParameter, isAscending);
+		final DataView<MerchantSummary> merchants = new DataView<MerchantSummary>(REPEATER_ID,dataProvider)
 		{
 
 			private static final long serialVersionUID = 8844000843574646422L;
@@ -139,8 +141,31 @@ public class MerchantsPage extends BasePage
 		merchants.setItemsPerPage(itemsPerPage);
 		container.add(merchants);
 		
-		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator("navigator", merchants);
+		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, merchants);
 		container.add(pagingNavigator.setOutputMarkupId(true));
+		pagingNavigator.setVisible(dataProvider.size() > itemsPerPage);
+		
+		container.add(new AjaxLink<Void>("categoryLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("category", target);
+			}
+		});
+
+		container.add(new AjaxLink<Void>("nameLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("name", target);
+			}
+		});
 
 		// override the action button
 		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
@@ -186,6 +211,33 @@ public class MerchantsPage extends BasePage
 		// dependencies
 		GMap map = new GMap("preloadMap");
 		add(map);
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void doAjaxSearchRefresh(final String sortParam, final AjaxRequestTarget target)
+	{
+		WebMarkupContainer container = (WebMarkupContainer) get(CONTAINER_ID);
+
+		final DataView<MerchantSummary> dataView = ((DataView<MerchantSummary>) container.get(REPEATER_ID));
+		final MerchantSummaryDataProvider provider = (MerchantSummaryDataProvider) dataView.getDataProvider();
+
+		// toggle asc/desc
+		if (sortParam.equals(sortParameter))
+		{
+			isAscending = isAscending == true ? false : true;
+			provider.setAscending(isAscending);
+		}
+
+		this.sortParameter = sortParam;
+
+		provider.setSortParameter(sortParam);
+
+		final AjaxPagingNavigator pagingNavigator = (AjaxPagingNavigator) container.get(NAVIGATOR_ID);
+		pagingNavigator.getPageable().setCurrentPage(0);
+
+		target.add(container);
+		target.add(pagingNavigator);
 
 	}
 

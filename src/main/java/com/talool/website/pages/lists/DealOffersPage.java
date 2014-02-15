@@ -58,6 +58,9 @@ public class DealOffersPage extends BasePage
 	private static final Logger LOG = Logger.getLogger(DealOffersPage.class);
 	private static final long serialVersionUID = 2102415289760762365L;
 	private static final String talool = "Talool";
+	private static final String CONTAINER_ID = "bookList";
+	private static final String REPEATER_ID = "offerRptr";
+	private static final String NAVIGATOR_ID = "navigator";
 	private int downloadCodeCount;
 	private DealOfferWizard wizard;
 	
@@ -91,7 +94,7 @@ public class DealOffersPage extends BasePage
 			model.setMerchantId(SessionUtils.getSession().getMerchantAccount().getMerchant().getId());
 		}
 		
-		final WebMarkupContainer container = new WebMarkupContainer("bookList");
+		final WebMarkupContainer container = new WebMarkupContainer(CONTAINER_ID);
 		container.setOutputMarkupId(true);
 		add(container);
 		
@@ -102,9 +105,8 @@ public class DealOffersPage extends BasePage
 		WebMarkupContainer bookTypeColHead = new WebMarkupContainer("bookTypeColHead");
 		container.add(bookTypeColHead.setOutputMarkupId(true));
 		bookTypeColHead.setVisible(isTaloolUserLoggedIn);
-
-		final DataView<DealOfferSummary> books = new DataView<DealOfferSummary>("offerRptr",
-				new DealOfferSummaryDataProvider(sortParameter, isAscending))
+		final DealOfferSummaryDataProvider dataProvider = new DealOfferSummaryDataProvider(sortParameter, isAscending);
+		final DataView<DealOfferSummary> books = new DataView<DealOfferSummary>(REPEATER_ID, dataProvider)
 		{
 
 			private static final long serialVersionUID = 4104816505968727445L;
@@ -401,8 +403,42 @@ public class DealOffersPage extends BasePage
 		books.setItemsPerPage(itemsPerPage);
 		container.add(books);
 		
-		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator("navigator", books);
+		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, books);
 		container.add(pagingNavigator.setOutputMarkupId(true));
+		pagingNavigator.setVisible(dataProvider.size() > itemsPerPage);
+		
+		container.add(new AjaxLink<Void>("titleLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("title", target);
+			}
+		});
+
+		container.add(new AjaxLink<Void>("expiresLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("expires", target);
+			}
+		});
+		
+		container.add(new AjaxLink<Void>("activeLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("isActive", target);
+			}
+		});
 		
 		// override the action button
 		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
@@ -447,6 +483,33 @@ public class DealOffersPage extends BasePage
 			}
 		};
 		add(wizard);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void doAjaxSearchRefresh(final String sortParam, final AjaxRequestTarget target)
+	{
+		WebMarkupContainer container = (WebMarkupContainer) get(CONTAINER_ID);
+
+		final DataView<DealOfferSummary> dataView = ((DataView<DealOfferSummary>) container.get(REPEATER_ID));
+		final DealOfferSummaryDataProvider provider = (DealOfferSummaryDataProvider) dataView.getDataProvider();
+
+		// toggle asc/desc
+		if (sortParam.equals(sortParameter))
+		{
+			isAscending = isAscending == true ? false : true;
+			provider.setAscending(isAscending);
+		}
+
+		this.sortParameter = sortParam;
+
+		provider.setSortParameter(sortParam);
+
+		final AjaxPagingNavigator pagingNavigator = (AjaxPagingNavigator) container.get(NAVIGATOR_ID);
+		pagingNavigator.getPageable().setCurrentPage(0);
+
+		target.add(container);
+		target.add(pagingNavigator);
+
 	}
 
 	@Override
