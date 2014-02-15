@@ -2,20 +2,22 @@ package com.talool.website.pages.lists;
 
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.Deal;
 import com.talool.core.MerchantAccount;
-import com.talool.core.MerchantMedia;
+import com.talool.stats.DealSummary;
 import com.talool.website.component.StaticImage;
 import com.talool.website.models.DealListModel;
 import com.talool.website.models.DealModel;
@@ -29,6 +31,15 @@ import com.talool.website.util.SessionUtils;
 public class DealOfferDealsPage extends BasePage
 {
 	private static final long serialVersionUID = 6008230892463177176L;
+	
+	private static final String CONTAINER_ID = "dealList";
+	private static final String REPEATER_ID = "dealRptr";
+	private static final String NAVIGATOR_ID = "navigator";
+	
+	private String sortParameter = "merchantName";
+	private boolean isAscending = true;
+	private int itemsPerPage = 50;
+	
 	private UUID _dealOfferId;
 	private DealWizard wizard;
 
@@ -46,40 +57,40 @@ public class DealOfferDealsPage extends BasePage
 		DealListModel model = new DealListModel();
 		model.setDealOfferId(_dealOfferId);
 
-		final WebMarkupContainer container = new WebMarkupContainer("dealList");
+		final WebMarkupContainer container = new WebMarkupContainer(CONTAINER_ID);
 		container.setOutputMarkupId(true);
 		add(container);
 
-		final ListView<Deal> deals = new ListView<Deal>("dealRptr", model)
+		final DealSummaryDataProvider dataProvider = new DealSummaryDataProvider(_dealOfferId, sortParameter, isAscending);
+		final DataView<DealSummary> deals = new DataView<DealSummary>(REPEATER_ID,dataProvider)
 		{
 
 			private static final long serialVersionUID = 2705519558987278333L;
 
 			@Override
-			protected void populateItem(ListItem<Deal> item)
+			protected void populateItem(Item<DealSummary> item)
 			{
-				Deal deal = item.getModelObject();
-				final UUID dealId = deal.getId();
+				DealSummary deal = item.getModelObject();
+				final UUID dealId = deal.getDealId();
 
-				item.setModel(new CompoundPropertyModel<Deal>(deal));
+				item.setModel(new CompoundPropertyModel<DealSummary>(deal));
 
 				if (item.getIndex() % 2 == 0)
 				{
 					item.add(new AttributeModifier("class", "odd-row-bg"));
 				}
-				item.add(new Label("merchant.name"));
+				item.add(new Label("merchantName"));
 				item.add(new Label("title"));
 				item.add(new Label("summary"));
 				item.add(new Label("details"));
 				
-				MerchantMedia image = deal.getImage();
-				if (image==null)
+				if (StringUtils.isEmpty(deal.getImageUrl()))
 				{
 					item.add(new StaticImage("myimage", false, "/img/000.png"));
 				}
 				else
 				{
-					item.add(new StaticImage("myimage", false, image.getMediaUrl()));
+					item.add(new StaticImage("myimage", false, deal.getImageUrl()));
 				}
 				
 
@@ -100,8 +111,24 @@ public class DealOfferDealsPage extends BasePage
 			}
 
 		};
+		deals.setItemsPerPage(itemsPerPage);
 		container.add(deals);
+		
+		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, deals);
+		container.add(pagingNavigator.setOutputMarkupId(true));
+		pagingNavigator.setVisible(dataProvider.size() > itemsPerPage);
 
+		container.add(new AjaxLink<Void>("merchantSortLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("merchantName", target);
+			}
+		});
+		
 		// override the action button
 		final BasePage page = (BasePage) this.getPage();
 		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
@@ -139,6 +166,33 @@ public class DealOfferDealsPage extends BasePage
 			}
 		};
 		add(wizard);
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void doAjaxSearchRefresh(final String sortParam, final AjaxRequestTarget target)
+	{
+		WebMarkupContainer container = (WebMarkupContainer) get(CONTAINER_ID);
+
+		final DataView<DealSummary> dataView = ((DataView<DealSummary>) container.get(REPEATER_ID));
+		final DealSummaryDataProvider provider = (DealSummaryDataProvider) dataView.getDataProvider();
+
+		// toggle asc/desc
+		if (sortParam.equals(sortParameter))
+		{
+			isAscending = isAscending == true ? false : true;
+			provider.setAscending(isAscending);
+		}
+
+		this.sortParameter = sortParam;
+
+		provider.setSortParameter(sortParam);
+
+		final AjaxPagingNavigator pagingNavigator = (AjaxPagingNavigator) container.get(NAVIGATOR_ID);
+		pagingNavigator.getPageable().setCurrentPage(0);
+
+		target.add(container);
+		target.add(pagingNavigator);
 
 	}
 

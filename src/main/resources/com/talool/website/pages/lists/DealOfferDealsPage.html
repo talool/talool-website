@@ -1,9 +1,10 @@
-<wicket:extend>
+<wicket:extend xmlns:wicket="http://wicket.apache.org">
 	<div wicket:id="dealList">
+		<div wicket:id="navigator" style="float:right;margin-bottom:5px;">[dataview navigator]</div>
 		<table>
 	  		<thead>
 	  			<tr>
-	  				<th>Merchant</th>
+	  				<th><a wicket:id="merchantSortLink">Merchant</a></th>
 	  				<th>Deals</th>
 	  				<th>Image</th>
 	  				<th class="actionCol">Actions</th>
@@ -11,7 +12,7 @@
 	  		</thead>
 	  		<tbody>
 	  			<tr class="odd" wicket:id="dealRptr">
-	  				<td wicket:id="merchant.name"></td>
+	  				<td wicket:id="merchantName"></td>
 	  				<td class="dealListItem">
 	  					<div class="title" wicket:id="title"></div>
 	  					<div class="summary" wicket:id="summary"></div>
