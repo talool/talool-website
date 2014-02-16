@@ -1,11 +1,14 @@
 package com.talool.website.pages.lists;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
+import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -22,7 +25,11 @@ import org.slf4j.LoggerFactory;
 import org.wicketstuff.gmap.GMap;
 
 import com.talool.core.Merchant;
+import com.talool.core.MerchantAccount;
+import com.talool.core.MerchantLocation;
+import com.talool.core.service.ServiceException;
 import com.talool.stats.MerchantSummary;
+import com.talool.website.component.ConfirmationIndicatingAjaxLink;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.MerchantManagementPage;
@@ -126,6 +133,47 @@ public class MerchantsPage extends BasePage
 						wizard.open(target);
 					}
 				});
+				
+				StringBuilder confirm = new StringBuilder();
+				confirm.append("Are you sure you want to remove \"").append(merchant.getName()).append("\"?");
+				ConfirmationIndicatingAjaxLink<Void> deleteLink = new ConfirmationIndicatingAjaxLink<Void>("deleteLink", JavaScriptUtils.escapeQuotes(confirm.toString()).toString())
+				{
+					private static final long serialVersionUID = 268692101349122303L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target)
+					{
+						getSession().getFeedbackMessages().clear();
+						try 
+						{
+							// Assign it to Talool and make it not discoverable. 
+							// This will hide it from the publisher without deleting the merchant.
+							// If it has ever had active deals, we don't want to delete it because 
+							// we want to preserve the history.
+							// TODO detected if the merchant was every sold anything, and delete if possible
+							Merchant merch = taloolService.getMerchantById(merchantId);
+							List<Merchant> merchants = taloolService.getMerchantByName(talool);
+							Merchant _talool = merchants.get(0);
+							MerchantAccount _taloolAccount = _talool.getMerchantAccounts().iterator().next();
+							for (MerchantLocation loc : merch.getLocations())
+							{
+								loc.setCreatedByMerchantAccount(_taloolAccount);
+							}
+							merch.setIsDiscoverable(false);
+							taloolService.merge(merch);
+							target.add(container);
+							Session.get().success(merch.getName() + " has been sent back to Talool.  Contact us if you want it back.");
+						} 
+						catch (ServiceException se)
+						{
+							LOG.error("problem fetcing the talool merchant id", se);
+							Session.get().error("There was a problem removing this merchant.  Contact us if you want it removed manually.");
+						}
+						target.add(feedback);
+						
+					}
+				};
+				item.add(deleteLink);
 
 				PageParameters dashboardParams = new PageParameters();
 				dashboardParams.set("id", merchantId);

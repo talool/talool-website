@@ -1,12 +1,15 @@
 package com.talool.website.pages.lists;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
+import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -14,10 +17,15 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
+import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
+import com.talool.core.service.ServiceException;
 import com.talool.stats.DealSummary;
+import com.talool.website.component.ConfirmationIndicatingAjaxLink;
 import com.talool.website.component.StaticImage;
 import com.talool.website.models.DealListModel;
 import com.talool.website.models.DealModel;
@@ -31,7 +39,8 @@ import com.talool.website.util.SessionUtils;
 public class DealOfferDealsPage extends BasePage
 {
 	private static final long serialVersionUID = 6008230892463177176L;
-	
+	private static final Logger LOG = LoggerFactory.getLogger(DealOfferDealsPage.class);
+	private static final String talool = "Talool";
 	private static final String CONTAINER_ID = "dealList";
 	private static final String REPEATER_ID = "dealRptr";
 	private static final String NAVIGATOR_ID = "navigator";
@@ -107,6 +116,43 @@ public class DealOfferDealsPage extends BasePage
 						wizard.open(target);
 					}
 				});
+				
+				StringBuilder confirm = new StringBuilder();
+				confirm.append("Are you sure you want to remove \"").append(deal.getTitle()).append("\"?");
+				ConfirmationIndicatingAjaxLink<Void> deleteLink = new ConfirmationIndicatingAjaxLink<Void>("deleteLink", JavaScriptUtils.escapeQuotes(confirm.toString()).toString())
+				{
+					private static final long serialVersionUID = 268692101349122303L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target)
+					{
+						getSession().getFeedbackMessages().clear();
+						try 
+						{
+							// Assign it to Talool and make it not active. 
+							// This will hide it from the publisher/merchant without deleting it.
+							// If it has ever had active deal acquires, we don't want to delete it because 
+							// we want to preserve the history.
+							// TODO detected if there are deal acquires, and delete if possible
+							Deal deal = taloolService.getDeal(dealId);
+							List<Merchant> merchants = taloolService.getMerchantByName(talool);
+							Merchant _talool = merchants.get(0);
+							deal.setActive(false);
+							deal.setMerchant(_talool);
+							taloolService.merge(deal);
+							target.add(container);
+							Session.get().success(deal.getTitle() + " has been sent back to Talool.  Contact us if you want it back.");
+						} 
+						catch (ServiceException se)
+						{
+							LOG.error("problem fetcing the talool merchant id", se);
+							Session.get().error("There was a problem removing this deal.  Contact us if you want it removed manually.");
+						}
+						target.add(((BasePage)getPage()).feedback);
+						
+					}
+				};
+				item.add(deleteLink);
 
 			}
 
