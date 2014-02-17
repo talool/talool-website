@@ -1,6 +1,14 @@
 <wicket:extend xmlns:wicket="http://wicket.apache.org">
 	<div wicket:id="merchantList">
-		<div wicket:id="navigator" style="float:right;margin-bottom:5px;">[dataview navigator]</div>
+		<table class="listNav">
+			<tr>
+				<td wicket:id="searchPanel" class="search"></td>
+				<td class="pagination">
+					<div class="count"><span wicket:id="merchantCount"></span> Merchant(s)</div>
+					<div wicket:id="navigator" class="navigator"></div>
+				</td>
+			</tr>
+		</table>
 	  	<table>
 	  		<thead>
 	  			<tr>

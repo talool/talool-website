@@ -131,3 +131,47 @@ div.tabpanel div.tab-row a:hover {
 	height: 36px;
 }
 
+.listNav
+{
+	margin: 15px 0;
+}
+
+.listNav tr
+{
+	border-bottom: none;
+}
+
+.listNav td
+{
+	padding: 0;
+}
+
+.listNav .pagination
+{
+	text-align: right;
+}
+
+.listNav .pagination .navigator a,
+.listNav .pagination .navigator em
+{
+	border: 1px solid;
+	padding: 5px;
+	border-radius: 3px;
+}
+.listNav .pagination .navigator em
+{
+
+}
+.listNav .pagination .count
+{
+	margin-bottom: 15px;
+	font-weight: bold;
+}
+.listNav .search input
+{
+	font-size: 15px;
+}
+.listNav .search .btn
+{
+	margin: -5px 0 0;
+}

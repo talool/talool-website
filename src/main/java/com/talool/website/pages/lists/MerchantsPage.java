@@ -30,6 +30,7 @@ import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
 import com.talool.stats.MerchantSummary;
 import com.talool.website.component.ConfirmationIndicatingAjaxLink;
+import com.talool.website.component.MerchantSearchPanel;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.MerchantManagementPage;
@@ -54,11 +55,15 @@ public class MerchantsPage extends BasePage
 	private static final String CONTAINER_ID = "merchantList";
 	private static final String REPEATER_ID = "merchRptr";
 	private static final String NAVIGATOR_ID = "navigator";
+	private static final String COUNT_ID = "merchantCount";
 	private MerchantWizard wizard;
 	
 	private String sortParameter = "name";
 	private boolean isAscending = true;
 	private int itemsPerPage = 50;
+	private long itemCount;
+	
+	private UUID searchMerchantId;
 
 	public MerchantsPage()
 	{
@@ -70,6 +75,7 @@ public class MerchantsPage extends BasePage
 		super(parameters);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onInitialize()
 	{
@@ -78,7 +84,8 @@ public class MerchantsPage extends BasePage
 		final WebMarkupContainer container = new WebMarkupContainer(CONTAINER_ID);
 		container.setOutputMarkupId(true);
 		add(container);
-		final MerchantSummaryDataProvider dataProvider = new MerchantSummaryDataProvider(sortParameter, isAscending);
+		
+		MerchantSummaryDataProvider dataProvider = new MerchantSummaryDataProvider(sortParameter, isAscending);
 		final DataView<MerchantSummary> merchants = new DataView<MerchantSummary>(REPEATER_ID,dataProvider)
 		{
 
@@ -189,9 +196,38 @@ public class MerchantsPage extends BasePage
 		merchants.setItemsPerPage(itemsPerPage);
 		container.add(merchants);
 		
+		final MerchantSearchPanel searchPanel = new MerchantSearchPanel("searchPanel"){
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onSearch(AjaxRequestTarget target, String merchantName) {
+				WebMarkupContainer container = (WebMarkupContainer) getPage().get(CONTAINER_ID);
+
+				final DataView<MerchantSummary> dataView = ((DataView<MerchantSummary>) container.get(REPEATER_ID));
+				MerchantSummaryDataProvider provider = (MerchantSummaryDataProvider) dataView.getDataProvider();
+				provider.setTitle(merchantName);
+
+				final AjaxPagingNavigator pagingNavigator = (AjaxPagingNavigator) container.get(NAVIGATOR_ID);
+				pagingNavigator.getPageable().setCurrentPage(0);
+				
+				itemCount = provider.size();
+				pagingNavigator.setVisible(itemCount > itemsPerPage);
+				
+				target.add(container);
+				target.add(pagingNavigator);
+			}
+			
+		};
+		container.add(searchPanel);
+		
+		itemCount = dataProvider.size();
+		container.add(new Label(COUNT_ID,new PropertyModel<Long>(this, "itemCount")));
+		
 		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, merchants);
 		container.add(pagingNavigator.setOutputMarkupId(true));
-		pagingNavigator.setVisible(dataProvider.size() > itemsPerPage);
+		pagingNavigator.setVisible(itemCount > itemsPerPage);
+		pagingNavigator.getPagingNavigation().setViewSize(5);
 		
 		container.add(new AjaxLink<Void>("categoryLink")
 		{
