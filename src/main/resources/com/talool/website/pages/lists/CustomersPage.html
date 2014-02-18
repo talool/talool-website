@@ -1,34 +1,42 @@
 <wicket:extend xmlns:wicket="http://wicket.apache.org">
-    <div wicket:id="customerContainer">
-	<div wicket:id="navigator" style="float:right;margin-bottom:5px;">[dataview navigator]</div>
-	<table>
-  		<thead>
-  			<tr>
-  				<th><a wicket:id="customerLink">Customer</a></th>
-  				<th><a wicket:id="registrationLink">Registration Date</a></th>
-  				<th>Deal Offer(s)</th>
-  				<th><a wicket:id="redemptionLink" >Redemptions</a></th>
-  				<th class="actionCol"></th>
-  			</tr>
-  		</thead>
-  		<tbody>
-  			<tr class="odd" wicket:id="customerRptr">
-  				<td>
-  					<a href="#" wicket:id="emailLink"></a><br/>
-  					<span wicket:id="firstName"></span>
-  					<span wicket:id="lastName"></span>
-  				</td>
-  				<td wicket:id="registrationDate">Date</td>
-  				<td wicket:id="commaSeperatedDealOfferTitles">Title</td>
-  				<td wicket:id="redemptions">Count</td>
-  				<td class="orange-font">
-  					<a wicket:id="editLink" class="icon icon-large icon-pencil" title="Edit Customer"></a>
-  					<a wicket:id="pwLink" class="icon icon-large icon-key" title="Reset Password"></a>
-  					<a wicket:id="dealOfferLink" class="icon icon-large icon-money" title="Buy Deal Offer"></a>
-  					<a wicket:id="deleteCustomer" href="#" class="icon icon-large icon-remove" title="Delete Customer"></a>
-  				</td>
-  			</tr>
-  		</tbody>
-  	</table>
+	<div wicket:id="customerContainer">
+		<table class="listNav">
+			<tr>
+				<td class="search"></td>
+				<td class="pagination">
+					<div class="count"><span wicket:id="merchantCount"></span> Customer(s)</div>
+					<div wicket:id="navigator" class="navigator"></div>
+				</td>
+			</tr>
+		</table>
+		<table>
+	  		<thead>
+	  			<tr>
+	  				<th><a wicket:id="customerLink">Customer</a></th>
+	  				<th><a wicket:id="registrationLink">Registration Date</a></th>
+	  				<th>Deal Offer(s)</th>
+	  				<th><a wicket:id="redemptionLink" >Redemptions</a></th>
+	  				<th class="actionCol"></th>
+	  			</tr>
+	  		</thead>
+	  		<tbody>
+	  			<tr class="odd" wicket:id="customerRptr">
+	  				<td>
+	  					<a href="#" wicket:id="emailLink"></a><br/>
+	  					<span wicket:id="firstName"></span>
+	  					<span wicket:id="lastName"></span>
+	  				</td>
+	  				<td wicket:id="registrationDate">Date</td>
+	  				<td wicket:id="commaSeperatedDealOfferTitles">Title</td>
+	  				<td wicket:id="redemptions">Count</td>
+	  				<td class="orange-font">
+	  					<a wicket:id="editLink" class="icon icon-large icon-pencil" title="Edit Customer"></a>
+	  					<a wicket:id="pwLink" class="icon icon-large icon-key" title="Reset Password"></a>
+	  					<a wicket:id="dealOfferLink" class="icon icon-large icon-money" title="Buy Deal Offer"></a>
+	  					<a wicket:id="deleteCustomer" href="#" class="icon icon-large icon-remove" title="Delete Customer"></a>
+	  				</td>
+	  			</tr>
+	  		</tbody>
+	  	</table>
   	</div>
 </wicket:extend>

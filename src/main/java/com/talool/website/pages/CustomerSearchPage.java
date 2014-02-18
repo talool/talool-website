@@ -1,9 +1,8 @@
 package com.talool.website.pages;
 
-import java.util.Arrays;
 import java.util.UUID;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -13,14 +12,12 @@ import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -29,6 +26,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import com.talool.core.service.ServiceException;
 import com.talool.stats.CustomerSummary;
 import com.talool.website.component.ConfirmationAjaxLink;
+import com.talool.website.component.CustomerSearchPanel;
 import com.talool.website.pages.CustomerSearchDataProvider.CustomerSearchOpts;
 import com.talool.website.pages.CustomerSearchDataProvider.CustomerSearchOpts.CustomerSearchType;
 import com.talool.website.pages.lists.CustomersPage;
@@ -62,18 +60,17 @@ public class CustomerSearchPage extends BasePage
 	private static final long serialVersionUID = 2102415289760762365L;
 	private static final Logger LOG = Logger.getLogger(CustomerSearchPage.class);
 	private static final int ITEMS_PER_PAGE = 50;
-	private static final int MOS_RECENT_MAX_RESULTS = 10;
+	private static final int MOS_RECENT_MAX_RESULTS = 50;
 	private static final String CUST_CONTAINER_ID = "customerContainer";
+	private static final String REPEATER_ID = "customerRptr";
+	private static final String NAVIGATOR_ID = "navigator";
+	private static final String COUNT_ID = "customerCount";
+	
+	private CustomerSearchPanel searchPanel;
+	private long itemCount;
 
 	private String sortParameter = "registrationDate";
 	private boolean isAscending = false;
-
-	private static final ChoiceRenderer<CustomerSearchType> searchChoiceRenderer = new ChoiceRenderer<CustomerSearchType>(
-			"displayVal", "name");
-
-	private CustomerSearchType selectedSearchType = CustomerSearchType.PublisherCustomerSummaryByEmail;
-
-	private String elementId;
 
 	public CustomerSearchPage()
 	{
@@ -90,92 +87,86 @@ public class CustomerSearchPage extends BasePage
 	{
 		super.onInitialize();
 
-		Form<Void> form = new Form<Void>("searchForm")
-		{
-			private static final long serialVersionUID = -477362909507132959L;
-
-			@Override
-			protected void onSubmit()
-			{
-				doSearch();
-			}
-		};
-
-		// TODO use email validator, not String.class
-		final TextField<String> elementId = new TextField<String>("elementId", new PropertyModel<String>(this, "elementId"), String.class);
-		form.add(elementId.setRequired(true));
-
 		final WebMarkupContainer customerContainer = new WebMarkupContainer(CUST_CONTAINER_ID);
-		add(customerContainer.setOutputMarkupId(true).setVisible(false).setOutputMarkupPlaceholderTag(true));
+		add(customerContainer.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
 
-		form.add(new DropDownChoice<CustomerSearchType>("searchSelect",
-				new PropertyModel<CustomerSearchType>(this, "selectedSearchType"), Arrays.asList(CustomerSearchType.values()),
-				searchChoiceRenderer)
-		{
-			@Override
-			protected boolean wantOnSelectionChangedNotifications()
-			{
-				return true;
-			}
-
-			private static final long serialVersionUID = -6001513999757037735L;
-
-			@Override
-			protected void onSelectionChanged(CustomerSearchType newSelection)
-			{
-				if (selectedSearchType == CustomerSearchType.RecentRegistrations)
-				{
-					elementId.setVisible(false);
-					doSearch();
-				}
-				else
-				{
-					elementId.setVisible(true);
-					customerContainer.setVisible(false);
-				}
-
-			}
-		});
-
-		add(form);
-
-		WebMarkupContainer customers = new WebMarkupContainer("customerRptr");
-		WebMarkupContainer navigator = new WebMarkupContainer("navigator");
-
-		customerContainer.add(navigator.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
-
+		IDataProvider<CustomerSummary> provider = getProvider("");
+		final DataView<CustomerSummary> customers = getDataView(provider);
 		customerContainer.add(customers);
+		
+		searchPanel = new CustomerSearchPanel("searchForm"){
 
-		if (StringUtils.isNotEmpty(this.elementId))
-		{
-			doSearch();
-		}
+			private static final long serialVersionUID = 1L;
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public void onSearch(AjaxRequestTarget target, String customerEmail) {
+				WebMarkupContainer container = (WebMarkupContainer) getPage().get(CUST_CONTAINER_ID);
+
+				CustomerSearchDataProvider provider = getProvider(customerEmail);
+				final DataView<CustomerSummary> dataView = getDataView(provider);
+				container.replace(dataView);
+				target.add(container);
+				
+				final AjaxPagingNavigator pagingNavigator = getPagination(dataView);
+				container.replace(pagingNavigator);
+				target.add(pagingNavigator);
+				
+				PagingNavigation nav = pagingNavigator.getPagingNavigation();
+				if (nav != null)
+				{
+					nav.setViewSize(5);
+				}
+				
+				itemCount = provider.size();
+				pagingNavigator.setVisible(itemCount > ITEMS_PER_PAGE);
+				if (itemCount==0)
+				{
+					SessionUtils.errorMessage("There are no customers matching '" + searchPanel.getCustomerEmail() + "'");
+				}
+				target.add(feedback);
+			}
+			
+		};
+		customerContainer.add(searchPanel);
+		
+		itemCount = provider.size();
+		customerContainer.add(new Label(COUNT_ID,new PropertyModel<Long>(this, "itemCount")));
+		
+		customerContainer.add(getPagination(customers));
 
 	}
-
-	public boolean hasActionLink()
+	
+	private AjaxPagingNavigator getPagination(DataView<CustomerSummary> customers)
 	{
-		return false;
+		AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, customers);
+		pagingNavigator.setOutputMarkupId(true);
+		pagingNavigator.setVisible(itemCount > ITEMS_PER_PAGE);
+		
+		return pagingNavigator;
 	}
-
-	private void doSearch()
+	
+	private CustomerSearchDataProvider getProvider(String customerEmail)
 	{
 		CustomerSearchDataProvider provider = null;
-
-		switch (selectedSearchType)
+		if (StringUtils.isEmpty(customerEmail))
 		{
-			case PublisherCustomerSummaryByEmail:
-				provider = new CustomerSearchDataProvider(new CustomerSearchOpts(
-						CustomerSearchType.PublisherCustomerSummaryByEmail, sortParameter, isAscending).setEmail(elementId));
-				break;
-
-			case RecentRegistrations:
-				provider = new CustomerSearchDataProvider(new CustomerSearchOpts(
-						CustomerSearchType.RecentRegistrations, sortParameter, isAscending).setCappedResultCount(MOS_RECENT_MAX_RESULTS));
-				break;
+			provider = new CustomerSearchDataProvider(new CustomerSearchOpts(
+					CustomerSearchType.RecentRegistrations, sortParameter, isAscending).setCappedResultCount(MOS_RECENT_MAX_RESULTS));
+			SessionUtils.infoMessage("Showing the most recent "+MOS_RECENT_MAX_RESULTS+" registrations.  Search by email to find specific customers.");
 		}
-
-		final DataView<CustomerSummary> customers = new DataView<CustomerSummary>("customerRptr", provider)
+		else
+		{
+			provider = new CustomerSearchDataProvider(new CustomerSearchOpts(
+					CustomerSearchType.PublisherCustomerSummaryByEmail, sortParameter, isAscending).setEmail(customerEmail));
+		}
+		
+		return provider;
+	}
+	
+	private DataView<CustomerSummary> getDataView(IDataProvider<CustomerSummary> provider)
+	{
+		DataView<CustomerSummary> customers = new DataView<CustomerSummary>(REPEATER_ID, provider)
 		{
 
 			private static final long serialVersionUID = -5170887821646081691L;
@@ -311,27 +302,13 @@ public class CustomerSearchPage extends BasePage
 			}
 
 		};
-
-		WebMarkupContainer customerContainer = (WebMarkupContainer) CustomerSearchPage.this.get(CUST_CONTAINER_ID);
-
 		customers.setItemsPerPage(ITEMS_PER_PAGE);
-		customerContainer.replace(customers);
+		return customers;
+	}
 
-		final AjaxPagingNavigator pagingNavigator = new
-				AjaxPagingNavigator("navigator", customers);
-
-		customerContainer.replace(pagingNavigator);
-
-		if (customers.getDataProvider().size() == 0)
-		{
-			customerContainer.setVisible(false);
-			SessionUtils.errorMessage("There are no customers matching '" + elementId + "'");
-		}
-		else
-		{
-			customerContainer.setVisible(true);
-		}
-
+	public boolean hasActionLink()
+	{
+		return false;
 	}
 
 	@Override

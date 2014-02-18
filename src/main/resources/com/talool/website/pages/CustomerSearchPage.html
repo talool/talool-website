@@ -1,48 +1,44 @@
-<wicket:extend>
-<form wicket:id="searchForm">
-<div style="padding-bottom:10px;">
-<span>Search By </span>
-<select wicket:id="searchSelect">
-  <option value="Email Address">Email Address</option>
-  <option value="Most Recent">Most Recent</option>
-</select> 
-<wicket:enclosure child="elementId">
-<input wicket:id="elementId" type="text" id="elementId" size="64">
-<input type="submit" class="btn btn-action" value="Search" style="width:auto; margin-left: 10px">
-</wicket:enclosure>
-</div>
-</form>
-<div wicket:id="customerContainer">
-	<div wicket:id="navigator" style="float:right;margin-bottom:5px;">[dataview navigator]</div>
-	<table>
-  		<thead>
-  			<tr>
-  				<th>Customer</th>
-  				<th>Registration Date</th>
-  				<th>Deal Offers</th>
-  				<th>Redemptions</th>
-  				<th class="actionCol"></th>
-  			</tr>
-  		</thead>
-  		<tbody>
-  			<tr class="odd" wicket:id="customerRptr">
-  				<td>
-  					<a href="#" wicket:id="emailLink"></a><br/>
-  					<span wicket:id="firstName"></span>
-  					<span wicket:id="lastName"></span>
-  				</td>
-  				<td wicket:id="registrationDate">Date</td>
-  				<td wicket:id="commaSeperatedDealOfferTitles">Title</td>
-  				<td wicket:id="redemptions">Count</td>
-  				<td class="orange-font">
-  					<a wicket:id="editLink" class="icon icon-large icon-pencil" title="Edit Customer"></a>
-  					<a wicket:id="pwLink" class="icon icon-large icon-key" title="Reset Password"></a>
-  					<a wicket:id="dealOfferLink" class="icon icon-large icon-money" title="Buy Deal Offer"></a>
-  					<a wicket:id="deleteCustomer" href="#" class="icon icon-large icon-remove" title="Delete Customer"></a>
-  				</td>
-  			</tr>
-  		</tbody>
-  	</table>
-  	</div>
- <script type="text/javascript">$("#elementId").focus();</script>
+<wicket:extend xmlns:wicket="http://wicket.apache.org">
+	
+	<div wicket:id="customerContainer">
+		<table class="listNav">
+			<tr>
+				<td wicket:id="searchForm" class="search"></td>
+				<td class="pagination">
+					<div class="count"><span wicket:id="customerCount"></span> Customer(s)</div>
+					<div wicket:id="navigator" class="navigator"></div>
+				</td>
+			</tr>
+		</table>
+		<table>
+	  		<thead>
+	  			<tr>
+	  				<th>Customer</th>
+	  				<th>Registration Date</th>
+	  				<th>Deal Offers</th>
+	  				<th>Redemptions</th>
+	  				<th class="actionCol"></th>
+	  			</tr>
+	  		</thead>
+	  		<tbody>
+	  			<tr class="odd" wicket:id="customerRptr">
+	  				<td>
+	  					<a href="#" wicket:id="emailLink"></a><br/>
+	  					<span wicket:id="firstName"></span>
+	  					<span wicket:id="lastName"></span>
+	  				</td>
+	  				<td wicket:id="registrationDate">Date</td>
+	  				<td wicket:id="commaSeperatedDealOfferTitles">Title</td>
+	  				<td wicket:id="redemptions">Count</td>
+	  				<td class="orange-font">
+	  					<a wicket:id="editLink" class="icon icon-large icon-pencil" title="Edit Customer"></a>
+	  					<a wicket:id="pwLink" class="icon icon-large icon-key" title="Reset Password"></a>
+	  					<a wicket:id="dealOfferLink" class="icon icon-large icon-money" title="Buy Deal Offer"></a>
+	  					<a wicket:id="deleteCustomer" href="#" class="icon icon-large icon-remove" title="Delete Customer"></a>
+	  				</td>
+	  			</tr>
+	  		</tbody>
+	  	</table>
+	 </div>
+	 <script type="text/javascript">$("#elementId").focus();</script>
 </wicket:extend>
