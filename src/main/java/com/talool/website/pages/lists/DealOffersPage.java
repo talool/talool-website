@@ -43,13 +43,11 @@ import com.talool.core.service.ServiceException;
 import com.talool.stats.DealOfferSummary;
 import com.talool.website.behaviors.AJAXDownload;
 import com.talool.website.component.ConfirmationIndicatingAjaxLink;
-import com.talool.website.models.DealOfferListModel;
 import com.talool.website.models.DealOfferModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.dealoffer.wizard.DealOfferWizard;
-import com.talool.website.service.PermissionService;
 import com.talool.website.util.SecuredPage;
 import com.talool.website.util.SessionUtils;
 
@@ -85,16 +83,8 @@ public class DealOffersPage extends BasePage
 	{
 		super.onInitialize();
 
-		boolean canViewAllBooks = PermissionService.get().canViewAnalytics(
-				SessionUtils.getSession().getMerchantAccount().getEmail());
-
-		DealOfferListModel model = new DealOfferListModel();
 		final StringBuilder sb = new StringBuilder();
 
-		if (!canViewAllBooks)
-		{
-			model.setMerchantId(SessionUtils.getSession().getMerchantAccount().getMerchant().getId());
-		}
 		
 		final WebMarkupContainer container = new WebMarkupContainer(CONTAINER_ID);
 		container.setOutputMarkupId(true);
@@ -373,12 +363,12 @@ public class DealOffersPage extends BasePage
 		container.add(books);
 		
 		// Set the labels above the pagination
-		itemCount = books.getItemCount();
+		itemCount = dataProvider.size();
 		container.add(new Label("totalCount",new PropertyModel<Long>(this, "itemCount")).setOutputMarkupId(true));
 		
 		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, books);
 		container.add(pagingNavigator.setOutputMarkupId(true));
-		pagingNavigator.setVisible(dataProvider.size() > itemsPerPage);
+		pagingNavigator.setVisible(itemCount > itemsPerPage);
 		
 		container.add(new AjaxLink<Void>("titleLink")
 		{
