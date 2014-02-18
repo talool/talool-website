@@ -64,10 +64,11 @@ public class CustomerSearchPage extends BasePage
 	private static final String CUST_CONTAINER_ID = "customerContainer";
 	private static final String REPEATER_ID = "customerRptr";
 	private static final String NAVIGATOR_ID = "navigator";
-	private static final String COUNT_ID = "customerCount";
+	private static final String VISIBLE_COUNT_ID = "visibleCount";
 	
 	private CustomerSearchPanel searchPanel;
 	private long itemCount;
+	private long visibleCount;
 
 	private String sortParameter = "registrationDate";
 	private boolean isAscending = false;
@@ -90,7 +91,7 @@ public class CustomerSearchPage extends BasePage
 		final WebMarkupContainer customerContainer = new WebMarkupContainer(CUST_CONTAINER_ID);
 		add(customerContainer.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
 
-		IDataProvider<CustomerSummary> provider = getProvider("");
+		CustomerSearchDataProvider provider = getProvider("");
 		final DataView<CustomerSummary> customers = getDataView(provider);
 		customerContainer.add(customers);
 		
@@ -98,27 +99,29 @@ public class CustomerSearchPage extends BasePage
 
 			private static final long serialVersionUID = 1L;
 
-			@SuppressWarnings("unchecked")
 			@Override
 			public void onSearch(AjaxRequestTarget target, String customerEmail) {
 				WebMarkupContainer container = (WebMarkupContainer) getPage().get(CUST_CONTAINER_ID);
 
+				// replace the data view
 				CustomerSearchDataProvider provider = getProvider(customerEmail);
 				final DataView<CustomerSummary> dataView = getDataView(provider);
 				container.replace(dataView);
 				target.add(container);
 				
+				// replace the pagination
 				final AjaxPagingNavigator pagingNavigator = getPagination(dataView);
 				container.replace(pagingNavigator);
 				target.add(pagingNavigator);
-				
 				PagingNavigation nav = pagingNavigator.getPagingNavigation();
 				if (nav != null)
 				{
 					nav.setViewSize(5);
 				}
 				
-				itemCount = provider.size();
+				// update the labels above the pagination
+				itemCount = provider.getTrueSize();
+				visibleCount = Math.min(ITEMS_PER_PAGE, itemCount);
 				pagingNavigator.setVisible(itemCount > ITEMS_PER_PAGE);
 				if (itemCount==0)
 				{
@@ -130,16 +133,37 @@ public class CustomerSearchPage extends BasePage
 		};
 		customerContainer.add(searchPanel);
 		
-		itemCount = provider.size();
-		customerContainer.add(new Label(COUNT_ID,new PropertyModel<Long>(this, "itemCount")));
-		
+		// Set the labels above the pagination
+		itemCount = provider.getTrueSize();
+		visibleCount = Math.min(ITEMS_PER_PAGE, itemCount);
+		customerContainer.add(new Label("customerCount",new PropertyModel<Long>(this, "itemCount")).setOutputMarkupId(true));
+		customerContainer.add(new Label("visibleCount",new PropertyModel<Long>(this, VISIBLE_COUNT_ID)).setOutputMarkupId(true));
+		// Set the pagination
 		customerContainer.add(getPagination(customers));
 
 	}
 	
-	private AjaxPagingNavigator getPagination(DataView<CustomerSummary> customers)
+	private AjaxPagingNavigator getPagination(final DataView<CustomerSummary> customers)
 	{
-		AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, customers);
+		AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, customers){
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onAjaxEvent(AjaxRequestTarget target) {
+				super.onAjaxEvent(target);
+				
+				// update the label showing the current number of items on the page
+				long pageNum = customers.getCurrentPage();
+				long itemCount = customers.getItemCount();
+				long itemsRemaining = itemCount - pageNum*ITEMS_PER_PAGE;
+				visibleCount = Math.min(ITEMS_PER_PAGE, itemsRemaining);
+				WebMarkupContainer container = (WebMarkupContainer) getPage().get(CUST_CONTAINER_ID);
+				Label visibleCount = (Label) container.get(VISIBLE_COUNT_ID);
+				target.add(visibleCount);
+			}
+			
+		};
 		pagingNavigator.setOutputMarkupId(true);
 		pagingNavigator.setVisible(itemCount > ITEMS_PER_PAGE);
 		
@@ -153,7 +177,7 @@ public class CustomerSearchPage extends BasePage
 		{
 			provider = new CustomerSearchDataProvider(new CustomerSearchOpts(
 					CustomerSearchType.RecentRegistrations, sortParameter, isAscending).setCappedResultCount(MOS_RECENT_MAX_RESULTS));
-			SessionUtils.infoMessage("Showing the most recent "+MOS_RECENT_MAX_RESULTS+" registrations.  Search by email to find specific customers.");
+			SessionUtils.infoMessage("Showing up to "+MOS_RECENT_MAX_RESULTS+" of the most recent registrations.  Search by email to find specific customers.");
 		}
 		else
 		{

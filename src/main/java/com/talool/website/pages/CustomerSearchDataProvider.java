@@ -147,11 +147,32 @@ public class CustomerSearchDataProvider implements IDataProvider<CustomerSummary
 	public long size()
 	{
 
-		if (size != null)
+		if (size == null)
 		{
-			return size;
+			setSize();
 		}
 
+		if (customerSearchOpts.cappedResultCount != null)
+		{
+			return Math.min(customerSearchOpts.cappedResultCount, size);
+		}
+
+		return size;
+
+	}
+	
+	public long getTrueSize()
+	{
+		if (size == null)
+		{
+			setSize();
+		}
+
+		return size;
+	}
+	
+	private void setSize()
+	{
 		final boolean canViewAllCustomers = canViewAllCustomers();
 
 		try
@@ -187,14 +208,6 @@ public class CustomerSearchDataProvider implements IDataProvider<CustomerSummary
 		{
 			e.printStackTrace();
 		}
-
-		if (customerSearchOpts.cappedResultCount != null)
-		{
-			size = Math.min(customerSearchOpts.cappedResultCount, size);
-		}
-
-		return size;
-
 	}
 
 	@Override

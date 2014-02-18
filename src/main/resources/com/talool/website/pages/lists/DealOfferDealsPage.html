@@ -1,6 +1,15 @@
 <wicket:extend xmlns:wicket="http://wicket.apache.org">
 	<div wicket:id="dealList">
-		<div wicket:id="navigator" style="float:right;margin-bottom:5px;">[dataview navigator]</div>
+		
+		<table class="listNav">
+			<tr>
+				<td class="pagination">
+					<div class="count"><span wicket:id="totalCount"></span> Deal(s)</div>
+					<div wicket:id="navigator" class="navigator"></div>
+				</td>
+			</tr>
+		</table>
+		
 		<table>
 	  		<thead>
 	  			<tr>
@@ -21,7 +30,7 @@
 	  				<td>
 	  					<img wicket:id="myimage"/>
 	  				</td>
-	  				<td class="orange-font">
+	  				<td class="orange-font actionCol">
 	  					<a wicket:id="editLink" class="icon icon-large icon-pencil" title="Edit Deal"></a>
 	  					<a wicket:id="deleteLink" class="icon icon-large icon-remove" title="Delete Deal"></a>
 	  				</td>

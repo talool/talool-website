@@ -16,6 +16,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,7 @@ public class DealOfferDealsPage extends BasePage
 	private String sortParameter = "merchantName";
 	private boolean isAscending = true;
 	private int itemsPerPage = 50;
+	private long itemCount;
 	
 	private UUID _dealOfferId;
 	private DealWizard wizard;
@@ -160,9 +162,15 @@ public class DealOfferDealsPage extends BasePage
 		deals.setItemsPerPage(itemsPerPage);
 		container.add(deals);
 		
+		// Set the labels above the pagination
+		itemCount = deals.getItemCount();
+		Label totalCount = new Label("totalCount",new PropertyModel<Long>(this, "itemCount"));
+		container.add(totalCount.setOutputMarkupId(true));
+				
 		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, deals);
 		container.add(pagingNavigator.setOutputMarkupId(true));
 		pagingNavigator.setVisible(dataProvider.size() > itemsPerPage);
+		pagingNavigator.getPagingNavigation().setViewSize(5);
 
 		container.add(new AjaxLink<Void>("merchantSortLink")
 		{

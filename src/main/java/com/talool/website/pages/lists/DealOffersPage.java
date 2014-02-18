@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
@@ -51,6 +52,7 @@ import com.talool.website.panel.dealoffer.wizard.DealOfferWizard;
 import com.talool.website.service.PermissionService;
 import com.talool.website.util.SecuredPage;
 import com.talool.website.util.SessionUtils;
+import com.vividsolutions.jts.geom.Geometry;
 
 @SecuredPage
 public class DealOffersPage extends BasePage
@@ -67,6 +69,7 @@ public class DealOffersPage extends BasePage
 	private String sortParameter = "title";
 	private boolean isAscending = false;
 	private int itemsPerPage = 50;
+	private long itemCount;
 
 	public DealOffersPage()
 	{
@@ -147,39 +150,6 @@ public class DealOffersPage extends BasePage
 				pubColCell.add(merchantLink);
 				
 				item.add(new Label("location"));
-				
-				/*
-				Geometry geo = dealOffer.getGeometry();
-				if (geo == null)
-				{
-					item.add(new Label("location",""));
-				}
-				else
-				{
-					Set<MerchantLocation> locations = dealOffer.getMerchant().getLocations();
-					MerchantLocation loc = null;
-					StringBuilder locationLabel = new StringBuilder();
-					for (MerchantLocation l:locations)
-					{
-						if (l.getGeometry()!=null && geo.equals(l.getGeometry()))
-						{
-							loc = l;
-							break;
-						}
-					}
-					if (loc != null)
-					{
-						if (loc.getLocationName() == null)
-						{
-							locationLabel.append(loc.getAddress1()).append(", ").append(loc.getNiceCityState());
-						}
-						else
-						{
-							locationLabel.append(loc.getLocationName());
-						}
-					}
-					item.add(new Label("location",locationLabel.toString()));
-				}*/
 
 				NumberFormat formatter = NumberFormat.getCurrencyInstance();
 				String moneyString = formatter.format(dealOffer.getPrice());
@@ -252,7 +222,7 @@ public class DealOffersPage extends BasePage
 						wizard.open(target);
 					}
 				};
-				item.add(editLink.setVisible(dealOffer.getOfferType().equals(DealType.KIRKE_BOOK.toString())));
+				item.add(editLink.setVisible(!dealOffer.getOfferType().equals(DealType.KIRKE_BOOK.toString())));
 
 				sb.append("Are you sure you want to copy \"").append(title).append("\" and all deals related?");
 				item.add(new ConfirmationIndicatingAjaxLink<Void>("copyLink",
@@ -403,6 +373,10 @@ public class DealOffersPage extends BasePage
 		books.setItemsPerPage(itemsPerPage);
 		container.add(books);
 		
+		// Set the labels above the pagination
+		itemCount = books.getItemCount();
+		container.add(new Label("totalCount",new PropertyModel<Long>(this, "itemCount")).setOutputMarkupId(true));
+		
 		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, books);
 		container.add(pagingNavigator.setOutputMarkupId(true));
 		pagingNavigator.setVisible(dataProvider.size() > itemsPerPage);
@@ -510,6 +484,42 @@ public class DealOffersPage extends BasePage
 		target.add(container);
 		target.add(pagingNavigator);
 
+	}
+	
+	// TODO Keeping this around, because I want to show how the books are promoted
+	private String getGeoLocation(DealOffer dealOffer)
+	{
+		Geometry geo = dealOffer.getGeometry();
+		if (geo == null)
+		{
+			return "";
+		}
+		else
+		{
+			Set<MerchantLocation> locations = dealOffer.getMerchant().getLocations();
+			MerchantLocation loc = null;
+			StringBuilder locationLabel = new StringBuilder();
+			for (MerchantLocation l:locations)
+			{
+				if (l.getGeometry()!=null && geo.equals(l.getGeometry()))
+				{
+					loc = l;
+					break;
+				}
+			}
+			if (loc != null)
+			{
+				if (loc.getLocationName() == null)
+				{
+					locationLabel.append(loc.getAddress1()).append(", ").append(loc.getNiceCityState());
+				}
+				else
+				{
+					locationLabel.append(loc.getLocationName());
+				}
+			}
+			return locationLabel.toString();
+		}
 	}
 
 	@Override

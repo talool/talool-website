@@ -1,7 +1,16 @@
 <wicket:extend xmlns:wicket="http://wicket.apache.org">
 	
 	<div wicket:id="bookList">
-		<div wicket:id="navigator" style="float:right;margin-bottom:5px;">[dataview navigator]</div>
+	
+		<table class="listNav">
+			<tr>
+				<td class="pagination">
+					<div class="count"><span wicket:id="totalCount"></span> Book(s)</div>
+					<div wicket:id="navigator" class="navigator"></div>
+				</td>
+			</tr>
+		</table>
+		
 		<table>
 	  		<thead>
 	  			<tr>
@@ -24,7 +33,7 @@
 	  				<td wicket:id="offerType"></td>
 	  				<td wicket:id="expires"></td>
 	  				<td wicket:id="isActive"></td>
-	  				<td class="orange-font">
+	  				<td class="orange-font actionCol">
 	  					<a wicket:id="editLink" title="edit book" class="icon icon-large icon-pencil"></a>
 	  					<a wicket:id="copyLink" title="copy book" class="icon icon-large icon-copy"></a>
 	  					<a wicket:id="codeLink" title="download access codes" class="icon icon-large icon-download"></a>
