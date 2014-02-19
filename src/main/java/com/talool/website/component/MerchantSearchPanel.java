@@ -67,7 +67,7 @@ public abstract class MerchantSearchPanel extends Panel {
 
 		
 		// Auto-complete search field for merchant selection
-		MerchantAutoCompleteBuilder acBuilder = new MerchantAutoCompleteBuilder(SessionUtils.getSession().getMerchantAccount().getMerchant());
+		MerchantAutoCompleteFactory acFactory = new MerchantAutoCompleteFactory(SessionUtils.getSession().getMerchantAccount().getMerchant());
 		ObjectAutoCompleteSelectionChangeListener<UUID> listener = new ObjectAutoCompleteSelectionChangeListener<UUID>()
 	    {
 
@@ -80,14 +80,14 @@ public abstract class MerchantSearchPanel extends Panel {
 			}
 	    	
 	    };
-	    acBuilder.updateOnSelectionChange(listener);
-	    acBuilder.readOnlyRenderer(null);
+	    acFactory.builder().updateOnSelectionChange(listener);
+	    acFactory.builder().readOnlyRenderer(null);
 	    
 	    // WATCH OUT: We are using this setting because 
 	    // we don't want to see the "selected" state of the component.
-	    acBuilder.clearInputOnSelection(); 
+	    acFactory.builder().clearInputOnSelection(); 
 	    
-		acField = acBuilder.build("ac", new PropertyModel<UUID>(this, "merchantId"));
+		acField = acFactory.builder().build("ac", new PropertyModel<UUID>(this, "merchantId"));
 	    form.add(acField);
 	   
 	}

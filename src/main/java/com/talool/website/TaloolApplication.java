@@ -54,6 +54,9 @@ import com.talool.website.pages.corporate.WWWPasswordResetPage;
 import com.talool.website.pages.corporate.WWWPrivacyPolicy;
 import com.talool.website.pages.corporate.WWWTermsOfService;
 import com.talool.website.pages.dashboard.MerchantDashboard;
+import com.talool.website.pages.error.AccessDeniedPage;
+import com.talool.website.pages.error.InternalErrorPage;
+import com.talool.website.pages.error.PageNotFound;
 import com.talool.website.pages.facebook.OpenGraphDeal;
 import com.talool.website.pages.facebook.OpenGraphDealOffer;
 import com.talool.website.pages.facebook.OpenGraphGift;
@@ -111,6 +114,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		return WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void init()
 	{
@@ -195,6 +199,8 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/m/deal", MobileOpenGraphDeal.class);
 		mountPage("/m/offer", MobileOpenGraphDealOffer.class);
 		mountPage("/m/location", MobileOpenGraphLocation.class);
+		
+		mountPage("/404", PageNotFound.class);
 
 		/*
 		 * We need a ONE_PASS_RENDER strategy because pages like search need
@@ -206,12 +212,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		// LeastRecentlyAccessedEvictionStrategy(1));
 		getPageSettings().setVersionPagesByDefault(false);
 		// getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
-		// getExceptionSettings().setUnexpectedExceptionDisplay(
-		// IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
-		// getApplicationSettings().setPageExpiredErrorPage(getHomePage());
-
-		// getApplicationSettings().setInternalErrorPage(ErrorPage.class);
-
+		
 		getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
 		
 		final AuthStrategy authStrat = new AuthStrategy();
@@ -222,15 +223,17 @@ public class TaloolApplication extends WebApplication implements Serializable
 		if (Config.get().getWebsiteMode().equalsIgnoreCase("deployment"))
 		{
 			getDebugSettings().setAjaxDebugModeEnabled(false);
-			getExceptionSettings().setUnexpectedExceptionDisplay(
-					IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
 		}
 		else
 		{
 			getDebugSettings().setAjaxDebugModeEnabled(true);
-			getExceptionSettings().setUnexpectedExceptionDisplay(
-					IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
 		}
+		getExceptionSettings().setUnexpectedExceptionDisplay(IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
+		getApplicationSettings().setPageExpiredErrorPage(getHomePage());
+		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
+		getApplicationSettings().setInternalErrorPage(InternalErrorPage.class);
+		
+		
 		// else
 		// {
 		// // love this hack for working locally and changing HTML and have it

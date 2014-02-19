@@ -121,6 +121,11 @@ public class MerchantsPage extends BasePage
 		
 		final AjaxPagingNavigator pagingNavigator = getPagination(merchants);
 		container.add(pagingNavigator.setOutputMarkupId(true));
+		PagingNavigation nav = pagingNavigator.getPagingNavigation();
+		if (nav != null)
+		{
+			nav.setViewSize(5);
+		}
 		
 		container.add(new AjaxLink<Void>("categoryLink")
 		{
@@ -198,11 +203,6 @@ public class MerchantsPage extends BasePage
 		AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, merchants);
 		pagingNavigator.setOutputMarkupId(true);
 		pagingNavigator.setVisible(itemCount > itemsPerPage);
-		PagingNavigation nav = pagingNavigator.getPagingNavigation();
-		if (nav != null)
-		{
-			nav.setViewSize(5);
-		}
 		return pagingNavigator;
 	}
 	
@@ -274,7 +274,6 @@ public class MerchantsPage extends BasePage
 					{
 						getSession().getFeedbackMessages().clear();
 						
-						WebMarkupContainer container = (WebMarkupContainer) getPage().get(CONTAINER_ID);
 						try 
 						{
 							// Assign it to Talool and make it not discoverable. 
@@ -365,6 +364,12 @@ public class MerchantsPage extends BasePage
 		final AjaxPagingNavigator pagingNavigator = getPagination(dataView);
 		container.replace(pagingNavigator);
 		target.add(pagingNavigator);
+		
+		PagingNavigation nav = pagingNavigator.getPagingNavigation();
+		if (nav != null)
+		{
+			nav.setViewSize(5);
+		}
 	}
 
 	@Override

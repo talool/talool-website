@@ -194,9 +194,17 @@ body.talool .sidebar a:visited {
 {
 	background-color: rgb(220,220,220);
 }
+.true-dark-gray-bg
+{
+	background-color: rgb(150,150,150);
+}
 
 .true-light-gray-bg {
 	background-color: rgba(222,222,222,.2);
+}
+
+.true-light-gray-font {
+	color: rgba(22,22,22,.2);
 }
 
 body.talool .btn.btn-primary {

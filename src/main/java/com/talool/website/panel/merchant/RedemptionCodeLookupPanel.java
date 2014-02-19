@@ -22,10 +22,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.wicketstuff.objectautocomplete.ObjectAutoCompleteField;
 import org.wicketstuff.objectautocomplete.ObjectAutoCompleteSelectionChangeListener;
 
@@ -33,7 +29,7 @@ import com.talool.core.DealAcquire;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
-import com.talool.website.component.MerchantAutoCompleteBuilder;
+import com.talool.website.component.MerchantAutoCompleteFactory;
 import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.panel.BaseTabPanel;
@@ -107,7 +103,8 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 			{
 				DealAcquire dac = item.getModelObject();
 				
-				Date tzDate = new Date(dac.getRedemptionDate().getTime() + getTimeZone().getRawOffset());
+				TimeZone timezone = TimeZone.getTimeZone("MST");
+				Date tzDate = new Date(dac.getRedemptionDate().getTime() + timezone.getRawOffset());
 				DateFormat formatter = new SimpleDateFormat("EEE, MMM d, yyyy 'at' h:mm:ss a z");   
 				String rDate = formatter.format(tzDate);
 				
@@ -176,8 +173,8 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 		}.setVisible(false));
 		
 		// Auto-complete search field for merchant selection
-		MerchantAutoCompleteBuilder acBuilder = new MerchantAutoCompleteBuilder(SessionUtils.getSession().getMerchantAccount().getMerchant());
-	    ObjectAutoCompleteField<Merchant, UUID> acField = acBuilder.build("ac", new PropertyModel<UUID>(this, "redemptionMerchantId"));
+		MerchantAutoCompleteFactory acFactory = new MerchantAutoCompleteFactory(SessionUtils.getSession().getMerchantAccount().getMerchant());
+	    ObjectAutoCompleteField<Merchant, UUID> acField = acFactory.builder().build("ac", new PropertyModel<UUID>(this, "redemptionMerchantId"));
 	    acField.setRequired(true);
 	    form.add(acField);
 	    acField.registerForUpdateOnSelectionChange(new ObjectAutoCompleteSelectionChangeListener<UUID>(){

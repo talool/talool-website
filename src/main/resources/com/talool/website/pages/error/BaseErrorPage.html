@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+  <head>
+    <title><wicket:message key="title"></wicket:message></title>
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/css/global.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+
+	<style>
+		body
+		{
+			padding: 100px;
+			text-align: center;
+		}
+		h2
+		{
+			margin: 50px 0;
+			font-size: 75px;
+		}
+		h4
+		{
+			font-size: 20px;
+		}
+		.footer
+		{
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			padding: 20px;
+			color: white;
+		}
+		.footer a,
+		.footer a:visited
+		{
+			display: inline-block;
+			margin: 0 20px;
+			color: white;
+		}
+	</style>
+
+  </head>
+  <body class="true-gray-bg">
+  
+  	<h2 class="true-light-gray-font"><wicket:message key="header"></wicket:message></h2>
+  	<h4 class="true-light-gray-font"><wicket:message key="subtitle"></wicket:message></h4>
+  	
+	<div wicket:id="feedback"></div>
+
+	<wicket:child/>
+
+	<div class="footer true-dark-gray-bg">
+		<a href="/">Talool.com</a>
+		<a href="/admin">Talool Tools</a>
+	</div>
+	
+  </body>
+</html>

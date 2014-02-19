@@ -17,14 +17,16 @@ import org.wicketstuff.objectautocomplete.ObjectReadOnlyRenderer;
 import com.talool.core.Merchant;
 import com.talool.website.models.MerchantListModel;
 
-public class MerchantAutoCompleteBuilder extends ObjectAutoCompleteBuilder<Merchant,UUID> implements Serializable
+public class MerchantAutoCompleteFactory implements Serializable
 {
 
 	private static final long serialVersionUID = 348887019963831116L;
 	private static final int MAX_CHOICES_PER_SEARCH = 6;
 	
-	public MerchantAutoCompleteBuilder(final Merchant merchant) {
-		super(new AutoCompletionChoicesProvider<Merchant>()
+	private transient ObjectAutoCompleteBuilder<Merchant,UUID> builder;
+	
+	public MerchantAutoCompleteFactory(final Merchant merchant) {
+		builder = new ObjectAutoCompleteBuilder<Merchant,UUID>(new AutoCompletionChoicesProvider<Merchant>()
 		{
 			private static final long serialVersionUID = 1L;
 			private MerchantListModel merchantModel = new MerchantListModel();
@@ -51,7 +53,7 @@ public class MerchantAutoCompleteBuilder extends ObjectAutoCompleteBuilder<Merch
 		});
 		
 		// This helps us render the correct strings for auto-complete choices
-		autoCompleteRenderer(new ObjectAutoCompleteRenderer<Merchant>(){
+		builder.autoCompleteRenderer(new ObjectAutoCompleteRenderer<Merchant>(){
 			private static final long serialVersionUID = 1L;
 
 			protected String getIdValue(Merchant m) {
@@ -63,10 +65,10 @@ public class MerchantAutoCompleteBuilder extends ObjectAutoCompleteBuilder<Merch
 		});
 		
 		// This is the link text that opens the search field
-		searchLinkText("(change)");
+		builder.searchLinkText("(change)");
 		
 		// Make sure we can show the current merchant by default
-		readOnlyRenderer(new ObjectReadOnlyRenderer<UUID>() {
+		builder.readOnlyRenderer(new ObjectReadOnlyRenderer<UUID>() {
 			private static final long serialVersionUID = 1L;
 
 			public Component getObjectRenderer(String id, IModel<UUID> pModel, IModel<String> pSearchTextModel) {
@@ -76,6 +78,11 @@ public class MerchantAutoCompleteBuilder extends ObjectAutoCompleteBuilder<Merch
 		    }
 		});
 	
+	}
+	
+	public ObjectAutoCompleteBuilder<Merchant,UUID> builder()
+	{
+		return builder;
 	}
 
 }
