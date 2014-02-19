@@ -164,7 +164,14 @@ public class MerchantLocationStep extends WizardStep
 			{
 				// New locations need to be saved before we can save the logos, images, geo,
 				// etc
-				taloolService.merge(merch);
+				if (merch.getId()==null)
+				{
+					taloolService.save(merch);
+				}
+				else
+				{
+					taloolService.merge(merch);
+				}
 				StringBuilder sb = new StringBuilder("Saved Merchant with id:");
 				LOG.debug(sb.append(merch.getId()).toString());
 				

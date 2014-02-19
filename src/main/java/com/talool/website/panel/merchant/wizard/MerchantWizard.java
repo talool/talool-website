@@ -96,7 +96,14 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 		{
 			if (mode.equals(MerchantWizardMode.MERCHANT))
 			{
-				taloolService.merge(merchant);
+				if (merchant.getId()==null)
+				{
+					taloolService.save(merchant);
+				}
+				else
+				{
+					taloolService.merge(merchant);
+				}
 				StringBuilder sb = new StringBuilder("Succesfully saved merchant: ");
 				this.info(sb.append(merchant.getName()).toString());
 			}
