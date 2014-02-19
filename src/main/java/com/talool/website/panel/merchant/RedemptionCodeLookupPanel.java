@@ -1,6 +1,8 @@
 package com.talool.website.panel.merchant;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -105,13 +107,9 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 			{
 				DealAcquire dac = item.getModelObject();
 				
-				Date redemptionDate = dac.getRedemptionDate();
-				
-				DateTime localDate = new DateTime(redemptionDate.getTime());
-				DateTimeZone tz = DateTimeZone.forID(getTimeZone().getID());
-				DateTimeFormatter formatter = DateTimeFormat.forPattern("EEE, MMM d, yyyy 'at' h:mm:ss a z").withZone(tz);
-				
-				String rDate = formatter.print(localDate);
+				Date tzDate = new Date(dac.getRedemptionDate().getTime() + getTimeZone().getRawOffset());
+				DateFormat formatter = new SimpleDateFormat("EEE, MMM d, yyyy 'at' h:mm:ss a z");   
+				String rDate = formatter.format(tzDate);
 				
 				item.add(new Label("redemptionDate", rDate));
 				
@@ -209,8 +207,8 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 	
 	public TimeZone getTimeZone() 
 	{
-		// start with the server timezone
-		TimeZone timezone = TimeZone.getDefault();
+		// start with the mountain timezone
+		TimeZone timezone = TimeZone.getTimeZone("MST");
 		
 		// update with the client's timezone if possible
 		WebClientInfo info = (WebClientInfo)getSession().getClientInfo();
