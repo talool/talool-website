@@ -12,9 +12,11 @@ import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -85,7 +87,127 @@ public class MerchantsPage extends BasePage
 		container.setOutputMarkupId(true);
 		add(container);
 		
-		MerchantSummaryDataProvider dataProvider = new MerchantSummaryDataProvider(sortParameter, isAscending);
+		final MerchantSummaryDataProvider dataProvider = new MerchantSummaryDataProvider(sortParameter, isAscending);
+		final DataView<MerchantSummary> merchants = getDataView(dataProvider);
+		container.add(merchants);
+		
+		final MerchantSearchPanel searchPanel = new MerchantSearchPanel("searchPanel"){
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onSearch(AjaxRequestTarget target, String merchantName) {
+				WebMarkupContainer container = (WebMarkupContainer) getPage().get(CONTAINER_ID);
+
+				final DataView<MerchantSummary> dataView = ((DataView<MerchantSummary>) container.get(REPEATER_ID));
+				MerchantSummaryDataProvider provider = (MerchantSummaryDataProvider) dataView.getDataProvider();
+				provider.setTitle(merchantName);
+
+				final AjaxPagingNavigator pagingNavigator = (AjaxPagingNavigator) container.get(NAVIGATOR_ID);
+				pagingNavigator.getPageable().setCurrentPage(0);
+				
+				itemCount = provider.size();
+				pagingNavigator.setVisible(itemCount > itemsPerPage);
+				
+				target.add(container);
+				target.add(pagingNavigator);
+			}
+			
+		};
+		container.add(searchPanel);
+		
+		itemCount = dataProvider.size();
+		container.add(new Label(COUNT_ID,new PropertyModel<Long>(this, "itemCount")));
+		
+		final AjaxPagingNavigator pagingNavigator = getPagination(merchants);
+		container.add(pagingNavigator.setOutputMarkupId(true));
+		
+		container.add(new AjaxLink<Void>("categoryLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("category", target);
+			}
+		});
+
+		container.add(new AjaxLink<Void>("nameLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("name", target);
+			}
+		});
+
+		// override the action button
+		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				getSession().getFeedbackMessages().clear();
+				final Merchant merchant = domainFactory.newMerchant();
+
+				merchant.getLocations().iterator().next().
+						setCreatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
+				wizard.setModelObject(merchant);
+				wizard.open(target);
+			}
+		};
+		setActionLink(actionLink);
+		Label actionLabel = new Label("actionLabel", getNewDefinitionPanelTitle());
+		actionLabel.setOutputMarkupId(true);
+		actionLink.add(actionLabel);
+		actionLink.setOutputMarkupId(true);
+
+		// Wizard
+		wizard = new MerchantWizard("wiz", "Merchant Wizard", MerchantWizardMode.MERCHANT)
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onFinish(AjaxRequestTarget target)
+			{
+				super.onFinish(target);
+				
+				resetPage(target);
+				
+				target.add(feedback);
+			}
+		};
+		add(wizard);
+
+		// preload the map to avoid a race condition with the loading of js
+		// dependencies
+		GMap map = new GMap("preloadMap");
+		add(map);
+
+	}
+	
+	private AjaxPagingNavigator getPagination(final DataView<MerchantSummary> merchants)
+	{
+		AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, merchants);
+		pagingNavigator.setOutputMarkupId(true);
+		pagingNavigator.setVisible(itemCount > itemsPerPage);
+		PagingNavigation nav = pagingNavigator.getPagingNavigation();
+		if (nav != null)
+		{
+			nav.setViewSize(5);
+		}
+		return pagingNavigator;
+	}
+	
+	private DataView<MerchantSummary> getDataView(IDataProvider<MerchantSummary> dataProvider)
+	{
 		final DataView<MerchantSummary> merchants = new DataView<MerchantSummary>(REPEATER_ID,dataProvider)
 		{
 
@@ -151,6 +273,8 @@ public class MerchantsPage extends BasePage
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
+						
+						WebMarkupContainer container = (WebMarkupContainer) getPage().get(CONTAINER_ID);
 						try 
 						{
 							// Assign it to Talool and make it not discoverable. 
@@ -168,7 +292,9 @@ public class MerchantsPage extends BasePage
 							}
 							merch.setIsDiscoverable(false);
 							taloolService.merge(merch);
-							target.add(container);
+							
+							resetPage(target);
+							
 							Session.get().success(merch.getName() + " has been sent back to Talool.  Contact us if you want it back.");
 						} 
 						catch (ServiceException se)
@@ -194,114 +320,14 @@ public class MerchantsPage extends BasePage
 
 		};
 		merchants.setItemsPerPage(itemsPerPage);
-		container.add(merchants);
 		
-		final MerchantSearchPanel searchPanel = new MerchantSearchPanel("searchPanel"){
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onSearch(AjaxRequestTarget target, String merchantName) {
-				WebMarkupContainer container = (WebMarkupContainer) getPage().get(CONTAINER_ID);
-
-				final DataView<MerchantSummary> dataView = ((DataView<MerchantSummary>) container.get(REPEATER_ID));
-				MerchantSummaryDataProvider provider = (MerchantSummaryDataProvider) dataView.getDataProvider();
-				provider.setTitle(merchantName);
-
-				final AjaxPagingNavigator pagingNavigator = (AjaxPagingNavigator) container.get(NAVIGATOR_ID);
-				pagingNavigator.getPageable().setCurrentPage(0);
-				
-				itemCount = provider.size();
-				pagingNavigator.setVisible(itemCount > itemsPerPage);
-				
-				target.add(container);
-				target.add(pagingNavigator);
-			}
-			
-		};
-		container.add(searchPanel);
-		
-		itemCount = dataProvider.size();
-		container.add(new Label(COUNT_ID,new PropertyModel<Long>(this, "itemCount")));
-		
-		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, merchants);
-		container.add(pagingNavigator.setOutputMarkupId(true));
-		pagingNavigator.setVisible(itemCount > itemsPerPage);
-		pagingNavigator.getPagingNavigation().setViewSize(5);
-		
-		container.add(new AjaxLink<Void>("categoryLink")
-		{
-			private static final long serialVersionUID = -4528179721619677443L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				doAjaxSearchRefresh("category", target);
-			}
-		});
-
-		container.add(new AjaxLink<Void>("nameLink")
-		{
-			private static final long serialVersionUID = -4528179721619677443L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				doAjaxSearchRefresh("name", target);
-			}
-		});
-
-		// override the action button
-		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
-		{
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				getSession().getFeedbackMessages().clear();
-				final Merchant merchant = domainFactory.newMerchant();
-
-				merchant.getLocations().iterator().next().
-						setCreatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
-				wizard.setModelObject(merchant);
-				wizard.open(target);
-			}
-		};
-		setActionLink(actionLink);
-		Label actionLabel = new Label("actionLabel", getNewDefinitionPanelTitle());
-		actionLabel.setOutputMarkupId(true);
-		actionLink.add(actionLabel);
-		actionLink.setOutputMarkupId(true);
-
-		// Wizard
-		wizard = new MerchantWizard("wiz", "Merchant Wizard", MerchantWizardMode.MERCHANT)
-		{
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onFinish(AjaxRequestTarget target)
-			{
-				super.onFinish(target);
-				// refresh the list after a deal is edited
-				target.add(container);
-			}
-		};
-		add(wizard);
-
-		// preload the map to avoid a race condition with the loading of js
-		// dependencies
-		GMap map = new GMap("preloadMap");
-		add(map);
-
+		return merchants;
 	}
 	
 	@SuppressWarnings("unchecked")
 	private void doAjaxSearchRefresh(final String sortParam, final AjaxRequestTarget target)
 	{
-		WebMarkupContainer container = (WebMarkupContainer) get(CONTAINER_ID);
+		WebMarkupContainer container = (WebMarkupContainer) getPage().get(CONTAINER_ID);
 
 		final DataView<MerchantSummary> dataView = ((DataView<MerchantSummary>) container.get(REPEATER_ID));
 		final MerchantSummaryDataProvider provider = (MerchantSummaryDataProvider) dataView.getDataProvider();
@@ -323,6 +349,22 @@ public class MerchantsPage extends BasePage
 		target.add(container);
 		target.add(pagingNavigator);
 
+	}
+	
+	private void resetPage(AjaxRequestTarget target)
+	{
+		// refresh the list after a book is edited
+		final WebMarkupContainer container = (WebMarkupContainer) getPage().get(CONTAINER_ID);
+		final MerchantSummaryDataProvider provider = new MerchantSummaryDataProvider(sortParameter, isAscending);
+		final DataView<MerchantSummary> dataView = getDataView(provider);
+		container.replace(dataView);
+		itemCount = provider.size();
+		target.add(container);
+		
+		// replace the pagination
+		final AjaxPagingNavigator pagingNavigator = getPagination(dataView);
+		container.replace(pagingNavigator);
+		target.add(pagingNavigator);
 	}
 
 	@Override

@@ -181,23 +181,28 @@ public class DealOffersPage extends BasePage
 			{
 				super.onFinish(target);
 				
-				// refresh the list after a book is edited
-				final WebMarkupContainer container = (WebMarkupContainer) getPage().get(CONTAINER_ID);
-				final DealOfferSummaryDataProvider provider = new DealOfferSummaryDataProvider(sortParameter, isAscending);
-				final DataView<DealOfferSummary> dataView = getDataView(provider);
-				container.replace(dataView);
-				itemCount = provider.size();
-				target.add(container);
-				
-				// replace the pagination
-				final AjaxPagingNavigator pagingNavigator = getPagination(books);
-				container.replace(pagingNavigator);
-				target.add(pagingNavigator);
+				resetPage(target);
 				
 				target.add(feedback);
 			}
 		};
 		add(wizard);
+	}
+	
+	private void resetPage(AjaxRequestTarget target)
+	{
+		// refresh the list after a book is edited
+		final WebMarkupContainer container = (WebMarkupContainer) getPage().get(CONTAINER_ID);
+		final DealOfferSummaryDataProvider provider = new DealOfferSummaryDataProvider(sortParameter, isAscending);
+		final DataView<DealOfferSummary> dataView = getDataView(provider);
+		container.replace(dataView);
+		itemCount = provider.size();
+		target.add(container);
+		
+		// replace the pagination
+		final AjaxPagingNavigator pagingNavigator = getPagination(dataView);
+		container.replace(pagingNavigator);
+		target.add(pagingNavigator);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -331,7 +336,9 @@ public class DealOffersPage extends BasePage
 							offer.setMerchant(merchants.get(0));
 							offer.setActive(false);
 							taloolService.merge(offer);
-							target.add(container);
+							
+							resetPage(target);
+							
 							Session.get().success(dealOffer.getTitle() + " has been sent back to Talool.  Contact us if you want it back.");
 						} 
 						catch (ServiceException se)
