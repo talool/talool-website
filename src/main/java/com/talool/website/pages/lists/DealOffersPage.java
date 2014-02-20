@@ -294,6 +294,10 @@ public class DealOffersPage extends BasePage
 				String moneyString = formatter.format(dealOffer.getPrice());
 				item.add(new Label("price", moneyString));
 				
+				
+				item.add(new Label("merchantCount", dealOffer.getMerchantCount()));
+				item.add(new Label("dealCount"));
+				
 				Label dealType = new Label("offerType");
 				item.add(dealType.setOutputMarkupId(true));
 				dealType.setVisible(isTaloolUserLoggedIn);

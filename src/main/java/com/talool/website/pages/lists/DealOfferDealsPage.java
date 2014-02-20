@@ -1,6 +1,8 @@
 package com.talool.website.pages.lists;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
@@ -8,6 +10,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -16,6 +19,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
@@ -50,6 +54,7 @@ public class DealOfferDealsPage extends BasePage
 	private boolean isAscending = true;
 	private int itemsPerPage = 50;
 	private long itemCount;
+	private Map<UUID,DealSummary> selectedDeals = new HashMap<UUID,DealSummary>();
 	
 	private UUID _dealOfferId;
 	private DealWizard wizard;
@@ -81,7 +86,7 @@ public class DealOfferDealsPage extends BasePage
 			@Override
 			protected void populateItem(Item<DealSummary> item)
 			{
-				DealSummary deal = item.getModelObject();
+				final DealSummary deal = item.getModelObject();
 				final UUID dealId = deal.getDealId();
 
 				item.setModel(new CompoundPropertyModel<DealSummary>(deal));
@@ -90,6 +95,25 @@ public class DealOfferDealsPage extends BasePage
 				{
 					item.add(new AttributeModifier("class", "odd-row-bg"));
 				}
+				
+				boolean isSelected = false;
+				item.add(new AjaxCheckBox("bulkCheckbox", new Model<Boolean>(isSelected)){
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onUpdate(AjaxRequestTarget target) {
+						if (getModelObject())
+						{
+							selectedDeals.put(dealId, deal);
+						}
+						else
+						{
+							selectedDeals.remove(dealId);
+						}
+					}
+					
+				});
 				item.add(new Label("merchantName"));
 				item.add(new Label("title"));
 				item.add(new Label("summary"));

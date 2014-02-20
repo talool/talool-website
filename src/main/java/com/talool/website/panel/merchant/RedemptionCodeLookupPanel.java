@@ -103,10 +103,9 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 			{
 				DealAcquire dac = item.getModelObject();
 				
-				TimeZone timezone = TimeZone.getTimeZone("MST");
-				Date tzDate = new Date(dac.getRedemptionDate().getTime() + timezone.getRawOffset());
-				DateFormat formatter = new SimpleDateFormat("EEE, MMM d, yyyy 'at' h:mm:ss a z");   
-				String rDate = formatter.format(tzDate);
+				DateFormat formatter = new SimpleDateFormat("EEE, MMM d, yyyy 'at' h:mm:ss a z");
+				formatter.setTimeZone(getTimeZone());
+				String rDate = formatter.format(dac.getRedemptionDate());
 				
 				item.add(new Label("redemptionDate", rDate));
 				
