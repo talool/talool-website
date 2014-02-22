@@ -1,19 +1,21 @@
 package com.talool.website.component;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.talool.core.Deal;
 import com.talool.core.DealOffer;
 import com.talool.core.FactoryManager;
 import com.talool.core.service.ServiceException;
@@ -31,6 +33,8 @@ public abstract class DealMover extends Panel {
 	private DealOffer moveToDealOffer;
 	private DealOfferListModel offerListModel;
 	private IndicatingAjaxLink<Void> mover;
+	private Label moveMessageLabel;
+	private String moveMessage;
 	
 	public DealMover(String id, IModel<Map<UUID,DealSummary>> model) {
 		super(id, model);
@@ -59,24 +63,21 @@ public abstract class DealMover extends Panel {
 				getSession().getFeedbackMessages().clear();
 				try
 				{
-					// TODO performance is really bad here!
-					TaloolService taloolService = FactoryManager.get()
-							.getServiceFactory().getTaloolService();
-					
+
 					Map<UUID,DealSummary> selectedDeals = model.getObject();
 					Collection<DealSummary> deals = selectedDeals.values();
+					List<UUID> dealIds = new ArrayList<UUID>();
 					for (DealSummary ds : deals)
 					{
-						Deal deal = taloolService.getDeal(ds.getDealId());
-						deal.setDealOffer(moveToDealOffer);
-						taloolService.merge(deal);
+						dealIds.add(ds.getDealId());
 					}
 					
-					StringBuilder sb = new StringBuilder("Your selected ");
-					if (deals.size()>1) sb.append("deals were ");
-					else sb.append("deal was ");
-					sb.append("moved.");
-					success(sb.toString());
+					TaloolService taloolService = FactoryManager.get()
+							.getServiceFactory().getTaloolService();
+					taloolService.moveDeals(dealIds, moveToDealOffer.getId(), 
+							SessionUtils.getSession().getMerchantAccount().getId());
+					
+					success(getMovedMessage(deals.size()));
 					
 				}
 				catch (ServiceException se)
@@ -107,6 +108,10 @@ public abstract class DealMover extends Panel {
 			}
 			
 		});
+		
+		setMoveMessage();
+		moveMessageLabel = new Label("moveMessage", new PropertyModel<String>(this, "moveMessage"));
+		add(moveMessageLabel.setOutputMarkupId(true));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -116,10 +121,48 @@ public abstract class DealMover extends Panel {
 		return (!selectedDeals.isEmpty() && moveToDealOffer!=null);
 	}
 	
+	@SuppressWarnings("unchecked")
+	private void setMoveMessage()
+	{
+		Map<UUID,DealSummary> selectedDeals = (Map<UUID,DealSummary>)getDefaultModel().getObject();
+		StringBuilder sb = new StringBuilder("Move ");
+		if (selectedDeals.isEmpty())
+		{
+			sb.append("selected deals to:");
+		}
+		else if (selectedDeals.size()==1)
+		{
+			sb.append("selected deal to:");
+		}
+		else
+		{
+			sb.append(selectedDeals.size()).append(" selected deals to:");
+		}
+		moveMessage = sb.toString();
+	}
+	
+	private String getMovedMessage(int count)
+	{
+		StringBuilder sb = new StringBuilder("Your ");
+		if (count==1)
+		{
+			sb.append("selected deal was moved to ");
+		}
+		else
+		{
+			sb.append(count).append(" selected deals were moved to ");
+		}
+		sb.append(moveToDealOffer.getTitle());
+		return sb.toString();
+	}
+	
 	public void reset(AjaxRequestTarget target)
 	{
 		mover.setEnabled(isMoveEnabled());
 		target.add(mover);
+		
+		setMoveMessage();
+		target.add(moveMessageLabel);
 	}
 
 	abstract public void onMove(AjaxRequestTarget target);

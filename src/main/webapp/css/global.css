@@ -351,6 +351,15 @@ body div.wicket-modal h3.w_captionText {
 	-moz-border-radius-bottomright: 4px;
 	border-bottom-right-radius: 4px;
 }
+.btn.disabled,
+span.btn
+{
+	box-shadow: none;
+	background-image: none;
+	background: rgba(0,0,0,.05);
+	cursor: default;
+	color: rgba(0,0,0,.2);
+}
 .dropdown-menu {
 	position: absolute;
 	top: 100%;

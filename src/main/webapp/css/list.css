@@ -176,7 +176,10 @@ div.tabpanel div.tab-row a:hover {
 {
 	margin: -5px 0 0;
 }
-
+.listNav .btn em
+{
+	font-style: normal;
+}
 .listNav .bulkAction select
 {
 	margin-right: 10px;
@@ -192,6 +195,14 @@ div.tabpanel div.tab-row a:hover {
     -moz-appearance:none;
     appearance:none;
     cursor:pointer;
+}
+
+.listNav .bulkAction .wicket-ajax-indicator
+{
+	display: inline-block;
+	margin-left: 10px;
+	position: relative;
+	top: 5px;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
