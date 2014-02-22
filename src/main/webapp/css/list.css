@@ -176,3 +176,51 @@ div.tabpanel div.tab-row a:hover {
 {
 	margin: -5px 0 0;
 }
+
+.listNav .bulkAction select
+{
+	margin-right: 10px;
+	
+	padding:7px 10px 10px;
+    border-radius:3px;
+    background: #f8f8f8;
+    color:#888;
+    border: 1px solid #bbb;
+    outline:none;
+    display: inline-block;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+    cursor:pointer;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .listNav .bulkAction select {padding-right:18px}
+}
+
+.listNav .bulkAction label {
+	position:relative;
+}
+.listNav .bulkAction label:after {
+    content:'<>';
+    font:11px "Consolas", monospace;
+    color:#aaa;
+    -webkit-transform:rotate(90deg);
+    -moz-transform:rotate(90deg);
+    -ms-transform:rotate(90deg);
+    transform:rotate(90deg);
+    right:17px; top:1px;
+    padding:0 0 2px;
+    border-bottom:1px solid #ddd;
+    position:absolute;
+    pointer-events:none;
+}
+.listNav .bulkAction label:before {
+    content:'';
+    right:12px; top:0px;
+    width:20px; height:20px;
+    background:#f8f8f8;
+    position:absolute;
+    pointer-events:none;
+    display:block;
+}

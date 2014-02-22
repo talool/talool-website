@@ -1,6 +1,7 @@
 package com.talool.website.pages.lists;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -15,9 +16,11 @@ import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -26,14 +29,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
+import com.talool.core.DealOffer;
+import com.talool.core.DealType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
 import com.talool.core.service.ServiceException;
 import com.talool.stats.DealSummary;
 import com.talool.website.component.ConfirmationIndicatingAjaxLink;
+import com.talool.website.component.DealMover;
 import com.talool.website.component.StaticImage;
-import com.talool.website.models.DealListModel;
 import com.talool.website.models.DealModel;
+import com.talool.website.models.DealOfferListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.deal.wizard.DealWizard;
@@ -58,11 +64,22 @@ public class DealOfferDealsPage extends BasePage
 	
 	private UUID _dealOfferId;
 	private DealWizard wizard;
+	private boolean bulkMoveEnabled;
+	private DealMover mover;
 
 	public DealOfferDealsPage(PageParameters parameters)
 	{
 		super(parameters);
 		_dealOfferId = UUID.fromString(parameters.get("id").toString());
+		DealOfferListModel offerListModel = new DealOfferListModel();
+		offerListModel.setMerchantId(SessionUtils.getSession().getMerchantAccount().getMerchant().getId());
+		offerListModel.setExcludeKirke(true);
+		try
+		{
+			DealOffer offer = taloolService.getDealOffer(_dealOfferId);
+			bulkMoveEnabled = (offer.getType().equals(DealType.KIRKE_BOOK) && !offerListModel.getObject().isEmpty());
+		}
+		catch (ServiceException se){}
 	}
 
 	@Override
@@ -70,14 +87,122 @@ public class DealOfferDealsPage extends BasePage
 	{
 		super.onInitialize();
 
-		DealListModel model = new DealListModel();
-		model.setDealOfferId(_dealOfferId);
-
 		final WebMarkupContainer container = new WebMarkupContainer(CONTAINER_ID);
 		container.setOutputMarkupId(true);
 		add(container);
+		
+		mover = new DealMover("mover", new PropertyModel<Map<UUID,DealSummary>>(this,"selectedDeals")){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onMove(AjaxRequestTarget target) {
+				resetPage(target);
+				target.add(feedback);
+				selectedDeals = new HashMap<UUID,DealSummary>();
+				mover.reset(target);
+				target.add(mover);
+			}
+			
+		};
+		container.add(mover.setOutputMarkupId(true).setVisible(bulkMoveEnabled));
 
 		final DealSummaryDataProvider dataProvider = new DealSummaryDataProvider(_dealOfferId, sortParameter, isAscending);
+		final DataView<DealSummary> deals = getDataView(dataProvider);
+		container.add(deals);
+		
+		// Set the labels above the pagination
+		itemCount = deals.getItemCount();
+		Label totalCount = new Label("totalCount",new PropertyModel<Long>(this, "itemCount"));
+		container.add(totalCount.setOutputMarkupId(true));
+				
+		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, deals);
+		container.add(pagingNavigator.setOutputMarkupId(true));
+		pagingNavigator.setVisible(dataProvider.size() > itemsPerPage);
+		pagingNavigator.getPagingNavigation().setViewSize(5);
+
+		container.add(new AjaxLink<Void>("merchantSortLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("merchantName", target);
+			}
+		});
+		
+		container.add(new AjaxLink<Void>("citySortLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("merchantCity", target);
+			}
+		});
+		
+		container.add(new AjaxLink<Void>("stateSortLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("merchantState", target);
+			}
+		});
+		
+		// override the action button
+		final BasePage page = (BasePage) this.getPage();
+		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				getSession().getFeedbackMessages().clear();
+				MerchantAccount ma = SessionUtils.getSession().getMerchantAccount();
+				Deal deal = domainFactory.newDeal(null, ma, true);
+				wizard.setModelObject(deal);
+				wizard.open(target);
+			}
+		};
+		page.setActionLink(actionLink);
+		Label actionLabel = new Label("actionLabel", getNewDefinitionPanelTitle());
+		actionLabel.setOutputMarkupId(true);
+		actionLink.add(actionLabel);
+		actionLink.setOutputMarkupId(true);
+
+		// Wizard
+		wizard = new DealWizard("wiz", "Deal Wizard")
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onFinish(AjaxRequestTarget target)
+			{
+				super.onFinish(target);
+				target.add(container);
+			}
+		};
+		add(wizard);
+
+	}
+	
+	private AjaxPagingNavigator getPagination(final DataView<DealSummary> deals)
+	{
+		AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, deals);
+		pagingNavigator.setOutputMarkupId(true);
+		pagingNavigator.setVisible(itemCount > itemsPerPage);
+		return pagingNavigator;
+	}
+	
+	private DataView<DealSummary> getDataView(IDataProvider<DealSummary> dataProvider)
+	{
 		final DataView<DealSummary> deals = new DataView<DealSummary>(REPEATER_ID,dataProvider)
 		{
 
@@ -97,7 +222,7 @@ public class DealOfferDealsPage extends BasePage
 				}
 				
 				boolean isSelected = false;
-				item.add(new AjaxCheckBox("bulkCheckbox", new Model<Boolean>(isSelected)){
+				AjaxCheckBox cb = new AjaxCheckBox("bulkCheckbox", new Model<Boolean>(isSelected)){
 
 					private static final long serialVersionUID = 1L;
 
@@ -111,10 +236,16 @@ public class DealOfferDealsPage extends BasePage
 						{
 							selectedDeals.remove(dealId);
 						}
+						mover.reset(target);
+						target.add(mover);
 					}
 					
-				});
+				};
+				item.add(cb.setVisible(bulkMoveEnabled));
+				
 				item.add(new Label("merchantName"));
+				item.add(new Label("merchantCity"));
+				item.add(new Label("merchantState"));
 				item.add(new Label("title"));
 				item.add(new Label("summary"));
 				item.add(new Label("details"));
@@ -166,7 +297,9 @@ public class DealOfferDealsPage extends BasePage
 							deal.setActive(false);
 							deal.setMerchant(_talool);
 							taloolService.merge(deal);
-							target.add(container);
+							
+							resetPage(target);
+							
 							Session.get().success(deal.getTitle() + " has been sent back to Talool.  Contact us if you want it back.");
 						} 
 						catch (ServiceException se)
@@ -184,67 +317,7 @@ public class DealOfferDealsPage extends BasePage
 
 		};
 		deals.setItemsPerPage(itemsPerPage);
-		container.add(deals);
-		
-		// Set the labels above the pagination
-		itemCount = deals.getItemCount();
-		Label totalCount = new Label("totalCount",new PropertyModel<Long>(this, "itemCount"));
-		container.add(totalCount.setOutputMarkupId(true));
-				
-		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, deals);
-		container.add(pagingNavigator.setOutputMarkupId(true));
-		pagingNavigator.setVisible(dataProvider.size() > itemsPerPage);
-		pagingNavigator.getPagingNavigation().setViewSize(5);
-
-		container.add(new AjaxLink<Void>("merchantSortLink")
-		{
-			private static final long serialVersionUID = -4528179721619677443L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				doAjaxSearchRefresh("merchantName", target);
-			}
-		});
-		
-		// override the action button
-		final BasePage page = (BasePage) this.getPage();
-		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
-		{
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				getSession().getFeedbackMessages().clear();
-				MerchantAccount ma = SessionUtils.getSession().getMerchantAccount();
-				Deal deal = domainFactory.newDeal(null, ma, true);
-				wizard.setModelObject(deal);
-				wizard.open(target);
-			}
-		};
-		page.setActionLink(actionLink);
-		Label actionLabel = new Label("actionLabel", getNewDefinitionPanelTitle());
-		actionLabel.setOutputMarkupId(true);
-		actionLink.add(actionLabel);
-		actionLink.setOutputMarkupId(true);
-
-		// Wizard
-		wizard = new DealWizard("wiz", "Deal Wizard")
-		{
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onFinish(AjaxRequestTarget target)
-			{
-				super.onFinish(target);
-				target.add(container);
-			}
-		};
-		add(wizard);
-
+		return deals;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -271,6 +344,29 @@ public class DealOfferDealsPage extends BasePage
 
 		target.add(container);
 		target.add(pagingNavigator);
+
+	}
+	
+	private void resetPage(final AjaxRequestTarget target)
+	{
+		// refresh the list after a book is edited
+		final WebMarkupContainer container = (WebMarkupContainer) getPage().get(CONTAINER_ID);
+		final DealSummaryDataProvider provider = new DealSummaryDataProvider(_dealOfferId, sortParameter, isAscending);
+		final DataView<DealSummary> dataView = getDataView(provider);
+		container.replace(dataView);
+		itemCount = provider.size();
+		target.add(container);
+		
+		// replace the pagination
+		final AjaxPagingNavigator pagingNavigator = getPagination(dataView);
+		container.replace(pagingNavigator);
+		target.add(pagingNavigator);
+		
+		PagingNavigation nav = pagingNavigator.getPagingNavigation();
+		if (nav != null)
+		{
+			nav.setViewSize(5);
+		}
 
 	}
 

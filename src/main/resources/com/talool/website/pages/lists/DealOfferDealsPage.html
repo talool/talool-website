@@ -3,6 +3,7 @@
 		
 		<table class="listNav">
 			<tr>
+				<td class="bulkAction" wicket:id="mover"></td>
 				<td class="pagination">
 					<div class="count"><span wicket:id="totalCount"></span> Deal(s)</div>
 					<div wicket:id="navigator" class="navigator"></div>
@@ -14,24 +15,31 @@
 	  		<thead>
 	  			<tr>
 	  				<th></th>
-	  				<th><a wicket:id="merchantSortLink">Merchant</a></th>
-	  				<th>Deals</th>
 	  				<th>Image</th>
+	  				<th>Deal</th>
+	  				<th><a wicket:id="merchantSortLink">Merchant</a></th>
+	  				<th><a wicket:id="citySortLink">City</a></th>
+	  				<th><a wicket:id="stateSortLink">State</a></th>
 	  				<th class="actionCol">Actions</th>
 	  			</tr>
 	  		</thead>
 	  		<tbody>
 	  			<tr class="odd" wicket:id="dealRptr">
 	  				<td class="bulkCheckbox"><input class="chbx" type="checkbox" wicket:id="bulkCheckbox"/></td>
-	  				<td wicket:id="merchantName"></td>
+	  				<td>
+	  					<img wicket:id="myimage"/>
+	  				</td>
+	  				
 	  				<td class="dealListItem">
 	  					<div class="title" wicket:id="title"></div>
 	  					<div class="summary" wicket:id="summary"></div>
 	  					<div class="details" wicket:id="details"></div>
 	  				</td>
-	  				<td>
-	  					<img wicket:id="myimage"/>
-	  				</td>
+	  				
+	  				<td wicket:id="merchantName"></td>
+	  				<td wicket:id="merchantCity"></td>
+	  				<td wicket:id="merchantState"></td>
+	  				
 	  				<td class="orange-font actionCol">
 	  					<a wicket:id="editLink" class="icon icon-large icon-pencil" title="Edit Deal"></a>
 	  					<a wicket:id="deleteLink" class="icon icon-large icon-remove" title="Delete Deal"></a>

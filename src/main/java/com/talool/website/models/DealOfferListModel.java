@@ -1,5 +1,6 @@
 package com.talool.website.models;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.DealOffer;
+import com.talool.core.DealType;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 
@@ -22,6 +24,7 @@ public class DealOfferListModel extends LoadableDetachableModel<List<DealOffer>>
 	}
 	private UUID _merchantId;
 	private LOAD_METHOD _method;
+	private boolean _excludeKirke = false;
 
 	@Override
 	protected List<DealOffer> load()
@@ -39,6 +42,19 @@ public class DealOfferListModel extends LoadableDetachableModel<List<DealOffer>>
 			{
 				books = ServiceFactory.get().getTaloolService().getDealOffers();
 			}
+			
+			if (_excludeKirke)
+			{
+				List<DealOffer> b2 = new ArrayList<DealOffer>();
+				for (DealOffer o:books)
+				{
+					if (!o.getType().equals(DealType.KIRKE_BOOK))
+					{
+						b2.add(o);
+					}
+				}
+				books = b2;
+			}
 
 		}
 		catch (ServiceException e)
@@ -53,6 +69,11 @@ public class DealOfferListModel extends LoadableDetachableModel<List<DealOffer>>
 	{
 		_merchantId = id;
 		_method = LOAD_METHOD.MERHCANT;
+	}
+	
+	public void setExcludeKirke(boolean x)
+	{
+		_excludeKirke = x;
 	}
 
 }
