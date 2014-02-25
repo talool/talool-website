@@ -13,6 +13,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
 import com.talool.core.service.TaloolService;
+import com.talool.website.TaloolSession;
 import com.talool.website.panel.AdminMenuPanel;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.NiceFeedbackPanel;
@@ -64,9 +65,10 @@ public abstract class BasePage extends WebPage
 		init();
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void init()
 	{
+		TaloolSession.performBrowserCheck();
+		
 		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
 
 		feedback = new NiceFeedbackPanel("feedback");

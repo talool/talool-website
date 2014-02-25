@@ -12,6 +12,7 @@ import com.talool.core.FactoryManager;
 import com.talool.core.MerchantAccount;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
+import com.talool.website.TaloolSession;
 import com.talool.website.pages.lists.MerchantsPage;
 import com.talool.website.service.PermissionService;
 import com.talool.website.util.SessionUtils;
@@ -31,6 +32,16 @@ public class AdminLoginPage extends WebPage
 
 	private String email;
 	private String pass;
+	
+	
+
+	public AdminLoginPage()
+	{
+		super();
+		
+		TaloolSession.performBrowserCheck();
+		
+	}
 
 	@Override
 	protected void onInitialize()

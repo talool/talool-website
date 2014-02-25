@@ -6,15 +6,21 @@ import java.util.UUID;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Session;
+import org.apache.wicket.core.request.handler.PageProvider;
+import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.markup.html.IPackageResourceGuard;
 import org.apache.wicket.markup.html.SecurePackageResourceGuard;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.settings.IExceptionSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.apache.wicket.util.lang.Exceptions;
 import org.apache.wicket.util.lang.PackageName;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -55,6 +61,7 @@ import com.talool.website.pages.corporate.WWWPrivacyPolicy;
 import com.talool.website.pages.corporate.WWWTermsOfService;
 import com.talool.website.pages.dashboard.MerchantDashboard;
 import com.talool.website.pages.error.AccessDeniedPage;
+import com.talool.website.pages.error.BrowserErrorPage;
 import com.talool.website.pages.error.InternalErrorPage;
 import com.talool.website.pages.error.PageNotFound;
 import com.talool.website.pages.facebook.OpenGraphDeal;
@@ -78,6 +85,7 @@ import com.talool.website.pages.sales.MerchantBenefits;
 import com.talool.website.pages.sales.PublisherBenefits;
 import com.talool.website.panel.image.upload.FileManageResourceReference;
 import com.talool.website.panel.image.upload.FileUploadResourceReference;
+import com.talool.website.service.BrowserException;
 
 /**
  * @author clintz
@@ -232,6 +240,19 @@ public class TaloolApplication extends WebApplication implements Serializable
 		getApplicationSettings().setPageExpiredErrorPage(getHomePage());
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
 		getApplicationSettings().setInternalErrorPage(InternalErrorPage.class);
+		
+		getRequestCycleListeners().add(new AbstractRequestCycleListener() {
+	        @Override
+	        public IRequestHandler onException(RequestCycle cycle, Exception ex) {
+	        	BrowserException be = Exceptions.findCause(ex, BrowserException.class);
+	        	if (be != null) 
+	            {
+	                return new RenderPageRequestHandler(new PageProvider(BrowserErrorPage.class));
+	            }
+	            return super.onException(cycle, ex);
+	        }
+	    });
+		
 		
 		
 		// else

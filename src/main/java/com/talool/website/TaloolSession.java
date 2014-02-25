@@ -1,27 +1,23 @@
 package com.talool.website;
 
-import org.apache.wicket.Session;
-import org.apache.wicket.core.request.ClientInfo;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.Request;
 
 import com.talool.core.DealOffer;
 import com.talool.core.MerchantAccount;
+import com.talool.website.service.BrowserException;
 
 /**
  * 
  * @author clintz
  * 
  */
-public class TaloolSession extends Session
+public class TaloolSession extends WebSession
 {
 	private static final long serialVersionUID = 5796824961553926305L;
 	private DealOffer lastDealOffer;
-
-	@Override
-	public ClientInfo getClientInfo()
-	{
-		return null;
-	}
 
 	public MerchantAccount getMerchantAccount()
 	{
@@ -53,6 +49,21 @@ public class TaloolSession extends Session
 	public void setLastDealOffer(DealOffer lastDealOffer)
 	{
 		this.lastDealOffer = lastDealOffer;
+	}
+	
+	public static void performBrowserCheck() throws BrowserException
+	{
+		try
+		{
+			WebClientInfo info = (WebClientInfo) TaloolSession.get().getClientInfo();
+			String ua = info.getUserAgent();
+			if (!StringUtils.containsIgnoreCase(ua, "WebKit"))
+			{
+				throw new BrowserException();
+			}
+		} 
+		catch (NullPointerException e)
+		{}
 	}
 
 }
