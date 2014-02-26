@@ -45,12 +45,11 @@ import com.talool.core.service.ServiceException;
 import com.talool.stats.DealOfferSummary;
 import com.talool.website.behaviors.AJAXDownload;
 import com.talool.website.component.ConfirmationIndicatingAjaxLink;
-import com.talool.website.component.ToggleButton;
-import com.talool.website.component.ToggleButton.ToggleLabelType;
 import com.talool.website.models.DealOfferModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.dealoffer.DealOfferPublishToggle;
 import com.talool.website.panel.dealoffer.wizard.DealOfferWizard;
 import com.talool.website.util.SecuredPage;
 import com.talool.website.util.SessionUtils;
@@ -290,7 +289,8 @@ public class DealOffersPage extends BasePage
 						new PropertyModel<String>(dealOffer, "merchantName"));
 				pubColCell.add(merchantLink);
 				
-				item.add(new Label("location", getGeoLocation(dealOffer)));
+				String locationName = getGeoLocation(dealOffer);
+				item.add(new Label("location", locationName));
 
 				if (isKirkeBook(dealOffer))
 				{
@@ -322,39 +322,7 @@ public class DealOffersPage extends BasePage
 					item.add(new Label("expires", ""));
 				}
 				
-				if (isKirkeBook(dealOffer))
-				{
-					// we can let users enable kirke books
-					item.add(new Label("isActive", "unpublishable"));
-				}
-				else if (isOfferReadyToPublish(dealOffer))
-				{
-					item.add(new ToggleButton("isActive", new Model<Boolean>(dealOffer.getIsActive()), ToggleLabelType.YES_NO){
-
-						private static final long serialVersionUID = -2508151345085039614L;
-
-						@Override
-						public void onToggle(AjaxRequestTarget target) {
-							try
-							{
-								DealOffer offer = taloolService.getDealOffer(dealOfferId);
-								offer.setActive(!offer.isActive());
-								taloolService.merge(offer);
-							}
-							catch (ServiceException se)
-							{
-								LOG.error("problem setting isActive flag for deal offer", se);
-								Session.get().error("There was a problem saving " +dealOffer.getTitle() + ".  Contact us if you want it updated manually.");
-							}
-						}
-						
-					});
-				}
-				else
-				{
-					item.add(new Label("isActive", "empty book"));
-				}
-				
+				item.add(new DealOfferPublishToggle("isActive", new Model<DealOfferSummary>(dealOffer)));
 				
 				StringBuilder confirm = new StringBuilder();
 				confirm.append("Are you sure you want to remove \"").append(title).append("\"?");
@@ -366,7 +334,6 @@ public class DealOffersPage extends BasePage
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						WebMarkupContainer container = (WebMarkupContainer) getPage().get(CONTAINER_ID);
 						try 
 						{
 							// Make "not active" and assign it to Talool. 
@@ -585,20 +552,6 @@ public class DealOffersPage extends BasePage
 		}
 		
 		return label;
-	}
-	
-	private boolean isOfferReadyToPublish(DealOfferSummary offer)
-	{
-		// Do we need to validate anything else?
-		boolean b = false;
-		try {
-			b = (offer.getMerchantCount() > 0 && offer.getDealCount() > 0);
-		}
-		catch (Exception e)
-		{
-			// meta data not ready
-		}
-		return b;
 	}
 	
 	private boolean isKirkeBook(DealOfferSummary offer) {
