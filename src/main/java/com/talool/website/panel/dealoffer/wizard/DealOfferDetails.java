@@ -4,7 +4,6 @@ import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.wizard.WizardStep;
-import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.ResourceModel;
@@ -49,8 +48,6 @@ public class DealOfferDetails extends WizardStep
 
 		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
 		addOrReplace(new DateTextField("expires", converter));
-
-		addOrReplace(new CheckBox("isActive"));
 		
 	}
 
