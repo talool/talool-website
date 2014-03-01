@@ -19,6 +19,11 @@ public class TaloolSession extends WebSession
 	private static final long serialVersionUID = 5796824961553926305L;
 	private DealOffer lastDealOffer;
 
+	private static enum AcceptedBrowserName
+	{
+		chrome, safari, firefox
+	};
+
 	public MerchantAccount getMerchantAccount()
 	{
 		return merchantAccount;
@@ -50,18 +55,25 @@ public class TaloolSession extends WebSession
 	{
 		this.lastDealOffer = lastDealOffer;
 	}
-	
+
 	public static void performBrowserCheck() throws BrowserException
 	{
 		try
 		{
 			WebClientInfo info = (WebClientInfo) TaloolSession.get().getClientInfo();
 			String ua = info.getUserAgent();
-			if (!StringUtils.containsIgnoreCase(ua, "WebKit"))
+
+			for (AcceptedBrowserName name : AcceptedBrowserName.values())
 			{
-				throw new BrowserException();
+				if (StringUtils.containsIgnoreCase(ua, name.toString()))
+				{
+					return;
+				}
 			}
-		} 
+
+			throw new BrowserException();
+
+		}
 		catch (NullPointerException e)
 		{}
 	}
