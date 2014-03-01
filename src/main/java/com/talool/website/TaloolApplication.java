@@ -16,6 +16,7 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.settings.IExceptionSettings;
@@ -85,6 +86,7 @@ import com.talool.website.pages.sales.MerchantBenefits;
 import com.talool.website.pages.sales.PublisherBenefits;
 import com.talool.website.panel.image.upload.FileManageResourceReference;
 import com.talool.website.panel.image.upload.FileUploadResourceReference;
+import com.talool.website.resources.SendgridWebHookResource;
 import com.talool.website.service.BrowserException;
 
 /**
@@ -207,7 +209,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/m/deal", MobileOpenGraphDeal.class);
 		mountPage("/m/offer", MobileOpenGraphDealOffer.class);
 		mountPage("/m/location", MobileOpenGraphLocation.class);
-		
+
 		mountPage("/404", PageNotFound.class);
 
 		/*
@@ -220,9 +222,9 @@ public class TaloolApplication extends WebApplication implements Serializable
 		// LeastRecentlyAccessedEvictionStrategy(1));
 		getPageSettings().setVersionPagesByDefault(false);
 		// getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
-		
+
 		getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
-		
+
 		final AuthStrategy authStrat = new AuthStrategy();
 		getSecuritySettings().setAuthorizationStrategy(authStrat);
 		getSecuritySettings().setUnauthorizedComponentInstantiationListener(authStrat);
@@ -240,21 +242,40 @@ public class TaloolApplication extends WebApplication implements Serializable
 		getApplicationSettings().setPageExpiredErrorPage(getHomePage());
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
 		getApplicationSettings().setInternalErrorPage(InternalErrorPage.class);
-		
-		getRequestCycleListeners().add(new AbstractRequestCycleListener() {
-	        @Override
-	        public IRequestHandler onException(RequestCycle cycle, Exception ex) {
-	        	BrowserException be = Exceptions.findCause(ex, BrowserException.class);
-	        	if (be != null) 
-	            {
-	                return new RenderPageRequestHandler(new PageProvider(BrowserErrorPage.class));
-	            }
-	            return super.onException(cycle, ex);
-	        }
-	    });
-		
-		
-		
+
+		getRequestCycleListeners().add(new AbstractRequestCycleListener()
+		{
+			@Override
+			public IRequestHandler onException(RequestCycle cycle, Exception ex)
+			{
+				BrowserException be = Exceptions.findCause(ex, BrowserException.class);
+				if (be != null)
+				{
+					return new RenderPageRequestHandler(new PageProvider(BrowserErrorPage.class));
+				}
+				return super.onException(cycle, ex);
+			}
+		});
+
+		// sendgrid webhook resource
+		// ResourceReference sendGridWebHookResource = new
+		// SendgridWebHookResource("sendGridWebHook");
+
+		final ResourceReference sendGridWebHookResource = new ResourceReference("sendGridWebHookResource")
+		{
+
+			private static final long serialVersionUID = 9186819766723899003L;
+			final SendgridWebHookResource sendGridResource = new SendgridWebHookResource();
+
+			@Override
+			public IResource getResource()
+			{
+				return sendGridResource;
+			}
+		};
+
+		mountResource("/sendgrid-hook", sendGridWebHookResource);
+
 		// else
 		// {
 		// // love this hack for working locally and changing HTML and have it

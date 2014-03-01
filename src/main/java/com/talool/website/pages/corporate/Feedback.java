@@ -12,10 +12,9 @@ import org.slf4j.LoggerFactory;
 
 import com.talool.core.FactoryManager;
 import com.talool.core.service.EmailService;
-import com.talool.core.service.ServiceException;
 
-
-public class Feedback extends BaseCorporatePage {
+public class Feedback extends BaseCorporatePage
+{
 
 	/**
 	 * 
@@ -29,14 +28,14 @@ public class Feedback extends BaseCorporatePage {
 	private String fromEmail;
 	private String feedbackSource;
 	private Boolean showThanks;
-	
+
 	public Feedback(PageParameters params)
 	{
 		super(params);
-		
+
 		StringValue fe = params.get("fromEmail");
 		StringValue fs = params.get("feedbackSrc");
-		if (fe.isEmpty()) 
+		if (fe.isEmpty())
 		{
 			// Check the post params
 			IRequestParameters postParams = this.getRequest().getPostParameters();
@@ -51,51 +50,59 @@ public class Feedback extends BaseCorporatePage {
 				feedbackBuilder.append("From: ").append(fromEmail).append("<br/>");
 				feedbackBuilder.append("Source: ").append(feedbackSource).append("<br/><br/>");
 				feedbackBuilder.append("Feedback: ").append(feedback.toString());
-				try
-				{
-					emailService.sendEmail(feedbackTitle, feedbackRecipient, fromEmail, feedbackBuilder.toString());
-				}
-				catch (ServiceException se)
-				{
-					StringBuilder sb = new StringBuilder("Service Exception: Failed to send feedback: ");
-					LOG.debug(sb.append(feedback.toString()).toString());
-				}
-				catch (Exception e)
-				{
-					StringBuilder sb = new StringBuilder("Exception: Failed to send feedback: ");
-					LOG.debug(sb.append(feedback.toString()).toString());
-				}
-				showThanks=true;
+				// try
+				// {
+				// emailService.sendEmail(feedbackTitle, feedbackRecipient, fromEmail,
+				// feedbackBuilder.toString());
+				// }
+				// catch (ServiceException se)
+				// {
+				// StringBuilder sb = new
+				// StringBuilder("Service Exception: Failed to send feedback: ");
+				// LOG.debug(sb.append(feedback.toString()).toString());
+				// }
+				// catch (Exception e)
+				// {
+				// StringBuilder sb = new
+				// StringBuilder("Exception: Failed to send feedback: ");
+				// LOG.debug(sb.append(feedback.toString()).toString());
+				// }
+				showThanks = true;
 			}
 		}
 		else
 		{
 			fromEmail = fe.toString();
 			feedbackSource = fs.toString();
-			showThanks=false;
+			showThanks = false;
 		}
-		
-		
+
 	}
-	
+
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
 		WebMarkupContainer form = new WebMarkupContainer("formbox");
 		add(form);
-		HiddenField<String> email = new HiddenField<String>("fromEmail", new PropertyModel<String>(this,"fromEmail")){
+		HiddenField<String> email = new HiddenField<String>("fromEmail", new PropertyModel<String>(this, "fromEmail"))
+		{
 			private static final long serialVersionUID = 1L;
+
 			@Override
-			public String getInputName() {
+			public String getInputName()
+			{
 				return "fromEmail";
 			}
 		};
 		form.add(email);
-		HiddenField<String> src = new HiddenField<String>("feedbackSrc", new PropertyModel<String>(this,"feedbackSource")){
+		HiddenField<String> src = new HiddenField<String>("feedbackSrc", new PropertyModel<String>(this, "feedbackSource"))
+		{
 			private static final long serialVersionUID = 1L;
+
 			@Override
-			public String getInputName() {
+			public String getInputName()
+			{
 				return "feedbackSrc";
 			}
 		};
@@ -103,11 +110,11 @@ public class Feedback extends BaseCorporatePage {
 		form.setVisible(!showThanks);
 		if (showThanks)
 		{
-			add(new Label("header","Thanks For Your Feedback!"));
+			add(new Label("header", "Thanks For Your Feedback!"));
 		}
 		else
 		{
-			add(new Label("header","We're Listening"));
+			add(new Label("header", "We're Listening"));
 		}
 	}
 
