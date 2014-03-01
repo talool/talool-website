@@ -16,7 +16,6 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.settings.IExceptionSettings;
@@ -86,7 +85,6 @@ import com.talool.website.pages.sales.MerchantBenefits;
 import com.talool.website.pages.sales.PublisherBenefits;
 import com.talool.website.panel.image.upload.FileManageResourceReference;
 import com.talool.website.panel.image.upload.FileUploadResourceReference;
-import com.talool.website.resources.SendgridWebHookResource;
 import com.talool.website.service.BrowserException;
 
 /**
@@ -256,25 +254,6 @@ public class TaloolApplication extends WebApplication implements Serializable
 				return super.onException(cycle, ex);
 			}
 		});
-
-		// sendgrid webhook resource
-		// ResourceReference sendGridWebHookResource = new
-		// SendgridWebHookResource("sendGridWebHook");
-
-		final ResourceReference sendGridWebHookResource = new ResourceReference("sendGridWebHookResource")
-		{
-
-			private static final long serialVersionUID = 9186819766723899003L;
-			final SendgridWebHookResource sendGridResource = new SendgridWebHookResource();
-
-			@Override
-			public IResource getResource()
-			{
-				return sendGridResource;
-			}
-		};
-
-		mountResource("/sendgrid-hook", sendGridWebHookResource);
 
 		// else
 		// {
