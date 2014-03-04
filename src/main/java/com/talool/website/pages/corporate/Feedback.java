@@ -10,15 +10,21 @@ import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.talool.core.Customer;
 import com.talool.core.FactoryManager;
 import com.talool.core.service.EmailService;
+import com.talool.core.service.ServiceException;
+import com.talool.service.mail.EmailParams;
+import com.talool.service.mail.EmailRequest;
 
+/**
+ * Feedback page for mobile customers
+ * 
+ * @author dmccuen,clintz
+ * 
+ */
 public class Feedback extends BaseCorporatePage
 {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(Feedback.class);
 	private static final String feedbackTitle = "Customer Feedback";
@@ -27,7 +33,7 @@ public class Feedback extends BaseCorporatePage
 			.getServiceFactory().getEmailService();
 	private String fromEmail;
 	private String feedbackSource;
-	private Boolean showThanks;
+	private boolean showThanks = false;
 
 	public Feedback(PageParameters params)
 	{
@@ -49,24 +55,25 @@ public class Feedback extends BaseCorporatePage
 				StringBuilder feedbackBuilder = new StringBuilder();
 				feedbackBuilder.append("From: ").append(fromEmail).append("<br/>");
 				feedbackBuilder.append("Source: ").append(feedbackSource).append("<br/><br/>");
-				feedbackBuilder.append("Feedback: ").append(feedback.toString());
-				// try
-				// {
-				// emailService.sendEmail(feedbackTitle, feedbackRecipient, fromEmail,
-				// feedbackBuilder.toString());
-				// }
-				// catch (ServiceException se)
-				// {
-				// StringBuilder sb = new
-				// StringBuilder("Service Exception: Failed to send feedback: ");
-				// LOG.debug(sb.append(feedback.toString()).toString());
-				// }
-				// catch (Exception e)
-				// {
-				// StringBuilder sb = new
-				// StringBuilder("Exception: Failed to send feedback: ");
-				// LOG.debug(sb.append(feedback.toString()).toString());
-				// }
+				feedbackBuilder.append("Feedback: ").append(feedback.toString()).append("<br/><br/>");
+
+				final EmailRequest<Customer> emailRequest = new EmailRequest<Customer>();
+				emailRequest.setEmailParams(new EmailParams(feedbackTitle, feedbackRecipient, fromEmail, feedbackBuilder.toString()));
+				emailRequest.setCategory("feedback");
+
+				try
+				{
+					emailService.sendEmail(emailRequest);
+					LOG.info("Feedback sent succcessfully for :" + emailRequest.getEmailParams().getFrom());
+				}
+				catch (ServiceException se)
+				{
+					LOG.error("Failed sending feedback", se);
+				}
+				catch (Exception e)
+				{
+					LOG.error("Failed sending feedback", e);
+				}
 				showThanks = true;
 			}
 		}
@@ -107,7 +114,9 @@ public class Feedback extends BaseCorporatePage
 			}
 		};
 		form.add(src);
+
 		form.setVisible(!showThanks);
+
 		if (showThanks)
 		{
 			add(new Label("header", "Thanks For Your Feedback!"));

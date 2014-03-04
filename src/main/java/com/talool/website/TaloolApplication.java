@@ -29,6 +29,7 @@ import com.talool.website.converter.UUIDConverter;
 import com.talool.website.mobile.MobileContactPage;
 import com.talool.website.mobile.MobileCustomerPage;
 import com.talool.website.mobile.MobileFundraiserPage;
+import com.talool.website.mobile.MobileGiftReturnedPage;
 import com.talool.website.mobile.MobileHomePage;
 import com.talool.website.mobile.MobileMerchantPage;
 import com.talool.website.mobile.MobilePasswordPage;
@@ -207,6 +208,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/m/deal", MobileOpenGraphDeal.class);
 		mountPage("/m/offer", MobileOpenGraphDealOffer.class);
 		mountPage("/m/location", MobileOpenGraphLocation.class);
+		mountPage("/m/gift-returned", MobileGiftReturnedPage.class);
 
 		mountPage("/404", PageNotFound.class);
 
