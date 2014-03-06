@@ -36,31 +36,35 @@ public abstract class BaseTabPanel extends Panel
 	{
 		super.onInitialize();
 
-		// hook into the action link and update it for this panel
 		final BasePage page = (BasePage) this.getPage();
-		Label actionLabel = new Label("actionLabel", getActionLabel());
-		actionLabel.setOutputMarkupId(true);
-
-		final AdminModalWindow definitionModal = page.getModal();
-		final SubmitCallBack callback = page.getCallback(definitionModal);
-		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
+		
+		// hook into the action link and update it for this panel
+		if (page.hasActionLink())
 		{
-
-			private static final long serialVersionUID = 7891264295227523725L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target)
+			Label actionLabel = new Label("actionLabel", getActionLabel());
+			actionLabel.setOutputMarkupId(true);
+	
+			final AdminModalWindow definitionModal = page.getModal();
+			final SubmitCallBack callback = page.getCallback(definitionModal);
+			AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
 			{
-				getSession().getFeedbackMessages().clear();
-				definitionModal.setTitle(getActionLabel());
-
-				definitionModal.setContent(getNewDefinitionPanel(definitionModal.getContentId(), callback));
-				definitionModal.show(target);
-			}
-		};
-		actionLink.setOutputMarkupId(true);
-		actionLink.add(actionLabel);
-		page.setActionLink(actionLink);
+	
+				private static final long serialVersionUID = 7891264295227523725L;
+	
+				@Override
+				public void onClick(AjaxRequestTarget target)
+				{
+					getSession().getFeedbackMessages().clear();
+					definitionModal.setTitle(getActionLabel());
+	
+					definitionModal.setContent(getNewDefinitionPanel(definitionModal.getContentId(), callback));
+					definitionModal.show(target);
+				}
+			};
+			actionLink.setOutputMarkupId(true);
+			actionLink.add(actionLabel);
+			page.setActionLink(actionLink);
+		}
 
 	}
 

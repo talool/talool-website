@@ -1,8 +1,11 @@
 package com.talool.website.panel.dealoffer;
 
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -11,9 +14,11 @@ import org.joda.time.DateTime;
 
 import com.talool.core.DealOffer;
 import com.talool.core.DealType;
+import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.service.ServiceFactory;
+import com.talool.stats.DealOfferMetrics.MetricType;
 import com.talool.stats.DealOfferSummary;
 import com.talool.website.component.ToggleButton;
 import com.talool.website.component.ToggleButton.ToggleLabelType;
@@ -24,7 +29,31 @@ public class DealOfferPublishToggle extends Panel {
 	private static final Logger LOG = Logger.getLogger(DealOfferPublishToggle.class);
 
 	public DealOfferPublishToggle(String id, IModel<DealOfferSummary> model) {
-		super(id, model);
+		super(id);
+		setDefaultModel(model);
+	}
+	
+	public DealOfferPublishToggle(String id, DealOffer offer, MerchantLocation loc, Map<String,Long> metrics) {
+		super(id);
+		
+		DealOfferSummary summary = new DealOfferSummary();
+		summary.setOfferId(offer.getId());
+		summary.setOfferType(offer.getType().toString());
+		summary.setExpires(offer.getExpires());
+		summary.setIsActive(offer.isActive());
+		if (loc!=null)
+		{
+			summary.setAddress1(loc.getAddress1());
+			summary.setAddress2(loc.getAddress2());
+			summary.setCity(loc.getCity());
+			summary.setState(loc.getStateProvinceCounty());
+		}
+		if (metrics != null)
+		{
+			summary.setDealCount(metrics.get(MetricType.TotalDeals.toString()));
+			summary.setMerchantCount(metrics.get(MetricType.TotalMerchants.toString()));
+		}
+		IModel<DealOfferSummary> model = new Model<DealOfferSummary>(summary);
 		setDefaultModel(model);
 	}
 	
@@ -41,28 +70,30 @@ public class DealOfferPublishToggle extends Panel {
 			isExpired = localDate.isBeforeNow();
 		}
 		
+		AttributeAppender warning = new AttributeAppender("class","true-gray-font");
+		
 		if (dealOffer.getOfferType().equals(DealType.KIRKE_BOOK.toString()))
 		{
 			// we can let users enable kirke books
-			add(new Label("toggle", "unpublishable"));
+			add(new Label("toggle", "unpublishable").add(warning));
 		}
 		else if (dealOffer.getExpires() == null)
 		{
 			// require expiration date
-			add(new Label("toggle", "missing expiration date"));
+			add(new Label("toggle", "missing expiration date").add(warning));
 		}
 		else if (isExpired)
 		{
-			add(new Label("toggle", "expired"));
+			add(new Label("toggle", "expired").add(warning));
 		}
 		else if (dealOffer.getCity() == null)
 		{
 			// require a location
-			add(new Label("toggle", "missing location"));
+			add(new Label("toggle", "missing location").add(warning));
 		}
 		else if (isOfferReadyToPublish(dealOffer))
 		{
-			add(new ToggleButton("toggle", new Model<Boolean>(dealOffer.getIsActive()), ToggleLabelType.YES_NO){
+			add(new ToggleButton("toggle", new Model<Boolean>(dealOffer.getIsActive()), ToggleLabelType.PUBLISH){
 
 				private static final long serialVersionUID = -2508151345085039614L;
 
@@ -74,6 +105,7 @@ public class DealOfferPublishToggle extends Panel {
 						DealOffer offer = taloolService.getDealOffer(dealOffer.getOfferId());
 						offer.setActive(!offer.isActive());
 						taloolService.merge(offer);
+						onPublishToggle(target);
 					}
 					catch (ServiceException se)
 					{
@@ -86,9 +118,14 @@ public class DealOfferPublishToggle extends Panel {
 		}
 		else
 		{
-			add(new Label("toggle", "empty book"));
+			add(new Label("toggle", "empty book").add(warning));
 		}
 		
+	}
+	
+	public void onPublishToggle(AjaxRequestTarget target)
+	{
+		// override as needed
 	}
 	
 	private boolean isOfferReadyToPublish(DealOfferSummary offer)
