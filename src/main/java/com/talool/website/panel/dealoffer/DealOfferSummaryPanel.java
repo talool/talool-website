@@ -225,7 +225,6 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 			
 		};
 		container.add(codesLink.setOutputMarkupId(true));
-		codesLink.setEnabled(offer.isActive());
 		
 		container.add(new DealOfferPublishToggle("toggle", offer, loc, metrics){
 
@@ -234,8 +233,6 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 			@Override
 			public void onPublishToggle(AjaxRequestTarget target) {
 				setPanelModel();
-				codesLink.setEnabled(offer.isActive());
-				target.add(codesLink);
 			}
 			
 		});

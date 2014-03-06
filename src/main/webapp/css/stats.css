@@ -45,6 +45,7 @@ table.actionBox
 	margin-bottom: 0;
 }
 
+table.stats tr,
 table.actionBox tr
 {
 	border:none;

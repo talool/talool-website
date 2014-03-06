@@ -27,11 +27,23 @@ public class DealOfferAnalyticsPanel extends BaseTabPanel {
 	protected void onInitialize() {
 		super.onInitialize();
 		
+		MetricListModel customerChartModel = new MetricListModel(_dealOfferId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.CUSTOMERS);
+		addOrReplace(new ChartPanel("customerChart", "Customers", customerChartModel));
+		
+		MetricListModel activationChartModel = new MetricListModel(_dealOfferId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.BOOKS);
+		addOrReplace(new ChartPanel("activationChart", "Activations", activationChartModel));
+		
 		MetricListModel redemptionChartModel = new MetricListModel(_dealOfferId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.REDEMPTIONS);
 		addOrReplace(new ChartPanel("redemptionChart", "Redemptions", redemptionChartModel));
 		
-		MetricListModel activationChartModel = new MetricListModel(_dealOfferId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.BOOKS_ACTIVATIONS);
-		addOrReplace(new ChartPanel("activationChart", "Book Activations", activationChartModel));
+		MetricListModel giftChartModel = new MetricListModel(_dealOfferId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.GIFTS);
+		addOrReplace(new ChartPanel("giftChart", "Gifts", giftChartModel));
+		
+		MetricListModel dealChartModel = new MetricListModel(_dealOfferId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.POPULAR_DEALS);
+		addOrReplace(new ChartPanel("dealChart", "Popular Deals", dealChartModel));
+		
+		MetricListModel merchantChartModel = new MetricListModel(_dealOfferId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.POPULAR_MERCHANTS);
+		addOrReplace(new ChartPanel("merchantChart", "Popular Merchants", merchantChartModel));
 	}
 
 	@Override

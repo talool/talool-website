@@ -122,6 +122,10 @@ public class ChartPanel extends Panel {
 			name = "Location Name";
 		else if (mt == METRIC_TYPE.CUSTOMERS_TOTAL)
 			name = "Customers";
+		else if (mt == METRIC_TYPE.ACQUIRED_DEALS_REDEMPTIONS_DEAL_SLICE)
+			name = "Deal";
+		else if (mt == METRIC_TYPE.ACQUIRED_DEALS_REDEMPTIONS_MERCHANT_SLICE)
+			name = "Merchant";
 		else
 			name = "";	
 		

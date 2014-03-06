@@ -67,7 +67,7 @@ public class DealOfferDealsPanel extends BaseTabPanel {
 		_dealOfferId = UUID.fromString(parameters.get("id").toString());
 		
 		// TODO what rules should determine if bulk move is enabled?
-		bulkMoveEnabled = true;
+		bulkMoveEnabled = false;
 	}
 	
 	@Override

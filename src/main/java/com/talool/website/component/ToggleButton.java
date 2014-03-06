@@ -69,7 +69,7 @@ abstract public class ToggleButton extends Panel {
 		}
 		if (labelType == ToggleLabelType.PUBLISH)
 		{
-			label = b ? "published":"publish";
+			label = b ? "published":"hidden";
 		}
 		else
 		{
