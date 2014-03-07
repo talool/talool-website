@@ -16,7 +16,7 @@ abstract public class ToggleButton extends Panel {
 	private String label;
 	private ToggleLabelType labelType;
 	
-	public enum ToggleLabelType {YES_NO, ON_OFF};
+	public enum ToggleLabelType {YES_NO, ON_OFF, PUBLISH};
 
 	public ToggleButton(String id, IModel<Boolean> model, ToggleLabelType lt) {
 		super(id, model);
@@ -66,6 +66,10 @@ abstract public class ToggleButton extends Panel {
 		if (labelType == ToggleLabelType.YES_NO)
 		{
 			label = b ? "yes":"no";
+		}
+		if (labelType == ToggleLabelType.PUBLISH)
+		{
+			label = b ? "published":"hidden";
 		}
 		else
 		{

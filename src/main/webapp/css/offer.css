@@ -33,14 +33,14 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	z-index: -1;
+	z-index: 0;
 	width: 100%;
 	height: 192px;
 	opacity:0.5;
 	filter:alpha(opacity=50);
 }
 
-.offerPreview .book div
+.offerPreview .book .metaData div
 {
 	padding: 15px 15px 0;
 }
@@ -56,6 +56,14 @@
 	left: 0;
 }
 
+.offerPreview .book .metaData,
+.findDealsPreview .book .metaData
+{
+	position: absolute;
+	height: 100%;
+}
+
+
 .findDealsPreview .book
 {
 	margin: 8px;
@@ -65,7 +73,7 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	z-index: -1;
+	z-index: 0;
 	height: 192px;
 	opacity:0.5;
 	filter:alpha(opacity=50);
@@ -79,7 +87,7 @@
 	z-index: 0;
 }
 
-.findDealsPreview .book div
+.findDealsPreview .book .metaData  div
 {
 	padding: 15px 15px 0 70px;
 }

@@ -1,0 +1,61 @@
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+		<link rel="stylesheet" type="text/css" href="/css/stats.css"/>
+		<link rel="stylesheet" type="text/css" href="/css/merchantWiz.css"/>
+	</wicket:head>
+	
+	<wicket:extend>
+		<table class="meta" wicket:id="container">
+			<tr>
+				<td>
+					<div class="borderedBox gray5-font">
+				  		<h3>Actions</h3>
+				  		<table class="actionBox">
+				  			<tr>
+				  				<td>
+						  			<a wicket:id="editLink" class="btn">Edit Book</a>
+							  	</td>
+				  				
+				  				<td>
+				  					<a wicket:id="codesLink" class="btn">Get Codes</a>
+				  				</td>
+				  				
+				  				<td wicket:id="toggle"></td>
+				  			</tr>
+				  		</table>
+				  	</div>
+					
+				  	
+				  	<div class="borderedBox gray5-font">
+				  		<h3>Book Details</h3>
+				  		<dl>
+					  		<dt>Publisher</dt>
+					  		<dd wicket:id="merchantName"></dd>
+					  		
+					  		<dt>Location</dt>
+					  		<dd wicket:id="loc"></dd>
+					  		
+					  		<dt>Price</dt>
+					  		<dd wicket:id="price"></dd>
+					  		
+					  		<dt>Expiration Date</dt>
+					  		<dd wicket:id="exp"></dd>
+					  		
+					  		<dt>Merchant Count</dt>
+					  		<dd wicket:id="merchantCount"></dd>
+					  		
+					  		<dt>Deal Count</dt>
+					  		<dd wicket:id="dealCount"></dd>
+					  		
+					  		
+					  	</dl>
+				  	</div>
+				  	
+				</td>
+				<td class="merchantWiz" wicket:id="findDealsPreview"></td>
+				<td class="merchantWiz" wicket:id="dealOfferPreview"></td>
+			</tr>
+		</table>
+		<div wicket:id="wiz" class="wiz merchantWiz"></div>
+	</wicket:extend>
+</html>

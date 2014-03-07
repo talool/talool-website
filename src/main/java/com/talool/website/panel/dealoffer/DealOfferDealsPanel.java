@@ -1,7 +1,6 @@
-package com.talool.website.pages.lists;
+package com.talool.website.panel.dealoffer;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -29,28 +28,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
-import com.talool.core.DealOffer;
-import com.talool.core.DealType;
 import com.talool.core.Merchant;
-import com.talool.core.MerchantAccount;
 import com.talool.core.service.ServiceException;
 import com.talool.stats.DealSummary;
 import com.talool.website.component.ConfirmationIndicatingAjaxLink;
 import com.talool.website.component.DealMover;
 import com.talool.website.component.StaticImage;
 import com.talool.website.models.DealModel;
-import com.talool.website.models.DealOfferListModel;
 import com.talool.website.pages.BasePage;
+import com.talool.website.pages.lists.DealSummaryDataProvider;
+import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.deal.wizard.DealWizard;
-import com.talool.website.util.SecuredPage;
-import com.talool.website.util.SessionUtils;
 
-@SecuredPage
-public class DealOfferDealsPage extends BasePage
-{
-	private static final long serialVersionUID = 6008230892463177176L;
-	private static final Logger LOG = LoggerFactory.getLogger(DealOfferDealsPage.class);
+public class DealOfferDealsPanel extends BaseTabPanel {
+
+	private static final long serialVersionUID = -6358605032461151690L;
+	
+	private static final Logger LOG = LoggerFactory.getLogger(DealOfferDealsPanel.class);
 	private static final String talool = "Talool";
 	private static final String CONTAINER_ID = "dealList";
 	private static final String REPEATER_ID = "dealRptr";
@@ -58,7 +53,7 @@ public class DealOfferDealsPage extends BasePage
 	
 	private String sortParameter = "merchantName";
 	private boolean isAscending = true;
-	private int itemsPerPage = 50;
+	private int itemsPerPage = 20;
 	private long itemCount;
 	private Map<UUID,DealSummary> selectedDeals = new HashMap<UUID,DealSummary>();
 	
@@ -67,21 +62,14 @@ public class DealOfferDealsPage extends BasePage
 	private boolean bulkMoveEnabled;
 	private DealMover mover;
 
-	public DealOfferDealsPage(PageParameters parameters)
-	{
-		super(parameters);
+	public DealOfferDealsPanel(String id, PageParameters parameters) {
+		super(id);
 		_dealOfferId = UUID.fromString(parameters.get("id").toString());
-		DealOfferListModel offerListModel = new DealOfferListModel();
-		offerListModel.setMerchantId(SessionUtils.getSession().getMerchantAccount().getMerchant().getId());
-		offerListModel.setExcludeKirke(true);
-		try
-		{
-			DealOffer offer = taloolService.getDealOffer(_dealOfferId);
-			bulkMoveEnabled = (offer.getType().equals(DealType.KIRKE_BOOK) && !offerListModel.getObject().isEmpty());
-		}
-		catch (ServiceException se){}
+		
+		// TODO what rules should determine if bulk move is enabled?
+		bulkMoveEnabled = false;
 	}
-
+	
 	@Override
 	protected void onInitialize()
 	{
@@ -97,7 +85,7 @@ public class DealOfferDealsPage extends BasePage
 			@Override
 			public void onMove(AjaxRequestTarget target) {
 				resetPage(target);
-				target.add(feedback);
+				target.add(((BasePage)this.getPage()).feedback);
 				selectedDeals = new HashMap<UUID,DealSummary>();
 				mover.reset(target);
 				target.add(mover);
@@ -153,31 +141,8 @@ public class DealOfferDealsPage extends BasePage
 			}
 		});
 		
-		// override the action button
-		final BasePage page = (BasePage) this.getPage();
-		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
-		{
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				getSession().getFeedbackMessages().clear();
-				MerchantAccount ma = SessionUtils.getSession().getMerchantAccount();
-				Deal deal = domainFactory.newDeal(null, ma, true);
-				wizard.setModelObject(deal);
-				wizard.open(target);
-			}
-		};
-		page.setActionLink(actionLink);
-		Label actionLabel = new Label("actionLabel", getNewDefinitionPanelTitle());
-		actionLabel.setOutputMarkupId(true);
-		actionLink.add(actionLabel);
-		actionLink.setOutputMarkupId(true);
-
 		// Wizard
-		wizard = new DealWizard("wiz", "Deal Wizard")
+		wizard = new DealWizard("dealWiz", "Deal Wizard")
 		{
 
 			private static final long serialVersionUID = 1L;
@@ -186,11 +151,11 @@ public class DealOfferDealsPage extends BasePage
 			protected void onFinish(AjaxRequestTarget target)
 			{
 				super.onFinish(target);
+				// refresh the list after a deal is edited
 				target.add(container);
 			}
 		};
-		add(wizard);
-
+		addOrReplace(wizard.setOutputMarkupId(true));
 	}
 	
 	private AjaxPagingNavigator getPagination(final DataView<DealSummary> deals)
@@ -350,7 +315,7 @@ public class DealOfferDealsPage extends BasePage
 	private void resetPage(final AjaxRequestTarget target)
 	{
 		// refresh the list after a book is edited
-		final WebMarkupContainer container = (WebMarkupContainer) getPage().get(CONTAINER_ID);
+		final WebMarkupContainer container = (WebMarkupContainer) get(CONTAINER_ID);
 		final DealSummaryDataProvider provider = new DealSummaryDataProvider(_dealOfferId, sortParameter, isAscending);
 		final DataView<DealSummary> dataView = getDataView(provider);
 		container.replace(dataView);
@@ -371,29 +336,13 @@ public class DealOfferDealsPage extends BasePage
 	}
 
 	@Override
-	public String getHeaderTitle()
-	{
-		MerchantAccount ma = SessionUtils.getSession().getMerchantAccount();
-		StringBuilder sb = new StringBuilder(ma.getMerchant().getName());
-		sb.append(" > ").append(getPageParameters().get("name")).append(" > Deals");
-		return sb.toString();
+	public String getActionLabel() {
+		return "";
 	}
 
 	@Override
-	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
-	{
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
 		return null;
 	}
 
-	@Override
-	public String getNewDefinitionPanelTitle()
-	{
-		return "New Deal";
-	}
-	
-	@Override
-	public boolean hasActionLink() {
-		// TODO return false for Publishers and true for Merchants
-		return false;
-	}
 }

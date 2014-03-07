@@ -33,3 +33,62 @@
 	width: 10px;
 	margin-right: 10px;
 }
+
+table.stats,
+table.meta
+{
+	width: 100%;
+}
+
+table.actionBox
+{
+	margin-bottom: 0;
+}
+
+table.stats tr,
+table.actionBox tr
+{
+	border:none;
+}
+
+table.stats td
+{
+	width: 50%;
+	vertical-align: top;
+}
+
+table.meta td
+{
+	width: 33%;
+	vertical-align: top;
+}
+
+table.meta table.actionBox td
+{
+	padding-left: 0;
+	vertical-align: middle;
+}
+
+table.meta td .iphone 
+{
+	background-image: url(/img/iPhone5.png);
+	background-repeat: no-repeat;
+	background-position: 0px -130px;
+	padding: 10px 33px;
+	position: relative;
+}
+
+.borderedBox
+{
+	border: 1px solid rgb(220,220,220);
+	border-radius: 5px;
+	padding: 10px;
+	margin: 0 10px 20px 0;
+	min-width: 310px
+}
+
+.borderedBox h3
+{
+	margin: 0 0 5px;
+	border-bottom: 1px solid rgb(220,220,220);
+}

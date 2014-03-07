@@ -280,7 +280,8 @@ public class DealOffersPage extends BasePage
 				PageParameters dealsParams = new PageParameters();
 				dealsParams.set("id", dealOfferId);
 				dealsParams.set("name", dealOffer.getTitle());
-				String url = (String) urlFor(DealOfferDealsPage.class, dealsParams);
+				String url = null; // (String) urlFor(DealOfferDealsPage.class,
+														// dealsParams);
 				ExternalLink titleLink = new ExternalLink("titleLink", Model.of(url),
 						new PropertyModel<String>(dealOffer, "title"));
 				item.add(titleLink);
@@ -425,9 +426,7 @@ public class DealOffersPage extends BasePage
 							};
 
 							mProps.setContent(panel);
-							mProps.setAutoSize(false);
 							mProps.setInitialWidth(650);
-							mProps.setResizable(false);
 							sb.setLength(0);
 							sb.append("Manage '").append(dealOffer.getTitle()).append("'").append(" properties");
 							mProps.setTitle(sb.toString());

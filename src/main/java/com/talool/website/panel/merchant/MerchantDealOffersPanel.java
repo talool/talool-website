@@ -22,7 +22,7 @@ import com.talool.core.Merchant;
 import com.talool.core.service.ServiceException;
 import com.talool.website.models.DealOfferListModel;
 import com.talool.website.pages.BasePage;
-import com.talool.website.pages.lists.DealOfferDealsPage;
+import com.talool.website.pages.DealOfferManagementPage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
@@ -73,7 +73,7 @@ public class MerchantDealOffersPanel extends BaseTabPanel
 				PageParameters dealsParams = new PageParameters();
 				dealsParams.set("id", dealOffer.getId());
 				dealsParams.set("name", dealOffer.getTitle());
-				String url = (String) urlFor(DealOfferDealsPage.class, dealsParams);
+				String url = (String) urlFor(DealOfferManagementPage.class, dealsParams);
 				ExternalLink titleLink = new ExternalLink("titleLink", Model.of(url),
 						new PropertyModel<String>(dealOffer, "title"));
 				item.add(titleLink);

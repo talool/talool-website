@@ -34,11 +34,11 @@ public class DealOfferPreview extends Panel
 		
 		if (offer.getPrice() == null || offer.getPrice() == 0)
 		{
-			price = "Price: FREE";
+			setPrice("");
 		}
 		else
 		{
-			price = "Price: "+ priceFormat.format(offer.getPrice());
+			setPrice(offer.getPrice().toString());
 		}
 
 		dealOfferBackgroundUrl = (offer.getDealOfferBackground() == null) ? defaultBackgoundUrl : offer.getDealOfferBackground().getMediaUrl();
