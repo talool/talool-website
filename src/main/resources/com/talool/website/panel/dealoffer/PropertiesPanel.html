@@ -1,0 +1,62 @@
+<wicket:head>
+<script>
+function addPropsToggle()
+{
+$('#newProps').toggle();$('#noProps').toggle();$('#feedback').empty();$('#plusminus');
+$('#plusminus').toggleClass('icon-plus-sign').toggleClass('icon-minus-sign');
+}
+</script>
+</wicket:head>
+<wicket:panel>
+<div wicket:id="propertiesContainer">
+<div wicket:id="feedback" style="padding:0 10px 0 10px"></div>
+<div style="margin: 5px 5px 5px 5px;">
+<a href="#" onclick="javascript:addPropsToggle();"><i id="plusminus" class="icon-plus-sign icon-large"></i> add new properties</a>	
+</div>	
+<div id="newProps" style="display:none;">
+<form wicket:id="savePropForm">
+<div style="text-align:center;"><h3>Add New Properties</h3></div>
+<label style="margin-left:120px">key</label><label style="margin-left:70px">value</label>
+<div style="float:left;width:100%">
+<div class="odd-row-bg" style="padding:10px;">
+<wicket:enclosure child="keys">
+<select id="select_input" wicket:id="keys" >
+    <option disabled="true">Select Key...</option>
+    <option>option 1</option>
+	 <option>option 2</option>
+	 <option>option 3</option>
+	</select>
+<input wicket:id="addPropertyValue" width:160px; type="text"/>
+<div class="orange-font actionCol" style="display:inline-block; ">
+   <a wicket:id="savePropSubmitLink" title="save property" class="icon icon-large icon-save"></a>
+</div>
+</wicket:enclosure>
+</div>
+<div style="padding:10px;">
+<input wicket:id="newPropKey"  type="text"/>
+<input wicket:id="newPropValue"  type="text"/>
+<div class="orange-font actionCol" style="display:inline-block; "><a  wicket:id="saveNewPropSubmitLink" title="save property" class="icon icon-large icon-save"></a>
+</div>
+</div>
+</div>
+</form>
+</div>
+<div id="noProps" wicket:id="noPropsMessage">
+<div style="text-align:center;"><h3>No Properties Exist</h3></div>
+</div>
+<div wicket:id="managePropsContainer">
+<div style="text-align:center;"><h3>Manage Existing Properties</h3></div>
+<label style="margin-left:120px">key</label><label style="margin-left:70px">value</label>
+<div style="float:left;padding:10px;width:100%" wicket:id="properties">
+<form wicket:id="editExistingForm">
+<input disabled=true wicket:id="key" type="text"/><input wicket:id="value" type="text"/>
+<div class="orange-font actionCol" style="display:inline-block; ">
+ 	<a wicket:id="save" title="save property" class="icon icon-large icon-save"></a>
+ 	<a wicket:id="remove" title="remove property" class="icon icon-large icon-remove"></a>
+</div>
+</form>
+</div>
+</div>
+<div class="clear"></div>
+</div>
+</wicket:panel>
