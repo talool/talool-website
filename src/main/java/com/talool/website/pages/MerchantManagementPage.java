@@ -3,7 +3,9 @@ package com.talool.website.pages;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
@@ -14,10 +16,13 @@ import org.wicketstuff.gmap.GMap;
 
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.MerchantAccountsPanel;
+import com.talool.website.panel.merchant.MerchantAnalyticsPanel;
 import com.talool.website.panel.merchant.MerchantDealOffersPanel;
 import com.talool.website.panel.merchant.MerchantDealsPanel;
 import com.talool.website.panel.merchant.MerchantLocationsPanel;
+import com.talool.website.panel.merchant.MerchantSummaryPanel;
 import com.talool.website.panel.message.MerchantMessages;
+import com.talool.website.util.CssClassToggle;
 import com.talool.website.util.SecuredPage;
 
 /**
@@ -47,30 +52,16 @@ public class MerchantManagementPage extends BaseManagementPage
 		super.onInitialize();
 
 		List<ITab> tabs = new ArrayList<ITab>();
-
-		if (isTaloolUserLoggedIn)
-		{
-			tabs.add(new AbstractTab(new Model<String>("Deal Offers"))
-			{
-
-				private static final long serialVersionUID = 5853871222415506440L;
-
-				@Override
-				public Panel getPanel(String panelId)
-				{
-					return new MerchantDealOffersPanel(panelId, getPageParameters());
-				}
-			});
-		}
 		
-		tabs.add(new AbstractTab(new Model<String>("Deals"))
+		tabs.add(new AbstractTab(new Model<String>("Summary"))
 		{
-			private static final long serialVersionUID = 6405610365875810783L;
+
+			private static final long serialVersionUID = 5853871222415506440L;
 
 			@Override
 			public Panel getPanel(String panelId)
 			{
-				return new MerchantDealsPanel(panelId, getPageParameters());
+				return new MerchantSummaryPanel(panelId, getPageParameters());
 			}
 		});
 
@@ -98,8 +89,31 @@ public class MerchantManagementPage extends BaseManagementPage
 			}
 		});
 		
+		tabs.add(new AbstractTab(new Model<String>("Deals"))
+		{
+			private static final long serialVersionUID = 6405610365875810783L;
+
+			@Override
+			public Panel getPanel(String panelId)
+			{
+				return new MerchantDealsPanel(panelId, getPageParameters());
+			}
+		});
+		
 		if (isTaloolUserLoggedIn)
 		{
+			tabs.add(new AbstractTab(new Model<String>("Books"))
+			{
+
+				private static final long serialVersionUID = 5853871222415506440L;
+
+				@Override
+				public Panel getPanel(String panelId)
+				{
+					return new MerchantDealOffersPanel(panelId, getPageParameters());
+				}
+			});
+			
 			tabs.add(new AbstractTab(new Model<String>("Messages"))
 			{
 
@@ -110,6 +124,20 @@ public class MerchantManagementPage extends BaseManagementPage
 				{
 					return new MerchantMessages(panelId, getPageParameters());
 				}
+			});
+			
+			tabs.add(new AbstractTab(new Model<String>("Analytics"))
+			{
+
+				private static final long serialVersionUID = 5853871222415506440L;
+
+				@Override
+				public Panel getPanel(String panelId)
+				{
+					return new MerchantAnalyticsPanel(panelId, getPageParameters());
+				}
+				
+				
 			});
 		}
 
@@ -122,8 +150,9 @@ public class MerchantManagementPage extends BaseManagementPage
 			protected void onAjaxUpdate(AjaxRequestTarget target)
 			{
 				super.onAjaxUpdate(target);
-				getSession().getFeedbackMessages().clear();;
-				BasePage page = (BasePage) this.getPage();
+				getSession().getFeedbackMessages().clear();
+				
+				MerchantManagementPage page = (MerchantManagementPage) this.getPage();
 				target.add(page.getFeedback());
 				target.add(page.getActionLink());
 			}

@@ -2,9 +2,11 @@
 	height: 400px;
 	width: 350px;
 }
-.merchantWiz .panel .map {
+.merchantWiz .map {
 	height: 320px;
 	width: 320px;
+}
+.merchantWiz .panel .map {
 	margin-left: 9px;
 	margin-top: -24px;
 }

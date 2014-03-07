@@ -81,6 +81,16 @@ dl dd
 	color: white;
 }
 
+.show
+{
+	visibility: visible;
+}
+
+.hide
+{
+	visibility: hidden;
+}
+
 /* USER INFO BUTTON */
 .userInfo {
 	text-align: right;

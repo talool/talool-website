@@ -87,6 +87,16 @@ table.meta td .iphone
 	min-width: 310px
 }
 
+.borderedBox .warnings
+{
+	padding-left: 20px;
+}
+
+.borderedBox .warnings li
+{
+	margin-bottom: 10px;
+}
+
 .borderedBox h3
 {
 	margin: 0 0 5px;

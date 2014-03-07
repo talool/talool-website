@@ -1,0 +1,51 @@
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+		<link rel="stylesheet" type="text/css" href="/css/stats.css"/>
+		<link rel="stylesheet" type="text/css" href="/css/merchantWiz.css"/>
+	</wicket:head>
+	
+	<wicket:extend>
+		<table class="meta" wicket:id="container">
+			<tr>
+				<td>
+					<div class="borderedBox gray5-font">
+				  		<h3>Actions</h3>
+				  		<table class="actionBox">
+				  			<tr>
+				  				<td>
+						  			<a wicket:id="editLink" class="btn">Edit Merchant</a>
+							  	</td>
+				  			</tr>
+				  		</table>
+				  	</div>
+					
+				  	<div class="borderedBox gray5-font" wicket:id="warnings">
+				  		<h3>Warnings</h3>
+				  		<ol class="red-font warnings">
+					  		<li wicket:id="warningRptr"><span wicket:id="warning"></span></li>
+					  	</ol>
+				  	</div>
+				  	
+				  	<div class="borderedBox gray5-font">
+				  		<h3>Merchant Details</h3>
+				  		<dl>
+					  		<dt>Category</dt>
+					  		<dd wicket:id="categoryLabel"></dd>
+					  		
+					  		<dt>Tags</dt>
+					  		<dd wicket:id="tagsLabel"></dd>
+					  		
+					  		<dt>Logo</dt>
+					  		<dd><img wicket:id="logo"/></dd>
+					  		
+					  	</dl>
+				  	</div>
+				  	
+				</td>
+				<td class="merchantWiz" wicket:id="merchantPreview"></td>
+				<td class="merchantWiz" wicket:id="mapPreview"></td>
+			</tr>
+		</table>
+		<div wicket:id="wiz" class="wiz merchantWiz"></div>
+	</wicket:extend>
+</html>
