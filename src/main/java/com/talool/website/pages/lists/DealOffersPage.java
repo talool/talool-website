@@ -50,6 +50,7 @@ import com.talool.website.behaviors.AJAXDownload;
 import com.talool.website.component.ConfirmationIndicatingAjaxLink;
 import com.talool.website.models.DealOfferModel;
 import com.talool.website.pages.BasePage;
+import com.talool.website.pages.DealOfferManagementPage;
 import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
@@ -92,6 +93,7 @@ public class DealOffersPage extends BasePage
 		super.onInitialize();
 
 		final AdminModalWindow modalProps = new AdminModalWindow("modalProps");
+		modalProps.setInitialWidth(650);
 		final SubmitCallBack callback = getCallback(modalProps);
 		add(modalProps);
 
@@ -280,8 +282,7 @@ public class DealOffersPage extends BasePage
 				PageParameters dealsParams = new PageParameters();
 				dealsParams.set("id", dealOfferId);
 				dealsParams.set("name", dealOffer.getTitle());
-				String url = null; // (String) urlFor(DealOfferDealsPage.class,
-														// dealsParams);
+				String url = (String) urlFor(DealOfferManagementPage.class, dealsParams);
 				ExternalLink titleLink = new ExternalLink("titleLink", Model.of(url),
 						new PropertyModel<String>(dealOffer, "title"));
 				item.add(titleLink);
@@ -426,7 +427,6 @@ public class DealOffersPage extends BasePage
 							};
 
 							mProps.setContent(panel);
-							mProps.setInitialWidth(650);
 							sb.setLength(0);
 							sb.append("Manage '").append(dealOffer.getTitle()).append("'").append(" properties");
 							mProps.setTitle(sb.toString());
