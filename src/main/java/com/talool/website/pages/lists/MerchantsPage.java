@@ -36,7 +36,6 @@ import com.talool.website.component.MerchantSearchPanel;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.MerchantManagementPage;
-import com.talool.website.pages.dashboard.MerchantDashboard;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.wizard.MerchantWizard;
 import com.talool.website.panel.merchant.wizard.MerchantWizard.MerchantWizardMode;
@@ -306,14 +305,6 @@ public class MerchantsPage extends BasePage
 					}
 				};
 				item.add(deleteLink);
-
-				PageParameters dashboardParams = new PageParameters();
-				dashboardParams.set("id", merchantId);
-				String dashboardUrl = (String) urlFor(MerchantDashboard.class, dashboardParams);
-				ExternalLink dashboardLink = new ExternalLink("dashboardLink", Model.of(dashboardUrl));
-				item.add(dashboardLink);
-				// Only show this link for Talool users... for now.
-				dashboardLink.setVisible(isTaloolUserLoggedIn);
 
 			}
 
