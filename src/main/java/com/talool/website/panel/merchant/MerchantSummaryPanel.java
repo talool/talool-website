@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
@@ -22,6 +23,11 @@ import com.talool.core.Deal;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.Tag;
+import com.talool.core.service.ServiceException;
+import com.talool.core.service.TaloolService.PropertySupportedEntity;
+import com.talool.domain.Properties;
+import com.talool.service.ServiceFactory;
+import com.talool.website.component.PropertyComboBox;
 import com.talool.website.component.StaticImage;
 import com.talool.website.models.DealListModel;
 import com.talool.website.models.MerchantModel;
@@ -30,6 +36,7 @@ import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.wizard.MerchantWizard;
 import com.talool.website.panel.merchant.wizard.MerchantWizard.MerchantWizardMode;
+import com.talool.website.util.KeyValue;
 
 public class MerchantSummaryPanel extends BaseTabPanel {
 
@@ -45,6 +52,7 @@ public class MerchantSummaryPanel extends BaseTabPanel {
 	private String categoryLabel;
 	private String tagsLabel;
 	private String logoUrl;
+	private List<KeyValue> keyValues;
 	
 	private List<String> warnings;
 	
@@ -96,11 +104,56 @@ public class MerchantSummaryPanel extends BaseTabPanel {
 		
 		container.add(new StaticImage("logo", false, new PropertyModel<String>(this, "logoUrl")));
 		
+		final ListView<KeyValue> propteryList = new ListView<KeyValue>("propertyRptr", new PropertyModel<List<KeyValue>>(this,"keyValues"))
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<KeyValue> item)
+			{
+				KeyValue prop = item.getModelObject();
+				item.add(new Label("pKey",prop.key));
+				item.add(new Label("pVal",prop.value));
+			}
+
+		};
+		container.add(propteryList);
+		
 		final MapPreview mapPreview = new MapPreview("mapPreview", merchant);
 		container.add(mapPreview);
 		
 		final MerchantPreview merchantPreview = new MerchantPreview("merchantPreview", merchant);
 		container.add(merchantPreview);
+		
+		final PropertyComboBox comboBox = new PropertyComboBox("comboBox", 
+				Model.of(merchant.getProperties()), PropertySupportedEntity.Merchant) {
+
+			private static final long serialVersionUID = 7609398573563991376L;
+
+			@Override
+			public void onPropertySave(Properties props,
+					AjaxRequestTarget target) {
+				try
+				{
+					ServiceFactory.get().getTaloolService().merge(merchant);
+					LOG.info(merchant.getProperties().dumpProperties());
+					
+					BasePage page = (BasePage) getPage();
+					target.add(page.feedback);
+					
+					setPanelModel();
+					target.add(container);
+				}
+				catch (ServiceException e)
+				{
+					LOG.error("failed to merge offer after saving properties.",e);
+				}
+				
+			}
+			
+		};
+		container.add(comboBox);
 		
 		// Wizard
 		wizard = new MerchantWizard("wiz", "Merchant Wizard", MerchantWizardMode.MERCHANT)
@@ -201,7 +254,7 @@ public class MerchantSummaryPanel extends BaseTabPanel {
 			}
 		}
 		
-		
+		keyValues = KeyValue.getKeyValues(merchant.getProperties());
 		
 	}
 

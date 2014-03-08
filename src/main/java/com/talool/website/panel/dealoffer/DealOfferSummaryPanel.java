@@ -2,12 +2,9 @@ package com.talool.website.panel.dealoffer;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.io.Serializable;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
@@ -52,6 +49,7 @@ import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.dealoffer.wizard.DealOfferWizard;
+import com.talool.website.util.KeyValue;
 import com.talool.website.util.SessionUtils;
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -115,7 +113,6 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 		container.add(new Label("exp", new PropertyModel<String>(this,"expiresLabel")));
 		container.add(new Label("merchantCount", new PropertyModel<Long>(this,"merchantCount")));
 		container.add(new Label("dealCount",new PropertyModel<Long>(this,"dealCount")));
-		
 		
 		final ListView<KeyValue> propteryList = new ListView<KeyValue>("propertyRptr", new PropertyModel<List<KeyValue>>(this,"keyValues"))
 		{
@@ -416,35 +413,7 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 			expiresLabel = "";
 		}
 		
-		keyValues = getKeyValues();
-	}
-	
-	public class KeyValue implements Serializable
-	{
-		private String key;
-		private String value;
-
-		public KeyValue(String key, String value)
-		{
-			this.key = key;
-			this.value = value;
-		}
-
-		private static final long serialVersionUID = 7882876501860467190L;
-
-	}
-
-	private List<KeyValue> getKeyValues()
-	{
-		List<KeyValue> keyVals = new ArrayList<KeyValue>();
-		Properties props = offer.getProperties();
-
-		for (Entry<String, String> entry : props.getAllProperties().entrySet())
-		{
-			keyVals.add(new KeyValue(entry.getKey(), entry.getValue()));
-		}
-		return keyVals;
-
+		keyValues = KeyValue.getKeyValues(offer.getProperties());
 	}
 	
 

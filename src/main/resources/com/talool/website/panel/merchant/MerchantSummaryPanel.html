@@ -16,6 +16,11 @@
 						  			<a wicket:id="editLink" class="btn">Edit Merchant</a>
 							  	</td>
 				  			</tr>
+				  			<tr>
+				  				<td colspan="3">
+						  			<div wicket:id="comboBox"></div>
+							  	</td>
+				  			</tr>
 				  		</table>
 				  	</div>
 					
@@ -28,17 +33,25 @@
 				  	
 				  	<div class="borderedBox gray5-font">
 				  		<h3>Merchant Details</h3>
-				  		<dl>
-					  		<dt>Category</dt>
-					  		<dd wicket:id="categoryLabel"></dd>
-					  		
-					  		<dt>Tags</dt>
-					  		<dd wicket:id="tagsLabel"></dd>
-					  		
-					  		<dt>Logo</dt>
-					  		<dd><img wicket:id="logo"/></dd>
-					  		
-					  	</dl>
+
+					  	<table>
+				  			<tr>
+				  				<th>Category</th>
+				  				<td wicket:id="categoryLabel"></td>
+				  			</tr>
+				  			<tr>
+				  				<th>Tags</th>
+				  				<td wicket:id="tagsLabel"></td>
+				  			</tr>
+				  			<tr>
+				  				<th>Logo</th>
+				  				<td><img wicket:id="logo"/></td>
+				  			</tr>
+					  		<tr wicket:id="propertyRptr">
+				  				<th wicket:id="pKey"></th>
+				  				<td wicket:id="pVal"></td>
+				  			</tr>
+					  	</table>
 				  	</div>
 				  	
 				</td>
