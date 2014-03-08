@@ -5,6 +5,7 @@
 	</wicket:head>
 	
 	<wicket:extend>
+		<div wicket:id="modalProps"></div>
 		<table class="meta" wicket:id="container">
 			<tr>
 				<td>
@@ -21,6 +22,12 @@
 				  				</td>
 				  				
 				  				<td wicket:id="toggle"></td>
+				  				
+				  			</tr>
+				  			<tr>
+				  				<td colspan="3">
+						  			<div wicket:id="comboBox"></div>
+							  	</td>
 				  			</tr>
 				  		</table>
 				  	</div>
@@ -28,27 +35,36 @@
 				  	
 				  	<div class="borderedBox gray5-font">
 				  		<h3>Book Details</h3>
-				  		<dl>
-					  		<dt>Publisher</dt>
-					  		<dd wicket:id="merchantName"></dd>
-					  		
-					  		<dt>Location</dt>
-					  		<dd wicket:id="loc"></dd>
-					  		
-					  		<dt>Price</dt>
-					  		<dd wicket:id="price"></dd>
-					  		
-					  		<dt>Expiration Date</dt>
-					  		<dd wicket:id="exp"></dd>
-					  		
-					  		<dt>Merchant Count</dt>
-					  		<dd wicket:id="merchantCount"></dd>
-					  		
-					  		<dt>Deal Count</dt>
-					  		<dd wicket:id="dealCount"></dd>
-					  		
-					  		
-					  	</dl>
+				  		<table>
+				  			<tr>
+				  				<th>Publisher</th>
+				  				<td wicket:id="merchantName"></td>
+				  			</tr>
+				  			<tr>
+				  				<th>Location</th>
+				  				<td wicket:id="loc"></td>
+				  			</tr>
+				  			<tr>
+				  				<th>Price</th>
+				  				<td wicket:id="price"></td>
+				  			</tr>
+				  			<tr>
+				  				<th>Expiration Date</th>
+				  				<td wicket:id="exp"></td>
+				  			</tr>
+				  			<tr>
+				  				<th>Merchant Count</th>
+				  				<td wicket:id="merchantCount"></td>
+				  			</tr>
+				  			<tr>
+				  				<th>Deal Count</th>
+				  				<td wicket:id="dealCount"></td>
+				  			</tr>
+				  			<tr wicket:id="propertyRptr">
+				  				<th wicket:id="pKey"></th>
+				  				<td wicket:id="pVal"></td>
+				  			</tr>
+					  	</table>
 				  	</div>
 				  	
 				</td>

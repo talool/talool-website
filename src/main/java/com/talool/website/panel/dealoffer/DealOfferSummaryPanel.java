@@ -2,9 +2,12 @@ package com.talool.website.panel.dealoffer;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,7 +19,10 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -33,11 +39,16 @@ import com.talool.core.DealOffer;
 import com.talool.core.DealType;
 import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
+import com.talool.core.service.TaloolService.PropertySupportedEntity;
+import com.talool.domain.Properties;
+import com.talool.service.ServiceFactory;
 import com.talool.stats.DealOfferMetrics;
 import com.talool.stats.DealOfferMetrics.MetricType;
 import com.talool.website.behaviors.AJAXDownload;
+import com.talool.website.component.PropertyComboBox;
 import com.talool.website.models.DealOfferModel;
 import com.talool.website.pages.BasePage;
+import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.dealoffer.wizard.DealOfferWizard;
@@ -65,6 +76,7 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 	private String expiresLabel;
 	private Long merchantCount;
 	private Long dealCount;
+	private List<KeyValue> keyValues;
 	
 	public DealOfferSummaryPanel(String id, PageParameters parameters) {
 		super(id);
@@ -75,6 +87,11 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		
+		final AdminModalWindow modalProps = new AdminModalWindow("modalProps");
+		modalProps.setInitialWidth(650);
+		//final SubmitCallBack callback = page.getCallback(modalProps);
+		add(modalProps);
 		
 		final WebMarkupContainer container = new WebMarkupContainer("container");
 		add(container.setOutputMarkupId(true));
@@ -99,11 +116,58 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 		container.add(new Label("merchantCount", new PropertyModel<Long>(this,"merchantCount")));
 		container.add(new Label("dealCount",new PropertyModel<Long>(this,"dealCount")));
 		
+		
+		final ListView<KeyValue> propteryList = new ListView<KeyValue>("propertyRptr", new PropertyModel<List<KeyValue>>(this,"keyValues"))
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<KeyValue> item)
+			{
+				KeyValue prop = item.getModelObject();
+				item.add(new Label("pKey",prop.key));
+				item.add(new Label("pVal",prop.value));
+			}
+
+		};
+		container.add(propteryList);
+		
+		
 		final FindDealsPreview findDealsPreview = new FindDealsPreview("findDealsPreview", offer);
 		container.add(findDealsPreview);
 		
 		final DealOfferPreview offerPreview = new DealOfferPreview("dealOfferPreview", offer);
 		container.add(offerPreview);
+		
+		final PropertyComboBox comboBox = new PropertyComboBox("comboBox", 
+				Model.of(offer.getProperties()), PropertySupportedEntity.DealOffer) {
+
+			private static final long serialVersionUID = 7609398573563991376L;
+
+			@Override
+			public void onPropertySave(Properties props,
+					AjaxRequestTarget target) {
+				try
+				{
+					ServiceFactory.get().getTaloolService().merge(offer);
+					LOG.info(offer.getProperties().dumpProperties());
+					
+					BasePage page = (BasePage) getPage();
+					target.add(page.feedback);
+					
+					setPanelModel();
+					target.add(container);
+				}
+				catch (ServiceException e)
+				{
+					LOG.error("failed to merge offer after saving properties.",e);
+				}
+				
+			}
+			
+		};
+		container.add(comboBox);
 		
 		final AJAXDownload download = new AJAXDownload()
 		{
@@ -352,9 +416,36 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 			expiresLabel = "";
 		}
 		
-		
+		keyValues = getKeyValues();
+	}
+	
+	public class KeyValue implements Serializable
+	{
+		private String key;
+		private String value;
+
+		public KeyValue(String key, String value)
+		{
+			this.key = key;
+			this.value = value;
+		}
+
+		private static final long serialVersionUID = 7882876501860467190L;
+
 	}
 
+	private List<KeyValue> getKeyValues()
+	{
+		List<KeyValue> keyVals = new ArrayList<KeyValue>();
+		Properties props = offer.getProperties();
+
+		for (Entry<String, String> entry : props.getAllProperties().entrySet())
+		{
+			keyVals.add(new KeyValue(entry.getKey(), entry.getValue()));
+		}
+		return keyVals;
+
+	}
 	
 
 }

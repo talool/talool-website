@@ -566,3 +566,12 @@ td.toggleContainer
 {
 	background-color: rgba(200, 200, 200, 0.25);
 }
+
+
+.properties-combobox-frame .p-value
+{
+	width: 50px; 
+	margin: 0 10px;
+	vertical-align: middle;
+}
+

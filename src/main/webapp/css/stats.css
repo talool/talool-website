@@ -102,3 +102,15 @@ table.meta td .iphone
 	margin: 0 0 5px;
 	border-bottom: 1px solid rgb(220,220,220);
 }
+
+.borderedBox th
+{
+	text-align: left;
+	color: rgba(111,111,111,0.8);
+	border-bottom: none;
+	padding: 10px;
+}
+table.meta .borderedBox td
+{
+	width: auto;
+}

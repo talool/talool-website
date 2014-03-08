@@ -1,7 +1,5 @@
 package com.talool.website.pages.lists;
 
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.UUID;
@@ -11,11 +9,9 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.core.util.string.JavaScriptUtils;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -27,11 +23,7 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
-import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -42,20 +34,14 @@ import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
 import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
-import com.talool.core.service.TaloolService.PropertySupportedEntity;
-import com.talool.domain.Properties;
-import com.talool.service.ServiceFactory;
 import com.talool.stats.DealOfferSummary;
-import com.talool.website.behaviors.AJAXDownload;
 import com.talool.website.component.ConfirmationIndicatingAjaxLink;
 import com.talool.website.models.DealOfferModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.DealOfferManagementPage;
 import com.talool.website.pages.MerchantManagementPage;
-import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.dealoffer.DealOfferPublishToggle;
-import com.talool.website.panel.dealoffer.PropertiesPanel;
 import com.talool.website.panel.dealoffer.wizard.DealOfferWizard;
 import com.talool.website.util.SecuredPage;
 import com.talool.website.util.SessionUtils;
@@ -91,11 +77,6 @@ public class DealOffersPage extends BasePage
 	protected void onInitialize()
 	{
 		super.onInitialize();
-
-		final AdminModalWindow modalProps = new AdminModalWindow("modalProps");
-		modalProps.setInitialWidth(650);
-		final SubmitCallBack callback = getCallback(modalProps);
-		add(modalProps);
 
 		final WebMarkupContainer container = new WebMarkupContainer(CONTAINER_ID);
 		container.setOutputMarkupId(true);
@@ -390,59 +371,6 @@ public class DealOffersPage extends BasePage
 
 				item.add(editLink.setVisible(!isKirkeBook(dealOffer)));
 
-				AjaxLink<Void> editProps = new AjaxLink<Void>("editProps")
-				{
-					private static final long serialVersionUID = 268692101349122303L;
-
-					@Override
-					public void onClick(AjaxRequestTarget target)
-					{
-						getSession().getFeedbackMessages().clear();
-						try
-						{
-							AdminModalWindow mProps = (AdminModalWindow) DealOffersPage.this.get("modalProps");
-							final DealOffer dOffer = ServiceFactory.get().getTaloolService().getDealOffer(dealOffer.getOfferId());
-							PropertiesPanel panel = new PropertiesPanel(mProps.getContentId(), Model.of(dOffer.getProperties()),
-									PropertySupportedEntity.DealOffer)
-							{
-
-								private static final long serialVersionUID = -6061721033345142501L;
-
-								@Override
-								public void saveEntityProperties(Properties props)
-								{
-									try
-									{
-										ServiceFactory.get().getTaloolService().merge(dOffer);
-
-										LOG.info(dOffer.getProperties().dumpProperties());
-
-									}
-									catch (ServiceException e)
-									{
-										e.printStackTrace();
-									}
-								}
-
-							};
-
-							mProps.setContent(panel);
-							sb.setLength(0);
-							sb.append("Manage '").append(dealOffer.getTitle()).append("'").append(" properties");
-							mProps.setTitle(sb.toString());
-							mProps.show(target);
-						}
-						catch (ServiceException e)
-						{
-							LOG.error("Problem getting dealOffer", e);
-							SessionUtils.errorMessage("Problem getting deal offer '" + title + "'");
-						}
-
-					}
-				};
-
-				item.add(editProps);
-
 				sb.append("Are you sure you want to copy \"").append(title).append("\" and all deals related?");
 				item.add(new ConfirmationIndicatingAjaxLink<Void>("copyLink",
 						JavaScriptUtils.escapeQuotes(sb.toString()).toString())
@@ -465,127 +393,6 @@ public class DealOffersPage extends BasePage
 						}
 
 					}
-				});
-
-				final AJAXDownload download = new AJAXDownload()
-				{
-
-					private static final long serialVersionUID = 3028684784843907550L;
-
-					@Override
-					protected String getFileName()
-					{
-						return dealOffer.getTitle() + " Access Codes.txt";
-					}
-
-					@Override
-					protected IResourceStream getResourceStream()
-					{
-						// download the new codes
-						final int finalCount = downloadCodeCount;
-						IResourceStream resourceStream = new AbstractResourceStreamWriter()
-						{
-							private static final long serialVersionUID = 659665452240222410L;
-
-							@Override
-							public void write(OutputStream output)
-							{
-								try
-								{
-									PrintWriter writer = new PrintWriter(output);
-
-									// TODO we should have a method that only returns the most
-									// recent X codes
-									List<String> codes = taloolService.getActivationCodes(dealOfferId);
-									int lastIndex = codes.size();
-									List<String> recentCodes = codes.subList(lastIndex - finalCount, lastIndex);
-
-									for (final String code : recentCodes)
-									{
-										writer.println(code);
-									}
-
-									writer.close();
-								}
-								catch (Exception e)
-								{
-									LOG.error("Problem writing codes: " + e.getLocalizedMessage(), e);
-								}
-							}
-
-							@Override
-							public String getContentType()
-							{
-								return "application/text";
-							}
-						};
-						return resourceStream;
-					}
-
-				};
-				item.add(download);
-
-				item.add(new IndicatingAjaxLink<Void>("codeLink")
-				{
-					private static final long serialVersionUID = 268692101349122303L;
-					private final int MAX_CODES_IN_ONE_CREATION = 10000;
-
-					@Override
-					public void onClick(AjaxRequestTarget target)
-					{
-						getSession().getFeedbackMessages().clear();
-
-						// Extract the code count parameter from RequestCycle
-						final Request request = RequestCycle.get().getRequest();
-						final String jsCodeCountString = request.getRequestParameters()
-								.getParameterValue("codeCount").toString("");
-
-						try
-						{
-							downloadCodeCount = Integer.parseInt(jsCodeCountString);
-							if (downloadCodeCount > MAX_CODES_IN_ONE_CREATION)
-							{
-								SessionUtils.errorMessage("Please enter a number smaller than " + MAX_CODES_IN_ONE_CREATION + ".");
-								downloadCodeCount = 0;
-							}
-						}
-						catch (Exception e)
-						{
-							SessionUtils.errorMessage("Please enter numbers only.");
-							downloadCodeCount = 0;
-						}
-
-						if (downloadCodeCount > 0)
-						{
-							// generate the codes and start the download
-							try
-							{
-								taloolService.createActivationCodes(dealOfferId, downloadCodeCount);
-								download.initiate(target);
-								Session.get().success("Codes created and download started.");
-							}
-							catch (ServiceException e)
-							{
-								Session.get().error("Problem creating codes");
-								LOG.error("Problem creating codes: " + e.getLocalizedMessage());
-							}
-						}
-
-						target.add(feedback);
-
-					}
-
-					@Override
-					protected void updateAjaxAttributes(
-							AjaxRequestAttributes attributes)
-					{
-						super.updateAjaxAttributes(attributes);
-
-						List<CharSequence> urlArgumentMethods = attributes.getDynamicExtraParameters();
-						urlArgumentMethods.add("return {'codeCount': prompt('How many access codes would you like to generate?')};");
-
-					}
-
 				});
 
 			}
