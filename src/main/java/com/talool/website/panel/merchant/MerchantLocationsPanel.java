@@ -2,6 +2,7 @@ package com.talool.website.panel.merchant;
 
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -12,16 +13,23 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.MerchantMedia;
+import com.talool.core.service.ServiceException;
+import com.talool.core.service.TaloolService.PropertySupportedEntity;
+import com.talool.domain.Properties;
+import com.talool.service.ServiceFactory;
 import com.talool.website.component.StaticImage;
 import com.talool.website.models.MerchantLocationListModel;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.pages.BasePage;
+import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseTabPanel;
+import com.talool.website.panel.PropertiesPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.wizard.MerchantWizard;
 import com.talool.website.panel.merchant.wizard.MerchantWizard.MerchantWizardMode;
@@ -35,6 +43,7 @@ import com.talool.website.util.SessionUtils;
 public class MerchantLocationsPanel extends BaseTabPanel
 {
 	private static final long serialVersionUID = 3634980968241854373L;
+	private static final Logger LOG = Logger.getLogger(MerchantLocationsPanel.class);
 	private UUID _merchantId;
 	private MerchantWizard wizard;
 
@@ -43,11 +52,21 @@ public class MerchantLocationsPanel extends BaseTabPanel
 		super(id);
 		_merchantId = UUID.fromString(parameters.get("id").toString());
 	}
+	
+	public MerchantLocationsPanel(String id, UUID mid)
+	{
+		super(id);
+		_merchantId = mid;
+	}
 
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
+		
+		final AdminModalWindow modalProps = new AdminModalWindow("modalProps");
+		modalProps.setInitialWidth(650);
+		add(modalProps.setOutputMarkupId(true));
 
 		MerchantLocationListModel model = new MerchantLocationListModel();
 		model.setMerchantId(_merchantId);
@@ -131,6 +150,47 @@ public class MerchantLocationsPanel extends BaseTabPanel
 						
 						wizard.open(target);
 					}
+				});
+				
+				item.add(new AjaxLink<Void>("editProps")
+				{
+					private static final long serialVersionUID = 268692101349122303L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target)
+					{
+						getSession().getFeedbackMessages().clear();
+
+						PropertiesPanel panel = new PropertiesPanel(modalProps.getContentId(), Model.of(managedLocation.getProperties()),
+								PropertySupportedEntity.MerchantLocation)
+						{
+
+							private static final long serialVersionUID = -6061721033345142501L;
+
+							@Override
+							public void saveEntityProperties(Properties props, AjaxRequestTarget target)
+							{
+								try
+								{
+									ServiceFactory.get().getTaloolService().merge(managedLocation);
+								}
+								catch (ServiceException e)
+								{
+									LOG.error("Failed to merge locaion after editing properties", e);
+								}
+								target.appendJavaScript("window.parent.Wicket.Window.current.autoSizeWindow();");
+							}
+							
+						};
+
+						StringBuilder sb = new StringBuilder();
+						modalProps.setContent(panel);
+						sb.setLength(0);
+						sb.append("Manage '").append(managedLocation.getNiceCityState()).append("'").append(" properties");
+						modalProps.setTitle(sb.toString());
+						modalProps.show(target);
+					}
+
 				});
 			}
 
