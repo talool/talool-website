@@ -294,6 +294,8 @@ public class DealOffersPage extends BasePage
 					item.add(new Label("price", moneyString));
 				}
 
+				final StringBuilder sb = new StringBuilder();
+
 				item.add(new Label("merchantCount", dealOffer.getMerchantCount()));
 				item.add(new Label("dealCount"));
 
@@ -301,24 +303,20 @@ public class DealOffersPage extends BasePage
 				item.add(dealType.setOutputMarkupId(true));
 				dealType.setVisible(isTaloolUserLoggedIn);
 
-				if (dealOffer.getExpires() != null)
-				{
-					DateTime localDate = new DateTime(dealOffer.getExpires().getTime());
-					DateTimeFormatter dateformatter = DateTimeFormat.forPattern("MMM d, yyyy");
-					String expDate = dateformatter.print(localDate);
-					item.add(new Label("expires", expDate));
-				}
-				else
-				{
-					item.add(new Label("expires", ""));
-				}
+				DateTimeFormatter dateformatter = DateTimeFormat.forPattern("MMM d, yyyy");
+				DateTime startDate = new DateTime(dealOffer.getScheduledStartDate().getTime());
+
+				DateTime endDate = new DateTime(dealOffer.getScheduledEndDate().getTime());
+				sb.append(dateformatter.print(startDate)).append(" - ").append(dateformatter.print(endDate));
+				item.add(new Label("schedule", sb.toString()));
+
+				sb.setLength(0);
 
 				item.add(new DealOfferPublishToggle("isActive", new Model<DealOfferSummary>(dealOffer)));
 
-				StringBuilder confirm = new StringBuilder();
-				confirm.append("Are you sure you want to remove \"").append(title).append("\"?");
+				sb.append("Are you sure you want to remove \"").append(title).append("\"?");
 				ConfirmationIndicatingAjaxLink<Void> deleteLink = new ConfirmationIndicatingAjaxLink<Void>("deleteLink", JavaScriptUtils.escapeQuotes(
-						confirm.toString()).toString())
+						sb.toString()).toString())
 				{
 					private static final long serialVersionUID = 268692101349122303L;
 
