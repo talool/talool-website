@@ -127,6 +127,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 	@Override
 	protected void init()
 	{
+		getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
 
 		final IPackageResourceGuard packageResourceGuard = getResourceSettings()
 				.getPackageResourceGuard();
@@ -223,8 +224,6 @@ public class TaloolApplication extends WebApplication implements Serializable
 		getPageSettings().setVersionPagesByDefault(false);
 		// getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
 
-		getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
-
 		final AuthStrategy authStrat = new AuthStrategy();
 		getSecuritySettings().setAuthorizationStrategy(authStrat);
 		getSecuritySettings().setUnauthorizedComponentInstantiationListener(authStrat);
@@ -288,6 +287,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		//
 		// getMarkupSettings().setStripWicketTags(false);
 		// }
+
 	}
 
 	private void mount(String string, PackageName forClass)

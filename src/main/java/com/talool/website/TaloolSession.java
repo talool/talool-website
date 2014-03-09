@@ -1,5 +1,7 @@
 package com.talool.website;
 
+import java.util.TimeZone;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
@@ -18,6 +20,8 @@ public class TaloolSession extends WebSession
 {
 	private static final long serialVersionUID = 5796824961553926305L;
 	private DealOffer lastDealOffer;
+
+	private WebClientInfo webClientInfo;
 
 	private static enum AcceptedBrowserName
 	{
@@ -56,12 +60,30 @@ public class TaloolSession extends WebSession
 		this.lastDealOffer = lastDealOffer;
 	}
 
-	public static void performBrowserCheck() throws BrowserException
+	public TimeZone getTimeZone()
 	{
+		TimeZone timeZone = null;
+
+		if (webClientInfo.getProperties().getTimeZone() != null)
+		{
+			timeZone = webClientInfo.getProperties().getTimeZone();
+		}
+		// fallback to server's timezone if we can't determine the client's
+		if (timeZone == null)
+		{
+			timeZone = TimeZone.getDefault();
+		}
+		return timeZone;
+	}
+
+	public void performBrowserCheck() throws BrowserException
+	{
+		WebClientInfo _wClientInfo = webClientInfo = (WebClientInfo) TaloolSession.get().getClientInfo();
+
 		try
 		{
-			WebClientInfo info = (WebClientInfo) TaloolSession.get().getClientInfo();
-			String ua = info.getUserAgent();
+			webClientInfo = _wClientInfo;
+			String ua = webClientInfo.getUserAgent();
 
 			for (AcceptedBrowserName name : AcceptedBrowserName.values())
 			{
@@ -77,5 +99,4 @@ public class TaloolSession extends WebSession
 		catch (NullPointerException e)
 		{}
 	}
-
 }
