@@ -69,11 +69,6 @@ public class DealOfferPublishToggle extends Panel
 
 		final DealOfferSummary dealOffer = (DealOfferSummary) getDefaultModelObject();
 
-		LOG.info(Calendar.getInstance().getTime());
-		LOG.info(dealOffer.getScheduledStartDate());
-
-		LOG.info(Calendar.getInstance().getTime().getTime() - dealOffer.getScheduledStartDate().getTime());
-
 		AttributeAppender warning = new AttributeAppender("class", "true-gray-font");
 
 		if (dealOffer.getOfferType().equals(DealType.KIRKE_BOOK.toString()))
