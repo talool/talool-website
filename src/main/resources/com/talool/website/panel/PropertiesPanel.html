@@ -1,0 +1,27 @@
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+		<link rel="stylesheet" type="text/css" href="/css/stats.css"/>
+	</wicket:head>
+	
+	<wicket:panel xmlns:wicket="http://wicket.apache.org">
+		<div wicket:id="container" style="width:500px; padding: 20px;">
+		
+			<div wicket:id="feedback"></div>
+			
+			<div class="borderedBox gray5-font">
+		  		<div wicket:id="comboBox"></div>
+		  	</div>
+		  	
+		  	<div class="borderedBox gray5-font" style="margin-top:20px;">
+		  		<b>Properties</b><br/>
+			  	<table>
+			  		<tr wicket:id="propertyRptr">
+		  				<th wicket:id="pKey"></th>
+		  				<td wicket:id="pVal"></td>
+		  			</tr>
+			  	</table>
+		  	</div>
+	  	</div>
+	</wicket:panel>
+
+</html>

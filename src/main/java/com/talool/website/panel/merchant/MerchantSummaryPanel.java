@@ -147,7 +147,7 @@ public class MerchantSummaryPanel extends BaseTabPanel {
 				}
 				catch (ServiceException e)
 				{
-					LOG.error("failed to merge offer after saving properties.",e);
+					LOG.error("failed to merge merchant after saving properties.",e);
 				}
 				
 			}

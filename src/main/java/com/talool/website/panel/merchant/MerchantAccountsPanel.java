@@ -23,8 +23,8 @@ import com.talool.website.models.MerchantAccountListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseTabPanel;
+import com.talool.website.panel.PropertiesPanel;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.dealoffer.PropertiesPanel;
 import com.talool.website.panel.merchant.definition.MerchantAccountPanel;
 import com.talool.website.panel.merchant.definition.MerchantAccountResetPasswordPanel;
 
@@ -47,7 +47,7 @@ public class MerchantAccountsPanel extends BaseTabPanel
 
 		final AdminModalWindow modalProps = new AdminModalWindow("modalProps");
 		modalProps.setInitialWidth(650);
-		add(modalProps);
+		add(modalProps.setOutputMarkupId(true));
 
 		MerchantAccountListModel model = new MerchantAccountListModel();
 		model.setMerchantId(_merchantId);
@@ -126,7 +126,7 @@ public class MerchantAccountsPanel extends BaseTabPanel
 							private static final long serialVersionUID = -6061721033345142501L;
 
 							@Override
-							public void saveEntityProperties(Properties props)
+							public void saveEntityProperties(Properties props, AjaxRequestTarget target)
 							{
 								try
 								{
@@ -134,10 +134,11 @@ public class MerchantAccountsPanel extends BaseTabPanel
 								}
 								catch (ServiceException e)
 								{
-									e.printStackTrace();
+									LOG.error("Failed to merge account after editing properties", e);
 								}
+								target.appendJavaScript("window.parent.Wicket.Window.current.autoSizeWindow();");
 							}
-
+							
 						};
 
 						StringBuilder sb = new StringBuilder();
