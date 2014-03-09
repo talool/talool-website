@@ -45,6 +45,8 @@ public class MerchantAccountsPanel extends BaseTabPanel
 	{
 		super.onInitialize();
 
+		final BasePage page = (BasePage) getPage();
+		
 		final AdminModalWindow modalProps = new AdminModalWindow("modalProps");
 		modalProps.setInitialWidth(650);
 		add(modalProps.setOutputMarkupId(true));
@@ -149,7 +151,7 @@ public class MerchantAccountsPanel extends BaseTabPanel
 						modalProps.show(target);
 					}
 
-				});
+				}.setVisible(page.isSuperUser));
 
 			}
 

@@ -25,59 +25,35 @@
   		<tr>
 	  	<td class="sidebar">
 	  		<ul>
-	  			<wicket:container wicket:id="adminMenu">
-		  			<li>Talool Admin</li>
-		  			<ul>
-		  				<wicket:link>
+	  			<li wicket:id="menuHeader">Talool Admin|Publisher Tools|Merchant Tools</li>
+	  			<ul>
+	  				<wicket:link>
+	  					<wicket:container wicket:id="analytics">
 		  					<li><a href="/com/talool/website/pages/AnalyticsPage.html"><i class="icon-dashboard icon-large"></i> Analytics</a></li>
-		  					<li><a href="/com/talool/website/pages/lists/MerchantsPage.html"><i class="icon-shopping-cart icon-large"></i> Merchants</a></li>
-			 				<li><a href="/com/talool/website/pages/lists/DealOffersPage.html"><i class="icon-money icon-large"></i> Deal Offers</a></li>
-			  				<li><a href="/com/talool/website/pages/CustomerSearchPage.html"><i class="icon-user icon-large"></i> Customers</a></li>
-			  				<li><a href="/com/talool/website/pages/lists/DealHistoryPage.html"><i class="icon-time icon-large"></i> Deal History</a></li>
-			  				<li><a href="/com/talool/website/pages/lists/MerchantRedemptionCodePage.html"><i class="icon-search icon-large"></i> Redemption Codes</a></li>
-		  				</wicket:link>
-		  			</ul>
-	  			</wicket:container>
-	  			<wicket:container wicket:id="publisherMenu">
-		  			<li>Publisher Tools</li>
-		  			<ul>
-		  				<wicket:link>
-		  					<li><a href="/com/talool/website/pages/AnalyticsPage.html"><i class="icon-dashboard icon-large"></i> My Analytics</a></li>
-		  					<li><a href="/com/talool/website/pages/lists/DealOffersPage.html"><i class="icon-money icon-large"></i> My Books</a></li>
-		  					<li><a href="/com/talool/website/pages/lists/MerchantsPage.html"><i class="icon-shopping-cart icon-large"></i> My Merchants</a></li>
-		  					<li><a href="/com/talool/website/pages/CustomerSearchPage.html"><i class="icon-user icon-large"></i> My Customers</a></li>
-		  					<li><a href="/com/talool/website/pages/lists/MerchantRedemptionCodePage.html"><i class="icon-search icon-large"></i> Redemption Codes</a></li>
-		  				</wicket:link>
-		  			</ul>
-	  			</wicket:container>
-	  			<!--
-	  			<li>Fundraiser Tools</li>
-	  			<ul>
-	  				<li><a><i class="icon-shopping-cart icon-large"></i> My Schools</a></li>
-	  				<li><a><i class="icon-shopping-cart icon-large"></i> My Salesforce</a></li>
-	  				<li><a><i class="icon-shopping-cart icon-large"></i> My Customers</a></li>
-	  				<li><a><i class="icon-shopping-cart icon-large"></i> My Sales</a></li>
-	  				
+		  				</wicket:container>
+		  				
+		  				<wicket:container wicket:id="publisher">
+		  					<li><a href="/com/talool/website/pages/lists/DealOffersPage.html"><i class="icon-money icon-large"></i> Books</a></li>
+			 				<li><a href="/com/talool/website/pages/lists/MerchantsPage.html"><i class="icon-shopping-cart icon-large"></i> Merchants</a></li>
+	  					</wicket:container>
+	  					
+	  					<wicket:container wicket:id="merchant">
+		  					<li><a><i class="icon-shopping-cart icon-large"></i> Deals</a></li>
+	  					</wicket:container>
+	  					
+	  					<li><a href="/com/talool/website/pages/CustomerSearchPage.html"><i class="icon-user icon-large"></i> Customer Search</a></li>
+		  				<li><a href="/com/talool/website/pages/lists/MerchantRedemptionCodePage.html"><i class="icon-search icon-large"></i> Redemption Codes</a></li>
+		  				
+	  					<wicket:container wicket:id="superuser">
+		  					<li><a href="/com/talool/website/pages/lists/DealHistoryPage.html"><i class="icon-time icon-large"></i> Deal History</a></li>
+	  					</wicket:container>
+		  			</wicket:link>
 	  			</ul>
-	  			<li>Merchant Tools</li>
-	  			<ul>
-	  				<li><a><i class="icon-shopping-cart icon-large"></i> My Customers</a></li>
-	  				<li><a><i class="icon-shopping-cart icon-large"></i> My Deals</a></li>
-	  				<li><a><i class="icon-shopping-cart icon-large"></i> My Reach</a></li>
-	  			</ul>
-	  			<li>Customer Tools</li>
-	  			<ul>
-	  				<li><a><i class="icon-shopping-cart icon-large"></i> My Purchases</a></li>
-	  				<li><a><i class="icon-shopping-cart icon-large"></i> My Favorites</a></li>
-	  				<li><a><i class="icon-shopping-cart icon-large"></i> My Deals</a></li>
-	  				<li><a><i class="icon-shopping-cart icon-large"></i> My Activity</a></li>
-	  			</ul>
-	  			 -->
 	  		</ul>
 	  	</td>
 	  	<td class="content">
 	  		<h2 wicket:id="headerTitle">Merchants</h2>
-	  		<div wicket:id="feedback"/>
+	  		<div wicket:id="feedback"></div>
 	  		<div class="actions" wicket:id="action">
 			  	<a wicket:id="actionLink" class="btn btn-action">
 			  		<i class="icon-plus"></i> 

@@ -64,6 +64,8 @@ public class MerchantLocationsPanel extends BaseTabPanel
 	{
 		super.onInitialize();
 		
+		final BasePage page = (BasePage) getPage();
+		
 		final AdminModalWindow modalProps = new AdminModalWindow("modalProps");
 		modalProps.setInitialWidth(650);
 		add(modalProps.setOutputMarkupId(true));
@@ -191,14 +193,13 @@ public class MerchantLocationsPanel extends BaseTabPanel
 						modalProps.show(target);
 					}
 
-				});
+				}.setVisible(page.isSuperUser));
 			}
 
 		};
 		container.add(locations);
 		
 		// override the action button
-		final BasePage page = (BasePage) this.getPage();
 		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
 		{
 

@@ -36,7 +36,7 @@ public class AnalyticsPage extends BasePage
 	@Override
 	public String getHeaderTitle()
 	{
-		return "My Analytics";
+		return "Analytics";
 	}
 
 	@Override

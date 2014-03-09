@@ -66,6 +66,8 @@ public class MerchantSummaryPanel extends BaseTabPanel {
 	protected void onInitialize() {
 		super.onInitialize();
 		
+		final BasePage page = (BasePage) getPage();
+		
 		final WebMarkupContainer container = new WebMarkupContainer("container");
 		add(container.setOutputMarkupId(true));
 		
@@ -118,7 +120,7 @@ public class MerchantSummaryPanel extends BaseTabPanel {
 			}
 
 		};
-		container.add(propteryList);
+		container.add(propteryList.setVisible(page.isSuperUser));
 		
 		final MapPreview mapPreview = new MapPreview("mapPreview", merchant);
 		container.add(mapPreview);
@@ -153,7 +155,7 @@ public class MerchantSummaryPanel extends BaseTabPanel {
 			}
 			
 		};
-		container.add(comboBox);
+		container.add(comboBox.setVisible(page.isSuperUser));
 		
 		// Wizard
 		wizard = new MerchantWizard("wiz", "Merchant Wizard", MerchantWizardMode.MERCHANT)
@@ -175,7 +177,6 @@ public class MerchantSummaryPanel extends BaseTabPanel {
 		addOrReplace(wizard.setOutputMarkupId(true));
 		
 		// hide the action button
-		final BasePage page = (BasePage) this.getPage();
 		page.getActionLink().add(new AttributeModifier("class","hide"));
 	}
 
