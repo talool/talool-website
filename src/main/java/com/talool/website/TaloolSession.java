@@ -117,9 +117,10 @@ public class TaloolSession extends WebSession
 
 		WebClientInfo webClientInfo = getClientInfo();
 
-		if (webClientInfo != null && webClientInfo.getProperties() != null)
+		String tz = getMerchantAccount().getProperties().getAsString("time.zone");
+		if (webClientInfo != null && webClientInfo.getProperties() != null && tz != null)
 		{
-			webClientInfo.getProperties().setTimeZone(TimeZone.getTimeZone(getMerchantAccount().getProperties().getAsString("time.zone")));
+			webClientInfo.getProperties().setTimeZone(TimeZone.getTimeZone(tz));
 		}
 
 	}

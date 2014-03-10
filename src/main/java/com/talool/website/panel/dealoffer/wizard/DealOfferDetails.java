@@ -5,8 +5,6 @@ import java.util.TimeZone;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.datetime.DateConverter;
-import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
@@ -15,8 +13,8 @@ import org.apache.wicket.model.ResourceModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.googlecode.wicket.kendo.ui.form.datetime.DateTimePicker;
 import com.talool.core.DealOffer;
-import com.talool.website.component.DateTimeFieldExtended;
 import com.talool.website.component.TimeZoneDropDown;
 import com.talool.website.panel.dealoffer.DealOfferPreview;
 import com.talool.website.panel.dealoffer.DealOfferPreviewUpdatingBehavior;
@@ -64,25 +62,19 @@ public class DealOfferDetails extends WizardStep
 		TextField<String> price = new TextField<String>("price");
 		addOrReplace(price.setRequired(true));
 		price.add(new DealOfferPreviewUpdatingBehavior(offerPreview, DealOfferComponent.PRICE, "onChange"));
-
-		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", true);
-
-		// start date must be at least today
-
-		final DateTimeFieldExtended start = new DateTimeFieldExtended("scheduledStartDate");
-
-		TimeZone bestGuessTimeZone = SessionUtils.getSession().getBestGuessTimeZone();
-
-		selectedTimeZoneId = TimeZoneDropDown.getBestSupportedTimeZone(bestGuessTimeZone).getID();
-
-		final DateTimeFieldExtended end = new DateTimeFieldExtended("scheduledEndDate");
-
-		// add(new StartEndDateFormValidator(start, end));
-
-		addOrReplace(end.setOutputMarkupId(true));
-
+		
+		final DateTimePicker start = new DateTimePicker("scheduledStartDate");
 		addOrReplace(start.setOutputMarkupId(true));
-
+		
+		final DateTimePicker end = new DateTimePicker("scheduledEndDate");
+		addOrReplace(end.setOutputMarkupId(true));
+		
+		//DateConverter converter = new PatternDateConverter("MM/dd/yyyy", true);
+		// start date must be at least today
+		// add(new StartEndDateFormValidator(start, end));
+		
+		TimeZone bestGuessTimeZone = SessionUtils.getSession().getBestGuessTimeZone();
+		selectedTimeZoneId = TimeZoneDropDown.getBestSupportedTimeZone(bestGuessTimeZone).getID();
 		TimeZoneDropDown timeZoneDropDown = new TimeZoneDropDown("timeZoneSelect", new PropertyModel<String>(this, "selectedTimeZoneId"));
 		timeZoneDropDown.add(new AjaxFormComponentUpdatingBehavior("onchange")
 		{
@@ -97,7 +89,6 @@ public class DealOfferDetails extends WizardStep
 			}
 
 		});
-
 		addOrReplace(timeZoneDropDown);
 
 	}

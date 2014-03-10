@@ -1,48 +1,50 @@
-<wicket:head>
-<style>
- .cdate input {margin:0;padding:5px;width:60px !important;}
-</style>
-</wicket:head>
-<wicket:panel xmlns:wicket="http://wicket.apache.org">
-     <div class="newMerchant">
-		<div class="panel right iPhonePanel">
-			<div wicket:id="offerBuilder"></div>
-		</div>
-		<div class="panel left bookDetails">
-			<div class="wicketExtensionsWizardHeaderTitle">
-				<wicket:message key="getstarted.title"></wicket:message>
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+		<link rel="stylesheet" type="text/css" href="/css/kendo/kendo.common.min.css"/>
+		<link rel="stylesheet" type="text/css" href="/css/kendo/kendo.default.min.css"/>
+	</wicket:head>
+	<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	     <div class="newMerchant">
+			<div class="panel right iPhonePanel">
+				<div wicket:id="offerBuilder"></div>
 			</div>
-			<div class="wicketExtensionsWizardHeaderSummary">
-				<wicket:message key="getstarted.summary"></wicket:message>
-			</div>
-		    <fieldset>
-				<div>
-			    	<label><i class="hint-font icon-asterisk"></i> Title</label><input wicket:id="title" type="text"/>
-			    </div>
-			    <div>
-			    	<label><i class="hint-font icon-asterisk"></i> Summary</label><textarea wicket:id="summary"></textarea>
-			    </div>
-			    
-			    <div>
-			    	<label><i class="hint-font icon-asterisk"></i> Price</label><input id="price" wicket:id="price" type="text"/>
+			<div class="panel left bookDetails">
+				<div class="wicketExtensionsWizardHeaderTitle">
+					<wicket:message key="getstarted.title"></wicket:message>
 				</div>
-    		    <p>Selecting the time zone below will be stored as a preference setting.</p>
-    		    <select wicket:id="timeZoneSelect"></select>
-				<div>
-			    	<label><i class="hint-font icon-asterisk"></i> Start Date</label>
-			        <span class="datetime" wicket:id="scheduledStartDate"></span>
-			    </div>
-			    <div>
-			    	<label><i class="hint-font icon-asterisk"></i> End Date</label>
-			        <span class="datetime" wicket:id="scheduledEndDate"></span>
-			    </div>
-		    	</fieldset>
+				<div class="wicketExtensionsWizardHeaderSummary">
+					<wicket:message key="getstarted.summary"></wicket:message>
+				</div>
+			    <fieldset>
+					<div>
+				    	<label><i class="hint-font icon-asterisk"></i> Title</label><input wicket:id="title" type="text"/>
+				    </div>
+				    <div>
+				    	<label><i class="hint-font icon-asterisk"></i> Summary</label><textarea wicket:id="summary"></textarea>
+				    </div>
+				    
+				    <div>
+				    	<label><i class="hint-font icon-asterisk"></i> Price</label><input id="price" wicket:id="price" type="text"/>
+					</div>
+	    		    
+	    		    
+					<div>
+				    	<label><i class="hint-font icon-asterisk"></i> Start Date</label>
+				        <span class="datetime" wicket:id="scheduledStartDate"></span>
+				    </div>
+				    <div>
+				    	<label><i class="hint-font icon-asterisk"></i> End Date</label>
+				        <span class="datetime" wicket:id="scheduledEndDate"></span>
+				    </div>
+				    
+				    <div>
+				    	<label><i class="optional-font icon-asterisk"></i> Time Zone</label>
+				        <select wicket:id="timeZoneSelect"></select>
+				    </div>
+			    </fieldset>
+			</div>
+			<div class="clear"></div>
 		</div>
-		<div class="clear"></div>
-	</div>
-	<script>
-	  $(function() {
-	    $( ".datepicker_do" ).datepicker();
-	  });
-	</script>
-</wicket:panel>
+	
+	</wicket:panel>
+</html>
