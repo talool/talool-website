@@ -10,11 +10,11 @@ import com.talool.website.models.MerchantModel;
 
 public class PermissionUtils {
 	
-	static final String superUser = "super_user";
-	static final String fundraiser = "fundraiser";
-	static final String fundraisingBook = "fundraising_book";
-	static final String publisher = "publisher";
-	static final String analytics = "analytics";
+	public static final String superUser = "super_user";
+	public static final String fundraiser = "fundraiser";
+	public static final String fundraisingBook = "fundraising_book";
+	public static final String publisher = "publisher";
+	public static final String analytics = "analytics";
 	
 	public static boolean isSuperUser(MerchantAccount account)
 	{

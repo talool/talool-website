@@ -15,6 +15,7 @@ import com.talool.core.FactoryManager;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.website.pages.BasePage;
+import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SessionUtils;
 
 public class DealOfferWizard extends AbstractWizard<DealOffer> {
@@ -67,6 +68,13 @@ public class DealOfferWizard extends AbstractWizard<DealOffer> {
 		 * Save the deal
 		 */
 		DealOffer offer  = (DealOffer) getModelObject();
+
+		// if this book belongs to a fundraising publisher, ensure it is set as a fundraising_book
+		if (PermissionUtils.isFundraisingPublisher(offer.getMerchant()))
+		{
+			offer.getProperties().createOrReplace(PermissionUtils.fundraisingBook, true);
+		}
+		
 		offer.setUpdatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
 		TaloolService taloolService = FactoryManager.get().getServiceFactory().getTaloolService();
 		try {
