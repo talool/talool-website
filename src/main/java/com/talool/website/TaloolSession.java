@@ -100,13 +100,11 @@ public class TaloolSession extends WebSession
 	{
 		try
 		{
-			final String userStoredTimeZone = getMerchantAccount().getProperties().getAsString("time.zone");
-			if (userStoredTimeZone != null && !userStoredTimeZone.equals(timeZoneId))
+			getMerchantAccount().getProperties().createOrReplace("time.zone", timeZoneId);
+			ServiceFactory.get().getTaloolService().merge(getMerchantAccount());
+			if (LOG.isDebugEnabled())
 			{
-				getMerchantAccount().getProperties().createOrReplace("time.zone", timeZoneId);
-
-				ServiceFactory.get().getTaloolService().merge(getMerchantAccount());
-				LOG.info("Changed timezone for " + getMerchantAccount().getEmail() + " to " + timeZoneId);
+				LOG.debug("Changed timezone for " + getMerchantAccount().getEmail() + " to " + timeZoneId);
 			}
 
 		}
@@ -119,7 +117,7 @@ public class TaloolSession extends WebSession
 
 		if (webClientInfo != null && webClientInfo.getProperties() != null)
 		{
-			webClientInfo.getProperties().setTimeZone(TimeZone.getTimeZone(getMerchantAccount().getProperties().getAsString("time.zone")));
+			webClientInfo.getProperties().setTimeZone(TimeZone.getTimeZone(timeZoneId));
 		}
 
 	}

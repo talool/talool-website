@@ -5,8 +5,6 @@ import java.util.TimeZone;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.datetime.DateConverter;
-import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
@@ -22,6 +20,7 @@ import com.talool.website.panel.dealoffer.DealOfferPreview;
 import com.talool.website.panel.dealoffer.DealOfferPreviewUpdatingBehavior;
 import com.talool.website.panel.dealoffer.DealOfferPreviewUpdatingBehavior.DealOfferComponent;
 import com.talool.website.util.SessionUtils;
+import com.talool.website.validators.StartEndDateFormValidator;
 
 /**
  * 
@@ -65,8 +64,6 @@ public class DealOfferDetails extends WizardStep
 		addOrReplace(price.setRequired(true));
 		price.add(new DealOfferPreviewUpdatingBehavior(offerPreview, DealOfferComponent.PRICE, "onChange"));
 
-		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", true);
-
 		// start date must be at least today
 
 		final DateTimeFieldExtended start = new DateTimeFieldExtended("scheduledStartDate");
@@ -77,7 +74,7 @@ public class DealOfferDetails extends WizardStep
 
 		final DateTimeFieldExtended end = new DateTimeFieldExtended("scheduledEndDate");
 
-		// add(new StartEndDateFormValidator(start, end));
+		add(new StartEndDateFormValidator(start, end));
 
 		addOrReplace(end.setOutputMarkupId(true));
 

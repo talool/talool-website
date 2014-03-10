@@ -13,6 +13,9 @@ import org.apache.wicket.model.IModel;
 
 /**
  * 
+ * An efficient Time zone drop down that supports specific time zones
+ * TimeZoneDropDown.SUPPORTED_TIME_ZONES . Daylight savings is accounted for.
+ * 
  * @author clintz
  * 
  */
@@ -32,7 +35,6 @@ public class TimeZoneDropDown extends DropDownChoice<String>
 		{
 			SHORT_NAME_MAP.put(TimeZone.getTimeZone(id).getDisplayName(false, TimeZone.SHORT), id);
 		}
-
 	}
 
 	private static final TimeZoneChoiceRenderer TIME_ZONE_CHOICE_RENDERER = new TimeZoneChoiceRenderer();

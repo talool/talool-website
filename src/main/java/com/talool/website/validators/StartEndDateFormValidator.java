@@ -1,6 +1,6 @@
 package com.talool.website.validators;
 
-import org.apache.wicket.datetime.markup.html.form.DateTextField;
+import org.apache.wicket.extensions.yui.calendar.DateTimeField;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
@@ -19,7 +19,7 @@ public class StartEndDateFormValidator extends AbstractFormValidator
 
 	private static final long serialVersionUID = -3481049618080999489L;
 
-	public StartEndDateFormValidator(final DateTextField startDate, final DateTextField endDate)
+	public StartEndDateFormValidator(final DateTimeField startDate, final DateTimeField endDate)
 	{
 		components = new FormComponent<?>[] { startDate, endDate };
 	}
@@ -34,8 +34,8 @@ public class StartEndDateFormValidator extends AbstractFormValidator
 	public void validate(Form<?> form)
 	{
 
-		final DateTextField startField = (DateTextField) components[0];
-		final DateTextField endField = (DateTextField) components[1];
+		final DateTimeField startField = (DateTimeField) components[0];
+		final DateTimeField endField = (DateTimeField) components[1];
 
 		if (endField.getConvertedInput() == null || startField.getConvertedInput() == null)
 		{
