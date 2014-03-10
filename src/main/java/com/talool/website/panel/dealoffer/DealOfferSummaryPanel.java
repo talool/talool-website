@@ -26,9 +26,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.apache.wicket.util.resource.IResourceStream;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,21 +50,22 @@ import com.talool.website.util.KeyValue;
 import com.talool.website.util.SessionUtils;
 import com.vividsolutions.jts.geom.Geometry;
 
-public class DealOfferSummaryPanel extends BaseTabPanel {
+public class DealOfferSummaryPanel extends BaseTabPanel
+{
 
 	private static final long serialVersionUID = 2170124491668826388L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealOfferSummaryPanel.class);
-	
+
 	private UUID _dealOfferId;
-	
+
 	private DealOffer offer;
 	private MerchantLocation loc;
 	private Map<String, Long> metrics;
-	
+
 	private int downloadCodeCount;
-	
+
 	private DealOfferWizard wizard;
-	
+
 	private String merchantLabel;
 	private String priceLabel;
 	private String locationLabel;
@@ -75,27 +73,29 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 	private Long merchantCount;
 	private Long dealCount;
 	private List<KeyValue> keyValues;
-	
-	public DealOfferSummaryPanel(String id, PageParameters parameters) {
+
+	public DealOfferSummaryPanel(String id, PageParameters parameters)
+	{
 		super(id);
 		_dealOfferId = UUID.fromString(parameters.get("id").toString());
 		setPanelModel();
 	}
 
 	@Override
-	protected void onInitialize() {
+	protected void onInitialize()
+	{
 		super.onInitialize();
 		
 		final BasePage page = (BasePage) getPage();
-		
+
 		final AdminModalWindow modalProps = new AdminModalWindow("modalProps");
 		modalProps.setInitialWidth(650);
-		//final SubmitCallBack callback = page.getCallback(modalProps);
+		// final SubmitCallBack callback = page.getCallback(modalProps);
 		add(modalProps);
-		
+
 		final WebMarkupContainer container = new WebMarkupContainer("container");
 		add(container.setOutputMarkupId(true));
-		
+
 		container.add(new AjaxLink<Void>("editLink")
 		{
 			private static final long serialVersionUID = 268692101349122303L;
@@ -108,15 +108,15 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 				wizard.open(target);
 			}
 		});
-		
-		container.add(new Label("merchantName",new PropertyModel<String>(this,"merchantLabel")));
-		container.add(new Label("price", new PropertyModel<String>(this,"priceLabel")));
-		container.add(new Label("loc", new PropertyModel<String>(this,"locationLabel")));
-		container.add(new Label("exp", new PropertyModel<String>(this,"expiresLabel")));
-		container.add(new Label("merchantCount", new PropertyModel<Long>(this,"merchantCount")));
-		container.add(new Label("dealCount",new PropertyModel<Long>(this,"dealCount")));
-		
-		final ListView<KeyValue> propteryList = new ListView<KeyValue>("propertyRptr", new PropertyModel<List<KeyValue>>(this,"keyValues"))
+
+		container.add(new Label("merchantName", new PropertyModel<String>(this, "merchantLabel")));
+		container.add(new Label("price", new PropertyModel<String>(this, "priceLabel")));
+		container.add(new Label("loc", new PropertyModel<String>(this, "locationLabel")));
+		container.add(new Label("exp", new PropertyModel<String>(this, "expiresLabel")));
+		container.add(new Label("merchantCount", new PropertyModel<Long>(this, "merchantCount")));
+		container.add(new Label("dealCount", new PropertyModel<Long>(this, "dealCount")));
+
+		final ListView<KeyValue> propteryList = new ListView<KeyValue>("propertyRptr", new PropertyModel<List<KeyValue>>(this, "keyValues"))
 		{
 
 			private static final long serialVersionUID = 1L;
@@ -125,64 +125,68 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 			protected void populateItem(ListItem<KeyValue> item)
 			{
 				KeyValue prop = item.getModelObject();
-				item.add(new Label("pKey",prop.key));
-				item.add(new Label("pVal",prop.value));
+				item.add(new Label("pKey", prop.key));
+				item.add(new Label("pVal", prop.value));
 			}
 
 		};
 		container.add(propteryList.setVisible(page.isSuperUser));
-		
-		
+
 		final FindDealsPreview findDealsPreview = new FindDealsPreview("findDealsPreview", offer);
 		container.add(findDealsPreview);
-		
+
 		final DealOfferPreview offerPreview = new DealOfferPreview("dealOfferPreview", offer);
 		container.add(offerPreview);
-		
-		final PropertyComboBox comboBox = new PropertyComboBox("comboBox", 
-				Model.of(offer.getProperties()), PropertySupportedEntity.DealOffer) {
+
+		final PropertyComboBox comboBox = new PropertyComboBox("comboBox",
+				Model.of(offer.getProperties()), PropertySupportedEntity.DealOffer)
+		{
 
 			private static final long serialVersionUID = 7609398573563991376L;
 
 			@Override
 			public void onPropertySave(Properties props,
-					AjaxRequestTarget target) {
+					AjaxRequestTarget target)
+			{
 				try
 				{
 					ServiceFactory.get().getTaloolService().merge(offer);
 					LOG.info(offer.getProperties().dumpProperties());
-					
+
 					BasePage page = (BasePage) getPage();
 					target.add(page.feedback);
-					
+
 					setPanelModel();
 					target.add(container);
 				}
 				catch (ServiceException e)
 				{
-					LOG.error("failed to merge offer after saving properties.",e);
+					LOG.error("failed to merge offer after saving properties.", e);
 				}
-				
+
 			}
-			
+
 		};
 		container.add(comboBox.setVisible(page.isSuperUser));
-		
+
+
 		final AJAXDownload download = new AJAXDownload()
 		{
 
 			private static final long serialVersionUID = 3028684784843907550L;
 
 			@Override
-			protected String getFileName() {
+			protected String getFileName()
+			{
 				return offer.getTitle() + " Access Codes.txt";
 			}
 
 			@Override
-			protected IResourceStream getResourceStream() {
+			protected IResourceStream getResourceStream()
+			{
 				// download the new codes
-            	final int finalCount = downloadCodeCount;
-	            IResourceStream resourceStream = new AbstractResourceStreamWriter()
+				final int finalCount = downloadCodeCount;
+				IResourceStream resourceStream = new AbstractResourceStreamWriter()
 				{
 					private static final long serialVersionUID = 659665452240222410L;
 
@@ -193,10 +197,11 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 						{
 							PrintWriter writer = new PrintWriter(output);
 
-							// TODO we should have a method that only returns the most recent X codes
+							// TODO we should have a method that only returns the most recent
+							// X codes
 							List<String> codes = taloolService.getActivationCodes(_dealOfferId);
 							int lastIndex = codes.size();
-							List<String> recentCodes = codes.subList(lastIndex-finalCount, lastIndex);
+							List<String> recentCodes = codes.subList(lastIndex - finalCount, lastIndex);
 
 							for (final String code : recentCodes)
 							{
@@ -219,10 +224,10 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 				};
 				return resourceStream;
 			}
-			
+
 		};
 		container.add(download);
-		
+
 		final IndicatingAjaxLink<Void> codesLink = new IndicatingAjaxLink<Void>("codesLink")
 		{
 			private static final long serialVersionUID = 268692101349122303L;
@@ -232,32 +237,31 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 			public void onClick(AjaxRequestTarget target)
 			{
 				getSession().getFeedbackMessages().clear();
-				
-				//Extract the code count parameter from RequestCycle
-	            final Request request = RequestCycle.get().getRequest();
-	            final String jsCodeCountString = request.getRequestParameters()
-	                            .getParameterValue("codeCount").toString("");
-	            
-	            try
-	            {
-	            	downloadCodeCount = Integer.parseInt(jsCodeCountString);
-	            	if (downloadCodeCount > MAX_CODES_IN_ONE_CREATION)
-	            	{
-	            		SessionUtils.errorMessage("Please enter a number smaller than "+MAX_CODES_IN_ONE_CREATION+".");
-	            		downloadCodeCount = 0;
-	            	}
-	            }
-	            catch (Exception e)
-	            {
-	            	SessionUtils.errorMessage("Please enter numbers only.");
-	            	downloadCodeCount = 0;
-	            }
-	            
-	            
-	            if (downloadCodeCount > 0)
-	            {
-	            	// generate the codes and start the download
-	            	try
+
+				// Extract the code count parameter from RequestCycle
+				final Request request = RequestCycle.get().getRequest();
+				final String jsCodeCountString = request.getRequestParameters()
+						.getParameterValue("codeCount").toString("");
+
+				try
+				{
+					downloadCodeCount = Integer.parseInt(jsCodeCountString);
+					if (downloadCodeCount > MAX_CODES_IN_ONE_CREATION)
+					{
+						SessionUtils.errorMessage("Please enter a number smaller than " + MAX_CODES_IN_ONE_CREATION + ".");
+						downloadCodeCount = 0;
+					}
+				}
+				catch (Exception e)
+				{
+					SessionUtils.errorMessage("Please enter numbers only.");
+					downloadCodeCount = 0;
+				}
+
+				if (downloadCodeCount > 0)
+				{
+					// generate the codes and start the download
+					try
 					{
 						taloolService.createActivationCodes(_dealOfferId, downloadCodeCount);
 						download.initiate(target);
@@ -268,38 +272,40 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 						Session.get().error("Problem creating codes");
 						LOG.error("Problem creating codes: " + e.getLocalizedMessage());
 					}
-	            }
-	            
-	            BasePage page = (BasePage)getPage();
-	            target.add(page.feedback);
+				}
+
+				BasePage page = (BasePage) getPage();
+				target.add(page.feedback);
 
 			}
-			
+
 			@Override
 			protected void updateAjaxAttributes(
-					AjaxRequestAttributes attributes) {
+					AjaxRequestAttributes attributes)
+			{
 				super.updateAjaxAttributes(attributes);
-				
+
 				List<CharSequence> urlArgumentMethods = attributes.getDynamicExtraParameters();
-                urlArgumentMethods.add("return {'codeCount': prompt('How many access codes would you like to generate?')};");
-				
+				urlArgumentMethods.add("return {'codeCount': prompt('How many access codes would you like to generate?')};");
+
 			}
-			
-			
+
 		};
 		container.add(codesLink.setOutputMarkupId(true));
-		
-		container.add(new DealOfferPublishToggle("toggle", offer, loc, metrics){
+
+		container.add(new DealOfferPublishToggle("toggle", offer, loc, metrics)
+		{
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onPublishToggle(AjaxRequestTarget target) {
+			public void onPublishToggle(AjaxRequestTarget target)
+			{
 				setPanelModel();
 			}
-			
+
 		});
-		
+
 		// Wizard
 		wizard = new DealOfferWizard("wiz", "Book Wizard")
 		{
@@ -320,35 +326,36 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 		addOrReplace(wizard.setOutputMarkupId(true));
 	}
 
-
-
 	@Override
-	public String getActionLabel() {
+	public String getActionLabel()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	private boolean isKirkeBook(DealOffer offer) {
+
+	private boolean isKirkeBook(DealOffer offer)
+	{
 		return offer.getType().equals(DealType.KIRKE_BOOK.toString());
 	}
 
 	private void setPanelModel()
 	{
 		offer = new DealOfferModel(_dealOfferId).getObject();
-		
+
 		try
 		{
 			Map<UUID, DealOfferMetrics> metricsMap = taloolService.getDealOfferMetrics();
 			if (metricsMap != null && !metricsMap.isEmpty())
 			{
 				DealOfferMetrics m = metricsMap.get(_dealOfferId);
-				if (m==null)
+				if (m == null)
 				{
 					merchantCount = 0L;
 					dealCount = 0L;
@@ -360,12 +367,12 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 					dealCount = metrics.get(MetricType.TotalDeals.toString());
 				}
 			}
-		} 
+		}
 		catch (ServiceException se)
 		{
 			LOG.error("Failed to get offer.", se);
 		}
-		
+
 		Geometry geo = offer.getGeometry();
 		Set<MerchantLocation> locs = offer.getMerchant().getLocations();
 		if (geo != null)
@@ -379,7 +386,7 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 				}
 			}
 		}
-		
+
 		merchantLabel = offer.getMerchant().getName();
 		if (loc == null || isKirkeBook(offer))
 		{
@@ -393,30 +400,20 @@ public class DealOfferSummaryPanel extends BaseTabPanel {
 		{
 			locationLabel = loc.getNiceCityState();
 		}
-		
+
 		if (isKirkeBook(offer))
 		{
 			priceLabel = "";
-		} 
+		}
 		else
 		{
 			NumberFormat formatter = NumberFormat.getCurrencyInstance();
 			priceLabel = formatter.format(offer.getPrice());
 		}
-		
-		if (offer.getExpires() != null)
-		{
-			DateTime localDate = new DateTime(offer.getExpires().getTime());
-			DateTimeFormatter dateformatter = DateTimeFormat.forPattern("MMM d, yyyy");
-			expiresLabel = dateformatter.print(localDate);
-		}
-		else
-		{
-			expiresLabel = "";
-		}
-		
+
+		expiresLabel = "";
+
 		keyValues = KeyValue.getKeyValues(offer.getProperties());
 	}
-	
 
 }

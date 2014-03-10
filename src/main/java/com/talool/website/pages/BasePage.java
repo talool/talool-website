@@ -13,7 +13,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
 import com.talool.core.service.TaloolService;
-import com.talool.website.TaloolSession;
 import com.talool.website.panel.AdminMenuPanel;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.NiceFeedbackPanel;
@@ -67,8 +66,8 @@ public abstract class BasePage extends WebPage
 
 	private void init()
 	{
-		TaloolSession.performBrowserCheck();
-		
+		SessionUtils.getSession().performBrowserCheck();
+
 		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
 
 		feedback = new NiceFeedbackPanel("feedback");
@@ -143,10 +142,10 @@ public abstract class BasePage extends WebPage
 		add(new Label("menuHeader",menuHeader));
 
 	}
-	
-	
+
 	@Override
-	protected void onInitialize() {
+	protected void onInitialize()
+	{
 		super.onInitialize();
 		add(new Label("headerTitle", getHeaderTitle()));
 	}

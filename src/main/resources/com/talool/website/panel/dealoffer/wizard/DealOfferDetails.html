@@ -1,3 +1,8 @@
+<wicket:head>
+<style>
+ .cdate input {margin:0;padding:5px;width:60px !important;}
+</style>
+</wicket:head>
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
      <div class="newMerchant">
 		<div class="panel right iPhonePanel">
@@ -21,17 +26,23 @@
 			    <div>
 			    	<label><i class="hint-font icon-asterisk"></i> Price</label><input id="price" wicket:id="price" type="text"/>
 				</div>
-			  
+    		    <p>Selecting the time zone below will be stored as a preference setting.</p>
+    		    <select wicket:id="timeZoneSelect"></select>
 				<div>
-			    	<label><i class="optional-font icon-asterisk"></i>Expires</label><input id="datepicker_do" wicket:id="expires" type="text"/>
+			    	<label><i class="hint-font icon-asterisk"></i> Start Date</label>
+			        <span class="datetime" wicket:id="scheduledStartDate"></span>
 			    </div>
-	    	</fieldset>
+			    <div>
+			    	<label><i class="hint-font icon-asterisk"></i> End Date</label>
+			        <span class="datetime" wicket:id="scheduledEndDate"></span>
+			    </div>
+		    	</fieldset>
 		</div>
 		<div class="clear"></div>
 	</div>
 	<script>
 	  $(function() {
-	    $( "#datepicker_do" ).datepicker();
+	    $( ".datepicker_do" ).datepicker();
 	  });
 	</script>
 </wicket:panel>
