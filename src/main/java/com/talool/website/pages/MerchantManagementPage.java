@@ -2,10 +2,9 @@ package com.talool.website.pages;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
@@ -22,7 +21,7 @@ import com.talool.website.panel.merchant.MerchantDealsPanel;
 import com.talool.website.panel.merchant.MerchantLocationsPanel;
 import com.talool.website.panel.merchant.MerchantSummaryPanel;
 import com.talool.website.panel.message.MerchantMessages;
-import com.talool.website.util.CssClassToggle;
+import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SecuredPage;
 
 /**
@@ -34,10 +33,12 @@ import com.talool.website.util.SecuredPage;
 public class MerchantManagementPage extends BaseManagementPage
 {
 	private static final long serialVersionUID = -6214364791355264043L;
+	private UUID _merchantId;
 
 	public MerchantManagementPage(PageParameters parameters)
 	{
 		super(parameters);
+		_merchantId = UUID.fromString(parameters.get("id").toString());
 	}
 
 	@Override
@@ -89,18 +90,20 @@ public class MerchantManagementPage extends BaseManagementPage
 			}
 		});
 		
-		tabs.add(new AbstractTab(new Model<String>("Deals"))
+		if (!PermissionUtils.isPublisher(_merchantId))
 		{
-			private static final long serialVersionUID = 6405610365875810783L;
-
-			@Override
-			public Panel getPanel(String panelId)
+			tabs.add(new AbstractTab(new Model<String>("Deals"))
 			{
-				return new MerchantDealsPanel(panelId, getPageParameters());
-			}
-		});
-		
-		if (isTaloolUserLoggedIn)
+				private static final long serialVersionUID = 6405610365875810783L;
+	
+				@Override
+				public Panel getPanel(String panelId)
+				{
+					return new MerchantDealsPanel(panelId, getPageParameters());
+				}
+			});
+		}
+		else
 		{
 			tabs.add(new AbstractTab(new Model<String>("Books"))
 			{
@@ -113,7 +116,9 @@ public class MerchantManagementPage extends BaseManagementPage
 					return new MerchantDealOffersPanel(panelId, getPageParameters());
 				}
 			});
-			
+		}
+		if (isSuperUser)
+		{	
 			tabs.add(new AbstractTab(new Model<String>("Messages"))
 			{
 
@@ -125,7 +130,9 @@ public class MerchantManagementPage extends BaseManagementPage
 					return new MerchantMessages(panelId, getPageParameters());
 				}
 			});
-			
+		}
+		if (PermissionUtils.canViewAnalytics(_merchantId))
+		{
 			tabs.add(new AbstractTab(new Model<String>("Analytics"))
 			{
 

@@ -17,7 +17,7 @@ import com.talool.website.panel.AdminMenuPanel;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.NiceFeedbackPanel;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.service.PermissionService;
+import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SessionUtils;
 
 /**
@@ -42,9 +42,9 @@ public abstract class BasePage extends WebPage
 	private WebMarkupContainer _action;
 	private AjaxLink<Void> _actionLink;
 	private Label _actionLabel;
-
-	public final Boolean isTaloolUserLoggedIn = PermissionService.get().canViewAnalytics(
-			SessionUtils.getSession().getMerchantAccount().getEmail());
+	
+	public final Boolean isSuperUser = PermissionUtils.isSuperUser(
+			SessionUtils.getSession().getMerchantAccount());
 
 	public BasePage()
 	{
@@ -110,22 +110,36 @@ public abstract class BasePage extends WebPage
 		_action.add(_actionLink);
 		add(_action.setVisible(hasActionLink()));
 
-		boolean canViewAnalytics = PermissionService.get().canViewAnalytics(
-				SessionUtils.getSession().getMerchantAccount().getEmail());
-
-		WebMarkupContainer adminMenu = new WebMarkupContainer("adminMenu");
-		add(adminMenu);
-		WebMarkupContainer publisherMenu = new WebMarkupContainer("publisherMenu");
+		WebMarkupContainer analyticsMenuItem = new WebMarkupContainer("analytics");
+		add(analyticsMenuItem);
+		analyticsMenuItem.setVisible(PermissionUtils.canViewAnalytics(SessionUtils.getSession().getMerchantAccount().getMerchant()) || isSuperUser);
+		
+		WebMarkupContainer adminMenu = new WebMarkupContainer("superuser");
+		add(adminMenu.setVisible(isSuperUser));
+		
+		WebMarkupContainer publisherMenu = new WebMarkupContainer("publisher");
 		add(publisherMenu);
-
-		if (canViewAnalytics)
+		publisherMenu.setVisible(PermissionUtils.isPublisher(SessionUtils.getSession().getMerchantAccount().getMerchant()) || isSuperUser);
+		
+		WebMarkupContainer merchantMenu = new WebMarkupContainer("merchant");
+		add(merchantMenu);
+		merchantMenu.setVisible(!PermissionUtils.isPublisher(SessionUtils.getSession().getMerchantAccount().getMerchant()) &&
+				!isSuperUser);
+		
+		String menuHeader = "";
+		if (isSuperUser) 
 		{
-			publisherMenu.setVisible(false);
+			menuHeader="Talool Admin";
+		}
+		else if (PermissionUtils.isPublisher(SessionUtils.getSession().getMerchantAccount().getMerchant()))
+		{
+			menuHeader="Publisher Tools";
 		}
 		else
 		{
-			adminMenu.setVisible(false);
+			menuHeader="Merchant Tools";
 		}
+		add(new Label("menuHeader",menuHeader));
 
 	}
 

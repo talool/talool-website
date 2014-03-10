@@ -84,11 +84,11 @@ public class DealOffersPage extends BasePage
 
 		WebMarkupContainer pubCol = new WebMarkupContainer("pubColHead");
 		container.add(pubCol.setOutputMarkupId(true));
-		pubCol.setVisible(isTaloolUserLoggedIn);
+		pubCol.setVisible(isSuperUser);
 
 		WebMarkupContainer bookTypeColHead = new WebMarkupContainer("bookTypeColHead");
 		container.add(bookTypeColHead.setOutputMarkupId(true));
-		bookTypeColHead.setVisible(isTaloolUserLoggedIn);
+		bookTypeColHead.setVisible(isSuperUser);
 		final DealOfferSummaryDataProvider dataProvider = new DealOfferSummaryDataProvider(sortParameter, isAscending);
 		final DataView<DealOfferSummary> books = getDataView(dataProvider);
 		container.add(books);
@@ -271,7 +271,7 @@ public class DealOffersPage extends BasePage
 				// Publisher link. Only show it for Talool users
 				WebMarkupContainer pubColCell = new WebMarkupContainer("pubColCell");
 				item.add(pubColCell.setOutputMarkupId(true));
-				pubColCell.setVisible(isTaloolUserLoggedIn);
+				pubColCell.setVisible(isSuperUser);
 				PageParameters merchantParams = new PageParameters();
 				merchantParams.set("id", dealOffer.getMerchantId());
 				merchantParams.set("name", dealOffer.getMerchantName());
@@ -301,7 +301,7 @@ public class DealOffersPage extends BasePage
 
 				Label dealType = new Label("offerType");
 				item.add(dealType.setOutputMarkupId(true));
-				dealType.setVisible(isTaloolUserLoggedIn);
+				dealType.setVisible(isSuperUser);
 
 				DateTimeFormatter dateformatter = DateTimeFormat.forPattern("MMM d, yyyy");
 				DateTime startDate = new DateTime(dealOffer.getScheduledStartDate().getTime());
@@ -436,14 +436,7 @@ public class DealOffersPage extends BasePage
 	@Override
 	public String getHeaderTitle()
 	{
-		if (isTaloolUserLoggedIn)
-		{
-			return "Deal Offers";
-		}
-		else
-		{
-			return "My Books";
-		}
+		return "Books";
 	}
 
 	@Override
@@ -456,14 +449,7 @@ public class DealOffersPage extends BasePage
 	@Override
 	public String getNewDefinitionPanelTitle()
 	{
-		if (isTaloolUserLoggedIn)
-		{
-			return "New Deal Offer";
-		}
-		else
-		{
-			return "New Book";
-		}
+		return "New Book";
 	}
 
 }

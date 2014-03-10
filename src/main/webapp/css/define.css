@@ -116,3 +116,17 @@ optgroup option {
 {
 	max-width: 375px;
 }
+
+fieldset .datetime 
+{
+	margin-left: -5px;
+}
+
+fieldset .datetime .k-datepicker
+{
+	width: 130px;
+}
+fieldset .datetime .k-widget input
+{
+	padding: .25em 0;;
+}

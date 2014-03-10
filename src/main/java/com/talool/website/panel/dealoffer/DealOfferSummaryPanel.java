@@ -85,6 +85,8 @@ public class DealOfferSummaryPanel extends BaseTabPanel
 	protected void onInitialize()
 	{
 		super.onInitialize();
+		
+		final BasePage page = (BasePage) getPage();
 
 		final AdminModalWindow modalProps = new AdminModalWindow("modalProps");
 		modalProps.setInitialWidth(650);
@@ -128,7 +130,7 @@ public class DealOfferSummaryPanel extends BaseTabPanel
 			}
 
 		};
-		container.add(propteryList);
+		container.add(propteryList.setVisible(page.isSuperUser));
 
 		final FindDealsPreview findDealsPreview = new FindDealsPreview("findDealsPreview", offer);
 		container.add(findDealsPreview);
@@ -165,7 +167,8 @@ public class DealOfferSummaryPanel extends BaseTabPanel
 			}
 
 		};
-		container.add(comboBox);
+		container.add(comboBox.setVisible(page.isSuperUser));
+
 
 		final AJAXDownload download = new AJAXDownload()
 		{

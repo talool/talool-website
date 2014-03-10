@@ -64,15 +64,16 @@ public class DealOfferDetails extends WizardStep
 		addOrReplace(price.setRequired(true));
 		price.add(new DealOfferPreviewUpdatingBehavior(offerPreview, DealOfferComponent.PRICE, "onChange"));
 
-		// start date must be at least today
+		// DateConverter converter = new PatternDateConverter("MM/dd/yyyy", true);
 
-		final DateTimeFieldExtended start = new DateTimeFieldExtended("scheduledStartDate");
+		// start date must be at least today
+		// add(new StartEndDateFormValidator(start, end));
 
 		TimeZone bestGuessTimeZone = SessionUtils.getSession().getBestGuessTimeZone();
-
 		selectedTimeZoneId = TimeZoneDropDown.getBestSupportedTimeZone(bestGuessTimeZone).getID();
 
 		final DateTimeFieldExtended end = new DateTimeFieldExtended("scheduledEndDate");
+		final DateTimeFieldExtended start = new DateTimeFieldExtended("scheduledStartDate");
 
 		add(new StartEndDateFormValidator(start, end));
 
@@ -94,7 +95,6 @@ public class DealOfferDetails extends WizardStep
 			}
 
 		});
-
 		addOrReplace(timeZoneDropDown);
 
 	}
