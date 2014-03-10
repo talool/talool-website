@@ -12,6 +12,7 @@ public class PermissionUtils {
 	
 	static final String superUser = "super_user";
 	static final String fundraiser = "fundraiser";
+	static final String fundraisingBook = "fundraising_book";
 	static final String publisher = "publisher";
 	static final String analytics = "analytics";
 	
@@ -56,7 +57,7 @@ public class PermissionUtils {
 	
 	public static boolean isFundraiser(DealOffer offer)
 	{
-		return offer.getProperties().getAsBool(fundraiser);
+		return offer.getProperties().getAsBool(fundraisingBook);
 	}
 	
 	public static boolean isFundraiser(UUID offerId)

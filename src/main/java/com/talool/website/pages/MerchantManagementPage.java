@@ -90,18 +90,20 @@ public class MerchantManagementPage extends BaseManagementPage
 			}
 		});
 		
-		tabs.add(new AbstractTab(new Model<String>("Deals"))
+		if (!PermissionUtils.isPublisher(_merchantId))
 		{
-			private static final long serialVersionUID = 6405610365875810783L;
-
-			@Override
-			public Panel getPanel(String panelId)
+			tabs.add(new AbstractTab(new Model<String>("Deals"))
 			{
-				return new MerchantDealsPanel(panelId, getPageParameters());
-			}
-		});
-		
-		if (PermissionUtils.isPublisher(_merchantId))
+				private static final long serialVersionUID = 6405610365875810783L;
+	
+				@Override
+				public Panel getPanel(String panelId)
+				{
+					return new MerchantDealsPanel(panelId, getPageParameters());
+				}
+			});
+		}
+		else
 		{
 			tabs.add(new AbstractTab(new Model<String>("Books"))
 			{

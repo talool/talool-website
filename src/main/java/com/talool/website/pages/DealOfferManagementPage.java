@@ -18,6 +18,7 @@ import com.talool.website.models.DealOfferModel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.dealoffer.DealOfferAnalyticsPanel;
 import com.talool.website.panel.dealoffer.DealOfferDealsPanel;
+import com.talool.website.panel.dealoffer.DealOfferSchoolsPanel;
 import com.talool.website.panel.dealoffer.DealOfferSummaryPanel;
 import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SecuredPage;
@@ -79,6 +80,20 @@ public class DealOfferManagementPage extends BaseManagementPage
 				return new DealOfferDealsPanel(panelId, getPageParameters());
 			}
 		});
+		
+		if (!isKirkeBook(offer) && PermissionUtils.isFundraiser(offer))
+		{
+			tabs.add(new AbstractTab(new Model<String>("Schools"))
+			{
+				private static final long serialVersionUID = 6405610365875810783L;
+	
+				@Override
+				public Panel getPanel(String panelId)
+				{
+					return new DealOfferSchoolsPanel(panelId, getPageParameters());
+				}
+			});
+		}
 		
 		// TODO should not be dependent on isActive, but rather if there have been purchases or activations
 		if (!isKirkeBook(offer) && 
