@@ -42,7 +42,7 @@ body.talool .wiz {
 }
 
 .abstractWizard .feedbackPanel {
-	margin-bottom: 1em;
+	margin-bottom: 0;
 }
 .wiz .wicketExtensionsWizardHeaderSummary,
 .wiz .wicketExtensionsWizardHeaderTitle,

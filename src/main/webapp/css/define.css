@@ -10,7 +10,7 @@
 	padding: 15px;
 }
 .newMerchant .panel {
-	padding: 15px;
+	padding: 0 15px 15px;
 	margin: 0 10px 5px;
 }
 
@@ -129,4 +129,9 @@ fieldset .datetime .k-datepicker
 fieldset .datetime .k-widget input
 {
 	padding: .25em 0;;
+}
+
+.k-popup .k-widget .k-state-selected a
+{
+	color: white;
 }

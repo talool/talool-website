@@ -1,5 +1,6 @@
 package com.talool.website.panel.dealoffer.wizard;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -11,6 +12,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.slf4j.Logger;
@@ -24,6 +26,7 @@ import com.talool.website.panel.dealoffer.DealOfferPreviewUpdatingBehavior;
 import com.talool.website.panel.dealoffer.DealOfferPreviewUpdatingBehavior.DealOfferComponent;
 import com.talool.website.util.CssClassToggle;
 import com.talool.website.util.SessionUtils;
+import com.talool.website.validators.StartEndDateFormValidator;
 
 /**
  * 
@@ -34,8 +37,9 @@ public class DealOfferDetails extends WizardStep
 {
 	private static final Logger LOG = LoggerFactory.getLogger(DealOfferDetails.class);
 	private static final long serialVersionUID = 1L;
-
-	private String selectedTimeZoneId;
+	
+	private String selectedTimeZoneId, lastTimeZoneId;
+	private DateTimePicker start, end;
 
 	public Date date = new Date();
 
@@ -69,14 +73,19 @@ public class DealOfferDetails extends WizardStep
 
 		TimeZone bestGuessTimeZone = SessionUtils.getSession().getBestGuessTimeZone();
 		selectedTimeZoneId = TimeZoneDropDown.getBestSupportedTimeZone(bestGuessTimeZone).getID();
+		lastTimeZoneId = selectedTimeZoneId;
+		LOG.debug("init with timezone: "+selectedTimeZoneId);
 
-		final DateTimePicker end = new DateTimePicker("scheduledEndDate");
-		final DateTimePicker start = new DateTimePicker("scheduledStartDate");
+		// convert the start/end dates to merchant_account timezone, for display
+		Date endDate = convertTimeZone(offer.getScheduledEndDate(), TimeZone.getTimeZone(selectedTimeZoneId), TimeZone.getDefault());
+		Date startDate = convertTimeZone(offer.getScheduledStartDate(), TimeZone.getTimeZone(selectedTimeZoneId), TimeZone.getDefault());
+		end = new DateTimePicker("scheduledEndDate", Model.of(endDate));
+		start = new DateTimePicker("scheduledStartDate", Model.of(startDate));
 		addOrReplace(end.setOutputMarkupId(true));
 		addOrReplace(start.setOutputMarkupId(true));
 		
-		// TODO start date must be at least today
-		//add(new StartEndDateFormValidator(start, end));
+		// start date must be at least today
+		add(new StartEndDateFormValidator(start, end));
 
 		final TimeZoneDropDown timeZoneDropDown = new TimeZoneDropDown("timeZoneSelect", new PropertyModel<String>(this, "selectedTimeZoneId"));
 		timeZoneDropDown.add(new AjaxFormComponentUpdatingBehavior("onchange")
@@ -87,8 +96,15 @@ public class DealOfferDetails extends WizardStep
 			protected void onUpdate(AjaxRequestTarget target)
 			{
 				SessionUtils.getSession().setAndPersistTimeZone(selectedTimeZoneId);
-				target.add(end);
+				
+				// adjust from old TZ to new TZ
+				Date endDate = convertTimeZone(end.getModelObject(), TimeZone.getTimeZone(selectedTimeZoneId), TimeZone.getTimeZone(lastTimeZoneId));
+				Date startDate = convertTimeZone(start.getModelObject(), TimeZone.getTimeZone(selectedTimeZoneId), TimeZone.getTimeZone(lastTimeZoneId));
+				lastTimeZoneId = selectedTimeZoneId;
+				end.setModelObject(endDate);
+				start.setModelObject(startDate);
 				target.add(start);
+				target.add(end);
 			}
 
 		});
@@ -113,4 +129,34 @@ public class DealOfferDetails extends WizardStep
 		
 
 	}
+
+	@Override
+	public void applyState() {
+		super.applyState();
+		
+		final DealOffer offer = (DealOffer) getDefaultModelObject();
+		
+		// get start/end dates from pickers and convert back to UTC
+		Date endDate = convertTimeZone(end.getModelObject(), TimeZone.getDefault(), TimeZone.getTimeZone(selectedTimeZoneId));
+		Date startDate = convertTimeZone(start.getModelObject(), TimeZone.getDefault(), TimeZone.getTimeZone(selectedTimeZoneId));
+		offer.setScheduledEndDate(endDate);
+		offer.setScheduledStartDate(startDate);
+	}
+	
+	private Date convertTimeZone(Date date, TimeZone toTimeZone, TimeZone fromTimeZone)
+	{
+		// get the offset
+		int millisInHour = (1000*60*60);
+		int fromOffset = fromTimeZone.getOffset(date.getTime()) / millisInHour;
+		int toOffset = toTimeZone.getOffset(date.getTime()) / millisInHour;
+		int offset = toOffset - fromOffset;
+		
+		// convert the date
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(Calendar.HOUR_OF_DAY, offset);
+		return c.getTime();
+	}
+	
+	
 }
