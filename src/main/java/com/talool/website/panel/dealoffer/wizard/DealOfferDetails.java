@@ -5,7 +5,10 @@ import java.util.TimeZone;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.wizard.WizardStep;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
@@ -13,14 +16,14 @@ import org.apache.wicket.model.ResourceModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.googlecode.wicket.kendo.ui.form.datetime.DateTimePicker;
 import com.talool.core.DealOffer;
-import com.talool.website.component.DateTimeFieldExtended;
 import com.talool.website.component.TimeZoneDropDown;
 import com.talool.website.panel.dealoffer.DealOfferPreview;
 import com.talool.website.panel.dealoffer.DealOfferPreviewUpdatingBehavior;
 import com.talool.website.panel.dealoffer.DealOfferPreviewUpdatingBehavior.DealOfferComponent;
+import com.talool.website.util.CssClassToggle;
 import com.talool.website.util.SessionUtils;
-import com.talool.website.validators.StartEndDateFormValidator;
 
 /**
  * 
@@ -64,24 +67,18 @@ public class DealOfferDetails extends WizardStep
 		addOrReplace(price.setRequired(true));
 		price.add(new DealOfferPreviewUpdatingBehavior(offerPreview, DealOfferComponent.PRICE, "onChange"));
 
-		// DateConverter converter = new PatternDateConverter("MM/dd/yyyy", true);
-
-		// start date must be at least today
-		// add(new StartEndDateFormValidator(start, end));
-
 		TimeZone bestGuessTimeZone = SessionUtils.getSession().getBestGuessTimeZone();
 		selectedTimeZoneId = TimeZoneDropDown.getBestSupportedTimeZone(bestGuessTimeZone).getID();
 
-		final DateTimeFieldExtended end = new DateTimeFieldExtended("scheduledEndDate");
-		final DateTimeFieldExtended start = new DateTimeFieldExtended("scheduledStartDate");
-
-		add(new StartEndDateFormValidator(start, end));
-
+		final DateTimePicker end = new DateTimePicker("scheduledEndDate");
+		final DateTimePicker start = new DateTimePicker("scheduledStartDate");
 		addOrReplace(end.setOutputMarkupId(true));
-
 		addOrReplace(start.setOutputMarkupId(true));
+		
+		// TODO start date must be at least today
+		//add(new StartEndDateFormValidator(start, end));
 
-		TimeZoneDropDown timeZoneDropDown = new TimeZoneDropDown("timeZoneSelect", new PropertyModel<String>(this, "selectedTimeZoneId"));
+		final TimeZoneDropDown timeZoneDropDown = new TimeZoneDropDown("timeZoneSelect", new PropertyModel<String>(this, "selectedTimeZoneId"));
 		timeZoneDropDown.add(new AjaxFormComponentUpdatingBehavior("onchange")
 		{
 			private static final long serialVersionUID = 8587109070528314926L;
@@ -95,7 +92,25 @@ public class DealOfferDetails extends WizardStep
 			}
 
 		});
-		addOrReplace(timeZoneDropDown);
+		addOrReplace(timeZoneDropDown.setOutputMarkupId(true));
+		
+		final WebMarkupContainer currentTimeZone = new WebMarkupContainer("currentTimeZone");
+		addOrReplace(currentTimeZone.setOutputMarkupId(true));
+		currentTimeZone.add(new Label("currentTimeZoneLabel",selectedTimeZoneId));
+		currentTimeZone.add(new AjaxLink<Void>("changeTimeZone"){
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				timeZoneDropDown.add(new CssClassToggle("hide","show"));
+				target.add(timeZoneDropDown);
+				currentTimeZone.setVisible(false);
+				target.add(currentTimeZone);
+			}
+			
+		});
+		
 
 	}
 }

@@ -77,3 +77,8 @@ body.talool .wiz {
 {
 	width: 380px;
 }
+
+.wiz .readOnlyValue
+{
+	line-height: 27px;
+}
