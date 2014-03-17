@@ -27,6 +27,7 @@ import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService.PropertySupportedEntity;
 import com.talool.domain.Properties;
 import com.talool.service.ServiceFactory;
+import com.talool.utils.KeyValue;
 import com.talool.website.component.PropertyComboBox;
 import com.talool.website.component.StaticImage;
 import com.talool.website.models.DealListModel;
@@ -36,7 +37,6 @@ import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.wizard.MerchantWizard;
 import com.talool.website.panel.merchant.wizard.MerchantWizard.MerchantWizardMode;
-import com.talool.website.util.KeyValue;
 
 public class MerchantSummaryPanel extends BaseTabPanel {
 

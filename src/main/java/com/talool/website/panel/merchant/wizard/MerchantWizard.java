@@ -10,12 +10,16 @@ import org.slf4j.LoggerFactory;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.wizard.AbstractWizard;
+import com.talool.core.Category;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
+import com.talool.domain.Properties;
 import com.talool.utils.HttpUtils;
+import com.talool.utils.KeyValue;
+import com.talool.website.models.TagListModel.CATEGORY;
 import com.talool.website.pages.BasePage;
 
 public class MerchantWizard extends AbstractWizard<Merchant>
@@ -29,7 +33,7 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 	};
 	public static enum MerchantWizardMode
 	{
-		MERCHANT, MERCHANT_LOCATION
+		MERCHANT, MERCHANT_LOCATION, FUNDRAISER
 	};
 	private WizardStep newLocation;
 	private MerchantWizardMode mode;
@@ -48,6 +52,10 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 			wizardModel.add(new MerchantLocationImage());
 			wizardModel.add(new MerchantLocationLogo());
 			wizardModel.add(new MerchantMap(this));
+		}
+		else if (this.mode.equals(MerchantWizardMode.FUNDRAISER))
+		{
+			wizardModel.add(new FundraiserDetails());
 		}
 		else
 		{
@@ -99,6 +107,27 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 				if (merchant.getId()==null)
 				{
 					taloolService.save(merchant);
+				}
+				else
+				{
+					taloolService.merge(merchant);
+				}
+				StringBuilder sb = new StringBuilder("Succesfully saved merchant: ");
+				this.info(sb.append(merchant.getName()).toString());
+			}
+			else if (mode.equals(MerchantWizardMode.FUNDRAISER))
+			{
+				if (merchant.getId()==null)
+				{
+					// set any values that can be empty...
+					Properties props = merchant.getProperties();
+					props.createOrReplace(KeyValue.fundraiser, "true");
+					merchant.getPrimaryLocation().setEmail("");
+					merchant.getPrimaryLocation().setCity("Boulder");
+					merchant.getPrimaryLocation().setStateProvinceCounty("");
+					
+					taloolService.save(merchant);
+					taloolService.save(merchant.getPrimaryLocation());
 				}
 				else
 				{

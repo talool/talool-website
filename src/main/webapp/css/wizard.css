@@ -21,6 +21,7 @@ body.talool .wiz {
 	display: none;
 }
 .wiz .panel.iPhonePanel {
+	padding-top: 15px;
 	padding-bottom:0;
 	margin: 0;
 	position: absolute;

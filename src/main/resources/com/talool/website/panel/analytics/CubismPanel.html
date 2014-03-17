@@ -1,0 +1,43 @@
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+		<link rel="stylesheet" type="text/css" href="/css/charts/cubism.css"/>
+		<script src="/js/charts/d3.v2.js"></script>
+		<script src="/js/charts/cubism.v1.min.js"></script>
+	</wicket:head>
+	
+	<wicket:panel>
+		<div class="statsModule">
+			<h3 wicket:id="chartName">Customers</h3>
+			<div wicket:id="chartCanvas" class="chart"></div>
+			<table>
+				<thead>
+					<tr>
+						<th class="metricName">Metric</th>
+						<th>Total <em>(%)</em></th>
+					</tr>
+				</thead>
+				<tbody wicket:id="rptr">
+					<tr>
+		  				<td>
+		  					<span class="key" wicket:id="metricKey"></span>
+		  					<span wicket:id="metricName"></span>
+		  				</td>
+		  				<td>
+		  					<span wicket:id="totalAllTime"></span>
+		  				</td>
+		  			</tr>
+		  			<tr wicket:id="slices" class="slice">
+		  				<td>
+		  					<span class="key" wicket:id="sliceKey"></span>
+		  					<span wicket:id="sliceName"></span>
+		  				</td>
+		  				<td>
+		  					<span wicket:id="sliceTotalAllTime"></span>
+		  					<em>(<span wicket:id="percentage"></span>%)</em>
+		  				</td>
+		  			</tr>
+				</tbody>
+			</table>
+		</div>
+	</wicket:panel>
+</html>

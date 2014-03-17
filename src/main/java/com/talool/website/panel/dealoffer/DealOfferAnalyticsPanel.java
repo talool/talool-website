@@ -2,12 +2,14 @@ package com.talool.website.panel.dealoffer;
 
 import java.util.UUID;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.website.models.MetricListModel;
 import com.talool.website.models.MetricListModel.CHART_RANGE;
 import com.talool.website.models.MetricListModel.CHART_TYPE;
+import com.talool.website.pages.BasePage;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.analytics.ChartPanel;
@@ -44,6 +46,10 @@ public class DealOfferAnalyticsPanel extends BaseTabPanel {
 		
 		MetricListModel merchantChartModel = new MetricListModel(_dealOfferId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.POPULAR_MERCHANTS);
 		addOrReplace(new ChartPanel("merchantChart", "Popular Merchants", merchantChartModel));
+		
+		// hide the action button
+		final BasePage page = (BasePage) getPage();
+		page.getActionLink().add(new AttributeModifier("class","hide"));
 	}
 
 	@Override

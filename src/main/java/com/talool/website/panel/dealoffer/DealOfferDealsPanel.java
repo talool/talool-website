@@ -156,6 +156,10 @@ public class DealOfferDealsPanel extends BaseTabPanel {
 			}
 		};
 		addOrReplace(wizard.setOutputMarkupId(true));
+		
+		// hide the action button
+		final BasePage page = (BasePage) getPage();
+		page.getActionLink().add(new AttributeModifier("class","hide"));
 	}
 	
 	private AjaxPagingNavigator getPagination(final DataView<DealSummary> deals)

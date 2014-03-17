@@ -1,0 +1,44 @@
+<html xmlns:wicket="http://wicket.apache.org">
+	
+	<wicket:extend>
+	
+		<div wicket:id="schoolList">
+		
+			<table class="listNav">
+				<tr>
+					<td class="pagination">
+						<div class="count"><span wicket:id="totalCount"></span> Funded Organization(s)</div>
+						<div wicket:id="navigator" class="navigator"></div>
+					</td>
+				</tr>
+			</table>
+			
+			<table>
+		  		<thead>
+		  			<tr>
+		  				<th><a wicket:id="merchantSortLink">Organization</a></th>
+		  				<th><a wicket:id="citySortLink">City</a></th>
+		  				<th><a wicket:id="stateSortLink">State</a></th>
+		  				<th class="actionCol">Actions</th>
+		  			</tr>
+		  		</thead>
+		  		<tbody>
+		  			<tr class="odd" wicket:id="schoolRptr">
+		  				
+		  				<td><a wicket:id="name">Organization</a></td>
+		  				<td wicket:id="city"></td>
+		  				<td wicket:id="state"></td>
+		  				
+		  				<td class="orange-font actionCol">
+		  					<a wicket:id="editLink" class="icon icon-large icon-pencil" title="Edit Organization"></a>
+		  					<a wicket:id="deleteLink" class="icon icon-large icon-remove" title="Remove Organization"></a>
+		  				</td>
+		  			</tr>
+		  		</tbody>
+		  	</table>
+		  	
+	  	</div>
+	  	<div wicket:id="wiz" class="wiz merchantWiz"></div>
+	</wicket:extend>
+	
+</html>

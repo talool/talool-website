@@ -13,11 +13,14 @@
 				  		<table class="actionBox">
 				  			<tr>
 				  				<td>
-						  			<a wicket:id="editLink" class="btn">Edit Merchant</a>
+						  			<a wicket:id="editLink" class="btn">Edit Fundraiser</a>
+							  	</td>
+							  	<td>
+						  			<a wicket:id="codeLink" class="btn">Get Tracking Codes</a>
 							  	</td>
 				  			</tr>
 				  			<tr>
-				  				<td>
+				  				<td colspan="3">
 						  			<div wicket:id="comboBox"></div>
 							  	</td>
 				  			</tr>
@@ -32,20 +35,24 @@
 				  	</div>
 				  	
 				  	<div class="borderedBox gray5-font">
-				  		<h3>Merchant Details</h3>
+				  		<h3>Fundraiser Details</h3>
 
 					  	<table>
 				  			<tr>
-				  				<th>Category</th>
-				  				<td wicket:id="categoryLabel"></td>
+				  				<th>Address</th>
+				  				<td wicket:id="addressLabel"></td>
 				  			</tr>
 				  			<tr>
-				  				<th>Tags</th>
-				  				<td wicket:id="tagsLabel"></td>
+				  				<th>Fundraising Book</th>
+				  				<td>book name...</td>
 				  			</tr>
 				  			<tr>
-				  				<th>Logo</th>
-				  				<td><img wicket:id="logo"/></td>
+				  				<th>Fundraising Schedule</th>
+				  				<td>book start/end dates...</td>
+				  			</tr>
+				  			<tr>
+				  				<th>% of Sales</th>
+				  				<td>will be a property</td>
 				  			</tr>
 					  		<tr wicket:id="propertyRptr">
 				  				<th wicket:id="pKey"></th>
@@ -55,8 +62,9 @@
 				  	</div>
 				  	
 				</td>
-				<td class="merchantWiz" wicket:id="merchantPreview"></td>
-				<td class="merchantWiz" wicket:id="mapPreview"></td>
+				<td colspan="2" class="stats">
+					<div wicket:id="salesChart"></div>
+				</td>
 			</tr>
 		</table>
 		<div wicket:id="wiz" class="wiz merchantWiz"></div>

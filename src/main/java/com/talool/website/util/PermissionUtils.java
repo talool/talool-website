@@ -5,25 +5,22 @@ import java.util.UUID;
 import com.talool.core.DealOffer;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
+import com.talool.utils.KeyValue;
 import com.talool.website.models.DealOfferModel;
 import com.talool.website.models.MerchantModel;
 
 public class PermissionUtils {
 	
-	public static final String superUser = "super_user";
-	public static final String fundraiser = "fundraiser";
-	public static final String fundraisingBook = "fundraising_book";
-	public static final String publisher = "publisher";
-	public static final String analytics = "analytics";
+	
 	
 	public static boolean isSuperUser(MerchantAccount account)
 	{
-		return account.getProperties().getAsBool(superUser);
+		return account.getProperties().getAsBool(KeyValue.superUser);
 	}
 	
 	public static boolean isPublisher(Merchant merchant)
 	{
-		return merchant.getProperties().getAsBool(publisher);
+		return merchant.getProperties().getAsBool(KeyValue.publisher);
 	}
 	
 	public static boolean isPublisher(UUID merchantId)
@@ -34,8 +31,8 @@ public class PermissionUtils {
 	
 	public static boolean isFundraisingPublisher(Merchant merchant)
 	{
-		return (merchant.getProperties().getAsBool(publisher) && 
-				merchant.getProperties().getAsBool(fundraiser));
+		return (merchant.getProperties().getAsBool(KeyValue.publisher) && 
+				merchant.getProperties().getAsBool(KeyValue.fundraiser));
 	}
 	
 	public static boolean isFundraisingPublisher(UUID merchantId)
@@ -46,7 +43,7 @@ public class PermissionUtils {
 	
 	public static boolean canViewAnalytics(Merchant merchant)
 	{
-		return merchant.getProperties().getAsBool(analytics);
+		return merchant.getProperties().getAsBool(KeyValue.analytics);
 	}
 	
 	public static boolean canViewAnalytics(UUID merchantId)
@@ -57,7 +54,7 @@ public class PermissionUtils {
 	
 	public static boolean isFundraiser(DealOffer offer)
 	{
-		return offer.getProperties().getAsBool(fundraisingBook);
+		return offer.getProperties().getAsBool(KeyValue.fundraisingBook);
 	}
 	
 	public static boolean isFundraiser(UUID offerId)

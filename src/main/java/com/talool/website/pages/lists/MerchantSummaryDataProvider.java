@@ -11,10 +11,13 @@ import org.apache.wicket.model.Model;
 import com.talool.core.Merchant;
 import com.talool.core.SearchOptions;
 import com.talool.core.service.ServiceException;
+import com.talool.domain.PropertyCriteria;
+import com.talool.domain.PropertyCriteria.Filter;
 import com.talool.service.ServiceFactory;
 import com.talool.stats.MerchantSummary;
 import com.talool.stats.PaginatedResult;
-import com.talool.website.service.PermissionService;
+import com.talool.utils.KeyValue;
+import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SessionUtils;
 
 /**
@@ -31,6 +34,7 @@ public class MerchantSummaryDataProvider implements IDataProvider<MerchantSummar
 	private UUID merchantId;
 	private String title;
 	private Long size = null;
+	private boolean filterFundraiser = false;
 
 	public MerchantSummaryDataProvider(final String sortParameter, final boolean isAscending)
 	{
@@ -41,6 +45,8 @@ public class MerchantSummaryDataProvider implements IDataProvider<MerchantSummar
 	@Override
 	public Iterator<? extends MerchantSummary> iterator(long first, long count)
 	{
+		PropertyCriteria criteria = getCriteria();
+		
 		Iterator<? extends MerchantSummary> iter = null;
 		PaginatedResult<MerchantSummary> results = null;
 
@@ -53,17 +59,17 @@ public class MerchantSummaryDataProvider implements IDataProvider<MerchantSummar
 			if (merchantId != null)
 			{
 				Merchant m = ServiceFactory.get().getTaloolService().getMerchantById(merchantId);
-				results = ServiceFactory.get().getTaloolService().getMerchantSummary(searchOpts, m.getName(), true);
+				results = ServiceFactory.get().getTaloolService().getMerchantSummary(searchOpts, m.getName(), criteria, true);
 			}
-			else if (PermissionService.get().canViewAllCustomers(SessionUtils.getSession().getMerchantAccount().getEmail()))
+			else if (PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount()))
 			{
 				if (StringUtils.isEmpty(title))
 				{
-					results = ServiceFactory.get().getTaloolService().getMerchantSummary(searchOpts, true);
+					results = ServiceFactory.get().getTaloolService().getMerchantSummary(searchOpts, criteria, true);
 				}
 				else
 				{
-					results = ServiceFactory.get().getTaloolService().getMerchantSummary(searchOpts, title, true);
+					results = ServiceFactory.get().getTaloolService().getMerchantSummary(searchOpts, title, criteria, true);
 				}
 			}
 			else
@@ -71,12 +77,12 @@ public class MerchantSummaryDataProvider implements IDataProvider<MerchantSummar
 				if (StringUtils.isEmpty(title))
 				{
 					results = ServiceFactory.get().getTaloolService().getPublisherMerchantSummary(
-							SessionUtils.getSession().getMerchantAccount().getMerchant().getId(), searchOpts, true);
+							SessionUtils.getSession().getMerchantAccount().getMerchant().getId(), searchOpts, criteria, true);
 				}
 				else
 				{
 					results = ServiceFactory.get().getTaloolService().getPublisherMerchantSummaryByName(
-							SessionUtils.getSession().getMerchantAccount().getMerchant().getId(), searchOpts, title, true);
+							SessionUtils.getSession().getMerchantAccount().getMerchant().getId(), searchOpts, title, criteria, true);
 				}
 			}
 
@@ -102,21 +108,23 @@ public class MerchantSummaryDataProvider implements IDataProvider<MerchantSummar
 			return size;
 		}
 
+		PropertyCriteria criteria = getCriteria();
+		
 		try
 		{
 			if (merchantId != null)
 			{
 				size = 1l;
 			}
-			if (PermissionService.get().canViewAllCustomers(SessionUtils.getSession().getMerchantAccount().getEmail()))
+			if (PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount()))
 			{
 				if (StringUtils.isEmpty(title))
 				{
-					size = ServiceFactory.get().getTaloolService().getMerchantSummaryCount();
+					size = ServiceFactory.get().getTaloolService().getMerchantSummaryCount(criteria);
 				}
 				else
 				{
-					size = ServiceFactory.get().getTaloolService().getMerchantSummaryCount(title);
+					size = ServiceFactory.get().getTaloolService().getMerchantSummaryCount(title, criteria);
 				}
 				
 			}
@@ -125,13 +133,13 @@ public class MerchantSummaryDataProvider implements IDataProvider<MerchantSummar
 				if (StringUtils.isEmpty(title))
 				{
 					size = ServiceFactory.get().getTaloolService()
-							.getPublisherMerchantSummaryCount(SessionUtils.getSession().getMerchantAccount().getMerchant().getId());
+							.getPublisherMerchantSummaryCount(SessionUtils.getSession().getMerchantAccount().getMerchant().getId(), criteria);
 				}
 				else
 				{
 					size = ServiceFactory.get().getTaloolService()
 							.getPublisherMerchantSummaryNameCount(
-									SessionUtils.getSession().getMerchantAccount().getMerchant().getId(), title);
+									SessionUtils.getSession().getMerchantAccount().getMerchant().getId(), title, criteria);
 				}
 				
 			}
@@ -177,6 +185,25 @@ public class MerchantSummaryDataProvider implements IDataProvider<MerchantSummar
 	public void setTitle(String title) {
 		this.title = title;
 		size=null;
+	}
+	
+	public void setFilterFundraiser(boolean b)
+	{
+		this.filterFundraiser = b;
+	}
+	
+	public PropertyCriteria getCriteria()
+	{
+		PropertyCriteria criteria = new PropertyCriteria();
+		if (filterFundraiser)
+		{
+			criteria.setFilters(Filter.equal(KeyValue.fundraiser, true));
+		}
+		else
+		{
+			criteria.setFilters(Filter.keyDoesNotExistOrPropertiesNull(KeyValue.fundraiser));
+		}
+		return criteria;
 	}
 
 	@Override

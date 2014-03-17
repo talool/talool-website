@@ -14,6 +14,7 @@ import com.talool.core.DealOffer;
 import com.talool.core.FactoryManager;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
+import com.talool.utils.KeyValue;
 import com.talool.website.pages.BasePage;
 import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SessionUtils;
@@ -72,7 +73,7 @@ public class DealOfferWizard extends AbstractWizard<DealOffer> {
 		// if this book belongs to a fundraising publisher, ensure it is set as a fundraising_book
 		if (PermissionUtils.isFundraisingPublisher(offer.getMerchant()))
 		{
-			offer.getProperties().createOrReplace(PermissionUtils.fundraisingBook, true);
+			offer.getProperties().createOrReplace(KeyValue.fundraisingBook, true);
 		}
 		
 		offer.setUpdatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());

@@ -131,7 +131,7 @@ public class MerchantManagementPage extends BaseManagementPage
 				}
 			});
 		}
-		if (PermissionUtils.canViewAnalytics(_merchantId))
+		if (PermissionUtils.canViewAnalytics(_merchantId) || isSuperUser)
 		{
 			tabs.add(new AbstractTab(new Model<String>("Analytics"))
 			{

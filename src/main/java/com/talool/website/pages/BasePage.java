@@ -121,6 +121,10 @@ public abstract class BasePage extends WebPage
 		add(publisherMenu);
 		publisherMenu.setVisible(PermissionUtils.isPublisher(SessionUtils.getSession().getMerchantAccount().getMerchant()) || isSuperUser);
 		
+		WebMarkupContainer fundraiserMenu = new WebMarkupContainer("fundraiser");
+		add(fundraiserMenu);
+		fundraiserMenu.setVisible(PermissionUtils.isFundraisingPublisher(SessionUtils.getSession().getMerchantAccount().getMerchant()) || isSuperUser);
+		
 		WebMarkupContainer merchantMenu = new WebMarkupContainer("merchant");
 		add(merchantMenu);
 		merchantMenu.setVisible(!PermissionUtils.isPublisher(SessionUtils.getSession().getMerchantAccount().getMerchant()) &&

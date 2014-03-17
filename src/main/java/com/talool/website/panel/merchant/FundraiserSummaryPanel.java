@@ -1,14 +1,12 @@
-package com.talool.website.panel.dealoffer;
+package com.talool.website.panel.merchant;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -30,73 +28,84 @@ import org.apache.wicket.util.resource.IResourceStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.talool.core.DealOffer;
-import com.talool.core.DealType;
-import com.talool.core.MerchantLocation;
+import com.talool.core.Merchant;
+import com.talool.core.MerchantAccount;
+import com.talool.core.MerchantCode;
+import com.talool.core.MerchantCodeGroup;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService.PropertySupportedEntity;
 import com.talool.domain.Properties;
 import com.talool.service.ServiceFactory;
-import com.talool.stats.DealOfferMetrics;
-import com.talool.stats.DealOfferMetrics.MetricType;
 import com.talool.utils.KeyValue;
 import com.talool.website.behaviors.AJAXDownload;
 import com.talool.website.component.PropertyComboBox;
-import com.talool.website.models.DealOfferModel;
+import com.talool.website.models.MerchantModel;
+import com.talool.website.models.MetricListModel;
+import com.talool.website.models.MetricListModel.CHART_RANGE;
+import com.talool.website.models.MetricListModel.CHART_TYPE;
 import com.talool.website.pages.BasePage;
-import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.dealoffer.wizard.DealOfferWizard;
+import com.talool.website.panel.analytics.CubismPanel;
+import com.talool.website.panel.merchant.wizard.MerchantWizard;
+import com.talool.website.panel.merchant.wizard.MerchantWizard.MerchantWizardMode;
+import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SessionUtils;
-import com.vividsolutions.jts.geom.Geometry;
 
-public class DealOfferSummaryPanel extends BaseTabPanel
-{
+public class FundraiserSummaryPanel extends BaseTabPanel {
 
 	private static final long serialVersionUID = 2170124491668826388L;
-	private static final Logger LOG = LoggerFactory.getLogger(DealOfferSummaryPanel.class);
+	private static final Logger LOG = LoggerFactory.getLogger(FundraiserSummaryPanel.class);
+	
+	private UUID _fundraiserId;
+	private UUID _publisherId;
+	
+	private Merchant fundraiser;
+	
+	private MerchantWizard wizard;
+	
+	private String addressLabel;
 
-	private UUID _dealOfferId;
-
-	private DealOffer offer;
-	private MerchantLocation loc;
-	private Map<String, Long> metrics;
-
-	private int downloadCodeCount;
-
-	private DealOfferWizard wizard;
-
-	private String merchantLabel;
-	private String priceLabel;
-	private String locationLabel;
-	private String expiresLabel;
-	private Long merchantCount;
-	private Long dealCount;
 	private List<KeyValue> keyValues;
-
-	public DealOfferSummaryPanel(String id, PageParameters parameters)
-	{
+	
+	private List<String> warnings;
+	
+	private int downloadCodeCount;
+	private MerchantCodeGroup merchantCodeGrp;
+	
+	public FundraiserSummaryPanel(String id, PageParameters parameters) {
 		super(id);
-		_dealOfferId = UUID.fromString(parameters.get("id").toString());
+		_fundraiserId = UUID.fromString(parameters.get("id").toString());
+		_publisherId = UUID.fromString(parameters.get("pid").toString());
 		setPanelModel();
 	}
 
 	@Override
-	protected void onInitialize()
-	{
+	protected void onInitialize() {
 		super.onInitialize();
 		
 		final BasePage page = (BasePage) getPage();
-
-		final AdminModalWindow modalProps = new AdminModalWindow("modalProps");
-		modalProps.setInitialWidth(650);
-		// final SubmitCallBack callback = page.getCallback(modalProps);
-		add(modalProps);
-
+		
 		final WebMarkupContainer container = new WebMarkupContainer("container");
 		add(container.setOutputMarkupId(true));
+		
+		final WebMarkupContainer warningContainer = new WebMarkupContainer("warnings");
+		container.add(warningContainer.setOutputMarkupId(true));
+		final ListView<String> warningList = new ListView<String>("warningRptr", new PropertyModel<List<String>>(this,"warnings"))
+		{
 
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<String> item)
+			{
+				item.add(new Label("warning",item.getModelObject()));
+			}
+
+		};
+		warningContainer.add(warningList);
+		warningContainer.setVisible(!warnings.isEmpty());
+		
 		container.add(new AjaxLink<Void>("editLink")
 		{
 			private static final long serialVersionUID = 268692101349122303L;
@@ -105,19 +114,14 @@ public class DealOfferSummaryPanel extends BaseTabPanel
 			public void onClick(AjaxRequestTarget target)
 			{
 				getSession().getFeedbackMessages().clear();
-				wizard.setModelObject(new DealOfferModel(_dealOfferId).getObject());
+				wizard.setModelObject(new MerchantModel(_fundraiserId, true).getObject());
 				wizard.open(target);
 			}
 		});
-
-		container.add(new Label("merchantName", new PropertyModel<String>(this, "merchantLabel")));
-		container.add(new Label("price", new PropertyModel<String>(this, "priceLabel")));
-		container.add(new Label("loc", new PropertyModel<String>(this, "locationLabel")));
-		container.add(new Label("exp", new PropertyModel<String>(this, "expiresLabel")));
-		container.add(new Label("merchantCount", new PropertyModel<Long>(this, "merchantCount")));
-		container.add(new Label("dealCount", new PropertyModel<Long>(this, "dealCount")));
-
-		final ListView<KeyValue> propteryList = new ListView<KeyValue>("propertyRptr", new PropertyModel<List<KeyValue>>(this, "keyValues"))
+		
+		container.add(new Label("addressLabel",new PropertyModel<String>(this,"addressLabel")));
+		
+		final ListView<KeyValue> propteryList = new ListView<KeyValue>("propertyRptr", new PropertyModel<List<KeyValue>>(this,"keyValues"))
 		{
 
 			private static final long serialVersionUID = 1L;
@@ -126,51 +130,46 @@ public class DealOfferSummaryPanel extends BaseTabPanel
 			protected void populateItem(ListItem<KeyValue> item)
 			{
 				KeyValue prop = item.getModelObject();
-				item.add(new Label("pKey", prop.key));
-				item.add(new Label("pVal", prop.value));
+				item.add(new Label("pKey",prop.key));
+				item.add(new Label("pVal",prop.value));
 			}
 
 		};
 		container.add(propteryList.setVisible(page.isSuperUser));
-
-		final FindDealsPreview findDealsPreview = new FindDealsPreview("findDealsPreview", offer);
-		container.add(findDealsPreview);
-
-		final DealOfferPreview offerPreview = new DealOfferPreview("dealOfferPreview", offer);
-		container.add(offerPreview);
-
-		final PropertyComboBox comboBox = new PropertyComboBox("comboBox",
-				Model.of(offer.getProperties()), PropertySupportedEntity.DealOffer)
-		{
+		
+		MetricListModel customerChartModel = new MetricListModel(_fundraiserId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.CUSTOMERS);
+		CubismPanel chart = new CubismPanel("salesChart", "Sales", customerChartModel);
+		container.add(chart.setVisible(PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount())));
+		
+		final PropertyComboBox comboBox = new PropertyComboBox("comboBox", 
+				Model.of(fundraiser.getProperties()), PropertySupportedEntity.Merchant) {
 
 			private static final long serialVersionUID = 7609398573563991376L;
 
 			@Override
 			public void onPropertySave(Properties props,
-					AjaxRequestTarget target)
-			{
+					AjaxRequestTarget target) {
 				try
 				{
-					ServiceFactory.get().getTaloolService().merge(offer);
-					LOG.info(offer.getProperties().dumpProperties());
-
+					ServiceFactory.get().getTaloolService().merge(fundraiser);
+					LOG.info(fundraiser.getProperties().dumpProperties());
+					
 					BasePage page = (BasePage) getPage();
 					target.add(page.feedback);
-
+					
 					setPanelModel();
 					target.add(container);
 				}
 				catch (ServiceException e)
 				{
-					LOG.error("failed to merge offer after saving properties.", e);
+					LOG.error("failed to merge merchant after saving properties.",e);
 				}
-
+				
 			}
-
+			
 		};
 		container.add(comboBox.setVisible(page.isSuperUser));
-
-
+		
 		final AJAXDownload download = new AJAXDownload()
 		{
 
@@ -179,7 +178,7 @@ public class DealOfferSummaryPanel extends BaseTabPanel
 			@Override
 			protected String getFileName()
 			{
-				return offer.getTitle() + " Access Codes.txt";
+				return merchantCodeGrp.getCodeGroupTitle() + ".txt";
 			}
 
 			@Override
@@ -198,15 +197,10 @@ public class DealOfferSummaryPanel extends BaseTabPanel
 						{
 							PrintWriter writer = new PrintWriter(output);
 
-							// TODO we should have a method that only returns the most recent
-							// X codes
-							List<String> codes = taloolService.getActivationCodes(_dealOfferId);
-							int lastIndex = codes.size();
-							List<String> recentCodes = codes.subList(lastIndex - finalCount, lastIndex);
-
-							for (final String code : recentCodes)
+							Set<MerchantCode> codes = merchantCodeGrp.getCodes();
+							for (final MerchantCode code : codes)
 							{
-								writer.println(code);
+								writer.println(code.getCode());
 							}
 
 							writer.close();
@@ -229,7 +223,7 @@ public class DealOfferSummaryPanel extends BaseTabPanel
 		};
 		container.add(download);
 
-		final IndicatingAjaxLink<Void> codesLink = new IndicatingAjaxLink<Void>("codesLink")
+		final IndicatingAjaxLink<Void> codesLink = new IndicatingAjaxLink<Void>("codeLink")
 		{
 			private static final long serialVersionUID = 268692101349122303L;
 			private final int MAX_CODES_IN_ONE_CREATION = 10000;
@@ -264,7 +258,14 @@ public class DealOfferSummaryPanel extends BaseTabPanel
 					// generate the codes and start the download
 					try
 					{
-						taloolService.createActivationCodes(_dealOfferId, downloadCodeCount);
+						MerchantAccount merchantAccount = SessionUtils.getSession().getMerchantAccount();
+						StringBuilder title = new StringBuilder();
+						title.append(fundraiser.getName()).append(" Tracking Codes");
+						String notes = "";
+						merchantCodeGrp = taloolService.createMerchantCodeGroup(_fundraiserId,
+				                merchantAccount.getId(), _publisherId,
+				                title.toString(), notes, (short)downloadCodeCount);
+						
 						download.initiate(target);
 						Session.get().success("Codes created and download started.");
 					}
@@ -293,22 +294,9 @@ public class DealOfferSummaryPanel extends BaseTabPanel
 
 		};
 		container.add(codesLink.setOutputMarkupId(true));
-
-		container.add(new DealOfferPublishToggle("toggle", offer, loc, metrics)
-		{
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onPublishToggle(AjaxRequestTarget target)
-			{
-				setPanelModel();
-			}
-
-		});
-
+		
 		// Wizard
-		wizard = new DealOfferWizard("wiz", "Book Wizard")
+		wizard = new MerchantWizard("wiz", "Merchant Wizard", MerchantWizardMode.FUNDRAISER)
 		{
 
 			private static final long serialVersionUID = 1L;
@@ -319,8 +307,6 @@ public class DealOfferSummaryPanel extends BaseTabPanel
 				super.onFinish(target);
 				// refresh the list after a deal is edited
 				setPanelModel();
-				findDealsPreview.init(offer);
-				offerPreview.init(offer);
 				target.add(container);
 			}
 		};
@@ -330,93 +316,38 @@ public class DealOfferSummaryPanel extends BaseTabPanel
 		page.getActionLink().add(new AttributeModifier("class","hide"));
 	}
 
-	@Override
-	public String getActionLabel()
-	{
-		return "";
-	}
+
 
 	@Override
-	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
-	{
+	public String getActionLabel() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private boolean isKirkeBook(DealOffer offer)
-	{
-		return offer.getType().equals(DealType.KIRKE_BOOK.toString());
+	@Override
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-
+	
 	private void setPanelModel()
 	{
-		offer = new DealOfferModel(_dealOfferId).getObject();
-
-		try
+		warnings = new ArrayList<String>();
+		
+		fundraiser = new MerchantModel(_fundraiserId, true).getObject();
+		
+		addressLabel = fundraiser.getPrimaryLocation().getNiceCityState();
+		
+		// check for accounts
+		if (fundraiser.getMerchantAccounts().isEmpty())
 		{
-			Map<UUID, DealOfferMetrics> metricsMap = taloolService.getDealOfferMetrics();
-			if (metricsMap != null && !metricsMap.isEmpty())
-			{
-				DealOfferMetrics m = metricsMap.get(_dealOfferId);
-				if (m == null)
-				{
-					merchantCount = 0L;
-					dealCount = 0L;
-				}
-				else
-				{
-					metrics = m.getLongMetrics();
-					merchantCount = metrics.get(MetricType.TotalMerchants.toString());
-					dealCount = metrics.get(MetricType.TotalDeals.toString());
-				}
-			}
+			warnings.add("There are no accounts for this fundraiser, so they can't receive sales information.");
 		}
-		catch (ServiceException se)
-		{
-			LOG.error("Failed to get offer.", se);
-		}
-
-		Geometry geo = offer.getGeometry();
-		Set<MerchantLocation> locs = offer.getMerchant().getLocations();
-		if (geo != null)
-		{
-			for (MerchantLocation l : locs)
-			{
-				if (l.getGeometry() != null && l.getGeometry().equalsExact(geo))
-				{
-					loc = l;
-					break;
-				}
-			}
-		}
-
-		merchantLabel = offer.getMerchant().getName();
-		if (loc == null || isKirkeBook(offer))
-		{
-			locationLabel = "";
-		}
-		else if (!StringUtils.isEmpty(loc.getLocationName()))
-		{
-			locationLabel = loc.getLocationName();
-		}
-		else
-		{
-			locationLabel = loc.getNiceCityState();
-		}
-
-		if (isKirkeBook(offer))
-		{
-			priceLabel = "";
-		}
-		else
-		{
-			NumberFormat formatter = NumberFormat.getCurrencyInstance();
-			priceLabel = formatter.format(offer.getPrice());
-		}
-
-		expiresLabel = "";
-
-		keyValues = KeyValue.getKeyValues(offer.getProperties());
+		
+		keyValues = KeyValue.getKeyValues(fundraiser.getProperties());
+		
 	}
+
+	
 
 }

@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService.PropertySupportedEntity;
 import com.talool.domain.Properties;
+import com.talool.utils.KeyValue;
 import com.talool.website.component.PropertyComboBox;
-import com.talool.website.util.KeyValue;
 
 /**
  * 

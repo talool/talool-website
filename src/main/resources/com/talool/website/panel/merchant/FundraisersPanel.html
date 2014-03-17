@@ -1,0 +1,33 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div wicket:id="schoolList">
+		<table class="listNav">
+			<tr>
+				<td id="searchPanel" class="search"></td>
+				<td class="pagination">
+					<div class="count"><span wicket:id="totalCount"></span> Merchant(s)</div>
+					<div wicket:id="navigator" class="navigator"></div>
+				</td>
+			</tr>
+		</table>
+	  	<table>
+	  		<thead>
+	  			<tr>
+	  				<th><a wicket:id="nameLink">Name</a></th>
+	  				<th class="actionCol">Actions</th>
+	  			</tr>
+	  		</thead>
+	  		<tbody>
+	  			<tr class="odd" wicket:id="schoolRptr">
+	  				<td>
+	  					<a href="#" wicket:id="name"></a>
+	  				</td>
+	  				<td class="orange-font actionCol">
+	  					<a wicket:id="editLink" class="icon icon-large icon-pencil" title="Edit Fundraiser"></a>
+	  					<a wicket:id="deleteLink" class="icon icon-large icon-remove" title="Delete Fundraiser"></a>
+	  				</td>
+	  			</tr>
+	  		</tbody>
+	  	</table>
+  	</div>
+  	<div wicket:id="wiz" class="wiz merchantWiz"></div>
+</wicket:panel>
