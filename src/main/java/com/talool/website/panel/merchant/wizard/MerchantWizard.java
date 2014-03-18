@@ -122,9 +122,10 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 					// set any values that can be empty...
 					Properties props = merchant.getProperties();
 					props.createOrReplace(KeyValue.fundraiser, "true");
+					props.createOrReplace(KeyValue.percentage, 50);
 					merchant.getPrimaryLocation().setEmail("");
 					merchant.getPrimaryLocation().setCity("Boulder");
-					merchant.getPrimaryLocation().setStateProvinceCounty("");
+					merchant.getPrimaryLocation().setStateProvinceCounty("CO");
 					
 					taloolService.save(merchant);
 					taloolService.save(merchant.getPrimaryLocation());

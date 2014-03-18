@@ -35,6 +35,7 @@ public class MerchantSummaryDataProvider implements IDataProvider<MerchantSummar
 	private String title;
 	private Long size = null;
 	private boolean filterFundraiser = false;
+	private boolean filterPublisher = false;
 
 	public MerchantSummaryDataProvider(final String sortParameter, final boolean isAscending)
 	{
@@ -192,16 +193,26 @@ public class MerchantSummaryDataProvider implements IDataProvider<MerchantSummar
 		this.filterFundraiser = b;
 	}
 	
+	public void setFilterPublisher(boolean b)
+	{
+		this.filterPublisher = b;
+	}
+	
 	public PropertyCriteria getCriteria()
 	{
 		PropertyCriteria criteria = new PropertyCriteria();
-		if (filterFundraiser)
+		if (filterPublisher)
+		{
+			criteria.setFilters(Filter.equal(KeyValue.publisher, true));
+		}
+		else if (filterFundraiser)
 		{
 			criteria.setFilters(Filter.equal(KeyValue.fundraiser, true));
 		}
 		else
 		{
 			criteria.setFilters(Filter.keyDoesNotExistOrPropertiesNull(KeyValue.fundraiser));
+			criteria.setFilters(Filter.and(Filter.keyDoesNotExistOrPropertiesNull(KeyValue.publisher)));
 		}
 		return criteria;
 	}

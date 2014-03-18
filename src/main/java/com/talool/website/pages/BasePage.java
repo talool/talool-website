@@ -115,6 +115,9 @@ public abstract class BasePage extends WebPage
 		WebMarkupContainer adminMenu = new WebMarkupContainer("superuser");
 		add(adminMenu.setVisible(isSuperUser));
 		
+		WebMarkupContainer historyMenu = new WebMarkupContainer("history");
+		add(historyMenu.setVisible(isSuperUser));
+		
 		WebMarkupContainer publisherMenu = new WebMarkupContainer("publisher");
 		add(publisherMenu);
 		publisherMenu.setVisible(PermissionUtils.isPublisher(SessionUtils.getSession().getMerchantAccount().getMerchant()) || isSuperUser);

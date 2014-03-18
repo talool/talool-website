@@ -31,8 +31,7 @@ public class PermissionUtils {
 	
 	public static boolean isFundraisingPublisher(Merchant merchant)
 	{
-		return (merchant.getProperties().getAsBool(KeyValue.publisher) && 
-				merchant.getProperties().getAsBool(KeyValue.fundraiser));
+		return merchant.getProperties().getAsBool(KeyValue.fundraisingPublisher);
 	}
 	
 	public static boolean isFundraisingPublisher(UUID merchantId)

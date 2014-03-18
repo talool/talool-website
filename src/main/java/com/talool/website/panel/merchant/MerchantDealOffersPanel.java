@@ -81,7 +81,7 @@ public class MerchantDealOffersPanel extends BaseTabPanel
 				item.add(new Label("summary"));
 				item.add(new Label("price"));
 				item.add(new Label("dealType"));
-				item.add(new Label("expires"));
+				//item.add(new Label("expires"));
 				item.add(new Label("isActive"));
 
 				BasePage page = (BasePage) this.getPage();

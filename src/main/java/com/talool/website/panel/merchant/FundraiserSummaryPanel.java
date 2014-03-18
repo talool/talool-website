@@ -63,9 +63,7 @@ public class FundraiserSummaryPanel extends BaseTabPanel {
 	private Merchant fundraiser;
 	
 	private MerchantWizard wizard;
-	
-	private String addressLabel;
-
+	private int percentage;
 	private List<KeyValue> keyValues;
 	
 	private List<String> warnings;
@@ -119,7 +117,7 @@ public class FundraiserSummaryPanel extends BaseTabPanel {
 			}
 		});
 		
-		container.add(new Label("addressLabel",new PropertyModel<String>(this,"addressLabel")));
+		container.add(new Label("percentage", new PropertyModel<Integer>(this,"percentage")));
 		
 		final ListView<KeyValue> propteryList = new ListView<KeyValue>("propertyRptr", new PropertyModel<List<KeyValue>>(this,"keyValues"))
 		{
@@ -336,8 +334,6 @@ public class FundraiserSummaryPanel extends BaseTabPanel {
 		
 		fundraiser = new MerchantModel(_fundraiserId, true).getObject();
 		
-		addressLabel = fundraiser.getPrimaryLocation().getNiceCityState();
-		
 		// check for accounts
 		if (fundraiser.getMerchantAccounts().isEmpty())
 		{
@@ -345,6 +341,7 @@ public class FundraiserSummaryPanel extends BaseTabPanel {
 		}
 		
 		keyValues = KeyValue.getKeyValues(fundraiser.getProperties());
+		percentage = fundraiser.getProperties().getAsInt(KeyValue.percentage);
 		
 	}
 
