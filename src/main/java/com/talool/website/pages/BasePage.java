@@ -66,8 +66,6 @@ public abstract class BasePage extends WebPage
 
 	private void init()
 	{
-		SessionUtils.getSession().performBrowserCheck();
-
 		add(new AdminMenuPanel("adminMenuPanel").setRenderBodyOnly(true));
 
 		feedback = new NiceFeedbackPanel("feedback");
