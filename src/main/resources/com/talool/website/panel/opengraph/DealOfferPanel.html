@@ -3,17 +3,33 @@
 	<div class="box">
 		<div class="wrapping gray4-font">
 			<div class="details">
-				<img wicket:id="merchantImage" class="hero"/>
 				<h1 wicket:id="titleLabel"></h1>
 				<table>
 					<tbody>
 						<tr>
-							<td class="label true-gray-font">where?</td>
-							<td wicket:id="merchantName">merchant name</td>
-						</tr>
-						<tr>
 							<td class="label true-gray-font">what?</td>
 							<td wicket:id="summary">summary</td>
+						</tr>
+						<tr wicket:id="supportContainer">
+							<td class="label true-gray-font">support!</td>
+							<td wicket:id="support" class="orange-font">fundraiser</td>
+						</tr>
+						<tr>
+							<td class="label true-gray-font">how?</td>
+							<td>
+								<span wicket:id="how"></span>
+								<div class="appicon">
+									<a class="download apple" href="https://itunes.apple.com/us/app/talool/id669529943"><img 
+										alt="Download on the App Store" 
+									   	src="/img/homepage/Download_on_the_App_Store_Badge_US-UK_135x40_0824.png" 
+									   	width="135" height="40"/></a>
+
+									<a class="download android" href="https://play.google.com/store/apps/details?id=com.talool.mobile.android"><img 
+										alt="Download on Google Play" 
+										src="/img/homepage/en_app_rgb_wo_45.png" 
+										width="129" height="45"/></a>
+								</div>
+							</td>
 						</tr>
 						<tr>
 							<td class="label true-gray-font">about us</td>
