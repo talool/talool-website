@@ -1,0 +1,49 @@
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+		<link rel="stylesheet" type="text/css" href="/css/stats.css"/>
+	</wicket:head>
+	
+	<wicket:extend>
+		<div wicket:id="container">
+			<table class="meta">
+				<tr>
+					<td style="max-width: 300px">
+						<div class="borderedBox gray5-font">
+					  		<h3>Actions</h3>
+					  		<table class="actionBox">
+					  			<tr>
+					  				<td>
+							  			<a wicket:id="replaceLink" class="btn">Replace Image</a>
+								  	</td>
+								  	<td>
+							  			<a wicket:id="deleteLink" class="btn">Delete Image</a>
+								  	</td>
+					  			</tr>
+					  		</table>
+					  	</div>
+					  	
+					  	<div class="borderedBox gray5-font">
+					  		<h3>Image Details</h3>
+	
+						  	<table>
+					  			<tr>
+					  				<th>Usage Count</th>
+					  				<td wicket:id="usageCount">10</td>
+					  			</tr>
+					  			<tr>
+					  				<th>Tags</th>
+					  				<td>tag 1, tag 2</td>
+					  			</tr>
+						  	</table>
+					  	</div>
+					  	
+					</td>
+					<td>
+						<img wicket:id="image"/>
+					</td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+	</wicket:extend>
+</html>

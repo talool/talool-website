@@ -91,7 +91,10 @@ public class MerchantMediaListModel extends LoadableDetachableModel<List<Merchan
 			
 			if (_mediaType.equals(MediaType.DEAL_OFFER_BACKGROUND_IMAGE) || _mediaType.equals(MediaType.DEAL_OFFER_MERCHANT_LOGO))
 			{
-				media.addAll(taloolService.getMerchantMedias(_taloolMerchantId, mediaTypes, searchOptions));
+				if (!_taloolMerchantId.toString().equals(_merchantId.toString()))
+				{
+					media.addAll(taloolService.getMerchantMedias(_taloolMerchantId, mediaTypes, searchOptions));
+				}
 				media.addAll(taloolService.getMerchantMedias(_merchantId, mediaTypes, searchOptions));
 			}
 			else if (_merchantId == null)

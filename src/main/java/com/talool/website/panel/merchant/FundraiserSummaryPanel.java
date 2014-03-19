@@ -260,7 +260,7 @@ public class FundraiserSummaryPanel extends BaseTabPanel {
 						StringBuilder title = new StringBuilder();
 						title.append(fundraiser.getName()).append(" Tracking Codes");
 						String notes = "";
-						merchantCodeGrp = taloolService.createMerchantCodeGroup(_fundraiserId,
+						merchantCodeGrp = taloolService.createMerchantCodeGroup(fundraiser,
 				                merchantAccount.getId(), _publisherId,
 				                title.toString(), notes, (short)downloadCodeCount);
 						
