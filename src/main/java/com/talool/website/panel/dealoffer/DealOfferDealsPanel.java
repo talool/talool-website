@@ -221,7 +221,7 @@ public class DealOfferDealsPanel extends BaseTabPanel {
 				
 				if (StringUtils.isEmpty(deal.getImageUrl()))
 				{
-					item.add(new StaticImage("myimage", false, "/img/000.png"));
+					item.add(new StaticImage("myimage", false, "/img/missing.jpg"));
 				}
 				else
 				{

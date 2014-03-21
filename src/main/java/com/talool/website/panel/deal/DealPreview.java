@@ -23,7 +23,7 @@ public class DealPreview extends Panel
 
 	public String title, summary, details, code, imageUrl, merchantName;
 	public String merchantLogoUrl, dealOfferLogoUrl;
-	private String defaultImageUrl = "/img/000.png";
+	private String defaultImageUrl = "/img/missing.jpg";
 	private String defaultDealOfferLogoUrl = "/img/000.png";
 	private String defaultMerchantLogoUrl = "/img/000.png";
 	public String expires;

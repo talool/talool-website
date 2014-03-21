@@ -91,7 +91,7 @@ public class MerchantDealsPanel extends BaseTabPanel
 				MerchantMedia image = deal.getImage();
 				if (image == null)
 				{
-					item.add(new StaticImage("myimage", false, "/img/000.png"));
+					item.add(new StaticImage("myimage", false, "/img/missing.jpg"));
 				}
 				else
 				{

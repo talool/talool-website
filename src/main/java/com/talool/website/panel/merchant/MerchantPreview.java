@@ -12,7 +12,7 @@ public class MerchantPreview extends Panel
 {
 	public String merchantImageUrl;
 	public String merchantName;
-	private String defaultImageUrl = "/img/000.png";
+	private String defaultImageUrl = "/img/missing.jpg";
 	public StaticImage image;
 
 	private static final long serialVersionUID = 1L;

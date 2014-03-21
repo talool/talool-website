@@ -138,6 +138,10 @@ public class MerchantSummaryPanel extends BaseTabPanel {
 					AjaxRequestTarget target) {
 				try
 				{
+					// TODO shouldn't need to do this, but the props won't persist unless something else on the merchant has changed
+					//merchant.setIsDiscoverable(!merchant.isDiscoverable());
+					//ServiceFactory.get().getTaloolService().merge(merchant);
+					//merchant.setIsDiscoverable(!merchant.isDiscoverable());
 					ServiceFactory.get().getTaloolService().merge(merchant);
 					LOG.info(merchant.getProperties().dumpProperties());
 					

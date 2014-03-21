@@ -98,7 +98,7 @@ public class MerchantLocationsPanel extends BaseTabPanel
 				MerchantMedia media = managedLocation.getMerchantImage();
 				if (media==null)
 				{
-					item.add(new StaticImage("myimage", false, "/img/000.png"));
+					item.add(new StaticImage("myimage", false, "/img/missing.jpg"));
 				}
 				else
 				{
