@@ -211,8 +211,7 @@ public class MerchantSummaryDataProvider implements IDataProvider<MerchantSummar
 		}
 		else
 		{
-			criteria.setFilters(Filter.keyDoesNotExistOrPropertiesNull(KeyValue.fundraiser));
-			criteria.setFilters(Filter.and(Filter.keyDoesNotExistOrPropertiesNull(KeyValue.publisher)));
+			criteria.setFilters(Filter.and(Filter.keyDoesNotExistOrPropertiesNull(KeyValue.publisher),Filter.keyDoesNotExistOrPropertiesNull(KeyValue.fundraiser)));
 		}
 		return criteria;
 	}
