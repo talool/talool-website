@@ -40,6 +40,8 @@ import com.talool.website.pages.lists.DealSummaryDataProvider;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.deal.wizard.DealWizard;
+import com.talool.website.util.PermissionUtils;
+import com.talool.website.util.SessionUtils;
 
 public class DealOfferDealsPanel extends BaseTabPanel {
 
@@ -67,7 +69,7 @@ public class DealOfferDealsPanel extends BaseTabPanel {
 		_dealOfferId = UUID.fromString(parameters.get("id").toString());
 		
 		// TODO what rules should determine if bulk move is enabled?
-		bulkMoveEnabled = false;
+		bulkMoveEnabled = PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount());
 	}
 	
 	@Override
