@@ -34,7 +34,6 @@ import com.talool.core.DealOffer;
 import com.talool.core.DealType;
 import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
-import com.talool.core.service.TaloolService.PropertySupportedEntity;
 import com.talool.domain.Properties;
 import com.talool.service.ServiceFactory;
 import com.talool.stats.DealOfferMetrics;
@@ -86,7 +85,7 @@ public class DealOfferSummaryPanel extends BaseTabPanel
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		
+
 		final BasePage page = (BasePage) getPage();
 
 		final AdminModalWindow modalProps = new AdminModalWindow("modalProps");
@@ -140,7 +139,7 @@ public class DealOfferSummaryPanel extends BaseTabPanel
 		container.add(offerPreview);
 
 		final PropertyComboBox comboBox = new PropertyComboBox("comboBox",
-				Model.of(offer.getProperties()), PropertySupportedEntity.DealOffer)
+				Model.of(offer.getProperties()), DealOffer.class)
 		{
 
 			private static final long serialVersionUID = 7609398573563991376L;
@@ -169,7 +168,6 @@ public class DealOfferSummaryPanel extends BaseTabPanel
 
 		};
 		container.add(comboBox.setVisible(page.isSuperUser));
-
 
 		final AJAXDownload download = new AJAXDownload()
 		{
@@ -325,9 +323,9 @@ public class DealOfferSummaryPanel extends BaseTabPanel
 			}
 		};
 		addOrReplace(wizard.setOutputMarkupId(true));
-		
+
 		// hide the action button
-		page.getActionLink().add(new AttributeModifier("class","hide"));
+		page.getActionLink().add(new AttributeModifier("class", "hide"));
 	}
 
 	@Override

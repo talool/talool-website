@@ -37,7 +37,7 @@ public class DealOfferDetails extends WizardStep
 {
 	private static final Logger LOG = LoggerFactory.getLogger(DealOfferDetails.class);
 	private static final long serialVersionUID = 1L;
-	
+
 	private String selectedTimeZoneId, lastTimeZoneId;
 	private DateTimePicker start, end;
 
@@ -74,7 +74,7 @@ public class DealOfferDetails extends WizardStep
 		TimeZone bestGuessTimeZone = SessionUtils.getSession().getBestGuessTimeZone();
 		selectedTimeZoneId = TimeZoneDropDown.getBestSupportedTimeZone(bestGuessTimeZone).getID();
 		lastTimeZoneId = selectedTimeZoneId;
-		LOG.debug("init with timezone: "+selectedTimeZoneId);
+		LOG.debug("init with timezone: " + selectedTimeZoneId);
 
 		// convert the start/end dates to merchant_account timezone, for display
 		Date endDate = convertTimeZone(offer.getScheduledEndDate(), TimeZone.getTimeZone(selectedTimeZoneId), TimeZone.getDefault());
@@ -83,7 +83,7 @@ public class DealOfferDetails extends WizardStep
 		start = new DateTimePicker("scheduledStartDate", Model.of(startDate));
 		addOrReplace(end.setOutputMarkupId(true));
 		addOrReplace(start.setOutputMarkupId(true));
-		
+
 		// start date must be at least today
 		add(new StartEndDateFormValidator(start, end));
 
@@ -96,7 +96,7 @@ public class DealOfferDetails extends WizardStep
 			protected void onUpdate(AjaxRequestTarget target)
 			{
 				SessionUtils.getSession().setAndPersistTimeZone(selectedTimeZoneId);
-				
+
 				// adjust from old TZ to new TZ
 				Date endDate = convertTimeZone(end.getModelObject(), TimeZone.getTimeZone(selectedTimeZoneId), TimeZone.getTimeZone(lastTimeZoneId));
 				Date startDate = convertTimeZone(start.getModelObject(), TimeZone.getTimeZone(selectedTimeZoneId), TimeZone.getTimeZone(lastTimeZoneId));
@@ -109,54 +109,57 @@ public class DealOfferDetails extends WizardStep
 
 		});
 		addOrReplace(timeZoneDropDown.setOutputMarkupId(true));
-		
+
 		final WebMarkupContainer currentTimeZone = new WebMarkupContainer("currentTimeZone");
 		addOrReplace(currentTimeZone.setOutputMarkupId(true));
-		currentTimeZone.add(new Label("currentTimeZoneLabel",selectedTimeZoneId));
-		currentTimeZone.add(new AjaxLink<Void>("changeTimeZone"){
+		currentTimeZone.add(new Label("currentTimeZoneLabel", selectedTimeZoneId));
+		currentTimeZone.add(new AjaxLink<Void>("changeTimeZone")
+		{
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
-				timeZoneDropDown.add(new CssClassToggle("hide","show"));
+			public void onClick(AjaxRequestTarget target)
+			{
+				timeZoneDropDown.add(new CssClassToggle("hide", "show"));
 				target.add(timeZoneDropDown);
 				currentTimeZone.setVisible(false);
 				target.add(currentTimeZone);
 			}
-			
+
 		});
-		
 
 	}
 
 	@Override
-	public void applyState() {
+	public void applyState()
+	{
 		super.applyState();
-		
+
 		final DealOffer offer = (DealOffer) getDefaultModelObject();
-		
+
 		// get start/end dates from pickers and convert back to UTC
 		Date endDate = convertTimeZone(end.getModelObject(), TimeZone.getDefault(), TimeZone.getTimeZone(selectedTimeZoneId));
 		Date startDate = convertTimeZone(start.getModelObject(), TimeZone.getDefault(), TimeZone.getTimeZone(selectedTimeZoneId));
 		offer.setScheduledEndDate(endDate);
 		offer.setScheduledStartDate(startDate);
 	}
-	
+
 	private Date convertTimeZone(Date date, TimeZone toTimeZone, TimeZone fromTimeZone)
 	{
 		// get the offset
-		int millisInHour = (1000*60*60);
+		int millisInHour = (1000 * 60 * 60);
 		int fromOffset = fromTimeZone.getOffset(date.getTime()) / millisInHour;
+		LOG.info("From Offset of " + fromTimeZone + " is " + fromOffset);
 		int toOffset = toTimeZone.getOffset(date.getTime()) / millisInHour;
+		LOG.info("To Offset of " + toTimeZone + " is " + toOffset);
 		int offset = toOffset - fromOffset;
-		
+
 		// convert the date
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
 		c.add(Calendar.HOUR_OF_DAY, offset);
 		return c.getTime();
 	}
-	
-	
+
 }

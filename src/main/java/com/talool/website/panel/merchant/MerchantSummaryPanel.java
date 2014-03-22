@@ -24,7 +24,6 @@ import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
-import com.talool.core.service.TaloolService.PropertySupportedEntity;
 import com.talool.domain.Properties;
 import com.talool.service.ServiceFactory;
 import com.talool.utils.KeyValue;
@@ -38,42 +37,45 @@ import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.wizard.MerchantWizard;
 import com.talool.website.panel.merchant.wizard.MerchantWizard.MerchantWizardMode;
 
-public class MerchantSummaryPanel extends BaseTabPanel {
+public class MerchantSummaryPanel extends BaseTabPanel
+{
 
 	private static final long serialVersionUID = 2170124491668826388L;
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantSummaryPanel.class);
-	
+
 	private UUID _merchantId;
-	
+
 	private Merchant merchant;
-	
+
 	private MerchantWizard wizard;
-	
+
 	private String categoryLabel;
 	private String tagsLabel;
 	private String logoUrl;
 	private List<KeyValue> keyValues;
-	
+
 	private List<String> warnings;
-	
-	public MerchantSummaryPanel(String id, PageParameters parameters) {
+
+	public MerchantSummaryPanel(String id, PageParameters parameters)
+	{
 		super(id);
 		_merchantId = UUID.fromString(parameters.get("id").toString());
 		setPanelModel();
 	}
 
 	@Override
-	protected void onInitialize() {
+	protected void onInitialize()
+	{
 		super.onInitialize();
-		
+
 		final BasePage page = (BasePage) getPage();
-		
+
 		final WebMarkupContainer container = new WebMarkupContainer("container");
 		add(container.setOutputMarkupId(true));
-		
+
 		final WebMarkupContainer warningContainer = new WebMarkupContainer("warnings");
 		container.add(warningContainer.setOutputMarkupId(true));
-		final ListView<String> warningList = new ListView<String>("warningRptr", new PropertyModel<List<String>>(this,"warnings"))
+		final ListView<String> warningList = new ListView<String>("warningRptr", new PropertyModel<List<String>>(this, "warnings"))
 		{
 
 			private static final long serialVersionUID = 1L;
@@ -81,13 +83,13 @@ public class MerchantSummaryPanel extends BaseTabPanel {
 			@Override
 			protected void populateItem(ListItem<String> item)
 			{
-				item.add(new Label("warning",item.getModelObject()));
+				item.add(new Label("warning", item.getModelObject()));
 			}
 
 		};
 		warningContainer.add(warningList);
 		warningContainer.setVisible(!warnings.isEmpty());
-		
+
 		container.add(new AjaxLink<Void>("editLink")
 		{
 			private static final long serialVersionUID = 268692101349122303L;
@@ -100,13 +102,13 @@ public class MerchantSummaryPanel extends BaseTabPanel {
 				wizard.open(target);
 			}
 		});
-		
-		container.add(new Label("categoryLabel",new PropertyModel<String>(this,"categoryLabel")));
-		container.add(new Label("tagsLabel",new PropertyModel<String>(this,"tagsLabel")));
-		
+
+		container.add(new Label("categoryLabel", new PropertyModel<String>(this, "categoryLabel")));
+		container.add(new Label("tagsLabel", new PropertyModel<String>(this, "tagsLabel")));
+
 		container.add(new StaticImage("logo", false, new PropertyModel<String>(this, "logoUrl")));
-		
-		final ListView<KeyValue> propteryList = new ListView<KeyValue>("propertyRptr", new PropertyModel<List<KeyValue>>(this,"keyValues"))
+
+		final ListView<KeyValue> propteryList = new ListView<KeyValue>("propertyRptr", new PropertyModel<List<KeyValue>>(this, "keyValues"))
 		{
 
 			private static final long serialVersionUID = 1L;
@@ -115,52 +117,50 @@ public class MerchantSummaryPanel extends BaseTabPanel {
 			protected void populateItem(ListItem<KeyValue> item)
 			{
 				KeyValue prop = item.getModelObject();
-				item.add(new Label("pKey",prop.key));
-				item.add(new Label("pVal",prop.value));
+				item.add(new Label("pKey", prop.key));
+				item.add(new Label("pVal", prop.value));
 			}
 
 		};
 		container.add(propteryList.setVisible(page.isSuperUser));
-		
+
 		final MapPreview mapPreview = new MapPreview("mapPreview", merchant);
 		container.add(mapPreview);
-		
+
 		final MerchantPreview merchantPreview = new MerchantPreview("merchantPreview", merchant);
 		container.add(merchantPreview);
-		
-		final PropertyComboBox comboBox = new PropertyComboBox("comboBox", 
-				Model.of(merchant.getProperties()), PropertySupportedEntity.Merchant) {
+
+		final PropertyComboBox comboBox = new PropertyComboBox("comboBox",
+				Model.of(merchant.getProperties()), Merchant.class)
+		{
 
 			private static final long serialVersionUID = 7609398573563991376L;
 
 			@Override
 			public void onPropertySave(Properties props,
-					AjaxRequestTarget target) {
+					AjaxRequestTarget target)
+			{
 				try
 				{
-					// TODO shouldn't need to do this, but the props won't persist unless something else on the merchant has changed
-					//merchant.setIsDiscoverable(!merchant.isDiscoverable());
-					//ServiceFactory.get().getTaloolService().merge(merchant);
-					//merchant.setIsDiscoverable(!merchant.isDiscoverable());
-					ServiceFactory.get().getTaloolService().merge(merchant);
+					ServiceFactory.get().getTaloolService().saveProperties(merchant, props);
 					LOG.info(merchant.getProperties().dumpProperties());
-					
+
 					BasePage page = (BasePage) getPage();
 					target.add(page.feedback);
-					
+
 					setPanelModel();
 					target.add(container);
 				}
 				catch (ServiceException e)
 				{
-					LOG.error("failed to merge merchant after saving properties.",e);
+					LOG.error("failed to merge merchant after saving properties.", e);
 				}
-				
+
 			}
-			
+
 		};
 		container.add(comboBox.setVisible(page.isSuperUser));
-		
+
 		// Wizard
 		wizard = new MerchantWizard("wiz", "Merchant Wizard", MerchantWizardMode.MERCHANT)
 		{
@@ -179,33 +179,33 @@ public class MerchantSummaryPanel extends BaseTabPanel {
 			}
 		};
 		addOrReplace(wizard.setOutputMarkupId(true));
-		
+
 		// hide the action button
-		page.getActionLink().add(new AttributeModifier("class","hide"));
+		page.getActionLink().add(new AttributeModifier("class", "hide"));
 	}
 
-
-
 	@Override
-	public String getActionLabel() {
+	public String getActionLabel()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	private void setPanelModel()
 	{
 		warnings = new ArrayList<String>();
-		
+
 		merchant = new MerchantModel(_merchantId, true).getObject();
-		
+
 		categoryLabel = merchant.getCategory().getName();
-		
+
 		StringBuilder sb = new StringBuilder();
 		Iterator<Tag> tags = merchant.getTags().iterator();
 		while (tags.hasNext())
@@ -217,9 +217,9 @@ public class MerchantSummaryPanel extends BaseTabPanel {
 			}
 		}
 		tagsLabel = sb.toString();
-		
+
 		MerchantLocation loc = merchant.getPrimaryLocation();
-		if (loc.getLogo() ==  null)
+		if (loc.getLogo() == null)
 		{
 			logoUrl = "/img/000.png";
 		}
@@ -227,42 +227,40 @@ public class MerchantSummaryPanel extends BaseTabPanel {
 		{
 			logoUrl = loc.getLogo().getMediaUrl();
 		}
-		
+
 		// check for location images and logos
-		for (MerchantLocation location:merchant.getLocations())
+		for (MerchantLocation location : merchant.getLocations())
 		{
-			if (location.getMerchantImage()==null)
+			if (location.getMerchantImage() == null)
 			{
 				warnings.add("A location for this merchant is missing an image.");
 			}
-			
-			if (location.getLogo()==null)
+
+			if (location.getLogo() == null)
 			{
 				warnings.add("A location for this merchant is missing a logo.");
 			}
 		}
-		
+
 		// check for accounts
 		if (merchant.getMerchantAccounts().isEmpty())
 		{
 			warnings.add("There are no accounts for this merchant, so they can't receive redemption information.");
 		}
-		
+
 		// check for deal images
 		DealListModel model = new DealListModel();
 		model.setMerchantId(_merchantId);
-		for (Deal deal:model.getObject())
+		for (Deal deal : model.getObject())
 		{
-			if (deal.getImage()==null)
+			if (deal.getImage() == null)
 			{
 				warnings.add("A deal for this merchant is missing an image.");
 			}
 		}
-		
-		keyValues = KeyValue.getKeyValues(merchant.getProperties());
-		
-	}
 
-	
+		keyValues = KeyValue.getKeyValues(merchant.getProperties());
+
+	}
 
 }

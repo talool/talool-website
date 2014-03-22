@@ -16,7 +16,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.MerchantAccount;
 import com.talool.core.service.ServiceException;
-import com.talool.core.service.TaloolService.PropertySupportedEntity;
 import com.talool.domain.Properties;
 import com.talool.service.ServiceFactory;
 import com.talool.website.models.MerchantAccountListModel;
@@ -46,7 +45,7 @@ public class MerchantAccountsPanel extends BaseTabPanel
 		super.onInitialize();
 
 		final BasePage page = (BasePage) getPage();
-		
+
 		final AdminModalWindow modalProps = new AdminModalWindow("modalProps");
 		modalProps.setInitialWidth(650);
 		add(modalProps.setOutputMarkupId(true));
@@ -122,7 +121,7 @@ public class MerchantAccountsPanel extends BaseTabPanel
 						getSession().getFeedbackMessages().clear();
 
 						PropertiesPanel panel = new PropertiesPanel(modalProps.getContentId(), Model.of(account.getProperties()),
-								PropertySupportedEntity.MerchantAccount)
+								MerchantAccount.class)
 						{
 
 							private static final long serialVersionUID = -6061721033345142501L;
@@ -140,7 +139,7 @@ public class MerchantAccountsPanel extends BaseTabPanel
 								}
 								target.appendJavaScript("window.parent.Wicket.Window.current.autoSizeWindow();");
 							}
-							
+
 						};
 
 						StringBuilder sb = new StringBuilder();

@@ -20,7 +20,6 @@ import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
-import com.talool.core.service.TaloolService.PropertySupportedEntity;
 import com.talool.domain.Properties;
 import com.talool.service.ServiceFactory;
 import com.talool.website.component.StaticImage;
@@ -52,7 +51,7 @@ public class MerchantLocationsPanel extends BaseTabPanel
 		super(id);
 		_merchantId = UUID.fromString(parameters.get("id").toString());
 	}
-	
+
 	public MerchantLocationsPanel(String id, UUID mid)
 	{
 		super(id);
@@ -63,20 +62,20 @@ public class MerchantLocationsPanel extends BaseTabPanel
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		
+
 		final BasePage page = (BasePage) getPage();
-		
+
 		final AdminModalWindow modalProps = new AdminModalWindow("modalProps");
 		modalProps.setInitialWidth(650);
 		add(modalProps.setOutputMarkupId(true));
 
 		MerchantLocationListModel model = new MerchantLocationListModel();
 		model.setMerchantId(_merchantId);
-		
+
 		final WebMarkupContainer container = new WebMarkupContainer("list");
 		container.setOutputMarkupId(true);
 		add(container);
-		
+
 		final ListView<MerchantLocation> locations = new ListView<MerchantLocation>(
 				"locationRptr", model)
 		{
@@ -96,7 +95,7 @@ public class MerchantLocationsPanel extends BaseTabPanel
 				}
 
 				MerchantMedia media = managedLocation.getMerchantImage();
-				if (media==null)
+				if (media == null)
 				{
 					item.add(new StaticImage("myimage", false, "/img/missing.jpg"));
 				}
@@ -104,9 +103,9 @@ public class MerchantLocationsPanel extends BaseTabPanel
 				{
 					item.add(new StaticImage("myimage", false, media.getMediaUrl()));
 				}
-				
+
 				MerchantMedia logo = managedLocation.getLogo();
-				if (logo==null)
+				if (logo == null)
 				{
 					item.add(new StaticImage("mylogo", false, "/img/000.png"));
 				}
@@ -114,7 +113,7 @@ public class MerchantLocationsPanel extends BaseTabPanel
 				{
 					item.add(new StaticImage("mylogo", false, logo.getMediaUrl()));
 				}
-				
+
 				item.add(new Label("locationName"));
 				item.add(new Label("phone"));
 				item.add(new Label("address1"));
@@ -122,7 +121,7 @@ public class MerchantLocationsPanel extends BaseTabPanel
 				item.add(new Label("city"));
 				item.add(new Label("stateProvinceCounty"));
 				item.add(new Label("zip"));
-				
+
 				String websiteUrl = managedLocation.getWebsiteUrl();
 				if (websiteUrl != null && !websiteUrl.isEmpty())
 				{
@@ -145,15 +144,15 @@ public class MerchantLocationsPanel extends BaseTabPanel
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						
+
 						Merchant merchant = new MerchantModel(_merchantId, true).getObject();
 						merchant.setCurrentLocation(managedLocation);
 						wizard.setModelObject(merchant);
-						
+
 						wizard.open(target);
 					}
 				});
-				
+
 				item.add(new AjaxLink<Void>("editProps")
 				{
 					private static final long serialVersionUID = 268692101349122303L;
@@ -164,7 +163,7 @@ public class MerchantLocationsPanel extends BaseTabPanel
 						getSession().getFeedbackMessages().clear();
 
 						PropertiesPanel panel = new PropertiesPanel(modalProps.getContentId(), Model.of(managedLocation.getProperties()),
-								PropertySupportedEntity.MerchantLocation)
+								MerchantLocation.class)
 						{
 
 							private static final long serialVersionUID = -6061721033345142501L;
@@ -182,7 +181,7 @@ public class MerchantLocationsPanel extends BaseTabPanel
 								}
 								target.appendJavaScript("window.parent.Wicket.Window.current.autoSizeWindow();");
 							}
-							
+
 						};
 
 						StringBuilder sb = new StringBuilder();
@@ -198,7 +197,7 @@ public class MerchantLocationsPanel extends BaseTabPanel
 
 		};
 		container.add(locations);
-		
+
 		// override the action button
 		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
 		{
@@ -209,9 +208,9 @@ public class MerchantLocationsPanel extends BaseTabPanel
 			public void onClick(AjaxRequestTarget target)
 			{
 				getSession().getFeedbackMessages().clear();
-				
+
 				Merchant merchant = new MerchantModel(_merchantId, true).getObject();
-				
+
 				// create a new location and add it to the merchant
 				MerchantLocation location = domainFactory.newMerchantLocation();
 				MerchantMedia merchLogo = merchant.getCurrentLocation().getLogo();
@@ -228,7 +227,7 @@ public class MerchantLocationsPanel extends BaseTabPanel
 				location.setCreatedByMerchantAccount(SessionUtils.getSession().getMerchantAccount());
 				merchant.addLocation(location);
 				merchant.setCurrentLocation(location);
-				
+
 				wizard.setModelObject(merchant);
 				wizard.open(target);
 			}

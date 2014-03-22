@@ -33,7 +33,6 @@ import com.talool.core.MerchantAccount;
 import com.talool.core.MerchantCode;
 import com.talool.core.MerchantCodeGroup;
 import com.talool.core.service.ServiceException;
-import com.talool.core.service.TaloolService.PropertySupportedEntity;
 import com.talool.domain.Properties;
 import com.talool.service.ServiceFactory;
 import com.talool.utils.KeyValue;
@@ -52,26 +51,28 @@ import com.talool.website.panel.merchant.wizard.MerchantWizard.MerchantWizardMod
 import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SessionUtils;
 
-public class FundraiserSummaryPanel extends BaseTabPanel {
+public class FundraiserSummaryPanel extends BaseTabPanel
+{
 
 	private static final long serialVersionUID = 2170124491668826388L;
 	private static final Logger LOG = LoggerFactory.getLogger(FundraiserSummaryPanel.class);
-	
+
 	private UUID _fundraiserId;
 	private UUID _publisherId;
-	
+
 	private Merchant fundraiser;
-	
+
 	private MerchantWizard wizard;
 	private int percentage;
 	private List<KeyValue> keyValues;
-	
+
 	private List<String> warnings;
-	
+
 	private int downloadCodeCount;
 	private MerchantCodeGroup merchantCodeGrp;
-	
-	public FundraiserSummaryPanel(String id, PageParameters parameters) {
+
+	public FundraiserSummaryPanel(String id, PageParameters parameters)
+	{
 		super(id);
 		_fundraiserId = UUID.fromString(parameters.get("id").toString());
 		_publisherId = UUID.fromString(parameters.get("pid").toString());
@@ -79,17 +80,18 @@ public class FundraiserSummaryPanel extends BaseTabPanel {
 	}
 
 	@Override
-	protected void onInitialize() {
+	protected void onInitialize()
+	{
 		super.onInitialize();
-		
+
 		final BasePage page = (BasePage) getPage();
-		
+
 		final WebMarkupContainer container = new WebMarkupContainer("container");
 		add(container.setOutputMarkupId(true));
-		
+
 		final WebMarkupContainer warningContainer = new WebMarkupContainer("warnings");
 		container.add(warningContainer.setOutputMarkupId(true));
-		final ListView<String> warningList = new ListView<String>("warningRptr", new PropertyModel<List<String>>(this,"warnings"))
+		final ListView<String> warningList = new ListView<String>("warningRptr", new PropertyModel<List<String>>(this, "warnings"))
 		{
 
 			private static final long serialVersionUID = 1L;
@@ -97,13 +99,13 @@ public class FundraiserSummaryPanel extends BaseTabPanel {
 			@Override
 			protected void populateItem(ListItem<String> item)
 			{
-				item.add(new Label("warning",item.getModelObject()));
+				item.add(new Label("warning", item.getModelObject()));
 			}
 
 		};
 		warningContainer.add(warningList);
 		warningContainer.setVisible(!warnings.isEmpty());
-		
+
 		container.add(new AjaxLink<Void>("editLink")
 		{
 			private static final long serialVersionUID = 268692101349122303L;
@@ -116,10 +118,10 @@ public class FundraiserSummaryPanel extends BaseTabPanel {
 				wizard.open(target);
 			}
 		});
-		
-		container.add(new Label("percentage", new PropertyModel<Integer>(this,"percentage")));
-		
-		final ListView<KeyValue> propteryList = new ListView<KeyValue>("propertyRptr", new PropertyModel<List<KeyValue>>(this,"keyValues"))
+
+		container.add(new Label("percentage", new PropertyModel<Integer>(this, "percentage")));
+
+		final ListView<KeyValue> propteryList = new ListView<KeyValue>("propertyRptr", new PropertyModel<List<KeyValue>>(this, "keyValues"))
 		{
 
 			private static final long serialVersionUID = 1L;
@@ -128,46 +130,48 @@ public class FundraiserSummaryPanel extends BaseTabPanel {
 			protected void populateItem(ListItem<KeyValue> item)
 			{
 				KeyValue prop = item.getModelObject();
-				item.add(new Label("pKey",prop.key));
-				item.add(new Label("pVal",prop.value));
+				item.add(new Label("pKey", prop.key));
+				item.add(new Label("pVal", prop.value));
 			}
 
 		};
 		container.add(propteryList.setVisible(page.isSuperUser));
-		
+
 		MetricListModel customerChartModel = new MetricListModel(_fundraiserId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.CUSTOMERS);
 		CubismPanel chart = new CubismPanel("salesChart", "Sales", customerChartModel);
 		container.add(chart.setVisible(PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount())));
-		
-		final PropertyComboBox comboBox = new PropertyComboBox("comboBox", 
-				Model.of(fundraiser.getProperties()), PropertySupportedEntity.Merchant) {
+
+		final PropertyComboBox comboBox = new PropertyComboBox("comboBox",
+				Model.of(fundraiser.getProperties()), Merchant.class)
+		{
 
 			private static final long serialVersionUID = 7609398573563991376L;
 
 			@Override
 			public void onPropertySave(Properties props,
-					AjaxRequestTarget target) {
+					AjaxRequestTarget target)
+			{
 				try
 				{
 					ServiceFactory.get().getTaloolService().merge(fundraiser);
 					LOG.info(fundraiser.getProperties().dumpProperties());
-					
+
 					BasePage page = (BasePage) getPage();
 					target.add(page.feedback);
-					
+
 					setPanelModel();
 					target.add(container);
 				}
 				catch (ServiceException e)
 				{
-					LOG.error("failed to merge merchant after saving properties.",e);
+					LOG.error("failed to merge merchant after saving properties.", e);
 				}
-				
+
 			}
-			
+
 		};
 		container.add(comboBox.setVisible(page.isSuperUser));
-		
+
 		final AJAXDownload download = new AJAXDownload()
 		{
 
@@ -261,9 +265,9 @@ public class FundraiserSummaryPanel extends BaseTabPanel {
 						title.append(fundraiser.getName()).append(" Tracking Codes");
 						String notes = "";
 						merchantCodeGrp = taloolService.createMerchantCodeGroup(fundraiser,
-				                merchantAccount.getId(), _publisherId,
-				                title.toString(), notes, (short)downloadCodeCount);
-						
+								merchantAccount.getId(), _publisherId,
+								title.toString(), notes, (short) downloadCodeCount);
+
 						download.initiate(target);
 						Session.get().success("Codes created and download started.");
 					}
@@ -292,7 +296,7 @@ public class FundraiserSummaryPanel extends BaseTabPanel {
 
 		};
 		container.add(codesLink.setOutputMarkupId(true));
-		
+
 		// Wizard
 		wizard = new MerchantWizard("wiz", "Merchant Wizard", MerchantWizardMode.FUNDRAISER)
 		{
@@ -309,42 +313,40 @@ public class FundraiserSummaryPanel extends BaseTabPanel {
 			}
 		};
 		addOrReplace(wizard.setOutputMarkupId(true));
-		
+
 		// hide the action button
-		page.getActionLink().add(new AttributeModifier("class","hide"));
+		page.getActionLink().add(new AttributeModifier("class", "hide"));
 	}
 
-
-
 	@Override
-	public String getActionLabel() {
+	public String getActionLabel()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	private void setPanelModel()
 	{
 		warnings = new ArrayList<String>();
-		
+
 		fundraiser = new MerchantModel(_fundraiserId, true).getObject();
-		
+
 		// check for accounts
 		if (fundraiser.getMerchantAccounts().isEmpty())
 		{
 			warnings.add("There are no accounts for this fundraiser, so they can't receive sales information.");
 		}
-		
+
 		keyValues = KeyValue.getKeyValues(fundraiser.getProperties());
 		percentage = fundraiser.getProperties().getAsInt(KeyValue.percentage);
-		
-	}
 
-	
+	}
 
 }

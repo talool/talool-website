@@ -304,6 +304,10 @@ public class DealOffersPage extends BasePage
 				dealType.setVisible(isSuperUser);
 
 				DateTimeFormatter dateformatter = DateTimeFormat.forPattern("MMM d, yyyy");
+				if (dealOffer.getScheduledStartDate() == null)
+				{
+					LOG.info("Got here!");
+				}
 				DateTime startDate = new DateTime(dealOffer.getScheduledStartDate().getTime());
 
 				DateTime endDate = new DateTime(dealOffer.getScheduledEndDate().getTime());
