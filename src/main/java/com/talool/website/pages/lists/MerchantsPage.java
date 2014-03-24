@@ -33,6 +33,7 @@ import com.talool.core.service.ServiceException;
 import com.talool.stats.MerchantSummary;
 import com.talool.website.component.ConfirmationIndicatingAjaxLink;
 import com.talool.website.component.MerchantSearchPanel;
+import com.talool.website.component.StaticImage;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.MerchantManagementPage;
@@ -240,6 +241,17 @@ public class MerchantsPage extends BasePage
 				item.add(new Label("city"));
 				item.add(new Label("state"));
 				item.add(new Label("zip"));
+				
+				String imageUrl;
+				if (merchant.getImageUrl()==null)
+				{
+					imageUrl = "/img/missing.jpg";
+				}
+				else
+				{
+					imageUrl = merchant.getImageUrl();
+				}
+				item.add(new StaticImage("image",true, imageUrl));
 
 				StringBuilder hasMultiple = new StringBuilder();
 				hasMultiple.append(merchant.getLocationCount());
