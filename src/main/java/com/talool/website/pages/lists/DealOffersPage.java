@@ -1,6 +1,7 @@
 package com.talool.website.pages.lists;
 
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -304,13 +305,26 @@ public class DealOffersPage extends BasePage
 				dealType.setVisible(isSuperUser);
 
 				DateTimeFormatter dateformatter = DateTimeFormat.forPattern("MMM d, yyyy");
+				DateTime startDate;
+				
 				if (dealOffer.getScheduledStartDate() == null)
 				{
-					LOG.info("Got here!");
+					startDate = new DateTime((new Date()).getTime());
 				}
-				DateTime startDate = new DateTime(dealOffer.getScheduledStartDate().getTime());
-
-				DateTime endDate = new DateTime(dealOffer.getScheduledEndDate().getTime());
+				else
+				{
+					startDate = new DateTime(dealOffer.getScheduledStartDate().getTime());
+				}
+				DateTime endDate;
+				if (dealOffer.getScheduledEndDate() == null)
+				{
+					endDate = new DateTime((new Date()).getTime());
+				}
+				else
+				{
+					endDate = new DateTime(dealOffer.getScheduledEndDate().getTime());
+				}
+				
 				sb.append(dateformatter.print(startDate)).append(" - ").append(dateformatter.print(endDate));
 				item.add(new Label("schedule", sb.toString()));
 
