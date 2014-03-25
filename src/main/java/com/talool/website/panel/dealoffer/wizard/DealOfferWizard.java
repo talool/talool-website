@@ -18,6 +18,7 @@ import com.talool.utils.KeyValue;
 import com.talool.website.pages.BasePage;
 import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SessionUtils;
+import com.talool.website.util.TaloolWizardModel;
 
 public class DealOfferWizard extends AbstractWizard<DealOffer> {
 	private static final long serialVersionUID = 1L;
@@ -27,7 +28,7 @@ public class DealOfferWizard extends AbstractWizard<DealOffer> {
 	{
 		super(id, title);
 		
-		WizardModel wizardModel = new WizardModel();
+		WizardModel wizardModel = new TaloolWizardModel();
 		wizardModel.add(new DealOfferDetails());
 		wizardModel.add(new DealOfferBackground());
 		wizardModel.add(new DealOfferIcon());

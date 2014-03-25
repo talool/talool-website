@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.wizard.AbstractWizard;
-import com.talool.core.Category;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
@@ -19,8 +18,8 @@ import com.talool.core.service.TaloolService;
 import com.talool.domain.Properties;
 import com.talool.utils.HttpUtils;
 import com.talool.utils.KeyValue;
-import com.talool.website.models.TagListModel.CATEGORY;
 import com.talool.website.pages.BasePage;
+import com.talool.website.util.TaloolWizardModel;
 
 public class MerchantWizard extends AbstractWizard<Merchant>
 {
@@ -44,7 +43,7 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 		this.mode = mode;
 		this.newLocation = new MerchantLocationStep();
 
-		WizardModel wizardModel = new WizardModel();
+		WizardModel wizardModel = new TaloolWizardModel();
 		if (this.mode.equals(MerchantWizardMode.MERCHANT))
 		{
 			wizardModel.add(new MerchantDetails());

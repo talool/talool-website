@@ -16,6 +16,7 @@ import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.website.pages.BasePage;
 import com.talool.website.util.SessionUtils;
+import com.talool.website.util.TaloolDynamicWizardModel;
 
 public class DealWizard extends AbstractWizard<Deal> {
 	private static final long serialVersionUID = 1L;
@@ -26,7 +27,7 @@ public class DealWizard extends AbstractWizard<Deal> {
 	{
 		super(id, title);
 		
-		final DynamicWizardModel wizardModel = new DynamicWizardModel(new DealDetails(this));
+		final DynamicWizardModel wizardModel = new TaloolDynamicWizardModel(new DealDetails(this));
 		
 		// only show last button if it is an edit flow
 		wizardModel.setLastVisible(isEdit);
