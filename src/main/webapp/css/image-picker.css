@@ -7,7 +7,10 @@ ul.thumbnails.image_picker_selector {
   	padding: 5px 0 0 5px;
   	margin: 0px; 
   	border-bottom: 1px solid rgba(215, 215, 215, 1);
-  	height: 300px;
+}
+
+.wiz ul.thumbnails.image_picker_selector {
+	height: 450px;
 }
 
 .shortMediaPicker ul.thumbnails.image_picker_selector 

@@ -72,6 +72,7 @@ body.talool .wiz {
 .wiz .mediaSelectionPanel
 {
 	margin-top: 20px;
+	width: 375px;
 }
 
 .wiz .offerWiz .panel.left 

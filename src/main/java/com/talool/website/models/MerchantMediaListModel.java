@@ -55,7 +55,7 @@ public class MerchantMediaListModel extends LoadableDetachableModel<List<Merchan
 
 		try
 		{
-			SearchOptions searchOptions = new SearchOptions.Builder().maxResults(100).page(0).sortProperty("merchantMedia.mediaUrl")
+			SearchOptions searchOptions = new SearchOptions.Builder().maxResults(500).page(0).sortProperty("merchantMedia.mediaUrl")
 					.ascending(true).build();
 			
 			MediaType[] mediaTypes;
