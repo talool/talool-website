@@ -22,7 +22,6 @@ import com.talool.core.FactoryManager;
 import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
-import com.talool.website.models.AvailableDealOffersListModel;
 import com.talool.website.models.ModelUtil;
 import com.talool.website.panel.deal.DealPreview;
 
@@ -34,9 +33,8 @@ public class DealTags extends DynamicWizardStep
 	private static final ChoiceRenderer<Tag> choiceRender = new ChoiceRenderer<Tag>("name", "name");
 
 	private List<Tag> tags;
-
-	private final IDynamicWizardStep dealAvailabilityStep;
-	private final IDynamicWizardStep createDealOfferStep;
+	
+	private final IDynamicWizardStep nextStep;
 	private DealWizard wizard;
 
 	private transient static final TaloolService taloolService = FactoryManager.get()
@@ -45,8 +43,7 @@ public class DealTags extends DynamicWizardStep
 	public DealTags(IDynamicWizardStep previousStep, DealWizard wiz)
 	{
 		super(previousStep, new ResourceModel("title"), new ResourceModel("summary"));
-		dealAvailabilityStep = new DealAvailability(this, wiz);
-		createDealOfferStep = new CreateDealOffer(this, wiz);
+		this.nextStep = new DealImage(this, wiz);
 		this.wizard = wiz;
 	}
 
@@ -142,9 +139,7 @@ public class DealTags extends DynamicWizardStep
 	@Override
 	public IDynamicWizardStep next()
 	{
-		Deal deal = (Deal) getDefaultModelObject();
-		AvailableDealOffersListModel listModel = new AvailableDealOffersListModel(deal);
-		return (listModel.isEmpty()) ? this.createDealOfferStep : this.dealAvailabilityStep;
+		return nextStep;
 	}
 
 	@Override

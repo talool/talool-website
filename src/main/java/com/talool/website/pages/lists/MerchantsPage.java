@@ -26,18 +26,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.gmap.GMap;
 
+import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
 import com.talool.core.MerchantLocation;
+import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
 import com.talool.stats.MerchantSummary;
 import com.talool.website.component.ConfirmationIndicatingAjaxLink;
 import com.talool.website.component.MerchantSearchPanel;
-import com.talool.website.component.StaticImage;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.image.EditableImage;
 import com.talool.website.panel.merchant.wizard.MerchantWizard;
 import com.talool.website.panel.merchant.wizard.MerchantWizard.MerchantWizardMode;
 import com.talool.website.util.SecuredPage;
@@ -242,16 +244,29 @@ public class MerchantsPage extends BasePage
 				item.add(new Label("state"));
 				item.add(new Label("zip"));
 				
-				String imageUrl;
-				if (merchant.getImageUrl()==null)
+				item.add(new EditableImage("editableImage",Model.of(merchant.getImageUrl()), merchantId, MediaType.MERCHANT_IMAGE)
 				{
-					imageUrl = "/img/missing.jpg";
-				}
-				else
-				{
-					imageUrl = merchant.getImageUrl();
-				}
-				item.add(new StaticImage("image",true, imageUrl));
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media) 
+					{
+						try
+						{
+							Merchant m = taloolService.getMerchantById(merchantId);
+							m.getCurrentLocation().setMerchantImage(media);
+							taloolService.merge(m.getCurrentLocation());
+							target.add(this);
+						}
+						catch (ServiceException se)
+						{
+							LOG.error("Failed to save new image with merchant",se);
+						}
+						
+					}
+					
+				});
 
 				StringBuilder hasMultiple = new StringBuilder();
 				hasMultiple.append(merchant.getLocationCount());

@@ -1,5 +1,7 @@
 package com.talool.website.models;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -37,6 +39,16 @@ public class CategoryTagListModel extends LoadableDetachableModel<List<Tag>>
 			return ImmutableList.<Tag> builder().build();
 		}
 
-		return TagCache.get().getTagsByCategoryName(category.getName());
+		List<Tag> tagList = TagCache.get().getTagsByCategoryName(category.getName());
+		Collections.sort(tagList, new TagComparator());
+		
+		return tagList;
+	}
+	
+	public class TagComparator implements Comparator<Tag> {
+	    @Override
+	    public int compare(Tag object1, Tag object2) {
+	        return object1.getName().compareToIgnoreCase(object2.getName());
+	    }
 	}
 }

@@ -9,6 +9,7 @@ import org.apache.wicket.model.ResourceModel;
 import com.talool.core.Deal;
 import com.talool.core.MediaType;
 import com.talool.core.MerchantMedia;
+import com.talool.website.models.AvailableDealOffersListModel;
 import com.talool.website.panel.deal.DealPreview;
 import com.talool.website.panel.image.selection.MediaSelectionPanel;
 
@@ -17,12 +18,16 @@ public class DealImage extends DynamicWizardStep
 
 	private static final long serialVersionUID = 1L;
 	private MerchantMedia image;
-	private final IDynamicWizardStep nextStep;
+	
+	private final IDynamicWizardStep dealAvailabilityStep;
+	private final IDynamicWizardStep createDealOfferStep;
 
 	public DealImage(IDynamicWizardStep previousStep, DealWizard wiz)
 	{
 		super(previousStep, new ResourceModel("title"), new ResourceModel("summary"));
-		this.nextStep = new DealTags(this, wiz);
+		
+		dealAvailabilityStep = new DealAvailability(this, wiz);
+		createDealOfferStep = new CreateDealOffer(this, wiz);
 	}
 
 	@Override
@@ -77,7 +82,9 @@ public class DealImage extends DynamicWizardStep
 	@Override
 	public IDynamicWizardStep next()
 	{
-		return nextStep;
+		Deal deal = (Deal) getDefaultModelObject();
+		AvailableDealOffersListModel listModel = new AvailableDealOffersListModel(deal);
+		return (listModel.isEmpty()) ? this.createDealOfferStep : this.dealAvailabilityStep;
 	}
 
 	@Override

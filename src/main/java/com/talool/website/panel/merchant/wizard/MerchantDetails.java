@@ -15,7 +15,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 
-import com.talool.cache.TagCache;
 import com.talool.core.Category;
 import com.talool.core.Merchant;
 import com.talool.core.Tag;
@@ -72,7 +71,8 @@ public class MerchantDetails extends WizardStep
 			@Override
 			protected void onUpdate(AjaxRequestTarget target)
 			{
-				tagChoices.setChoices(TagCache.get().getTagsByCategoryName(category.getName()));
+				CategoryTagListModel cats = new CategoryTagListModel(category);
+				tagChoices.setChoices(cats.getObject());
 				((Merchant) getDefaultModelObject()).setCategory(category);
 				target.add(tagChoices);
 			}

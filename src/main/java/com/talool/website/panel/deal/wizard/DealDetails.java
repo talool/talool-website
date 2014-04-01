@@ -18,7 +18,7 @@ public class DealDetails extends DynamicWizardStep
 	public DealDetails(DealWizard wiz)
 	{
 		super(null, new ResourceModel("title"), new ResourceModel("summary"));
-		this.nextStep = new DealImage(this, wiz);
+		this.nextStep = new DealTags(this, wiz);
 	}
 
 	@Override

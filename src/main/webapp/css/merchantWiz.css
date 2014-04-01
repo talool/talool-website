@@ -76,14 +76,11 @@ body.talool .merchantWiz .panel.iPhonePanel {
 	left: 15px;
 }
 
-.merchantWiz .colterra {
-	background-image: url(/img/iPhone5_Colterra_boulder.png);
-	background-repeat: no-repeat;
-	background-position: -85px -128px;
-	padding: 10px 15px;
-	height: 560px;
-	width: 305px;
+.merchantWiz select.tags
+{
+	height: 400px;
 }
+
 .merchantWiz .teaser.discover {
 	padding: 0;
 	height: 545px;

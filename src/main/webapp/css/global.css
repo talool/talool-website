@@ -91,6 +91,39 @@ dl dd
 	visibility: hidden;
 }
 
+.showUploader .editControls
+{
+	display:none;
+}
+.editControls
+{
+	overflow:hidden;
+	position:relative;
+}
+.editControls .editControl
+{
+	display:none;
+}
+.editControls:hover .editControl
+{
+	overflow:hidden;
+	display:block;
+	position: absolute;
+	top:0;
+	right:0;
+	padding: 3px 5px;
+	background-color: #ddd;
+}
+
+.showUploader iframe
+{
+	display:block;
+}
+.hideUploader iframe
+{
+	display: none;
+}
+
 /* USER INFO BUTTON */
 .userInfo {
 	text-align: right;
