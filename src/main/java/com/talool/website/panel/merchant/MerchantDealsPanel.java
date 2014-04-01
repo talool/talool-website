@@ -15,6 +15,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -23,18 +24,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
+import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
 import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
 import com.talool.website.component.ConfirmationIndicatingAjaxLink;
-import com.talool.website.component.StaticImage;
 import com.talool.website.models.DealListModel;
 import com.talool.website.models.DealModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.deal.wizard.DealWizard;
+import com.talool.website.panel.image.EditableImage;
 import com.talool.website.util.SessionUtils;
 
 public class MerchantDealsPanel extends BaseTabPanel
@@ -71,7 +73,7 @@ public class MerchantDealsPanel extends BaseTabPanel
 			@Override
 			protected void populateItem(final ListItem<Deal> item)
 			{
-				Deal deal = item.getModelObject();
+				final Deal deal = item.getModelObject();
 				final UUID dealId = deal.getId();
 
 				// Hibernate.initialize(deal);
@@ -88,15 +90,34 @@ public class MerchantDealsPanel extends BaseTabPanel
 				item.add(new Label("summary"));
 				item.add(new Label("details"));
 				
-				MerchantMedia image = deal.getImage();
-				if (image == null)
+				String url = null;
+				if (deal.getImage() != null) 
 				{
-					item.add(new StaticImage("myimage", false, "/img/missing.jpg"));
+					url = deal.getImage().getMediaUrl();
 				}
-				else
+				item.add(new EditableImage("editableImage",Model.of(url), _merchantId, MediaType.DEAL_IMAGE)
 				{
-					item.add(new StaticImage("myimage", false, image.getMediaUrl()));
-				}
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media) 
+					{
+						try
+						{
+							deal.setImage(media);
+							taloolService.merge(deal);
+							target.add(this);
+						}
+						catch (ServiceException se)
+						{
+							LOG.error("Failed to save new image with managedLocation",se);
+						}
+						
+					}
+					
+				});
+				
 				Date exp = deal.getExpires();
 				if (exp != null)
 				{

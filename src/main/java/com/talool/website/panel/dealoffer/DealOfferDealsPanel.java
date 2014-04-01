@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -28,18 +27,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
+import com.talool.core.MediaType;
 import com.talool.core.Merchant;
+import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
 import com.talool.stats.DealSummary;
 import com.talool.website.component.ConfirmationIndicatingAjaxLink;
 import com.talool.website.component.DealMover;
-import com.talool.website.component.StaticImage;
 import com.talool.website.models.DealModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.lists.DealSummaryDataProvider;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.deal.wizard.DealWizard;
+import com.talool.website.panel.image.EditableImage;
 import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SessionUtils;
 
@@ -221,14 +222,29 @@ public class DealOfferDealsPanel extends BaseTabPanel {
 				item.add(new Label("summary"));
 				item.add(new Label("details"));
 				
-				if (StringUtils.isEmpty(deal.getImageUrl()))
+				item.add(new EditableImage("editableImage",Model.of(deal.getImageUrl()), deal.getMerchantId(), MediaType.DEAL_IMAGE)
 				{
-					item.add(new StaticImage("myimage", false, "/img/missing.jpg"));
-				}
-				else
-				{
-					item.add(new StaticImage("myimage", false, deal.getImageUrl()));
-				}
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media) 
+					{
+						try
+						{
+							Deal d = taloolService.getDeal(dealId);
+							d.setImage(media);
+							taloolService.merge(d);
+							target.add(this);
+						}
+						catch (ServiceException se)
+						{
+							LOG.error("Failed to save new image with managedLocation",se);
+						}
+						
+					}
+					
+				});
 				
 
 				item.add(new AjaxLink<Void>("editLink")

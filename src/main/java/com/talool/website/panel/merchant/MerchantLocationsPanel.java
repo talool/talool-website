@@ -16,6 +16,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.MerchantMedia;
@@ -30,6 +31,7 @@ import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.PropertiesPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.image.EditableImage;
 import com.talool.website.panel.merchant.wizard.MerchantWizard;
 import com.talool.website.panel.merchant.wizard.MerchantWizard.MerchantWizardMode;
 import com.talool.website.util.SessionUtils;
@@ -94,15 +96,33 @@ public class MerchantLocationsPanel extends BaseTabPanel
 					item.add(new AttributeModifier("class", "odd-row-bg"));
 				}
 
-				MerchantMedia media = managedLocation.getMerchantImage();
-				if (media == null)
+				String url = null;
+				if (managedLocation.getMerchantImage() != null) 
 				{
-					item.add(new StaticImage("myimage", false, "/img/missing.jpg"));
+					url = managedLocation.getMerchantImage().getMediaUrl();
 				}
-				else
+				item.add(new EditableImage("editableImage",Model.of(url), _merchantId, MediaType.MERCHANT_IMAGE)
 				{
-					item.add(new StaticImage("myimage", false, media.getMediaUrl()));
-				}
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media) 
+					{
+						try
+						{
+							managedLocation.setMerchantImage(media);
+							taloolService.merge(managedLocation);
+							target.add(this);
+						}
+						catch (ServiceException se)
+						{
+							LOG.error("Failed to save new image with managedLocation",se);
+						}
+						
+					}
+					
+				});
 
 				MerchantMedia logo = managedLocation.getLogo();
 				if (logo == null)
