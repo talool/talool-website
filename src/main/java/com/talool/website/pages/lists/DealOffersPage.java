@@ -141,6 +141,8 @@ public class DealOffersPage extends BasePage
 				offer.setDealType(DealType.PAID_BOOK);
 				MerchantLocation offerLocation = offer.getMerchant().getPrimaryLocation();
 				offer.setGeometry(offerLocation.getGeometry());
+				offer.setScheduledStartDate(new Date());
+				offer.setScheduledEndDate(new Date());
 
 				wizard.setModelObject(offer);
 				wizard.open(target);

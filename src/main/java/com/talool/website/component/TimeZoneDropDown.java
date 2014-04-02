@@ -23,7 +23,7 @@ public class TimeZoneDropDown extends DropDownChoice<String>
 {
 	private static final long serialVersionUID = 3901389332228767802L;
 
-	public static String[] SUPPORTED_TIME_ZONES = { "US/Eastern", "US/Central", "US/Mountain", "US/Pacific", "US/Hawaii", "US/Alaska", "GMT" };
+	public static String[] SUPPORTED_TIME_ZONES = { "US/Eastern", "US/Central", "US/Mountain", "US/Pacific", "US/Hawaii", "US/Alaska", "GMT", "UTC" };
 
 	private static List<String> SUPPORTED_IDS_LIST = Arrays.asList(SUPPORTED_TIME_ZONES);
 
