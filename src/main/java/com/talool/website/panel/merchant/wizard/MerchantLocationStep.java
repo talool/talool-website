@@ -25,6 +25,7 @@ import com.talool.website.component.StateSelect;
 import com.talool.website.panel.merchant.MapPreview;
 import com.talool.website.panel.merchant.MapPreviewUpdatingBehaviorController;
 import com.talool.website.panel.merchant.MapPreviewUpdatingBehaviorController.MapComponent;
+import com.talool.website.panel.merchant.wizard.MerchantWizard.MerchantWizardMode;
 import com.vividsolutions.jts.geom.Geometry;
 
 public class MerchantLocationStep extends WizardStep
@@ -38,11 +39,12 @@ public class MerchantLocationStep extends WizardStep
 	
 	private String originalLocation;
 	private Geometry oldGeo;
+	private MerchantWizardMode mode;
 
-	public MerchantLocationStep()
+	public MerchantLocationStep(MerchantWizardMode mode)
 	{
 		super(new ResourceModel("title"), new ResourceModel("summary"));
-		
+		this.mode = mode;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -87,7 +89,7 @@ public class MerchantLocationStep extends WizardStep
 
 		locationPanel.add(new TextField<String>("currentLocation.phone").setRequired(true));
 
-		locationPanel.add(new TextField<String>("currentLocation.websiteUrl").setRequired(true).add(new UrlValidator()));
+		locationPanel.add(new TextField<String>("currentLocation.websiteUrl").add(new UrlValidator()));
 		
 		// TODO drop the email from the data model
 		Merchant merch = (Merchant) getDefaultModelObject();
@@ -158,7 +160,7 @@ public class MerchantLocationStep extends WizardStep
 		
 		
 		// Only save if we have to and the geo is not null
-		if (merchantLocation.getId() == null && newGeo != null)
+		if (merchantLocation.getId() == null && newGeo != null && this.mode.equals(MerchantWizardMode.MERCHANT))
 		{
 			try
 			{

@@ -62,7 +62,7 @@ public class MapPreview extends Panel
 			map.removeAllOverlays();
 			GLatLng center = new GLatLng(pin.getY(), pin.getX());
 			map.setCenter(center);
-			map.addOverlay(new GMarker(new GMarkerOptions(map, new GLatLng(pin.getY(), pin.getX()))));
+			map.addOverlay(new GMarker(new GMarkerOptions(map, center)));
 		}
 	}
 

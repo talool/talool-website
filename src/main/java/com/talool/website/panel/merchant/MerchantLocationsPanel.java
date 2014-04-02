@@ -1,11 +1,14 @@
 package com.talool.website.panel.merchant;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -16,6 +19,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.talool.core.Deal;
 import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
@@ -23,6 +27,7 @@ import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
 import com.talool.domain.Properties;
 import com.talool.service.ServiceFactory;
+import com.talool.website.component.ConfirmationIndicatingAjaxLink;
 import com.talool.website.component.StaticImage;
 import com.talool.website.models.MerchantLocationListModel;
 import com.talool.website.models.MerchantModel;
@@ -213,6 +218,42 @@ public class MerchantLocationsPanel extends BaseTabPanel
 					}
 
 				}.setVisible(page.isSuperUser));
+				
+				StringBuilder confirm = new StringBuilder();
+				confirm.append("Are you sure you want to remove \"").append(managedLocation.getNiceCityState()).append("\"?");
+				ConfirmationIndicatingAjaxLink<Void> deleteLink = new ConfirmationIndicatingAjaxLink<Void>("deleteLink", JavaScriptUtils.escapeQuotes(confirm.toString()).toString())
+				{
+					private static final long serialVersionUID = 268692101349122303L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target)
+					{
+						getSession().getFeedbackMessages().clear();
+						
+						// abort if there is only one location
+						Merchant merchant = new MerchantModel(_merchantId, true).getObject();
+						if (merchant.getLocations().size()<2)
+						{
+							Session.get().error("We can't delete the last location for "+merchant.getName()+".");
+							return;
+						}
+						
+						try 
+						{
+							taloolService.deleteMerchantLocation(managedLocation.getId());
+							target.add(container);
+							Session.get().success(managedLocation.getNiceCityState() + " has been deleted.");
+						} 
+						catch (ServiceException se)
+						{
+							LOG.error("problem fetcing the talool merchant id", se);
+							Session.get().error("There was a problem deleting this location.");
+						}
+						target.add(((BasePage)getPage()).feedback);
+						
+					}
+				};
+				item.add(deleteLink);
 			}
 
 		};

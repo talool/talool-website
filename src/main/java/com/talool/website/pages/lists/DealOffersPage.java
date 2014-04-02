@@ -113,17 +113,6 @@ public class DealOffersPage extends BasePage
 			}
 		});
 
-		container.add(new AjaxLink<Void>("expiresLink")
-		{
-			private static final long serialVersionUID = -4528179721619677443L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				doAjaxSearchRefresh("expires", target);
-			}
-		});
-
 		container.add(new AjaxLink<Void>("activeLink")
 		{
 			private static final long serialVersionUID = -4528179721619677443L;

@@ -41,7 +41,7 @@ public class MerchantWizard extends AbstractWizard<Merchant>
 	{
 		super(id, title);
 		this.mode = mode;
-		this.newLocation = new MerchantLocationStep();
+		this.newLocation = new MerchantLocationStep(mode);
 
 		WizardModel wizardModel = new TaloolWizardModel();
 		if (this.mode.equals(MerchantWizardMode.MERCHANT))

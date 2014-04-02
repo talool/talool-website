@@ -261,6 +261,7 @@ public class DealOfferDealsPanel extends BaseTabPanel {
 					}
 				});
 				
+				final BasePage page = (BasePage)getPage();
 				StringBuilder confirm = new StringBuilder();
 				confirm.append("Are you sure you want to remove \"").append(deal.getTitle()).append("\"?");
 				ConfirmationIndicatingAjaxLink<Void> deleteLink = new ConfirmationIndicatingAjaxLink<Void>("deleteLink", JavaScriptUtils.escapeQuotes(confirm.toString()).toString())
@@ -294,7 +295,7 @@ public class DealOfferDealsPanel extends BaseTabPanel {
 							LOG.error("problem fetcing the talool merchant id", se);
 							Session.get().error("There was a problem removing this deal.  Contact us if you want it removed manually.");
 						}
-						target.add(((BasePage)getPage()).feedback);
+						target.add(page.feedback);
 						
 					}
 				};
