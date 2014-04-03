@@ -104,6 +104,10 @@ public class OpenGraphDealOffer extends OpenGraphRepeator {
 	public String getUrlPath() {
 		StringBuilder sb = new StringBuilder("/offer/");
 		sb.append(offer.getId());
+		if (fundraiser != null & code != null)
+		{
+			sb.append("/").append(code);
+		}
 		return sb.toString();
 	}
 	
