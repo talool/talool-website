@@ -40,15 +40,11 @@ public class PermissionUtils {
 		return isFundraisingPublisher(merchant);
 	}
 	
-	public static boolean canViewAnalytics(Merchant merchant)
+	public static boolean canViewAnalytics(MerchantAccount merchantAccount)
 	{
-		return merchant.getProperties().getAsBool(KeyValue.analytics);
-	}
-	
-	public static boolean canViewAnalytics(UUID merchantId)
-	{
-		Merchant merchant = new MerchantModel(merchantId, true).getObject();
-		return canViewAnalytics(merchant);
+		if (isSuperUser(merchantAccount)) return true;
+		
+		return merchantAccount.getProperties().getAsBool(KeyValue.analytics);
 	}
 	
 	public static boolean isFundraiser(DealOffer offer)

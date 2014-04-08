@@ -27,6 +27,7 @@ import com.talool.website.panel.merchant.PublisherAnalyticsPanel;
 import com.talool.website.panel.message.MerchantMessages;
 import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SecuredPage;
+import com.talool.website.util.SessionUtils;
 
 /**
  * 
@@ -145,7 +146,7 @@ public class MerchantManagementPage extends BaseManagementPage
 				}
 			});
 		}
-		if (PermissionUtils.canViewAnalytics(_merchantId) || isSuperUser)
+		if (PermissionUtils.canViewAnalytics(SessionUtils.getSession().getMerchantAccount()))
 		{
 			tabs.add(new AbstractTab(new Model<String>("Analytics"))
 			{

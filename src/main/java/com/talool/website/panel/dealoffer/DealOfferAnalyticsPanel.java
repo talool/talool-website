@@ -15,7 +15,6 @@ import com.talool.website.panel.analytics.CubismHorizon;
 import com.talool.website.panel.analytics.CubismHorizonFactory;
 import com.talool.website.panel.analytics.CubismPanel;
 import com.talool.website.panel.dashboard.ActiveUsersPanel;
-import com.talool.website.panel.dashboard.AvailableDealsPanel;
 import com.talool.website.panel.dashboard.RecentRedemptionsPanel;
 
 public class DealOfferAnalyticsPanel extends BaseTabPanel {

@@ -82,7 +82,7 @@ public class DealOfferManagementPage extends BaseManagementPage
 		
 		// TODO should not be dependent on isActive, but rather if there have been purchases or activations
 		if (!isKirkeBook(offer) && 
-				PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount()))
+				PermissionUtils.canViewAnalytics(SessionUtils.getSession().getMerchantAccount()))
 		{
 			tabs.add(new AbstractTab(new Model<String>("Analytics"))
 			{
