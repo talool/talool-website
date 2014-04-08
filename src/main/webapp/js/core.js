@@ -33,6 +33,47 @@ $(function() {
 		{
 			return navigator.userAgent.match(/(Android|iPhone|iPod|iPad)/);
 		};
+		
+		this.cubismChart = function(id, horizons, step)
+		{
+			$(id)[0].innerHTML = "";
+			
+			var context = cubism.context().step(step).size(500);
+			var graphite = context.graphite("http://graphite.talool.com");
+
+			d3.select(id).call(function(div) {
+	
+				div.append("div")
+		  		.attr("class", "axis")
+		  		.call(context.axis().orient("top"));
+				
+				for (var h in horizons)
+				{
+					var horizon = horizons[h];
+					
+					var data = [];
+					for (var i=0; i<horizon.metrics.length; i++)
+					{
+						var metric = horizon.metrics[i];
+						data[i] = graphite.metric(metric.definition);
+					}
+					
+					div.append("div")
+				      .attr("class", "horizon")
+				      .data(data)
+				      .call(context
+				    		  .horizon()
+				    		  .height(50)
+				    		  .title(horizon.title)
+				        	);
+				}
+	
+			  	div.append("div")
+			      	.attr("class", "rule")
+			      	.call(context.rule());
+	
+			});
+		};
 
 		this.init();
 

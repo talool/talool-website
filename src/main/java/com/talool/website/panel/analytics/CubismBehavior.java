@@ -11,6 +11,7 @@ import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.template.PackageTextTemplate;
 
 public class CubismBehavior extends Behavior {
@@ -20,14 +21,12 @@ public class CubismBehavior extends Behavior {
 	private List<CubismHorizon> horizons;
 	private double chartStep;
 	
-	public CubismBehavior(List<CubismHorizon> horizons)
+	public CubismBehavior(List<CubismHorizon> horizons, IModel<CubismStep> model)
     {
     	super();
     	this.horizons = horizons;
     	
-    	// TODO Consider calculating the step value based on the start date and current date, 
-    	// or give options to change the step.
-    	chartStep = (1*60*1000); // 3m per value
+    	chartStep = model.getObject().step;
     }
 
 	/**
@@ -44,10 +43,16 @@ public class CubismBehavior extends Behavior {
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
         super.renderHead(component, response);
-        setUploadConfig(component, response);
+        setChartConfig(component, response);
     }
     
-    public void setUploadConfig(Component component, IHeaderResponse response){
+    public void setChartConfig(Component component, IHeaderResponse response)
+    {	
+        response.render(JavaScriptHeaderItem.forScript(getChartConfig(component), "js"+component.getMarkupId()));
+    }
+    
+    public String getChartConfig(Component component)
+    {
     	jsTmpl = new PackageTextTemplate(CubismBehavior.class, "cubismConfig.js");
         Map<String, Object> variables = new HashMap<String, Object>();
 
@@ -55,9 +60,7 @@ public class CubismBehavior extends Behavior {
         variables.put("data",getJSONArrayForMetrics());
         variables.put("chartStep",chartStep);
 
-        String s = jsTmpl.asString(variables);
-        response.render(JavaScriptHeaderItem.forScript(s, "js"+component.getMarkupId()));
-
+        return jsTmpl.asString(variables);
     }
     
     private JSONArray getJSONArrayForMetrics()

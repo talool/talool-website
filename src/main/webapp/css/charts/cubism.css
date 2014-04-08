@@ -12,6 +12,7 @@ svg {
 {
 	width: 522px;
 	margin-bottom: 60px;
+	position: relative;
 }
 
 .cubism div.chart {
@@ -78,4 +79,13 @@ svg {
   background: #000;
   opacity: .2;
   z-index: 2;
+}
+
+.cubism select
+{
+	width: auto;
+	position: absolute;
+	top: 0px;
+	right: 10px;
+	margin: 0;
 }
