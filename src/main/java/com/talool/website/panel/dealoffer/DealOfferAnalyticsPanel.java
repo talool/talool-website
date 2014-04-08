@@ -1,18 +1,22 @@
 package com.talool.website.panel.dealoffer;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.talool.website.models.MetricListModel;
-import com.talool.website.models.MetricListModel.CHART_RANGE;
-import com.talool.website.models.MetricListModel.CHART_TYPE;
+import com.talool.website.models.DealOfferModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.analytics.ChartPanel;
+import com.talool.website.panel.analytics.CubismHorizon;
+import com.talool.website.panel.analytics.CubismHorizonFactory;
+import com.talool.website.panel.analytics.CubismPanel;
+import com.talool.website.panel.dashboard.ActiveUsersPanel;
+import com.talool.website.panel.dashboard.AvailableDealsPanel;
+import com.talool.website.panel.dashboard.RecentRedemptionsPanel;
 
 public class DealOfferAnalyticsPanel extends BaseTabPanel {
 
@@ -29,26 +33,15 @@ public class DealOfferAnalyticsPanel extends BaseTabPanel {
 	protected void onInitialize() {
 		super.onInitialize();
 		
-		MetricListModel customerChartModel = new MetricListModel(_dealOfferId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.CUSTOMERS);
-		addOrReplace(new ChartPanel("customerChart", "Customers", customerChartModel));
+		DealOfferModel model = new DealOfferModel(_dealOfferId);
+		List<CubismHorizon> metrics = CubismHorizonFactory.getPurchaseMetrics(model.getObject());
+		add(new CubismPanel("chart", "Purchase Activity", metrics));
 		
-		MetricListModel activationChartModel = new MetricListModel(_dealOfferId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.BOOKS);
-		addOrReplace(new ChartPanel("activationChart", "Activations", activationChartModel));
-		
-		MetricListModel redemptionChartModel = new MetricListModel(_dealOfferId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.REDEMPTIONS);
-		addOrReplace(new ChartPanel("redemptionChart", "Redemptions", redemptionChartModel));
-		
-		MetricListModel giftChartModel = new MetricListModel(_dealOfferId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.GIFTS);
-		addOrReplace(new ChartPanel("giftChart", "Gifts", giftChartModel));
-		
-		MetricListModel dealChartModel = new MetricListModel(_dealOfferId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.POPULAR_DEALS);
-		addOrReplace(new ChartPanel("dealChart", "Popular Deals", dealChartModel));
-		
-		MetricListModel merchantChartModel = new MetricListModel(_dealOfferId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.POPULAR_MERCHANTS);
-		addOrReplace(new ChartPanel("merchantChart", "Popular Merchants", merchantChartModel));
+		add(new RecentRedemptionsPanel("recentRedemptions", _dealOfferId));
+		add(new ActiveUsersPanel("activeUsers", _dealOfferId));
 		
 		// hide the action button
-		final BasePage page = (BasePage) getPage();
+		final BasePage page = (BasePage) this.getPage();
 		page.getActionLink().add(new AttributeModifier("class","hide"));
 	}
 

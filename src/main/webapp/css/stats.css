@@ -7,7 +7,6 @@
 
 .statsModule h3
 {
-	background-color: rgba(222,222,222,1.0);
 	padding: 5px 10px;
 	margin: 0;
 }
@@ -114,3 +113,18 @@ table.meta .borderedBox td
 {
 	width: auto;
 }
+
+.analytics
+{
+	vertical-align: top;
+	padding-right: 80px;
+}
+
+.analytics th
+{
+	text-align: left;
+}
+
+
+
+

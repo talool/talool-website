@@ -8,33 +8,15 @@
 		<table class="dashboard">
 			<tr class="no-bdr">
 				<td>
-					<div wicket:id="availableDeals"/>
+					<div wicket:id="availableDeals"></div>
+					<div wicket:id="recentRedemptions"></div>
+					<div wicket:id="activeUsers"></div>
 				</td>
-				<td>
-					<div wicket:id="recentRedemptions"/>
-				</td>
-			</tr>
-			<tr class="no-bdr">
-				<td>
-					<div wicket:id="activeUsers"/>
-				</td>
-				<td>
-					<div wicket:id="merchantReaches"/>
+				<td class="stats" style="vertical-align:top">
+					<div wicket:id="chart"></div>
 				</td>
 			</tr>
 		</table>
-		
-		<table class="stats">
-			<tr>
-				<td wicket:id="dealChart"></td>
-				<td wicket:id="customerChart"></td>
-			</tr>
-			<tr>
-				<td wicket:id="redemptionChart"></td>
-				<td wicket:id="giftChart"></td>
-			</tr>
-		</table>
-		
 		
 	</wicket:extend>
 </html>

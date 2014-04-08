@@ -1,6 +1,7 @@
 package com.talool.website.panel.analytics;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.Component;
@@ -12,19 +13,21 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.util.template.PackageTextTemplate;
 
-import com.talool.website.models.MetricListModel;
-import com.talool.website.models.MetricListModel.Metric;
-
 public class CubismBehavior extends Behavior {
 
 	private static final long serialVersionUID = 3989069660334116805L;
 	private PackageTextTemplate jsTmpl;
-	private MetricListModel model;
+	private List<CubismHorizon> horizons;
+	private double chartStep;
 	
-	public CubismBehavior(MetricListModel model)
+	public CubismBehavior(List<CubismHorizon> horizons)
     {
     	super();
-    	this.model = model;
+    	this.horizons = horizons;
+    	
+    	// TODO Consider calculating the step value based on the start date and current date, 
+    	// or give options to change the step.
+    	chartStep = (1*60*1000); // 3m per value
     }
 
 	/**
@@ -49,35 +52,41 @@ public class CubismBehavior extends Behavior {
         Map<String, Object> variables = new HashMap<String, Object>();
 
         variables.put("componentMarkupId", component.getMarkupId());
-        //variables.put("labels",getLabelsForConfig());
-        //variables.put("data",getDataForConfig());
+        variables.put("data",getJSONArrayForMetrics());
+        variables.put("chartStep",chartStep);
 
         String s = jsTmpl.asString(variables);
         response.render(JavaScriptHeaderItem.forScript(s, "js"+component.getMarkupId()));
 
     }
     
-    private JSONObject getJSONObjectForMetric(Metric metric, int lineIndex)
+    private JSONArray getJSONArrayForMetrics()
     {
-    	JSONObject m = new JSONObject();
+    	JSONArray data = new JSONArray();
     	try
     	{
-    		m.put("fillColor", model.getJsonColor(lineIndex,false));
-    		m.put("strokeColor", model.getJsonColor(lineIndex,true));
-    		m.put("pointColor", model.getJsonColor(lineIndex,true));
-    		m.put("pointStrokeColor", "#fff");
-    		JSONArray data = new JSONArray();
-    		for (Integer i:metric.data)
+    		for (CubismHorizon h:horizons)
     		{
-    			data.put(i);
+    			JSONObject horizonObject = new JSONObject();
+    			horizonObject.put("title",h.getTitle());
+    			JSONArray metricArray = new JSONArray();
+    			for (GraphiteMetric m:h.getMetrics())
+        		{
+    				JSONObject metricObject = new JSONObject();
+    				metricObject.put("title",m.getTitle());
+    				metricObject.put("definition", m.getDefinition());
+    				metricArray.put(metricObject);
+        		}
+    			horizonObject.put("metrics", metricArray);
+    			data.put(horizonObject);
     		}
-    		m.put("data", data);
+    		
     	}
     	catch (JSONException e)
     	{
     		// log exception
     	}
-		return m;
+		return data;
     }
     
     

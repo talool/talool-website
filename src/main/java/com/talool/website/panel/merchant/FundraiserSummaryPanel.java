@@ -39,12 +39,11 @@ import com.talool.utils.KeyValue;
 import com.talool.website.behaviors.AJAXDownload;
 import com.talool.website.component.PropertyComboBox;
 import com.talool.website.models.MerchantModel;
-import com.talool.website.models.MetricListModel;
-import com.talool.website.models.MetricListModel.CHART_RANGE;
-import com.talool.website.models.MetricListModel.CHART_TYPE;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.analytics.CubismHorizon;
+import com.talool.website.panel.analytics.CubismHorizonFactory;
 import com.talool.website.panel.analytics.CubismPanel;
 import com.talool.website.panel.merchant.wizard.MerchantWizard;
 import com.talool.website.panel.merchant.wizard.MerchantWizard.MerchantWizardMode;
@@ -137,8 +136,8 @@ public class FundraiserSummaryPanel extends BaseTabPanel
 		};
 		container.add(propteryList.setVisible(page.isSuperUser));
 
-		MetricListModel customerChartModel = new MetricListModel(_fundraiserId, CHART_RANGE.LAST_6_MONTHS, CHART_TYPE.CUSTOMERS);
-		CubismPanel chart = new CubismPanel("salesChart", "Sales", customerChartModel);
+		List<CubismHorizon> metrics = CubismHorizonFactory.getFundraiserPurchaseMetricsByFundraiserId(_fundraiserId);
+		CubismPanel chart = new CubismPanel("salesChart", "Purchase Activity", metrics);
 		container.add(chart.setVisible(PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount())));
 
 		final PropertyComboBox comboBox = new PropertyComboBox("comboBox",

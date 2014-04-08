@@ -8,9 +8,20 @@ svg {
   shape-rendering: crispEdges;
 }
 
-.statsModule div.chart {
+.cubism
+{
+	width: 522px;
+	margin-bottom: 60px;
+}
+
+.cubism div.chart {
   position: relative;
   padding: 0;
+}
+
+.cubism h3
+{
+	margin-bottom: 20px;
 }
 
 .axis {

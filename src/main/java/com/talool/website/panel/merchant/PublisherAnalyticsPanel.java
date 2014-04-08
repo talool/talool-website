@@ -15,16 +15,15 @@ import com.talool.website.panel.analytics.CubismHorizonFactory;
 import com.talool.website.panel.analytics.CubismPanel;
 import com.talool.website.panel.dashboard.ActiveUsersPanel;
 import com.talool.website.panel.dashboard.AvailableDealsPanel;
-import com.talool.website.panel.dashboard.MerchantReachPanel;
 import com.talool.website.panel.dashboard.RecentRedemptionsPanel;
 
-public class MerchantAnalyticsPanel extends BaseTabPanel {
+public class PublisherAnalyticsPanel extends BaseTabPanel {
 
 	private static final long serialVersionUID = 522375793977325630L;
 
 	private UUID _merchantId;
 	
-	public MerchantAnalyticsPanel(String id, PageParameters parameters) {
+	public PublisherAnalyticsPanel(String id, PageParameters parameters) {
 		super(id);
 		_merchantId = UUID.fromString(parameters.get("id").toString());
 	}
@@ -33,10 +32,9 @@ public class MerchantAnalyticsPanel extends BaseTabPanel {
 	protected void onInitialize() {
 		super.onInitialize();
 		
-		List<CubismHorizon> metrics = CubismHorizonFactory.getRedemptionMetricsByMerchantId(_merchantId);
-		add(new CubismPanel("chart", "Redemption Activity", metrics));
+		List<CubismHorizon> metrics = CubismHorizonFactory.getKeyMetrics(_merchantId);
+		add(new CubismPanel("chart", "Purchase Activity", metrics));
 		
-		add(new AvailableDealsPanel("availableDeals", _merchantId));
 		add(new RecentRedemptionsPanel("recentRedemptions", _merchantId));
 		add(new ActiveUsersPanel("activeUsers", _merchantId));
 		

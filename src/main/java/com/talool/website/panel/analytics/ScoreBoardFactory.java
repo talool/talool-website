@@ -263,7 +263,7 @@ public final class ScoreBoardFactory
 	public static ScoreBoardPanel createTotalBookActivations(final String id, final ActivationCodeSummary summary)
 	{
 		final StringBuilder sb = new StringBuilder(summary.dealOfferTitle);
-		final String title = sb.append(" Activations").toString();
+		final String title = sb.toString();
 		sb.setLength(0);
 
 		final NumberFormat percentFormat = NumberFormat.getPercentInstance();

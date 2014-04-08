@@ -1,45 +1,66 @@
 $(function() {
-	var context = cubism.context()
-	    .step(30*60*1000) // 30m per value
-	    .size(500);
 	
-	var colors = ["rgba(220,220,220,1)",
-    	"rgba(25, 188, 185, 0.7)",
-    	"rgba(241, 90, 36, 0.7)",
-    	"rgba(80, 185, 72, 0.7)",
-    	"rgba(237, 28, 36, 0.6)"];
-	
-	var graphite = context.graphite("http://graphite.talool.com");
-	
-	// TODO we don't have 500hrs of data, so make sure it is in sync with the step and size
-	var redemptions = graphite.metric("stats_counts.talool.redemption")
-							  .summarize("30m");
-							  //.shift(-7 * 24 * 60 * 60 * 1000); // last 7 days
-
-	d3.select("#${componentMarkupId}").call(function(div) {
-
+	setTimeout(function() {
 		
+		var step = ${chartStep};
+		
+		var context = cubism.context()
+		    .step(step)  
+		    .size(500);
+		
+		// TODO review the greens in cubism and replace with teals
+		/*
+		var colors = ["rgba(220,220,220,1)",
+	    	"rgba(25, 188, 185, 0.7)",
+	    	"rgba(241, 90, 36, 0.7)",
+	    	"rgba(80, 185, 72, 0.7)",
+	    	"rgba(237, 28, 36, 0.6)"];
+		*/
+		
+		var graphite = context.graphite("http://graphite.talool.com");
+		
+		var horizons = ${data};
+		
+		d3.select("#${componentMarkupId}").call(function(div) {
 
-	  	div.selectAll(".horizon")
-	      	.data([redemptions])
-	      	.enter().append("div")
-	      	.attr("class", "horizon")
-	      	.call(context.horizon().height(100).colors(colors).title("").extent([-5, 5]));
-	  	
-	  	div.append("div")
-      		.attr("class", "axis")
-      		.call(context.axis().orient("bottom"));
+			div.append("div")
+	  		.attr("class", "axis")
+	  		.call(context.axis().orient("top"));
+			
+			for (var h in horizons)
+			{
+				var horizon = horizons[h];
+				
+				var data = [];
+				for (var i=0; i<horizon.metrics.length; i++)
+				{
+					var metric = horizon.metrics[i];
+					data[i] = graphite.metric(metric.definition);
+				}
+				
+				div.append("div")
+			      .attr("class", "horizon")
+			      .data(data)
+			      .call(context
+			    		  .horizon()
+			    		  .height(50)
+			    		  .title(horizon.title)
+			        	);
+			}
 
-	  	div.append("div")
-	      	.attr("class", "rule")
-	      	.call(context.rule());
+		  	div.append("div")
+		      	.attr("class", "rule")
+		      	.call(context.rule());
 
-	});
+		});
+		
+		//On mousemove, reposition the chart values to match the rule.
+		//context.on("focus", function(i) {
+		//  d3.selectAll(".value").style("right", i == null ? null : context.size() + 20 - i + "px");
+		//});
+		
+	}, 100 );
 	
-	//On mousemove, reposition the chart values to match the rule.
-	context.on("focus", function(i) {
-	  d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
-	});
 });
 
 

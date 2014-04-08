@@ -13,6 +13,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wicketstuff.gmap.GMap;
 
+import com.talool.core.Merchant;
+import com.talool.utils.KeyValue;
+import com.talool.website.models.MerchantModel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.MerchantAccountsPanel;
 import com.talool.website.panel.merchant.MerchantAnalyticsPanel;
@@ -20,6 +23,7 @@ import com.talool.website.panel.merchant.MerchantDealOffersPanel;
 import com.talool.website.panel.merchant.MerchantDealsPanel;
 import com.talool.website.panel.merchant.MerchantLocationsPanel;
 import com.talool.website.panel.merchant.MerchantSummaryPanel;
+import com.talool.website.panel.merchant.PublisherAnalyticsPanel;
 import com.talool.website.panel.message.MerchantMessages;
 import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SecuredPage;
@@ -44,7 +48,16 @@ public class MerchantManagementPage extends BaseManagementPage
 	@Override
 	public String getHeaderTitle()
 	{
-		return "Merchants > " + getPageParameters().get("name");
+		Merchant merchant = new MerchantModel(_merchantId, true).getObject();
+		if (merchant.getProperties().getAsBool(KeyValue.publisher))
+		{
+			return "Publishers > " + getPageParameters().get("name");
+		}
+		else
+		{
+			return "Merchants > " + getPageParameters().get("name");
+		}
+		
 	}
 
 	@Override
@@ -142,7 +155,15 @@ public class MerchantManagementPage extends BaseManagementPage
 				@Override
 				public Panel getPanel(String panelId)
 				{
-					return new MerchantAnalyticsPanel(panelId, getPageParameters());
+					Merchant merchant = new MerchantModel(_merchantId, true).getObject();
+					if (merchant.getProperties().getAsBool(KeyValue.publisher))
+					{
+						return new PublisherAnalyticsPanel(panelId, getPageParameters());
+					}
+					else
+					{
+						return new MerchantAnalyticsPanel(panelId, getPageParameters());
+					}
 				}
 				
 				

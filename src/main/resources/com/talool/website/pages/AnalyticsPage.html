@@ -4,31 +4,56 @@
 	</wicket:head>
 	
 	<wicket:extend>
-		<div>
-		
-			<div wicket:id="customerChart"></div>
-			<div wicket:id="locationChart"></div>
-			<div wicket:id="bookChart" style="clear:left"></div>
-			<div wicket:id="purchaseChart"></div>
-			<div wicket:id="activationChart" style="clear:left"></div>
-			<div wicket:id="redemptionChart"></div>
-			<div wicket:id="giftChart" style="clear:left"></div>
-			
-			<div style="clear:both"></div>
-		</div>	
-		<div wicket:id="totalCustomers"></div>
-		
-		<div wicket:id="totalFacebookCustomers"></div>
-		
-		<div wicket:id="totalRedemptions"></div>
-		
-		<div wicket:id="totalEmailGifts"></div>
-		
-		<div wicket:id="totalFacebookGifts"></div>
-		
-		<div wicket:id="activationStatRptr">
-			<div wicket:id="totalActivations"></div>
-		</div>
+
+		<table class="dashboard">
+			<tr class="no-bdr">
+				<td class="analytics">
+					<h3>Key Metrics</h3>
+					<table>
+						<tr>
+							<th class="metricName">Metric</th>
+							<th>Total <em>(%)</em></th>
+						</tr>
+
+						<tr>
+			  				<wicket:container wicket:id="totalCustomers"></wicket:container>
+			  			</tr>
+			  			<tr>
+			  				<wicket:container wicket:id="totalFacebookCustomers"></wicket:container>
+			  			</tr>
+			  			<tr>
+			  				<wicket:container wicket:id="totalRedemptions"></wicket:container>
+			  			</tr>
+			  			<tr>
+			  				<wicket:container wicket:id="totalEmailGifts"></wicket:container>
+			  			</tr>
+			  			<tr>
+			  				<wicket:container wicket:id="totalFacebookGifts"></wicket:container>
+			  			</tr>
+			  			
+			  		</table>
+			  		
+			  		<br/><br/>
+			  		
+			  		<h3>Activations</h3>
+					<table>
+						<tr>
+							<th class="metricName">Book</th>
+							<th>Total <em>(%)</em></th>
+						</tr>
+						
+			  			<tr wicket:id="rptr">
+			  				<wicket:container wicket:id="metric"></wicket:container>
+			  			</tr>
+					</table>
+	
+				</td>
+				<td class="stats">
+					<div wicket:id="chart"></div>
+					<div wicket:id="purchaseChart"></div>
+				</td>
+			</tr>
+		</table>
 	
 	</wicket:extend>
 </html>
