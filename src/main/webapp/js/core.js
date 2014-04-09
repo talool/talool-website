@@ -40,7 +40,9 @@ $(function() {
 			
 			var context = cubism.context().step(step).size(size);
 			var graphite = context.graphite("http://graphite.talool.com");
-
+			
+			var talool_colors = ["#d94701","#fd8d3c","#fdbe85","#feedde","#83e0dc","#00bfb7","#008a83","#19534f"];
+			
 			d3.select(id).call(function(div) {
 	
 				div.append("div")
@@ -65,6 +67,7 @@ $(function() {
 				    		  .horizon()
 				    		  .height(50)
 				    		  .title(horizon.title)
+				    		  .colors(talool_colors)
 				        	);
 				}
 	
