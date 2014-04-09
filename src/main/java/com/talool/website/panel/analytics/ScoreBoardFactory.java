@@ -1,6 +1,5 @@
 package com.talool.website.panel.analytics;
 
-import java.text.NumberFormat;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,9 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.talool.core.service.AnalyticService.ActivationCodeSummary;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
-import com.talool.website.Constants;
 import com.talool.website.service.PermissionService;
-import com.talool.website.util.SafeSimpleDecimalFormat;
 import com.talool.website.util.SessionUtils;
 
 /**
@@ -58,7 +55,7 @@ public final class ScoreBoardFactory
 
 	}
 
-	private static class MetricCountModel extends LoadableDetachableModel<String>
+	private static class MetricCountModel extends LoadableDetachableModel<MetricCount>
 	{
 		private static final long serialVersionUID = -4968676121844147519L;
 
@@ -80,10 +77,10 @@ public final class ScoreBoardFactory
 		}
 
 		@Override
-		protected String load()
+		protected MetricCount load()
 		{
-			long count = 0;
-
+			Long count = 0L;
+			Long total = 0L;
 			try
 			{
 				switch (metricType)
@@ -97,7 +94,7 @@ public final class ScoreBoardFactory
 						{
 							count = ServiceFactory.get().getAnalyticService().getPublishersCustomerTotal(merchantId);
 						}
-
+						
 						break;
 
 					case TotalRedemptions:
@@ -153,15 +150,13 @@ public final class ScoreBoardFactory
 				LOG.error("Problem gettting totalCustomers", se);
 			}
 
-			final SafeSimpleDecimalFormat formatter = new SafeSimpleDecimalFormat(Constants.FORMAT_COMMA_NUMBER);
-
-			return formatter.format(count);
+			return new MetricCount(count, total);
 		}
 	}
 
 	public static ScoreBoardPanel createTotalCustomers(String id)
 	{
-		return new ScoreBoardPanel(id, "Customers",
+		return new ScoreBoardPanel(id, "Registrations",
 				new MetricCountModel(MetricType.TotalCustomers));
 
 	}
@@ -216,15 +211,14 @@ public final class ScoreBoardFactory
 
 	public static ScoreBoardPanel createTotalFacebookCustomers(String id)
 	{
-		return new ScoreBoardPanel(id, "Facebook Customers", new AbstractReadOnlyModel<String>()
+		return new ScoreBoardPanel(id, "Facebook Customers", new AbstractReadOnlyModel<MetricCount>()
 		{
 
 			private static final long serialVersionUID = 4759222549302823144L;
 
 			@Override
-			public String getObject()
+			public MetricCount getObject()
 			{
-				final StringBuilder sb = new StringBuilder();
 				Long fb = null;
 				Long count = null;
 
@@ -241,19 +235,12 @@ public final class ScoreBoardFactory
 						fb = ServiceFactory.get().getAnalyticService().getPublishersFacebookCustomerTotal(publisherMerchantId);
 						count = ServiceFactory.get().getAnalyticService().getPublishersCustomerTotal(publisherMerchantId);
 					}
-
-					final NumberFormat percentFormat = NumberFormat.getPercentInstance();
-					percentFormat.setMaximumFractionDigits(2);
-
-					final SafeSimpleDecimalFormat formatter = new SafeSimpleDecimalFormat(Constants.FORMAT_COMMA_NUMBER);
-
-					sb.append(formatter.format(fb)).append(" (").append(String.valueOf(percentFormat.format((float) fb / (float) count))).append(")");
 				}
 				catch (ServiceException e)
 				{
 					e.printStackTrace();
 				}
-				return sb.toString();
+				return new MetricCount(fb,count);
 			}
 
 		});
@@ -262,18 +249,6 @@ public final class ScoreBoardFactory
 
 	public static ScoreBoardPanel createTotalBookActivations(final String id, final ActivationCodeSummary summary)
 	{
-		final StringBuilder sb = new StringBuilder(summary.dealOfferTitle);
-		final String title = sb.toString();
-		sb.setLength(0);
-
-		final NumberFormat percentFormat = NumberFormat.getPercentInstance();
-		percentFormat.setMaximumFractionDigits(2);
-
-		final SafeSimpleDecimalFormat formatter = new SafeSimpleDecimalFormat(Constants.FORMAT_COMMA_NUMBER);
-		sb.append(formatter.format(summary.totalActivatedCodes)).append("/").append(formatter.format(summary.totalCodes)).append(" (").
-				append(String.valueOf(percentFormat.format((float) summary.totalActivatedCodes / (float) summary.totalCodes))).append(")");
-
-		return new ScoreBoardPanel(id, title, Model.of(sb.toString()));
-
+		return new ScoreBoardPanel(id, summary.dealOfferTitle, Model.of(new MetricCount(summary.totalActivatedCodes,summary.totalCodes)));
 	}
 }

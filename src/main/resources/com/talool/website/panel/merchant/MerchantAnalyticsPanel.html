@@ -5,18 +5,14 @@
 	
 	<wicket:extend>
 	
-		<table class="dashboard">
-			<tr class="no-bdr">
-				<td>
-					<div wicket:id="availableDeals"></div>
-					<div wicket:id="recentRedemptions"></div>
-					<div wicket:id="activeUsers"></div>
-				</td>
-				<td class="stats" style="vertical-align:top">
-					<div wicket:id="chart"></div>
-				</td>
-			</tr>
-		</table>
+		<div class="stats">
+			<div class="cubismContainer">
+				<div wicket:id="chart"></div>
+				<div wicket:id="recentRedemptions"></div>
+				<div wicket:id="activeUsers"></div>
+				<div wicket:id="availableDeals"></div>
+			</div>
+		</div>
 		
 	</wicket:extend>
 </html>

@@ -14,9 +14,9 @@ public class ScoreBoardPanel extends Panel
 	private static final long serialVersionUID = -2193478480235823659L;
 
 	private String scoreBoardLabel;
-	private IModel<?> model;
-
-	public ScoreBoardPanel(String id, String scoreBoardLabel, IModel<?> model)
+	private IModel<MetricCount> model;
+	
+	public ScoreBoardPanel(String id, String scoreBoardLabel, IModel<MetricCount> model)
 	{
 		super(id);
 		this.scoreBoardLabel = scoreBoardLabel;
@@ -30,7 +30,11 @@ public class ScoreBoardPanel extends Panel
 
 		add(new Label("scoreBoardLabel", scoreBoardLabel));
 
-		add(new Label("scoreBoardMetric", model));
+		add(new Label("scoreBoardMetric", model.getObject().getCount()));
+		
+		add(new Label("total", model.getObject().getTotal()));
+		
+		add(new Label("percentage", model.getObject().getPercentage()));
 
 	}
 

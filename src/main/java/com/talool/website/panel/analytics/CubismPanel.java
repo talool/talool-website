@@ -20,11 +20,13 @@ public class CubismPanel extends Panel {
 	private List<CubismHorizon> horizons;
 	private CubismStep step;
 	
+	private static final int size = 1000;
+	
 	// Define the unit of measure for a "step"
-	// based on a chart width of 500px, 
-	// (60*60*1000)/500 = 7200, (7.2 sec)
-	// round down to 7000 so graphite doesn't barf
-	private static final double oneHour = 7000; 
+	// based on a chart width of 1000px, 
+	// (60*60*1000)/500 = 3600, (3.6 sec)
+	// round up to 4000 so graphite doesn't barf
+	private static final double oneHour = 4000; 
 	
 	// steps must be great than our lowest retention threshold (10s or 10000)
 	public static CubismStep[] SUPPORTED_STEPS = { 
@@ -56,7 +58,7 @@ public class CubismPanel extends Panel {
 		
 		final WebMarkupContainer chart = new WebMarkupContainer("chartCanvas");
 		add(chart.setOutputMarkupId(true));
-		chart.add(new CubismBehavior(horizons, model));
+		chart.add(new CubismBehavior(horizons, model, size));
 
 		DropDownChoice<CubismStep> stepPicker = new DropDownChoice<CubismStep>("chartStep", model, choices, renderer);
 		add(stepPicker.setOutputMarkupId(true));
@@ -67,7 +69,7 @@ public class CubismPanel extends Panel {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) 
 			{	
-				CubismBehavior b = new CubismBehavior(horizons, model);
+				CubismBehavior b = new CubismBehavior(horizons, model, size);
 				target.appendJavaScript(b.getChartConfig(chart));
 			}
 			

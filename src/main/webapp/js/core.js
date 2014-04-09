@@ -34,11 +34,11 @@ $(function() {
 			return navigator.userAgent.match(/(Android|iPhone|iPod|iPad)/);
 		};
 		
-		this.cubismChart = function(id, horizons, step)
+		this.cubismChart = function(id, horizons, step, size)
 		{
 			$(id)[0].innerHTML = "";
 			
-			var context = cubism.context().step(step).size(500);
+			var context = cubism.context().step(step).size(size);
 			var graphite = context.graphite("http://graphite.talool.com");
 
 			d3.select(id).call(function(div) {

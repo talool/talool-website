@@ -20,12 +20,13 @@ public class CubismBehavior extends Behavior {
 	private PackageTextTemplate jsTmpl;
 	private List<CubismHorizon> horizons;
 	private double chartStep;
+	private int chartSize;
 	
-	public CubismBehavior(List<CubismHorizon> horizons, IModel<CubismStep> model)
+	public CubismBehavior(List<CubismHorizon> horizons, IModel<CubismStep> model, int size)
     {
     	super();
     	this.horizons = horizons;
-    	
+    	chartSize = size;
     	chartStep = model.getObject().step;
     }
 
@@ -59,6 +60,7 @@ public class CubismBehavior extends Behavior {
         variables.put("componentMarkupId", component.getMarkupId());
         variables.put("data",getJSONArrayForMetrics());
         variables.put("chartStep",chartStep);
+        variables.put("chartSize",chartSize);
 
         return jsTmpl.asString(variables);
     }

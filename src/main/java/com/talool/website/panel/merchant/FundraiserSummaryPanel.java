@@ -136,10 +136,6 @@ public class FundraiserSummaryPanel extends BaseTabPanel
 		};
 		container.add(propteryList.setVisible(page.isSuperUser));
 
-		List<CubismHorizon> metrics = CubismHorizonFactory.getFundraiserPurchaseMetricsByFundraiserId(_fundraiserId);
-		CubismPanel chart = new CubismPanel("salesChart", "Purchase Activity", metrics);
-		container.add(chart.setVisible(PermissionUtils.canViewAnalytics(SessionUtils.getSession().getMerchantAccount())));
-
 		final PropertyComboBox comboBox = new PropertyComboBox("comboBox",
 				Model.of(fundraiser.getProperties()), Merchant.class)
 		{

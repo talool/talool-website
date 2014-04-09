@@ -1,3 +1,10 @@
+.cubismContainer
+{
+	width: 1000px;
+	margin: 30px 0;
+	border: 1px solid #ddd;
+}
+
 svg {
   font: 10px sans-serif;
 }
@@ -10,8 +17,6 @@ svg {
 
 .cubism
 {
-	width: 522px;
-	margin-bottom: 60px;
 	position: relative;
 }
 
@@ -22,7 +27,9 @@ svg {
 
 .cubism h3
 {
-	margin-bottom: 20px;
+	margin: 0px;
+	padding:10px;
+	background: #ddd;
 }
 
 .axis {
@@ -84,8 +91,30 @@ svg {
 .cubism select
 {
 	width: auto;
-	position: absolute;
-	top: 0px;
-	right: 10px;
+	float: right;
+	margin: 10px;
+}
+
+.cubismContainer table
+{
 	margin: 0;
+	background: #eee;
+}
+
+.cubismContainer table tr:hover
+{
+	background-color: rgba(25, 188, 185, 0.1);
+}
+
+.cubismContainer table th
+{
+	background: #ddd;
+	text-align: left;
+	padding: 10px;
+	white-space: nowrap;
+}
+
+.cubismContainer table th.metricName
+{
+	width: 70%;
 }

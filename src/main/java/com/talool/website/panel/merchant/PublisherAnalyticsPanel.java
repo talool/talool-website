@@ -35,9 +35,6 @@ public class PublisherAnalyticsPanel extends BaseTabPanel {
 		List<CubismHorizon> metrics = CubismHorizonFactory.getKeyMetrics(_merchantId);
 		add(new CubismPanel("chart", "Purchase Activity", metrics));
 		
-		add(new RecentRedemptionsPanel("recentRedemptions", _merchantId));
-		add(new ActiveUsersPanel("activeUsers", _merchantId));
-		
 		// hide the action button
 		final BasePage page = (BasePage) this.getPage();
 		page.getActionLink().add(new AttributeModifier("class","hide"));

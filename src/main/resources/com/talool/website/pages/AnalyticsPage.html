@@ -5,14 +5,16 @@
 	
 	<wicket:extend>
 
-		<table class="dashboard">
-			<tr class="no-bdr">
-				<td class="analytics">
-					<h3>Key Metrics</h3>
+		<div class="analytics stats">
+
+				<div class="cubismContainer">
+					<div wicket:id="chart"></div>
 					<table>
 						<tr>
 							<th class="metricName">Metric</th>
-							<th>Total <em>(%)</em></th>
+							<th>Count</th>
+							<th>Total</th>
+							<th>Percentage</th>
 						</tr>
 
 						<tr>
@@ -33,27 +35,25 @@
 			  			
 			  		</table>
 			  		
-			  		<br/><br/>
+			  	</div>
+			  	
+			  	<div class="cubismContainer">
 			  		
-			  		<h3>Activations</h3>
+			  		<div wicket:id="purchaseChart"></div>
 					<table>
 						<tr>
 							<th class="metricName">Book</th>
-							<th>Total <em>(%)</em></th>
+							<th>Activations</th>
+							<th>Access Codes</th>
+							<th>Percentage</th>
 						</tr>
 						
 			  			<tr wicket:id="rptr">
 			  				<wicket:container wicket:id="metric"></wicket:container>
 			  			</tr>
 					</table>
-	
-				</td>
-				<td class="stats">
-					<div wicket:id="chart"></div>
-					<div wicket:id="purchaseChart"></div>
-				</td>
-			</tr>
-		</table>
+				</div>
+		</div>
 	
 	</wicket:extend>
 </html>

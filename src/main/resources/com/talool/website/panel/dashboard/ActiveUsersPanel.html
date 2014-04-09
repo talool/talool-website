@@ -1,26 +1,14 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
+
 	<table>
 		<tr>
-			<th>Active Users</th>
-			<th class="a-r">see all</th>
+			<th>Customer</th>
+			<th class="a-r">Total Redemptions</th>
 		</tr>
-		<tr class="no-bdr">
-			<td colspan="2">
-				<table>
-					<tr>
-						<th>Customer</th>
-						<th class="a-r">Deals Used</th>
-						<th class="a-r">Visits</th>
-						<th class="a-r">Messages</th>
-					</tr>
-					<tr wicket:id="rptr">
-		  				<td wicket:id="customerName"></td>
-		  				<td wicket:id="dealCount" class="a-r"></td>
-		  				<td class="a-r">TBD</td>
-		  				<td class="a-r">TBD</td>
-		  			</tr>
-				</table>
-			</td>
-		</tr>
+		<tr wicket:id="rptr">
+ 				<td wicket:id="customerName"></td>
+ 				<td wicket:id="dealCount" class="a-r"></td>
+ 			</tr>
 	</table>
+
 </wicket:panel>

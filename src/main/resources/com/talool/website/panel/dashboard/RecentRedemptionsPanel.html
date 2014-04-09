@@ -1,26 +1,18 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
+
 	<table>
 		<tr>
-			<th>Recent Deal Redemptions</th>
-			<th class="a-r">see all</th>
+			<th>Recently Redeemed Deal</th>
+			<th class="a-r">Customer</th>
+			<th class="a-r">Redemption Code</th>
+			<th class="a-r">Date</th>
 		</tr>
-		<tr class="no-bdr">
-			<td colspan="2">
-				<table>
-					<tr>
-						<th>Title</th>
-						<th class="a-r">Customer</th>
-						<th class="a-r">Redemption Code</th>
-						<th class="a-r">Date</th>
-					</tr>
-					<tr wicket:id="rptr">
-						<td wicket:id="title" ></td>
-		  				<td wicket:id="customerName"class="a-r"></td>
-		  				<td wicket:id="code" class="a-r"></td>
-		  				<td wicket:id="date" class="a-r"></td>
-		  			</tr>
-				</table>
-			</td>
-		</tr>
+		<tr wicket:id="rptr">
+			<td wicket:id="title" ></td>
+ 				<td wicket:id="customerName"class="a-r"></td>
+ 				<td wicket:id="code" class="a-r"></td>
+ 				<td wicket:id="date" class="a-r"></td>
+ 			</tr>
 	</table>
+
 </wicket:panel>
