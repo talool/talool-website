@@ -43,7 +43,7 @@ public class DealImage extends DynamicWizardStep
 		
 		image = deal.getImage();
 		PropertyModel<MerchantMedia> selectedMediaModel = new PropertyModel<MerchantMedia>(this,"image");
-		MediaSelectionPanel imagePanel = new MediaSelectionPanel("dealImage", deal.getMerchant().getId(), MediaType.DEAL_IMAGE, selectedMediaModel)
+		MediaSelectionPanel imagePanel = new MediaSelectionPanel("dealImage", deal.getMerchant().getId(), MediaType.DEAL_IMAGE, selectedMediaModel, deal.getTags())
 		{
 
 			private static final long serialVersionUID = 1L;

@@ -9,7 +9,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -25,7 +24,7 @@ import com.talool.website.util.SessionUtils;
 
 /**
  * 
- * @author clintz
+ * @author dmccuen
  * 
  */
 @SecuredPage
@@ -64,7 +63,7 @@ public class MediaManagementPage extends BaseManagementPage
 			@Override
 			public Panel getPanel(String panelId)
 			{
-				return new MediaPickerTab(panelId, _merchantId, MediaType.MERCHANT_IMAGE, Model.of(selectedMedia)){
+				return new MediaPickerTab(panelId, null, MediaType.MERCHANT_IMAGE, Model.of(selectedMedia), true){
 
 					private static final long serialVersionUID = -8058739501703670519L;
 

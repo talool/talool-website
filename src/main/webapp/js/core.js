@@ -34,6 +34,23 @@ $(function() {
 			return navigator.userAgent.match(/(Android|iPhone|iPod|iPad)/);
 		};
 		
+		this.mediaPicker = function()
+		{
+			$("ul.thumbnails.image_picker_selector").each(function(idx, elem){
+				$(elem).remove();
+			});
+			
+			$("select.merchantMediaSelector option").each(function(idx, elem){
+				if (elem.value.indexOf("http")==0)
+				{
+					$(elem).attr("data-img-src",elem.value);
+				}
+			});
+			
+			$("select.merchantMediaSelector").imagepicker();
+			
+		};
+		
 		this.cubismChart = function(id, horizons, step, size)
 		{
 			$(id)[0].innerHTML = "";

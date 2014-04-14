@@ -4,25 +4,16 @@
 	    <script src="/js/image-picker.min.js"></script>
 	</wicket:head>
 	<wicket:panel>
-
-		<select class="merchantMediaSelector" wicket:id="availableMedia" style="display:none"><option>Default Media</option></select>
-
-		<script>
+		<table class="library">
+			<tr>
+				<td wicket:id="tagFilters" style="vertical-align:top; width: 200px"></td>
+				<td style="vertical-align:top">
+					<select class="merchantMediaSelector" wicket:id="availableMedia" style="display:none"><option>Default Media</option></select>
+					<script>$(function(){window.oo.mediaPicker();});</script>
+				</td>
+			</tr>
+		</table>
 		
-		$(function(){
-			
-			$("select.merchantMediaSelector option").each(function(idx, elem){
-				if (elem.value.indexOf("http")==0)
-				{
-					$(elem).attr("data-img-src",elem.value);
-				}
-			});
-			
-			$("select.merchantMediaSelector").imagepicker();
-			
-		});
-	       
-		</script>
 	</wicket:panel>
 	
 </html>

@@ -2,6 +2,7 @@ package com.talool.website.panel.image.selection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -14,6 +15,7 @@ import org.apache.wicket.model.Model;
 
 import com.talool.core.MediaType;
 import com.talool.core.MerchantMedia;
+import com.talool.core.Tag;
 import com.talool.website.models.MerchantMediaListModel;
 
 public abstract class MediaSelectionPanel extends Panel {
@@ -22,6 +24,7 @@ public abstract class MediaSelectionPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private UUID merchantId;
 	private MediaType mediaType;
+	private Set<Tag> tags;
 	private IModel<MerchantMedia> merchantMediaModel;
 	private AjaxTabbedPanel<ITab> tabbedPanel;
 	private int iframeHeight = 300;
@@ -31,6 +34,14 @@ public abstract class MediaSelectionPanel extends Panel {
 		merchantMediaModel = model;
 		mediaType = mt;
 		merchantId = mid;
+	}
+	
+	public MediaSelectionPanel(String id, UUID mid, MediaType mt, IModel<MerchantMedia> model, Set<Tag> tags) {
+		super(id);
+		merchantMediaModel = model;
+		mediaType = mt;
+		merchantId = mid;
+		this.tags = tags;
 	}
 	
 	@Override
@@ -103,7 +114,7 @@ public abstract class MediaSelectionPanel extends Panel {
 				@Override
 				public Panel getPanel(String panelId)
 				{
-					return new MediaPickerTab(panelId, null, mediaType, merchantMediaModel)
+					return new MediaPickerTab(panelId, null, mediaType, merchantMediaModel, tags)
 					{
 	
 						private static final long serialVersionUID = 1L;

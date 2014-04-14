@@ -41,7 +41,7 @@ public class MerchantLocationImage extends WizardStep
 
 		selectedImage = merchant.getCurrentLocation().getMerchantImage();
 		PropertyModel<MerchantMedia> selectedImageModel = new PropertyModel<MerchantMedia>(this,"selectedImage");
-		MediaSelectionPanel imagePanel = new MediaSelectionPanel("merchantMediaImage", merchant.getId(), MediaType.MERCHANT_IMAGE, selectedImageModel)
+		MediaSelectionPanel imagePanel = new MediaSelectionPanel("merchantMediaImage", merchant.getId(), MediaType.MERCHANT_IMAGE, selectedImageModel, merchant.getTags())
 		{
 
 			private static final long serialVersionUID = 1L;
