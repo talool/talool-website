@@ -82,7 +82,7 @@ abstract public class MediaPickerTab extends Panel
 		ChoiceRenderer<MerchantMedia> cr = new ChoiceRenderer<MerchantMedia>("mediaName", "mediaUrl");
 		
 		LoadableDetachableModel<List<MerchantMedia>> model;
-		if (showFilters)
+		if (showFilters || merchantId==null)
 		{
 			model = new StockMediaListModel(tags);
 		}

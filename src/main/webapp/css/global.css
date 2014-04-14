@@ -9,6 +9,12 @@ body {
 p {
 	line-height: 21px;
 }
+
+td
+{
+	vertical-align: top;
+}
+
 table.contentWrapper {
 	width: 100%;
 	border: none;

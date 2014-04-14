@@ -125,6 +125,13 @@ table.meta .borderedBox td
 	text-align: left;
 }
 
-
-
+.stockMediaStats
+{
+	width: 320px;
+}
+.stockMediaStats img
+{
+	display: inline-block;
+	margin-bottom: 30px;
+}
 
