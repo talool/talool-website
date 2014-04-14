@@ -1,0 +1,23 @@
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+	    <link rel="stylesheet" type="text/css" href="/css/image-picker.css"/>
+	    <script src="/js/image-picker.min.js"></script>
+	</wicket:head>
+	<wicket:panel>
+		<table class="library">
+			<tr>
+				<td style="vertical-align:top; width: 200px">
+					<div wicket:id="tagFilters"></div>
+					<br/><br/>
+					<a wicket:id="applyTags" class="btn">Apply Tags</a>
+				</td>
+				<td style="vertical-align:top">
+					<select multiple="multiple" class="merchantMediaSelector" wicket:id="availableMedia" style="display:none"><option>Default Media</option></select>
+					<script>$(function(){window.oo.mediaPicker();});</script>
+				</td>
+			</tr>
+		</table>
+		
+	</wicket:panel>
+	
+</html>

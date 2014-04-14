@@ -2,6 +2,7 @@ package com.talool.website.pages;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.wicket.RestartResponseException;
@@ -156,19 +157,23 @@ public class MediaSummaryPage extends BasePage
 		delete.setOutputMarkupId(true);
 		container.add(delete.setEnabled(usageCount == 0));
 		
-		TagPickerPanel tpp = new TagPickerPanel("tagPicker", _media.getCategory(), _media.getTags())
+		PropertyModel<Set<Tag>> tagModel = new PropertyModel<Set<Tag>>(_media,"tags");
+		TagPickerPanel tpp = new TagPickerPanel("tagPicker", _media.getCategory(), tagModel)
 		{
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onTagsSelectionComplete(AjaxRequestTarget target, Category category, List<Tag> tags) 
+			public void onTagsSelectionComplete(AjaxRequestTarget target, Category category, Set<Tag> tags) 
 			{
 				try
 				{
 					_media.setCategory(category);
 					_media.clearTags();
-					_media.addTags(tags);
+					
+					List<Tag> tl = new ArrayList<Tag>();
+					tl.addAll(tags);
+					_media.addTags(tl);
 					taloolService.saveMerchantMedia(_media);
 				}
 				catch (ServiceException se)

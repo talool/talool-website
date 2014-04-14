@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.PropertyModel;
 
 import com.talool.core.Category;
 import com.talool.core.MediaType;
@@ -68,9 +69,8 @@ abstract public class MediaPickerTab extends Panel
 		Category category = (new CategoryListModel()).getObject().get(0);
 		CategoryTagListModel tagsModel = new CategoryTagListModel(category);
 		Tag tag = tagsModel.getObject().get(0);
-		Set<Tag> tags = new HashSet<Tag>();
-		tags.add(tag);
-		this.tags = tags;
+		this.tags = new HashSet<Tag>(); 
+		this.tags.add(tag);
 
 	}
 
@@ -109,15 +109,15 @@ abstract public class MediaPickerTab extends Panel
 			
 		});
 		
-		TagPickerPanel tpp = new TagPickerPanel("tagFilters")
+		PropertyModel<Set<Tag>> selectedTags = new PropertyModel<Set<Tag>>(this,"tags");
+		TagPickerPanel tpp = new TagPickerPanel("tagFilters",selectedTags)
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onTagsSelectionComplete(AjaxRequestTarget target, Category category, List<Tag> tl) 
+			public void onTagsSelectionComplete(AjaxRequestTarget target, Category category, Set<Tag> ts) 
 			{
-				tags = new HashSet<Tag>();
-				tags.addAll(tl);
+				tags = ts;
 				mediaSelect.setChoices(new StockMediaListModel(tags));
 				target.add(mediaSelect);
 				target.appendJavaScript("window.oo.mediaPicker();");

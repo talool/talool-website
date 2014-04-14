@@ -1,7 +1,5 @@
 package com.talool.website.panel;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -10,6 +8,7 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,10 +29,10 @@ abstract public class TagPickerPanel extends Panel
 			"name");
 	protected Category category;
 	
-	private List<Tag> tags = new ArrayList<Tag>();
+	private IModel<Set<Tag>> tags;
 	private ListMultipleChoice<Tag> tagChoices;
 
-	public TagPickerPanel(String id, Category cat, Set<Tag> tags)
+	public TagPickerPanel(String id, Category cat, IModel<Set<Tag>> tags)
 	{
 		super(id);
 		if (cat==null)
@@ -41,22 +40,21 @@ abstract public class TagPickerPanel extends Panel
 			cat = (new CategoryListModel()).getObject().get(0);
 		}
 		category = cat;
-		this.tags.addAll(tags);
+		this.tags = tags;
 	}
 	
-	public TagPickerPanel(String id)
+	public TagPickerPanel(String id, IModel<Set<Tag>> tags)
 	{
 		super(id);
 		category = (new CategoryListModel()).getObject().get(0);
+		this.tags = tags;
 	}
 	
 	public void addChoices()
 	{
 		CategoryTagListModel tagsModel = new CategoryTagListModel(category);
-		tagsModel.setIncludeDefault(true);
 		
-		tagChoices = new ListMultipleChoice<Tag>("tags", new PropertyModel<List<Tag>>(
-				this, "tags"), tagsModel.getObject(), choiceRender);
+		tagChoices = new ListMultipleChoice<Tag>("tags", tags, tagsModel.getObject(), choiceRender);
 		
 		tagChoices.setMaxRows(25);
 		tagChoices.setOutputMarkupId(true);
@@ -69,11 +67,7 @@ abstract public class TagPickerPanel extends Panel
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				if (tags.contains(CategoryTagListModel.dTag))
-				{
-					tags.clear();
-				}
-				onTagsSelectionComplete(target, category, tags);
+				onTagsSelectionComplete(target, category, tags.getObject());
 			}
 			
 		});
@@ -110,11 +104,10 @@ abstract public class TagPickerPanel extends Panel
 	protected void setChoices(AjaxRequestTarget target)
 	{
 		CategoryTagListModel tagsModel = new CategoryTagListModel(category);
-		tagsModel.setIncludeDefault(true);
 		tagChoices.setChoices(tagsModel.getObject());
 		target.add(tagChoices);
 	}
 
-	abstract public void onTagsSelectionComplete(AjaxRequestTarget target, Category category, List<Tag> tags);
+	abstract public void onTagsSelectionComplete(AjaxRequestTarget target, Category category, Set<Tag> tags);
 
 }

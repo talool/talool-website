@@ -18,6 +18,7 @@ import com.talool.core.Merchant;
 import com.talool.core.MerchantMedia;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.image.selection.MediaPickerTab;
+import com.talool.website.panel.image.selection.MediaTaggerPanel;
 import com.talool.website.panel.image.selection.MediaUploadTab;
 import com.talool.website.util.SecuredPage;
 import com.talool.website.util.SessionUtils;
@@ -74,6 +75,18 @@ public class MediaManagementPage extends BaseManagementPage
 					}
 					
 				};
+			}
+		});
+		
+		tabs.add(new AbstractTab(new Model<String>("Untagged Images"))
+		{
+
+			private static final long serialVersionUID = 5853871222415506440L;
+
+			@Override
+			public Panel getPanel(String panelId)
+			{
+				return new MediaTaggerPanel(panelId);
 			}
 		});
 		

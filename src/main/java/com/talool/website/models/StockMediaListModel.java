@@ -1,5 +1,6 @@
 package com.talool.website.models;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -28,12 +29,12 @@ public class StockMediaListModel extends LoadableDetachableModel<List<MerchantMe
 	private static final Logger LOG = LoggerFactory.getLogger(StockMediaListModel.class);
 	private static final String talool = "Talool";
 	private UUID _taloolMerchantId = null;
-	private Set<Tag> _tags;
+	private Collection<Tag> _tags;
 	
 	private static final transient TaloolService taloolService = ServiceFactory.get().getTaloolService();
 
 	
-	public StockMediaListModel(Set<Tag> tags) {
+	public StockMediaListModel(Collection<Tag> tags) {
 		super();
 		
 		_tags = tags;
@@ -59,7 +60,7 @@ public class StockMediaListModel extends LoadableDetachableModel<List<MerchantMe
 
 		try
 		{
-			media = taloolService.getStockMedias(_taloolMerchantId, _tags, searchOptions);
+			media = taloolService.getStockMedias(_taloolMerchantId, (Set<Tag>)_tags, searchOptions);
 		}
 		catch (ServiceException e)
 		{
