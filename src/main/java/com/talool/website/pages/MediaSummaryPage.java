@@ -17,15 +17,18 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.talool.core.Category;
 import com.talool.core.Deal;
 import com.talool.core.DealOffer;
 import com.talool.core.MediaType;
 import com.talool.core.MerchantLocation;
 import com.talool.core.MerchantMedia;
+import com.talool.core.Tag;
 import com.talool.core.service.ServiceException;
 import com.talool.website.component.StaticImage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.TagPickerPanel;
 import com.talool.website.panel.image.selection.MediaPickerTab;
 import com.talool.website.util.SecuredPage;
 
@@ -152,10 +155,38 @@ public class MediaSummaryPage extends BasePage
 		};
 		delete.setOutputMarkupId(true);
 		container.add(delete.setEnabled(usageCount == 0));
+		
+		TagPickerPanel tpp = new TagPickerPanel("tagPicker", _media.getCategory(), _media.getTags())
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onTagsSelectionComplete(AjaxRequestTarget target, Category category, List<Tag> tags) 
+			{
+				try
+				{
+					_media.setCategory(category);
+					_media.clearTags();
+					_media.addTags(tags);
+					taloolService.saveMerchantMedia(_media);
+				}
+				catch (ServiceException se)
+				{
+					error("Failied to tag media");
+					LOG.error("failed to tag media",se);
+				}
+				target.add(page.feedback);
+			}
+			
+		};
+
+		container.add(tpp);
 	}
 	
 	private void updateModels()
 	{
+		
 		try
 		{
 			MediaType mediaType = _media.getMediaType();
