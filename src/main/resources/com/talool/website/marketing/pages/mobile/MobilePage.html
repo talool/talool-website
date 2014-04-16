@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+	<head>
+	
+		<title><wicket:message key="title"/></title>
+	
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  		<meta name="apple-mobile-web-app-capable" content="yes">
+  		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+  		
+  		<meta name="apple-itunes-app" content="app-id=669529943,app-argument=talool://">
+  		
+  		<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,700' rel='stylesheet' type='text/css'>
+  		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+    	
+    	<link rel="stylesheet" type="text/css" href="/css/font-awesome.css">
+	    <link rel="stylesheet" type="text/css" href="/css/marketing/mobile.css">
+ 
+  		<!-- jQuery and jQuery Mobile -->
+  		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  		<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+  		
+  		<script src="/js/mobile.js"></script>
+  		
+  		<script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		
+		  ga('create', 'UA-42344079-3', 'talool.com');
+		  ga('send', 'pageview');
+		  
+		</script>
+
+	</head>
+    <body class="talool mobile">
+
+	    <div class="" data-role="page" id="page">
+    		
+    		<div 
+				data-role="panel" 
+				data-display="reveal"
+				data-position="left"
+				class="menu"
+				id="menu">
+				
+				<ul 
+					data-role="listview"
+					data-inset="true">
+					<li><a href="/m" data-prefetch="true">Home</a></li>
+				    <li><a href="/m/customers" data-prefetch="true">Customers</a></li>
+				    <li><a href="/m/publishers" data-prefetch="true">Publishers</a></li>
+				    <li><a href="/m/fundraisers" data-prefetch="true">Fundraisers</a></li>
+				    <li><a href="/m/merchants" data-prefetch="true">Merchants</a></li>
+				</ul>
+				
+				<ul 
+					data-role="listview"
+					data-inset="true">
+				    <li><a href="/m/privacy" data-prefetch="true">Privacy Policy</a></li>
+				    <li><a href="/m/terms" data-prefetch="true">Terms of Use</a></li>
+				    <li><a href="/m/contact" data-prefetch="true">Contact Us</a></li>
+				    <li><a href="/m/password" data-prefetch="true">Forgot Password</a></li>
+				</ul>
+
+			</div>
+    		
+    		<div 
+    			data-theme="c"
+    			data-position="fixed"
+    			data-role="header">
+    			
+    			<a
+    				data-role="button"
+    				data-iconpos="notext"
+    				data-mini="true"
+    				data-iconshadow="false"
+    				data-shadow="false"
+    				data-corners="false"
+    				class="icon icon-large icon-reorder"
+    				href="#menu">menu</a>
+    				
+    			<img class="logo" alt="Talool" src="/img/homepage/TaloolLogoIcon2.png"/>
+    			
+    			<a
+    				data-role="button"
+    				data-iconpos="notext"
+    				data-mini="true"
+    				data-iconshadow="false"
+    				data-shadow="false"
+    				data-corners="false"
+    				class="icon icon-large icon-download-alt ui-btn-right"
+    				id="download">menu</a>
+    				
+    		</div>
+    		
+    		<div data-role="content">
+    			<wicket:child/>
+    		</div>
+	    </div>
+	    
+    </body>
+</html>

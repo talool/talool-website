@@ -1,0 +1,255 @@
+
+
+.hp a 
+{
+	color: rgb(25, 188, 185);
+}
+
+.hp .header {
+	padding: 20px 55px 10px 40px;
+	position: relative;
+}
+.hp .header .logo {
+	position: absolute;
+	top:20px;
+	left:40px;
+	border: 0;
+}
+
+
+
+.hp h1 {
+	margin-top: 30px;
+	font-weight: bold;
+	font-size: 36px;
+}
+.hp h2 {
+	margin-top: 30px;
+	font-weight: normal;
+	font-size: 32px;
+}
+.hp h3 {
+	margin-top: 30px;
+	font-size: 18px;
+}
+.hp .learnMore {
+	text-align: center;
+	padding: 30px 20px;
+}
+
+.hp .learnMore h2
+{
+	margin-top: 0;
+}
+
+.hp .learnMore a
+{
+	margin: 0 20px;
+}
+
+
+.talool .hp .content 
+{
+	margin: 0;
+}
+.hp .platformBenefits, 
+.hp .content 
+{
+	padding: 10px 40px 30px;
+}
+.hp .footer
+{
+	text-align: left;
+	padding: 10px 0;
+	font-size: 12px;
+	margin-bottom: 100px;
+}
+.hp .footer span
+{
+	float: right;
+}
+.hp .footer.true-gray-font, .hp .footer.true-gray-font a, .hp .footer.true-gray-font a:visited {
+	color: rgb(190, 190, 190);
+}
+.hp .benefitsDesc
+{
+	padding: 10px 40px;
+	border-top: 1px solid;
+}
+
+.feedbackPanel
+{
+	margin: 50px 50px 20px;
+}
+
+.passwordRecovery
+{
+	margin: 50px 50px 200px;
+}
+.passwordRecovery table
+{
+	
+}
+.passwordRecovery td
+{
+	padding: 0 0 10px;
+}
+.passwordRecovery input.txt
+{
+	width: 230px;
+	line-height: 28px;
+	font-size: 16px;
+}
+.passwordRecovery label
+{
+	line-height: 28px;
+	padding-right: 15px;
+}
+
+.passwordRecovery .btn
+{
+	vertical-align: top;
+	margin-left: 15px;
+}
+.passwordRecovery .controls
+{
+	text-align: right;
+}
+
+/* ==================== */
+.hp {
+	padding: 0;
+	margin: 0px auto;
+	width: 1200px;
+	background-color: white;
+	font-size:16px;
+}
+.hp .appDesc 
+{
+	padding: 10px 430px 10px 60px;
+	height: 725px;
+	background: url(/img/homepage/iPhone5Boulder7.png) no-repeat right -50px;
+}
+
+.hp .header .nav {
+	line-height: 50px;
+	margin-left: 220px;
+	text-align: right;
+}
+
+.hp .header .nav em
+{
+	font-style: normal;
+	font-weight: normal;
+	color: rgb(25, 188, 185);
+	margin: 0 0 0 30px;
+}
+
+.hp .header .nav a, 
+.hp .header .nav a:hover, 
+.hp .header .nav a:visited {
+	margin: 0 0 0 30px;
+	color: rgb(153, 134, 117);
+}
+
+.hp .appicons
+{
+	margin: 20px 0 0;
+	text-align: center;
+}
+.hp .appicons img
+{
+	border: 0;
+}
+.hp .appicons a
+{
+	display: inline-block;
+	margin: 0 10px;
+}
+
+.circles
+{
+	margin-top: 80px;
+}
+.circles td
+{
+	width: 150px;
+	text-align: center;
+}
+.circles .circle
+{
+	border: 1px solid black;
+	width: 210px;
+	height: 210px;
+	border-radius: 105px;
+	margin: 20px auto 20px;
+	overflow:hidden;
+}
+.circles td.acenter
+{
+	padding: 0 25px;
+}
+.circles .caption
+{
+	text-align: center;
+	width: 180px;
+	margin: 0 auto;
+}
+.circles .caption h3
+{
+	margin: 0 0 10px;
+}
+.hp .hero
+{
+	padding: 0 0 20px;
+	background-color: rgba(200,200,200,.2);
+}
+.hp .hero img
+{
+	display: block;
+}
+.hp .hero h2
+{
+	margin: 30px 50px 10px;
+}
+.hp .hero p
+{
+	margin: 0 50px 15px;
+}
+
+.hp .hero .fineprint
+{
+	margin: 0 50px 25px;
+	font-size: 12px;
+}
+
+.hp .hero .learnmore
+{
+	margin: 25px 50px;
+}
+.hp .hero .learnmore .btn
+{
+	margin-right: 10px;
+}
+
+.hp table.pricing
+{
+	width: 1100px;
+	margin: 25px 50px 10px;
+	border-collapse:collapse; 
+	border-spacing: 0;
+	font-size: 13px;
+}
+.hp .pricing tr
+{
+	border-bottom: 1px solid #eee;
+}
+.hp .pricing th
+{
+	text-align: left;
+	font-size: 14px;
+}
+.hp .pricing td
+{
+	padding: 10px 5px;
+}
