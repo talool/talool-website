@@ -56,7 +56,7 @@ $(function() {
 			$(id)[0].innerHTML = "";
 			
 			var context = cubism.context().step(step).size(size);
-			var graphite = context.graphite("http://graphite.talool.com");
+			var graphite = context.graphite("http://carb.talool.com");
 			
 			var talool_colors = ["#d94701","#fd8d3c","#fdbe85","#feedde","#83e0dc","#00bfb7","#008a83","#19534f"];
 			

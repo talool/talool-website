@@ -52,7 +52,7 @@ $(function() {
 			
 			$(".og").parent(".ui-content").addClass("og");
 			
-			// check if this is a table
+			// check if this is a tablet
 			var ww = ( $(window).width() < window.screen.width ) ? $(window).width() : window.screen.width; //get proper width
 			if (ww > 600) 
 			{

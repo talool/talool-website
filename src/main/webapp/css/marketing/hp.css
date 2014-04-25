@@ -7,21 +7,16 @@
 
 .hp .header {
 	padding: 20px 55px 10px 40px;
-	position: relative;
+	width: 100%;
 }
 .hp .header .logo {
-	position: absolute;
-	top:20px;
-	left:40px;
 	border: 0;
 }
 
-
-
 .hp h1 {
-	margin-top: 30px;
-	font-weight: bold;
-	font-size: 36px;
+	margin-top: 120px;
+	font-weight: normal;
+	font-size: 35px;
 }
 .hp h2 {
 	margin-top: 30px;
@@ -124,6 +119,11 @@
 	background-color: white;
 	font-size:16px;
 }
+.hp p.large
+{
+	font-size: 24px;
+	line-height: 32px;
+}
 .hp .appDesc 
 {
 	padding: 10px 430px 10px 60px;
@@ -131,9 +131,14 @@
 	background: url(/img/homepage/iPhone5Boulder7.png) no-repeat right -50px;
 }
 
+.hp .appDesc.whiteLabel
+{
+	height: 800px;
+	background: url(/img/homepage/iPhone5Boulder7.png) no-repeat right 25px;
+}
+
 .hp .header .nav {
 	line-height: 50px;
-	margin-left: 220px;
 	text-align: right;
 }
 
@@ -155,7 +160,6 @@
 .hp .appicons
 {
 	margin: 20px 0 0;
-	text-align: center;
 }
 .hp .appicons img
 {
@@ -164,12 +168,13 @@
 .hp .appicons a
 {
 	display: inline-block;
-	margin: 0 10px;
+	margin: 0 20px 0 0;
 }
 
 .circles
 {
-	margin-top: 80px;
+	width: 80%;
+	margin: 0 auto;
 }
 .circles td
 {
@@ -252,4 +257,46 @@
 .hp .pricing td
 {
 	padding: 10px 5px;
+}
+
+.hp .registration .label
+{
+	width: 150px;
+}
+.hp .registration table
+{
+	margin: 25px 10px 10px;
+	border-collapse:collapse; 
+	border-spacing: 0;
+}
+.hp .registration td
+{
+	padding-bottom: 20px;
+}
+.hp .registration input.small
+{
+	width: 47px;
+}
+.hp .registration input.medium
+{
+	width: 105px;
+}
+.hp .registration input.large
+{
+	width: 220px;
+}
+.hp .registration .small-text
+{
+	font-size: 13px;
+}
+
+.hp .appDesc dl
+{
+	margin-left: 20px;
+	margin-bottom: 30px;
+	font-size: 13px;
+}
+.hp .appDesc dd
+{
+	margin-bottom: 15px;
 }
