@@ -115,7 +115,7 @@
 .hp {
 	padding: 0;
 	margin: 0px auto;
-	width: 1200px;
+	width: 1000px;
 	background-color: white;
 	font-size:16px;
 }
@@ -127,8 +127,7 @@
 }
 .hp .appDesc 
 {
-	padding: 10px 500px 10px 60px;
-	height: 720px;
+	padding: 10px 470px 50px 60px;
 	background: url(/img/homepage/hpbg.png) repeat-x right bottom;
 	position: relative;
 	overflow: hidden;
@@ -147,8 +146,7 @@
 .hp .appDesc.fundraising,
 .hp .appDesc.tools
 {
-	height: 800px;
-	padding-right: 500px;
+	padding-right: 380px;
 }
 
 .hp .appDesc.fundraising .phone
@@ -158,8 +156,7 @@
 
 .hp .appDesc.whiteLabel
 {
-	height: 920px;
-	padding-right: 500px;
+	padding-right: 430px;
 }
 .hp .appDesc.whiteLabel .phone
 {
@@ -192,7 +189,7 @@
 
 .hp .appicons
 {
-	margin: 20px 0 0;
+	margin: 20px 0 100px;
 }
 .hp .appicons img
 {
@@ -272,7 +269,7 @@
 
 .hp table.pricing
 {
-	width: 1100px;
+	width: 900px;
 	margin: 25px 50px 10px;
 	border-collapse:collapse; 
 	border-spacing: 0;
@@ -327,6 +324,7 @@
 {
 	margin-left: 20px;
 	margin-bottom: 30px;
+	font-size: 13px;
 }
 .hp .appDesc dd
 {
