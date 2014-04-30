@@ -51,17 +51,16 @@ import com.talool.website.marketing.pages.app.MerchantServices;
 import com.talool.website.marketing.pages.app.PrivacyPolicy;
 import com.talool.website.marketing.pages.app.PublisherServices;
 import com.talool.website.marketing.pages.app.TermsOfService;
+import com.talool.website.marketing.pages.mobile.MobileAnalyticsPage;
 import com.talool.website.marketing.pages.mobile.MobileContactPage;
-import com.talool.website.marketing.pages.mobile.MobileCustomerPage;
-import com.talool.website.marketing.pages.mobile.MobileFundraiserPage;
+import com.talool.website.marketing.pages.mobile.MobileFundraisingPage;
 import com.talool.website.marketing.pages.mobile.MobileGiftReturnedPage;
 import com.talool.website.marketing.pages.mobile.MobileHomePage;
-import com.talool.website.marketing.pages.mobile.MobileMerchantPage;
 import com.talool.website.marketing.pages.mobile.MobilePasswordPage;
 import com.talool.website.marketing.pages.mobile.MobilePasswordResetPage;
 import com.talool.website.marketing.pages.mobile.MobilePrivacyPage;
-import com.talool.website.marketing.pages.mobile.MobilePublisherPage;
 import com.talool.website.marketing.pages.mobile.MobileTermsPage;
+import com.talool.website.marketing.pages.mobile.MobileWhiteLabelPage;
 import com.talool.website.pages.AdminLoginPage;
 import com.talool.website.pages.AnalyticsPage;
 import com.talool.website.pages.CustomerManagementPage;
@@ -192,10 +191,9 @@ public class TaloolApplication extends WebApplication implements Serializable
 
 		// Mobile Web Pages
 		mountPage("/m", MobileHomePage.class);
-		mountPage("/m/customers", MobileCustomerPage.class);
-		mountPage("/m/publishers", MobilePublisherPage.class);
-		mountPage("/m/fundraisers", MobileFundraiserPage.class);
-		mountPage("/m/merchants", MobileMerchantPage.class);
+		mountPage("/m/fundraising", MobileFundraisingPage.class);
+		mountPage("/m/analytics", MobileAnalyticsPage.class);
+		mountPage("/m/whitelabel", MobileWhiteLabelPage.class);
 		mountPage("/m/terms", MobileTermsPage.class);
 		mountPage("/m/privacy", MobilePrivacyPage.class);
 		mountPage("/m/contact", MobileContactPage.class);

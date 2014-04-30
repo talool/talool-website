@@ -5,7 +5,33 @@
 	margin: 6px;
 	color: rgba(115, 115, 115, .7);
 }
+.talool.mobile .hero img
+{
+	display: none;
+}
+.talool.mobile .hero h2
+{
+	margin-top: 50px;
+}
 
+.talool.mobile .appDesc dl
+{
+	margin-left: 20px;
+	margin-bottom: 30px;
+}
+.talool.mobile .appDesc dt
+{
+	font-weight: bold;
+}
+.talool.mobile .appDesc dd
+{
+	margin-bottom: 15px;
+	margin-left: 0;
+}
+.notOnMobile
+{
+	display: none;
+}
 .talool.mobile #menu
 {
 	background-color: #fff;

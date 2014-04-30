@@ -2,13 +2,13 @@ package com.talool.website.marketing.pages.mobile;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.talool.website.marketing.panel.PublisherPanel;
+import com.talool.website.marketing.panel.AnalyticsPanel;
 
-public class MobilePublisherPage extends MobilePage {
+public class MobileAnalyticsPage extends MobilePage {
 
 	private static final long serialVersionUID = 1L;
 
-	public MobilePublisherPage(PageParameters parameters)
+	public MobileAnalyticsPage(PageParameters parameters)
 	{
 		super(parameters);
 	}
@@ -18,6 +18,6 @@ public class MobilePublisherPage extends MobilePage {
 	{
 		super.onInitialize();
 		
-		add(new PublisherPanel("content"));
+		add(new AnalyticsPanel("content"));
 	}
 }

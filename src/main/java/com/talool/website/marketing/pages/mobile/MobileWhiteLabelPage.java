@@ -2,13 +2,13 @@ package com.talool.website.marketing.pages.mobile;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.talool.website.marketing.panel.MerchantPanel;
+import com.talool.website.marketing.panel.WhiteLabelPanel;
 
-public class MobileMerchantPage extends MobilePage {
+public class MobileWhiteLabelPage extends MobilePage {
 
 	private static final long serialVersionUID = 1L;
 
-	public MobileMerchantPage(PageParameters parameters)
+	public MobileWhiteLabelPage(PageParameters parameters)
 	{
 		super(parameters);
 	}
@@ -18,6 +18,6 @@ public class MobileMerchantPage extends MobilePage {
 	{
 		super.onInitialize();
 		
-		add(new MerchantPanel("content"));
+		add(new WhiteLabelPanel("content"));
 	}
 }
