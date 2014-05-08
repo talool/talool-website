@@ -324,6 +324,9 @@
 {
 	margin-left: 20px;
 	margin-bottom: 30px;
+}
+.hp .appDesc dl.small
+{
 	font-size: 13px;
 }
 .hp .appDesc dd

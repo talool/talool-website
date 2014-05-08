@@ -73,7 +73,10 @@ body.android .apple
 {
 	margin: 15px 0;
 }
-
+.talool.mobile .learnmore.fixed-width a
+{
+	width: 260px;
+}
 .mobile .ui-content.og
 {
 	padding: 0;

@@ -19,6 +19,8 @@ public class BaseMarketingPage extends WebPage
 {
 	private static final long serialVersionUID = 8390824646913457971L;
 
+	protected PageParameters parameters;
+	
 	public BaseMarketingPage()
 	{
 		super();
@@ -27,6 +29,7 @@ public class BaseMarketingPage extends WebPage
 	public BaseMarketingPage(PageParameters parameters)
 	{
 		super(parameters);
+		this.parameters = parameters;
 	}
 	
 	@Override
@@ -35,12 +38,11 @@ public class BaseMarketingPage extends WebPage
 		super.onInitialize();
 		if (isMobile()) 
 		{
-			// redirect to mobile web (doing it late, so subclasses can redirect in the constructor)
-			throw new RestartResponseException(MobileHomePage.class, null);
+			handleMobile();
 		}
 	}
 
-	protected boolean isMobile()
+	public boolean isMobile()
 	{
 		final HttpServletRequest request = ((HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest());
 		String ua = request.getHeader("User-Agent");
@@ -48,5 +50,11 @@ public class BaseMarketingPage extends WebPage
 		return (StringUtils.contains(ua, "Android") ||
 			StringUtils.contains(ua, "iPhone") ||
 			StringUtils.contains(ua, "iPad"));
+	}
+	
+	public void handleMobile()
+	{
+		// redirect to mobile web (doing it late, so subclasses can redirect in the constructor)
+		throw new RestartResponseException(MobileHomePage.class, null);
 	}
 }

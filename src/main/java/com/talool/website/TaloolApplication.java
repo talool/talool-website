@@ -36,6 +36,7 @@ import com.talool.website.facebook.pages.mobile.MobileOpenGraphGift;
 import com.talool.website.facebook.pages.mobile.MobileOpenGraphLocation;
 import com.talool.website.marketing.pages.Analytics;
 import com.talool.website.marketing.pages.ContactPage;
+import com.talool.website.marketing.pages.EmailLandingPage;
 import com.talool.website.marketing.pages.FAQ;
 import com.talool.website.marketing.pages.Fundraising;
 import com.talool.website.marketing.pages.HomePage;
@@ -53,6 +54,8 @@ import com.talool.website.marketing.pages.app.PublisherServices;
 import com.talool.website.marketing.pages.app.TermsOfService;
 import com.talool.website.marketing.pages.mobile.MobileAnalyticsPage;
 import com.talool.website.marketing.pages.mobile.MobileContactPage;
+import com.talool.website.marketing.pages.mobile.MobileEmailLandingPage;
+import com.talool.website.marketing.pages.mobile.MobileFaqPage;
 import com.talool.website.marketing.pages.mobile.MobileFundraisingPage;
 import com.talool.website.marketing.pages.mobile.MobileGiftReturnedPage;
 import com.talool.website.marketing.pages.mobile.MobileHomePage;
@@ -188,6 +191,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/location", OpenGraphLocation.class);
 		mountPage("/password", PasswordPage.class);
 		mountPage("/rpw", PasswordResetPage.class);
+		mountPage("/landing", EmailLandingPage.class);
 
 		// Mobile Web Pages
 		mountPage("/m", MobileHomePage.class);
@@ -204,6 +208,8 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/m/offer", MobileOpenGraphDealOffer.class);
 		mountPage("/m/location", MobileOpenGraphLocation.class);
 		mountPage("/m/gift-returned", MobileGiftReturnedPage.class);
+		mountPage("/m/landing", MobileEmailLandingPage.class);
+		mountPage("/m/faq", MobileFaqPage.class);
 
 		mountPage("/404", PageNotFound.class);
 
