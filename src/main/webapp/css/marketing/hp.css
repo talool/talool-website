@@ -333,3 +333,38 @@
 {
 	margin-bottom: 15px;
 }
+
+/* landing pages */
+span.highlight
+{
+	background-color: rgba(25, 188, 185, .15); 
+}
+
+.sampleEmail
+{
+	display: none;
+}
+.sampleEmail i
+{
+	color: #bbb;
+}
+.sampleEmailContainer
+{
+	position: relative;
+}
+.sampleEmailContainer:hover .sampleEmail
+{
+	display: block;
+	position: absolute;
+	top: 30px;
+	border: 1px solid #ddd;
+	background: white;
+	padding: 20px;
+	width: 350px;
+	border-radius: 6px;
+	-webkit-box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+	box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+	line-height: 18px;
+	font-size: 13px;
+}
