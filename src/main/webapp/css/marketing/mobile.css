@@ -77,6 +77,10 @@ body.android .apple
 {
 	width: 260px;
 }
+.hideFaq .faq
+{
+	display:none;
+}
 .mobile .ui-content.og
 {
 	padding: 0;

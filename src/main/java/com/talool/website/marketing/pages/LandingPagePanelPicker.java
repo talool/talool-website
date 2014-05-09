@@ -90,4 +90,9 @@ public class LandingPagePanelPicker implements Serializable {
 		}
 		return p;
 	}
+	
+	public boolean showFaq()
+	{
+		return (landingPage == landingPageType.MERCHANT_OUTREACH);
+	}
 }
