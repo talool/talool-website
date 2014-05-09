@@ -72,16 +72,16 @@ public class LandingPagePanelPicker implements Serializable {
 			switch (variation)
 			{
 				case 1: 
-					p = new PTOOutreachBooks(contentId, 80);
+					p = new PTOOutreachBooksCrowdSource(contentId, 80);
 					break;	
 				case 2: 
-					p = new PTOOutreachBooksCrowdSource(contentId, 80);
+					p = new PTOOutreachBooks(contentId, 90);
 					break;
 				case 3:
-					p = new PTOOutreachBooksCrowdSource(contentId, 90);
+					p = new PTOOutreachBooks(contentId, 80);
 					break;
 				default:
-					p = new PTOOutreachBooks(contentId, 90);
+					p = new PTOOutreachBooksCrowdSource(contentId, 90);
 			}
 		}
 		else
