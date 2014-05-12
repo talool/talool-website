@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.talool.website.marketing.panel.landing.MerchantOutreachLocal;
 import com.talool.website.marketing.panel.landing.MerchantOutreachNational;
 import com.talool.website.marketing.panel.landing.PTOOutreachBooks;
-import com.talool.website.marketing.panel.landing.PTOOutreachBooksCrowdSource;
+import com.talool.website.marketing.panel.landing.PTOOutreachBooksSampleEmail;
 
 public class LandingPagePanelPicker implements Serializable {
 
@@ -72,16 +72,16 @@ public class LandingPagePanelPicker implements Serializable {
 			switch (variation)
 			{
 				case 1: 
-					p = new PTOOutreachBooksCrowdSource(contentId, 80);
+					p = new PTOOutreachBooks(contentId, 80);
 					break;	
 				case 2: 
-					p = new PTOOutreachBooks(contentId, 90);
+					p = new PTOOutreachBooksSampleEmail(contentId, 90);
 					break;
 				case 3:
-					p = new PTOOutreachBooks(contentId, 80);
+					p = new PTOOutreachBooksSampleEmail(contentId, 80);
 					break;
 				default:
-					p = new PTOOutreachBooksCrowdSource(contentId, 90);
+					p = new PTOOutreachBooks(contentId, 90);
 			}
 		}
 		else

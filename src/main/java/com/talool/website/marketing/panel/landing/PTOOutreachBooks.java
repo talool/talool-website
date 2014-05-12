@@ -17,7 +17,9 @@ public class PTOOutreachBooks extends Panel {
 	protected void onInitialize() {
 		super.onInitialize();
 		
-		add(new Label("percentage",maxPercentage));
+		add(new Label("percentage1",maxPercentage));
+		add(new Label("percentage2",maxPercentage));
+		add(new Label("percentage3",maxPercentage));
 	}
 	
 	

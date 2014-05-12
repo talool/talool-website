@@ -3,12 +3,12 @@ package com.talool.website.marketing.panel.landing;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 
-public class PTOOutreachBooksCrowdSource extends Panel {
+public class PTOOutreachBooksSampleEmail extends Panel {
 
 	private static final long serialVersionUID = 1L;
 	private int maxPercentage;
 
-	public PTOOutreachBooksCrowdSource(String id, int percentage) {
+	public PTOOutreachBooksSampleEmail(String id, int percentage) {
 		super(id);
 		maxPercentage = percentage;
 	}
