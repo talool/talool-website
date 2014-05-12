@@ -3,100 +3,48 @@ package com.talool.website.panel.merchant;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 import java.util.TimeZone;
-import java.util.UUID;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.wicketstuff.objectautocomplete.ObjectAutoCompleteField;
-import org.wicketstuff.objectautocomplete.ObjectAutoCompleteSelectionChangeListener;
 
 import com.talool.core.DealAcquire;
-import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
-import com.talool.core.service.ServiceException;
-import com.talool.website.component.MerchantAutoCompleteFactory;
+import com.talool.website.models.DealAcquireListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.util.DistanceUtils;
-import com.talool.website.util.SessionUtils;
 import com.vividsolutions.jts.geom.Geometry;
 
-/**
- * 
- * @author clintz
- * 
- */
-public class RedemptionCodeLookupPanel extends BaseTabPanel
-{
-	private static final Logger L = Logger.getLogger(RedemptionCodeLookupPanel.class);
-	private static final long serialVersionUID = 3634980968241854373L;
-
-	private UUID merchantId;
-	private UUID redemptionMerchantId;
-	private String redemptionCode;
-
-	public RedemptionCodeLookupPanel(String id, PageParameters parameters)
+public class RecentRedemptionsPanel extends BaseTabPanel {
+	private static final long serialVersionUID = 1L;
+	
+	private DealAcquireListModel listModel;
+	
+	public RecentRedemptionsPanel(String id, PageParameters parameters)
 	{
 		super(id);
-		merchantId = UUID.fromString(parameters.get("id").toString());
-		redemptionMerchantId = merchantId;
+		listModel = new DealAcquireListModel();
+		listModel.setGetRecent(true);
 	}
 
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
-
-		Form<Void> form = new Form<Void>("searchForm")
-		{
-
-			@Override
-			protected void onSubmit()
-			{
-				super.onSubmit();
-
-				try
-				{
-					List<DealAcquire> dacs = taloolService.getRedeemedDealAcquires(redemptionMerchantId, redemptionCode.toUpperCase());
-					RedemptionCodeLookupPanel.this.get("redeemedRptr").setDefaultModel(Model.of(dacs));
-					RedemptionCodeLookupPanel.this.get("redeemedRptr").setVisible(true);
-				}
-				catch (ServiceException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-
-			private static final long serialVersionUID = 773304007969659116L;
-
-		};
-
-		final TextField<String> codeField = new TextField<String>("redemptionCode", new PropertyModel<String>(this, "redemptionCode"));
-		form.add(codeField.setRequired(true).setOutputMarkupId(true));
-		add(form);
-
-		add(new ListView<DealAcquire>("redeemedRptr")
+		
+		add(new ListView<DealAcquire>("redeemedRptr", listModel)
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -171,29 +119,13 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 				
 			}
 
-		}.setVisible(false));
+		});
 		
-		// Auto-complete search field for merchant selection
-		MerchantAutoCompleteFactory acFactory = new MerchantAutoCompleteFactory(SessionUtils.getSession().getMerchantAccount().getMerchant());
-	    ObjectAutoCompleteField<Merchant, UUID> acField = acFactory.builder().build("ac", new PropertyModel<UUID>(this, "redemptionMerchantId"));
-	    acField.setRequired(true);
-	    form.add(acField);
-	    acField.registerForUpdateOnSelectionChange(new ObjectAutoCompleteSelectionChangeListener<UUID>(){
-			private static final long serialVersionUID = -2873351122556896745L;
-
-			@Override
-			public void selectionChanged(AjaxRequestTarget target, IModel<UUID> model) {
-				// set the focus on redemption code field
-				target.focusComponent(codeField);
-			}
-	    	
-	    });
-	 
-	    // hide the action button
+		// hide the action button
 	    final BasePage page = (BasePage) getPage();
 	    page.getActionLink().add(new AttributeModifier("class", "hide"));
 	}
-
+	
 	@Override
 	public String getActionLabel()
 	{
@@ -224,6 +156,4 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 		
 		return timezone;
 	}
-
-
 }

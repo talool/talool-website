@@ -1,0 +1,24 @@
+<wicket:extend xmlns:wicket="http://wicket.apache.org">
+
+	<wicket:enclosure child="redeemedRptr">
+	  	<table>
+	  	<thead>
+	  			<tr>
+	  				<th>Deal</th>
+	  				<th>Customer</th>	
+	  				<th>Redemption Date</th>
+	  				<th>Redemption Location</th>
+	  			</tr>
+	  		</thead>
+	  		<tbody>
+	  			<tr wicket:id="redeemedRptr">
+	  				<td><a wicket:id="dealLink"></a> <div wicket:id="offerName"></div></td>
+	  				<td><a wicket:id="emailLink"></a> <div wicket:id="customerName"></div></td>
+	  				<td wicket:id="redemptionDate"></td>
+	  				<td><div wicket:id="distance"></div><a wicket:id="location"></a></td>
+	  			</tr>
+	  		</tbody>
+	  	</table>
+	</wicket:enclosure>
+	
+</wicket:extend>

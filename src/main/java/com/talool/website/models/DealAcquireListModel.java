@@ -16,6 +16,7 @@ public class DealAcquireListModel extends LoadableDetachableModel<List<DealAcqui
 	private static final long serialVersionUID = -871001031643638887L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealAcquireListModel.class);
 	private UUID _customerId;
+	private boolean getRecent = false;
 
 	@Override
 	protected List<DealAcquire> load()
@@ -25,7 +26,15 @@ public class DealAcquireListModel extends LoadableDetachableModel<List<DealAcqui
 
 		try
 		{
-			deals = ServiceFactory.get().getCustomerService().getDealAcquiresByCustomerId(_customerId);
+			if (getRecent)
+			{
+				deals = ServiceFactory.get().getAnalyticService().getRecentRedemptions();
+			}
+			else
+			{
+				deals = ServiceFactory.get().getCustomerService().getDealAcquiresByCustomerId(_customerId);
+			}
+			
 		}
 		catch (ServiceException se)
 		{
@@ -38,6 +47,11 @@ public class DealAcquireListModel extends LoadableDetachableModel<List<DealAcqui
 	public void setCustomerId(final UUID id)
 	{
 		_customerId = id;
+	}
+	
+	public void setGetRecent(boolean  b)
+	{
+		getRecent = b;
 	}
 
 }
