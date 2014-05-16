@@ -25,15 +25,24 @@
 			    	<label><i class="hint-font icon-asterisk"></i> Price</label>
 			    	<input id="price" wicket:id="dealOffer.price" type="text"/>
 				</div>
-			  
+			     
 				<div>
-			    	<label><i class="optional-font icon-asterisk"></i> Expires</label>
-			    	<input id="datepicker_do" wicket:id="dealOffer.expires" type="text"/>
+			    	<label><i class="hint-font icon-asterisk"></i> Start Date</label>
+			        <span class="datetime" wicket:id="scheduledStartDate"></span>
 			    </div>
 			    <div>
-		    		<label></label>
-		    		<input wicket:id="dealOffer.isActive" class="chbx" type="checkbox">Is Active</input>
-		    	</div>
+			    	<label><i class="hint-font icon-asterisk"></i> End Date</label>
+			        <span class="datetime" wicket:id="scheduledEndDate"></span>
+			    </div>
+			    
+			    <div>
+			    	<label><i class="optional-font icon-asterisk"></i> Time Zone</label>
+			        <span wicket:id="currentTimeZone" class="readOnlyValue">
+			        	<span wicket:id="currentTimeZoneLabel">XXX</span> 
+			        	(<a wicket:id="changeTimeZone">change</a>)
+			        </span>
+			        <select wicket:id="timeZoneSelect" class="hide"></select>
+			    </div>
 			</fieldset>
 			<div wicket:id="dealOfferLogo"></div>
 		</div>

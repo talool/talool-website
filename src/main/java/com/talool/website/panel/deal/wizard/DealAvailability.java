@@ -1,7 +1,6 @@
 package com.talool.website.panel.deal.wizard;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -12,7 +11,6 @@ import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardModel;
 import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardStep;
 import org.apache.wicket.extensions.wizard.dynamic.IDynamicWizardStep;
 import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 
@@ -65,7 +63,7 @@ public class DealAvailability extends DynamicWizardStep
 		dealOfferSelect.add(new DealPreviewUpdatingBehavior(dealPreview, DealComponent.DEAL_OFFER, "onChange"));
 		addOrReplace(dealOfferSelect);
 
-		addOrReplace(new AjaxLink<Void>("newDealOffer")
+		AjaxLink<Void> newDealOffer = new AjaxLink<Void>("newDealOffer")
 		{
 
 			private static final long serialVersionUID = 1L;
@@ -78,7 +76,8 @@ public class DealAvailability extends DynamicWizardStep
 				wizard.goBack(target);
 			}
 
-		});
+		};
+		addOrReplace(newDealOffer.setVisible(false)); // wired off for now
 
 		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
 		DateTextField expires = new DateTextField("expires", converter);

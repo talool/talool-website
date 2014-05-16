@@ -1,7 +1,5 @@
 package com.talool.website.marketing.panel;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -25,6 +23,7 @@ import com.talool.core.service.EmailService;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.service.ErrorCode;
+import com.talool.service.ServiceConfig;
 import com.talool.service.mail.EmailRequestParams;
 import com.talool.utils.HttpUtils;
 import com.talool.utils.KeyValue;
@@ -79,9 +78,7 @@ public class RegistrationPanel extends Panel {
 		
 		try
 		{
-			List<Merchant> merchants = taloolService.getMerchantByName(talool);
-			List<MerchantAccount> accounts = taloolService.getAccountsForMerchant(merchants.get(0).getId());
-			_taloolMerchantAccount = accounts.get(0);
+			_taloolMerchantAccount = taloolService.getMerchantAccountById(ServiceConfig.get().getTaloolPublisherMerchantAccountId());
 		}
 		catch (ServiceException se)
 		{
