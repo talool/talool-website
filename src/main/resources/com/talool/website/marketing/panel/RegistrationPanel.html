@@ -1,46 +1,97 @@
 <!DOCTYPE html>
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
-	<div class="appDesc registration">
-		<h2>Let's Do This</h2>
-		<form class="registration">
+	<div class="registration" wicket:id="container">
+		<h2>Get Started</h2>
+		We just need a little information about your business to get you set up to publish deals on Talool.
+		<div wicket:id="feedback"></div>
+		<form wicket:id="form">
 			<table>
 				<tr>
-					<td class="label">Company Name</td>
-					<td><input type="text" class="large"/></td>
-				</tr>
-				<tr>
-					<td class="label">Primary Contact</td>
-					<td><input type="text" class="medium"/> <input type="text" class="medium"/></td>
-				</tr>
-				<tr>
-					<td class="label">Phone Number</td>
-					<td><input type="text" class="medium"/></td>
-				</tr>
-				<tr>
-					<td class="label">Email Address</td>
-					<td><input type="text" class="large"/></td>
-				</tr>
-				<tr>
-					<td class="label">Website</td>
-					<td><input type="text" class="large"/></td>
-				</tr>
-				<tr>
-					<td class="label">What services are you interested in?</td>
-					<td class="small-text">
-						<input type="checkbox"/> Publishing Free Deals For My Business<br/>
-						<input type="checkbox"/> Selling Deals For My Business<br/>
-						<input type="checkbox"/> Selling Books of Deals For Multiple Businesses<br/>
-						<input type="checkbox"/> Selling Books of Deals For Fundraisers<br/>
+					<td colspan="2">
+						<b>Your Primary Place of Business</b>
 					</td>
 				</tr>
 				<tr>
-					<td></td>
-					<td>
-						<button class="btn">Submit Registration</button>
-					</td>
+					<td class="label">Business Name</td>
+					<td><input type="text" class="large" wicket:id="merchantName"/></td>
+				</tr>
+				<tr>
+					<td class="label">Address</td>
+					<td><input type="text" class="large" wicket:id="address1"/><br/>
+					<input type="text" class="large" wicket:id="address2"/></td>
+				</tr>
+				<tr>
+					<td class="label">City</td>
+					<td><input type="text" class="large" wicket:id="city"/></td>
+				</tr>
+				<tr>
+					<td class="label">State</td>
+					<td><select class="large" wicket:id="state"></select></td>
+				</tr>
+				<tr>
+					<td class="label">Zip</td>
+					<td><input class="large" wicket:id="zip"/></td>
+				</tr>
+				<tr>
+					<td class="label">Phone</td>
+					<td><input class="large" wicket:id="phone"/></td>
+				</tr>
+				<tr>
+					<td class="label">Website<br/><span class="small-text">(or Facebook page)</span></td>
+					<td><input class="large" wicket:id="website"/></td>
 				</tr>
 			</table>
 			
+			<table>
+				<tr>
+					<td colspan="2">
+						<b>Your Talool Merchant Account Credentials</b>
+					</td>
+				</tr>
+				<tr>
+					<td class="label">Title<br/><span class="small-text">(e.g. Owner)</span></td>
+					<td><input type="text" class="large" wicket:id="roleTitle"/></td>
+				</tr>
+				<tr>
+					<td class="label">First &amp; Last Name</td>
+					<td><input type="text" class="medium" wicket:id="firstName"/>
+					<input type="text" class="medium" wicket:id="lastName"/></td>
+				</tr>
+				<tr>
+					<td class="label">Email Address</td>
+					<td><input type="text" class="large" wicket:id="email"/></td>
+				</tr>
+				<tr>
+					<td class="label">Password<br/><span class="small-text">(enter it twice)</span></td>
+					<td ><input type="password" class="large" wicket:id="password"/>
+					<input type="password" class="large" wicket:id="confirm"/></td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<b>Merchant Consent</b><br/>
+						<span class="small-text">
+						By checking the boxes below, I hereby certify that I have obtained all necessary 
+						authorization to enter into the Talool Merchant Agreement and the Talool Terms of 
+						Service on behalf of my business.
+						</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="small-text" colspan="2">
+						<input type="checkbox" wicket:id="merchantAgreement"/> I Accept the 
+						<a href="/corp/merchantAgreement" target="corp">Talool Merchant Agreement</a>
+					</td>
+				</tr>
+				<tr>
+					<td class="small-text" colspan="2">
+						<input type="checkbox" wicket:id="tos"/> I Accept the 
+						<a href="/corp/terms" target="corp">Talool Terms of Service</a>
+					</td>
+				</tr>
+			</table>
+			<div class="formButtons">
+				<button class="btn" wicket:id="submitButton">Submit Registration</button>
+			</div>
 		</form>
 	</div>
 </wicket:panel>

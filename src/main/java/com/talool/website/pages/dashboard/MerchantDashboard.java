@@ -1,49 +1,49 @@
 package com.talool.website.pages.dashboard;
 
-import org.apache.wicket.request.mapper.parameter.PageParameters;
+import java.util.UUID;
 
-import com.talool.website.pages.BaseDashboard;
-import com.talool.website.panel.dashboard.ActiveUsersPanel;
-import com.talool.website.panel.dashboard.AvailableDealsPanel;
-import com.talool.website.panel.dashboard.MerchantReachPanel;
-import com.talool.website.panel.dashboard.RecentRedemptionsPanel;
+import org.apache.wicket.markup.html.panel.Panel;
+
+import com.talool.website.pages.BasePage;
+import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.merchant.MerchantSummaryPanel;
 import com.talool.website.util.SecuredPage;
+import com.talool.website.util.SessionUtils;
 
 @SecuredPage
-public class MerchantDashboard extends BaseDashboard {
+public class MerchantDashboard extends BasePage {
 
 	private static final long serialVersionUID = 1L;
+	private UUID _merchantId;
 	
 	public MerchantDashboard()
 	{
 		super();
-	}
-
-	public MerchantDashboard(PageParameters parameters)
-	{
-		super(parameters);
+		_merchantId = SessionUtils.getSession().getMerchantAccount().getMerchant().getId();
 	}
 	
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		
-		add(new AvailableDealsPanel("availableDeals", merchantId));
-		add(new RecentRedemptionsPanel("recentRedemptions", merchantId));
-		add(new ActiveUsersPanel("activeUsers", merchantId));
-		add(new MerchantReachPanel("merchantReaches", merchantId));
-		
-	}
-
-	@Override
-	public boolean hasActionLink() {
-		return false;
+		getPageParameters().set("id", _merchantId);
+		add(new MerchantSummaryPanel("summary", getPageParameters()));
 	}
 
 	@Override
 	public String getHeaderTitle() {
-		return "Dashboard: "+merchant.getName();
+		return SessionUtils.getSession().getMerchantAccount().getMerchant().getName();
+	}
+
+	@Override
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getNewDefinitionPanelTitle() {
+		return null;
 	}
 	
 	

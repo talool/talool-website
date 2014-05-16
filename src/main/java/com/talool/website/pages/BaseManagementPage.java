@@ -17,5 +17,10 @@ abstract public class BaseManagementPage extends BasePage
 		super(parameters);
 	}
 	
+	public BaseManagementPage()
+	{
+		super();
+	}
+	
 	
 }

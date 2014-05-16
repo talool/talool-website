@@ -3,7 +3,6 @@ package com.talool.website.panel.merchant;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -11,6 +10,7 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -28,6 +28,7 @@ import org.wicketstuff.objectautocomplete.ObjectAutoCompleteSelectionChangeListe
 
 import com.talool.core.DealAcquire;
 import com.talool.core.Merchant;
+import com.talool.core.MerchantAccount;
 import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
 import com.talool.website.component.MerchantAutoCompleteFactory;
@@ -37,6 +38,7 @@ import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.util.DistanceUtils;
+import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SessionUtils;
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -173,11 +175,17 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 
 		}.setVisible(false));
 		
+		final MerchantAccount account = SessionUtils.getSession().getMerchantAccount();
+		
 		// Auto-complete search field for merchant selection
+		final WebMarkupContainer acContainer = new WebMarkupContainer("acContainer");
+		form.add(acContainer);
+		// only visible for certain users
+		acContainer.setVisible(PermissionUtils.isSuperUser(account) || PermissionUtils.isPublisher(account.getMerchant()));
 		MerchantAutoCompleteFactory acFactory = new MerchantAutoCompleteFactory(SessionUtils.getSession().getMerchantAccount().getMerchant());
-	    ObjectAutoCompleteField<Merchant, UUID> acField = acFactory.builder().build("ac", new PropertyModel<UUID>(this, "redemptionMerchantId"));
+		ObjectAutoCompleteField<Merchant, UUID> acField = acFactory.builder().build("ac", new PropertyModel<UUID>(this, "redemptionMerchantId"));
 	    acField.setRequired(true);
-	    form.add(acField);
+	    acContainer.add(acField);
 	    acField.registerForUpdateOnSelectionChange(new ObjectAutoCompleteSelectionChangeListener<UUID>(){
 			private static final long serialVersionUID = -2873351122556896745L;
 
@@ -188,6 +196,7 @@ public class RedemptionCodeLookupPanel extends BaseTabPanel
 			}
 	    	
 	    });
+		
 	 
 	    // hide the action button
 	    final BasePage page = (BasePage) getPage();

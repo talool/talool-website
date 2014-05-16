@@ -12,8 +12,9 @@ import com.talool.core.FactoryManager;
 import com.talool.core.MerchantAccount;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
-import com.talool.website.pages.lists.MerchantsPage;
-import com.talool.website.service.PermissionService;
+import com.talool.website.pages.dashboard.MerchantDashboard;
+import com.talool.website.pages.lists.DealOffersPage;
+import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SessionUtils;
 
 /**
@@ -58,13 +59,17 @@ public class AdminLoginPage extends WebPage
 						SessionUtils.getSession().setMerchantAccount(mAccnt);
 						continueToOriginalDestination();
 
-						if (PermissionService.get().canViewAnalytics(mAccnt.getEmail()))
+						if (PermissionUtils.isSuperUser(mAccnt))
 						{
 							setResponsePage(AnalyticsPage.class);
 						}
+						else if (PermissionUtils.isPublisher(mAccnt.getMerchant()))
+						{
+							setResponsePage(DealOffersPage.class);
+						}
 						else
 						{
-							setResponsePage(MerchantsPage.class);
+							setResponsePage(MerchantDashboard.class);
 						}
 
 					}

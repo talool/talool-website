@@ -36,6 +36,7 @@ import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.wizard.MerchantWizard;
 import com.talool.website.panel.merchant.wizard.MerchantWizard.MerchantWizardMode;
+import com.talool.website.util.SessionUtils;
 
 public class MerchantSummaryPanel extends BaseTabPanel
 {
@@ -54,12 +55,17 @@ public class MerchantSummaryPanel extends BaseTabPanel
 	private String logoUrl;
 	private List<KeyValue> keyValues;
 
-	private List<String> warnings;
+	private List<String> wizardWarnings;
+	private List<String> dealWarnings;
+	
+	private boolean isOwnerView = false;
 
 	public MerchantSummaryPanel(String id, PageParameters parameters)
 	{
 		super(id);
 		_merchantId = UUID.fromString(parameters.get("id").toString());
+		isOwnerView = _merchantId.equals(SessionUtils.getSession().getMerchantAccount().getMerchant().getId());
+		
 		setPanelModel();
 	}
 
@@ -72,10 +78,26 @@ public class MerchantSummaryPanel extends BaseTabPanel
 
 		final WebMarkupContainer container = new WebMarkupContainer("container");
 		add(container.setOutputMarkupId(true));
+		
+		final WebMarkupContainer actionBox = new WebMarkupContainer("actionBox");
+		container.add(actionBox.setVisible(!isOwnerView));
 
 		final WebMarkupContainer warningContainer = new WebMarkupContainer("warnings");
 		container.add(warningContainer.setOutputMarkupId(true));
-		final ListView<String> warningList = new ListView<String>("warningRptr", new PropertyModel<List<String>>(this, "warnings"))
+		warningContainer.setVisible(!wizardWarnings.isEmpty() || !dealWarnings.isEmpty());
+		
+		final WebMarkupContainer wizWarningContainer = new WebMarkupContainer("wizardWarnings");
+		wizWarningContainer.add(new AjaxLink<Void>("edit")
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				openWizard(target);
+			}
+		});
+		final ListView<String> wizWarningList = new ListView<String>("wizWarningRptr", new PropertyModel<List<String>>(this, "wizardWarnings"))
 		{
 
 			private static final long serialVersionUID = 1L;
@@ -83,23 +105,37 @@ public class MerchantSummaryPanel extends BaseTabPanel
 			@Override
 			protected void populateItem(ListItem<String> item)
 			{
-				item.add(new Label("warning", item.getModelObject()));
+				item.add(new Label("wizWarning", item.getModelObject()));
 			}
 
 		};
-		warningContainer.add(warningList);
-		warningContainer.setVisible(!warnings.isEmpty());
+		wizWarningContainer.add(wizWarningList);
+		warningContainer.add(wizWarningContainer.setVisible(!wizardWarnings.isEmpty()));
+		
+		final WebMarkupContainer dealWarningContainer = new WebMarkupContainer("dealWarnings");
+		final ListView<String> dealWarningList = new ListView<String>("dealWarningRptr", new PropertyModel<List<String>>(this, "dealWarnings"))
+		{
 
-		container.add(new AjaxLink<Void>("editLink")
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<String> item)
+			{
+				item.add(new Label("dealWarning", item.getModelObject()));
+			}
+
+		};
+		dealWarningContainer.add(dealWarningList);
+		warningContainer.add(dealWarningContainer.setVisible(!dealWarnings.isEmpty()));
+		
+		actionBox.add(new AjaxLink<Void>("editLink")
 		{
 			private static final long serialVersionUID = 268692101349122303L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target)
 			{
-				getSession().getFeedbackMessages().clear();
-				wizard.setModelObject(new MerchantModel(_merchantId, true).getObject());
-				wizard.open(target);
+				openWizard(target);
 			}
 		});
 
@@ -159,7 +195,7 @@ public class MerchantSummaryPanel extends BaseTabPanel
 			}
 
 		};
-		container.add(comboBox.setVisible(page.isSuperUser));
+		actionBox.add(comboBox.setVisible(page.isSuperUser));
 
 		// Wizard
 		wizard = new MerchantWizard("wiz", "Merchant Wizard", MerchantWizardMode.MERCHANT)
@@ -181,30 +217,68 @@ public class MerchantSummaryPanel extends BaseTabPanel
 		addOrReplace(wizard.setOutputMarkupId(true));
 
 		// hide the action button
-		page.getActionLink().add(new AttributeModifier("class", "hide"));
+		if (!isOwnerView)
+		{
+			page.getActionLink().add(new AttributeModifier("class", "hide"));
+		}
+		else
+		{
+			// override the action button
+			AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
+			{
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onClick(AjaxRequestTarget target)
+				{
+					openWizard(target);
+				}
+			};
+			page.setActionLink(actionLink);
+			Label actionLabel = new Label("actionLabel", getActionLabel());
+			actionLabel.setOutputMarkupId(true);
+			actionLink.add(actionLabel);
+			actionLink.setOutputMarkupId(true);
+		}
+	}
+	
+	private void openWizard(AjaxRequestTarget target)
+	{
+		getSession().getFeedbackMessages().clear();
+		wizard.setModelObject(new MerchantModel(_merchantId, true).getObject());
+		wizard.open(target);
 	}
 
 	@Override
 	public String getActionLabel()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return "Edit Merchant Profile";
 	}
 
 	@Override
 	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
 	{
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	private void setPanelModel()
 	{
-		warnings = new ArrayList<String>();
-
+		wizardWarnings = new ArrayList<String>();
+		dealWarnings = new ArrayList<String>();
+		
 		merchant = new MerchantModel(_merchantId, true).getObject();
 
-		categoryLabel = merchant.getCategory().getName();
+		if (merchant.getCategory() == null)
+		{
+			wizardWarnings.add("Select a category so customers can find you in the app.");
+			categoryLabel = "";
+		}
+		else
+		{
+			categoryLabel = merchant.getCategory().getName();
+		}
+		
 
 		StringBuilder sb = new StringBuilder();
 		Iterator<Tag> tags = merchant.getTags().iterator();
@@ -233,19 +307,13 @@ public class MerchantSummaryPanel extends BaseTabPanel
 		{
 			if (location.getMerchantImage() == null)
 			{
-				warnings.add("A location for this merchant is missing an image.");
+				wizardWarnings.add("Select an image for your location.");
 			}
 
 			if (location.getLogo() == null)
 			{
-				warnings.add("A location for this merchant is missing a logo.");
+				wizardWarnings.add("Upload the logo for your location.");
 			}
-		}
-
-		// check for accounts
-		if (merchant.getMerchantAccounts().isEmpty())
-		{
-			warnings.add("There are no accounts for this merchant, so they can't receive redemption information.");
 		}
 
 		// check for deal images
@@ -255,7 +323,7 @@ public class MerchantSummaryPanel extends BaseTabPanel
 		{
 			if (deal.getImage() == null)
 			{
-				warnings.add("A deal for this merchant is missing an image.");
+				dealWarnings.add("One of your deals is missing an image.");
 			}
 		}
 

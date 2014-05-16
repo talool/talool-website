@@ -40,6 +40,7 @@ import com.talool.website.marketing.pages.EmailLandingPage;
 import com.talool.website.marketing.pages.FAQ;
 import com.talool.website.marketing.pages.Fundraising;
 import com.talool.website.marketing.pages.HomePage;
+import com.talool.website.marketing.pages.MerchantAgreementPage;
 import com.talool.website.marketing.pages.PasswordPage;
 import com.talool.website.marketing.pages.PasswordResetPage;
 import com.talool.website.marketing.pages.PrivacyPolicyPage;
@@ -59,6 +60,7 @@ import com.talool.website.marketing.pages.mobile.MobileFaqPage;
 import com.talool.website.marketing.pages.mobile.MobileFundraisingPage;
 import com.talool.website.marketing.pages.mobile.MobileGiftReturnedPage;
 import com.talool.website.marketing.pages.mobile.MobileHomePage;
+import com.talool.website.marketing.pages.mobile.MobileMerchantAgreementPage;
 import com.talool.website.marketing.pages.mobile.MobilePasswordPage;
 import com.talool.website.marketing.pages.mobile.MobilePasswordResetPage;
 import com.talool.website.marketing.pages.mobile.MobilePrivacyPage;
@@ -179,6 +181,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		// Big Web Pages
 		mountPage("/corp/privacy", PrivacyPolicyPage.class);
 		mountPage("/corp/terms", TermsOfServicePage.class);
+		mountPage("/corp/merchantAgreement", MerchantAgreementPage.class);
 		mountPage("/contactus", ContactPage.class);
 		mountPage("/whitelabel", WhiteLabel.class);
 		mountPage("/fundraising", Fundraising.class);
@@ -199,6 +202,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/m/analytics", MobileAnalyticsPage.class);
 		mountPage("/m/whitelabel", MobileWhiteLabelPage.class);
 		mountPage("/m/terms", MobileTermsPage.class);
+		mountPage("/m/ma", MobileMerchantAgreementPage.class);
 		mountPage("/m/privacy", MobilePrivacyPage.class);
 		mountPage("/m/contact", MobileContactPage.class);
 		mountPage("/m/password", MobilePasswordPage.class);

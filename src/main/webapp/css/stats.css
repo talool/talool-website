@@ -96,6 +96,16 @@ table.meta td .iphone
 	margin-bottom: 10px;
 }
 
+.borderedBox .warnings li ul
+{
+	margin: 10px 0;
+}
+
+.borderedBox .warnings li li
+{
+	list-style-type: disc;
+}
+
 .borderedBox h3
 {
 	margin: 0 0 5px;

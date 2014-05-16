@@ -289,15 +289,26 @@
 	padding: 10px 5px;
 }
 
+.hp .registration
+{
+	padding: 0 45px 50px;
+}
 .hp .registration .label
 {
 	width: 150px;
 }
+
+.hp .registration .feedbackPanel
+{
+	margin:  10px 0 0;
+}
 .hp .registration table
 {
-	margin: 25px 10px 10px;
+	margin: 45px 50px 10px 0px;
 	border-collapse:collapse; 
 	border-spacing: 0;
+	width: 400px;
+	float: left;
 }
 .hp .registration td
 {
@@ -318,6 +329,12 @@
 .hp .registration .small-text
 {
 	font-size: 13px;
+}
+.hp .registration .formButtons
+{
+	clear: left;
+	padding: 10px;
+	text-align: center;
 }
 
 .hp .appDesc dl

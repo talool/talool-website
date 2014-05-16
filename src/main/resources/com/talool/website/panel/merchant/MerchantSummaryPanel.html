@@ -8,7 +8,7 @@
 		<table class="meta" wicket:id="container">
 			<tr>
 				<td>
-					<div class="borderedBox gray5-font">
+					<div class="borderedBox gray5-font" wicket:id="actionBox">
 				  		<h3>Actions</h3>
 				  		<table class="actionBox">
 				  			<tr>
@@ -25,9 +25,20 @@
 				  	</div>
 					
 				  	<div class="borderedBox gray5-font" wicket:id="warnings">
-				  		<h3>Warnings</h3>
-				  		<ol class="red-font warnings">
-					  		<li wicket:id="warningRptr"><span wicket:id="warning"></span></li>
+				  		<h3>Next Steps</h3>
+				  		<ol class="warnings">
+					  		<li wicket:id="wizardWarnings">
+					  			<a wicket:id="edit">Edit your merchant profile</a>
+						  		<ul class="warnings">
+							  		<li wicket:id="wizWarningRptr"><span wicket:id="wizWarning"></span></li>
+							  	</ul>
+						  	</li>
+						  	<li wicket:id="dealWarnings">
+					  			Edit your deals to correct the following:
+						  		<ul class="warnings">
+							  		<li wicket:id="dealWarningRptr"><span wicket:id="dealWarning"></span></li>
+							  	</ul>
+						  	</li>
 					  	</ol>
 				  	</div>
 				  	
