@@ -284,6 +284,7 @@ public class DealOfferDealsPanel extends BaseTabPanel {
 							Merchant _talool = merchants.get(0);
 							deal.setActive(false);
 							deal.setMerchant(_talool);
+							// TODO move it to a different Offer
 							taloolService.merge(deal);
 							
 							resetPage(target);

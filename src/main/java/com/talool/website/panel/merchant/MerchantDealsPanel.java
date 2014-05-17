@@ -135,9 +135,6 @@ public class MerchantDealsPanel extends BaseTabPanel
 				item.add(new Label("isActive"));
 				item.add(new Label("dealOffer.title"));
 
-				item.add(new Label("lastUpdatedBy", deal.getUpdatedByEmail() + " / "
-						+ deal.getUpdatedByMerchantName()));
-
 				item.add(new AjaxLink<Void>("editLink")
 				{
 					private static final long serialVersionUID = 268692101349122303L;

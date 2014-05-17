@@ -36,23 +36,4 @@ public final class PermissionService
 
 	}
 
-	public boolean canViewAnalytics(final String signedInEmail)
-	{
-		return isTaloolEmail(signedInEmail);
-	}
-
-	public boolean isTaloolEmail(final String signedInEmail)
-	{
-		if (signedInEmail.contains("@talool.com"))
-		{
-			return true;
-		}
-
-		return false;
-	}
-
-	public boolean canViewAllCustomers(final String signedInEmail)
-	{
-		return isTaloolEmail(signedInEmail);
-	}
 }

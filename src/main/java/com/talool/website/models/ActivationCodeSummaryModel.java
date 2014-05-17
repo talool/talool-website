@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.talool.core.service.AnalyticService.ActivationCodeSummary;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
-import com.talool.website.service.PermissionService;
+import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SessionUtils;
 
 /**
@@ -28,7 +28,7 @@ public class ActivationCodeSummaryModel extends LoadableDetachableModel<List<Act
 		List<ActivationCodeSummary> summaries = null;
 		try
 		{
-			if (PermissionService.get().isTaloolEmail(SessionUtils.getSession().getMerchantAccount().getEmail()))
+			if (PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount()))
 			{
 				// talool summaries
 				summaries = ServiceFactory.get().getAnalyticService().getActivationCodeSummaries();

@@ -11,7 +11,7 @@ import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 import com.talool.stats.CustomerSummary;
 import com.talool.stats.PaginatedResult;
-import com.talool.website.service.PermissionService;
+import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SessionUtils;
 
 /**
@@ -46,7 +46,7 @@ public class CustomerSummaryDataProvider implements IDataProvider<CustomerSummar
 
 		try
 		{
-			if (PermissionService.get().canViewAllCustomers(SessionUtils.getSession().getMerchantAccount().getEmail()))
+			if (PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount()))
 			{
 				results = ServiceFactory.get().getCustomerService().getCustomerSummary(searchOpts, false);
 			}
@@ -80,7 +80,7 @@ public class CustomerSummaryDataProvider implements IDataProvider<CustomerSummar
 
 		try
 		{
-			if (PermissionService.get().canViewAllCustomers(SessionUtils.getSession().getMerchantAccount().getEmail()))
+			if (PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount()))
 			{
 				size = ServiceFactory.get().getCustomerService().getCustomerSummaryCount();
 			}

@@ -38,6 +38,7 @@ import com.talool.website.panel.customer.definition.CustomerPanel;
 import com.talool.website.panel.customer.definition.CustomerPurchaseDealOfferPanel;
 import com.talool.website.panel.customer.definition.CustomerResetPasswordPanel;
 import com.talool.website.service.PermissionService;
+import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SecuredPage;
 import com.talool.website.util.SessionUtils;
 
@@ -62,7 +63,7 @@ public class CustomersPage extends BasePage
 	public CustomersPage()
 	{
 		super();
-		if (!PermissionService.get().canViewAllCustomers(SessionUtils.getSession().getMerchantAccount().getEmail()))
+		if (!PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount()))
 		{
 			throw new RestartResponseException(
 					new PageProvider(

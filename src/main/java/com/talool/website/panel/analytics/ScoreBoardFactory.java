@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.talool.core.service.AnalyticService.ActivationCodeSummary;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
-import com.talool.website.service.PermissionService;
+import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SessionUtils;
 
 /**
@@ -86,7 +86,7 @@ public final class ScoreBoardFactory
 				switch (metricType)
 				{
 					case TotalCustomers:
-						if (PermissionService.get().isTaloolEmail(signedInEmail))
+						if (PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount()))
 						{
 							count = ServiceFactory.get().getAnalyticService().getTotalCustomers();
 						}
@@ -98,7 +98,7 @@ public final class ScoreBoardFactory
 						break;
 
 					case TotalRedemptions:
-						if (PermissionService.get().isTaloolEmail(signedInEmail))
+						if (PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount()))
 						{
 							count = ServiceFactory.get().getAnalyticService().getTotalRedemptions();
 						}
@@ -110,7 +110,7 @@ public final class ScoreBoardFactory
 						break;
 
 					case TotalEmailGifts:
-						if (PermissionService.get().isTaloolEmail(signedInEmail))
+						if (PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount()))
 						{
 							count = ServiceFactory.get().getAnalyticService().getTotalEmailGifts();
 						}
@@ -120,7 +120,7 @@ public final class ScoreBoardFactory
 						}
 						break;
 					case TotalFacebookGifts:
-						if (PermissionService.get().isTaloolEmail(signedInEmail))
+						if (PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount()))
 						{
 							count = ServiceFactory.get().getAnalyticService().getTotalFacebookGifts();
 						}
@@ -133,7 +133,7 @@ public final class ScoreBoardFactory
 						count = ServiceFactory.get().getAnalyticService().getTotalActivatedCodes(this.id);
 						break;
 					case TotalFaceboolCustomers:
-						if (PermissionService.get().isTaloolEmail(signedInEmail))
+						if (PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount()))
 						{
 							count = ServiceFactory.get().getAnalyticService().getTotalFacebookCustomers();
 						}
@@ -185,7 +185,7 @@ public final class ScoreBoardFactory
 	public static void createBookActivationPanels(final MarkupContainer container)
 	{
 
-		if (PermissionService.get().isTaloolEmail(SessionUtils.getSession().getMerchantAccount().getEmail()))
+		if (PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount()))
 		{
 
 		}
@@ -224,7 +224,7 @@ public final class ScoreBoardFactory
 
 				try
 				{
-					if (PermissionService.get().isTaloolEmail(SessionUtils.getSession().getMerchantAccount().getEmail()))
+					if (PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount()))
 					{
 						fb = ServiceFactory.get().getAnalyticService().getTotalFacebookCustomers();
 						count = ServiceFactory.get().getAnalyticService().getTotalCustomers();

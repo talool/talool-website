@@ -13,7 +13,7 @@ import com.talool.service.ServiceFactory;
 import com.talool.stats.CustomerSummary;
 import com.talool.stats.PaginatedResult;
 import com.talool.website.pages.CustomerSearchDataProvider.CustomerSearchOpts.CustomerSearchType;
-import com.talool.website.service.PermissionService;
+import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SessionUtils;
 
 /**
@@ -82,7 +82,7 @@ public class CustomerSearchDataProvider implements IDataProvider<CustomerSummary
 
 	private static boolean canViewAllCustomers()
 	{
-		return PermissionService.get().canViewAllCustomers(SessionUtils.getSession().getMerchantAccount().getEmail());
+		return PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount());
 	}
 
 	@Override

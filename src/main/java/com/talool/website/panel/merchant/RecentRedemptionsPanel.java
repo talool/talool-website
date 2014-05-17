@@ -106,7 +106,8 @@ public class RecentRedemptionsPanel extends BaseTabPanel {
 						new PropertyModel<String>(dac.getDeal(), "title"));
 				item.add(dealLink);
 				
-				item.add(new Label("offerName", dac.getDeal().getDealOffer().getTitle()));
+				item.add(new Label("merchantName", dac.getDeal().getMerchant().getName()));
+				item.add(new Label("redemptionCode", dac.getRedemptionCode()));
 				item.add(new Label("customerName", dac.getCustomer().getFirstName() + " " + dac.getCustomer().getLastName()));
 				
 				PageParameters customerParams = new PageParameters();

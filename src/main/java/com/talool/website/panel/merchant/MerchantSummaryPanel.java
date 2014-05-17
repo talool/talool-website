@@ -80,7 +80,7 @@ public class MerchantSummaryPanel extends BaseTabPanel
 		add(container.setOutputMarkupId(true));
 		
 		final WebMarkupContainer actionBox = new WebMarkupContainer("actionBox");
-		container.add(actionBox.setVisible(!isOwnerView));
+		container.add(actionBox.setVisible(!isOwnerView).setOutputMarkupId(true));
 
 		final WebMarkupContainer warningContainer = new WebMarkupContainer("warnings");
 		container.add(warningContainer.setOutputMarkupId(true));
@@ -212,6 +212,8 @@ public class MerchantSummaryPanel extends BaseTabPanel
 				merchantPreview.init(merchant);
 				mapPreview.init(merchant);
 				target.add(container);
+				
+				warningContainer.setVisible(!wizardWarnings.isEmpty() || !dealWarnings.isEmpty());
 			}
 		};
 		addOrReplace(wizard.setOutputMarkupId(true));

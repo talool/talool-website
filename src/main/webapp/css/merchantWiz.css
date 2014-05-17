@@ -13,6 +13,7 @@
 .merchantWiz .locationList {
 	height: 360px;
 	overflow:scroll;
+	padding: 1px;
 }
 .merchantWiz .locationList .location {
 	border: 1px solid rgba(185, 172, 151,.5);
