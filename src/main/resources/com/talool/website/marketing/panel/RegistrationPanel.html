@@ -67,25 +67,25 @@
 					<input type="password" class="large" wicket:id="confirm"/></td>
 				</tr>
 				<tr>
-					<td colspan="2">
+					<td colspan="2" class="consent">
 						<b>Merchant Consent</b><br/>
 						<span class="small-text">
 						By checking the boxes below, I hereby certify that I have obtained all necessary 
-						authorization to enter into the Talool Merchant Agreement and the Talool Terms of 
-						Service on behalf of my business.
+						authorization to enter into the 
+						<a href="/corp/merchantAgreement" target="corp">Talool Merchant Agreement</a> and the 
+						<a href="/corp/terms" target="corp">Talool Terms of  Service</a> 
+						on behalf of my business.
 						</span>
 					</td>
 				</tr>
 				<tr>
-					<td class="small-text" colspan="2">
-						<input type="checkbox" wicket:id="merchantAgreement"/> I Accept the 
-						<a href="/corp/merchantAgreement" target="corp">Talool Merchant Agreement</a>
+					<td class="small-text" colspan="2" >
+							<label><input type="checkbox" wicket:id="merchantAgreement"/> I Accept the Talool Merchant Agreement</label>
 					</td>
 				</tr>
 				<tr>
 					<td class="small-text" colspan="2">
-						<input type="checkbox" wicket:id="tos"/> I Accept the 
-						<a href="/corp/terms" target="corp">Talool Terms of Service</a>
+						<label><input type="checkbox" wicket:id="tos"/> I Accept the Talool Terms of Service</label>
 					</td>
 				</tr>
 			</table>

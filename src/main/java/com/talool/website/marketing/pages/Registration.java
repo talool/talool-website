@@ -1,7 +1,9 @@
 package com.talool.website.marketing.pages;
 
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.talool.website.marketing.pages.mobile.MobileRegistrationPage;
 import com.talool.website.marketing.panel.RegistrationPanel;
 
 public class Registration extends BaseMarketingPage
@@ -31,5 +33,11 @@ public class Registration extends BaseMarketingPage
 	{
 		super.onInitialize();
 		add(new RegistrationPanel("registration", isFundraiser, isPublisher));
+	}
+	
+	@Override
+	public void handleMobile() {
+		// redirect to mobile web (doing it late, so subclasses can redirect in the constructor)
+		throw new RestartResponseException(MobileRegistrationPage.class, this.parameters);
 	}
 }

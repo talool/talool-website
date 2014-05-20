@@ -1,27 +1,36 @@
-<wicket:extend>
-  	<table>
-  		<thead>
-  			<tr>
-  				<th>Title</th>
-  				<th>Summary</th>
-  				<th>Price</th>
-  				<th>Book Type</th>
-  				<th>Is Active</th>
-  				<th class="actionCol">Actions</th>
-  			</tr>
-  		</thead>
-  		<tbody>
-  			<tr wicket:id="offerRptr">
-  				<td><a wicket:id="titleLink"></a></td>
-  				<td wicket:id="summary"></td>
-  				<td wicket:id="price"></td>
-  				<td wicket:id="dealType"></td>
-  				<td wicket:id="isActive"></td>
-  				<td class="orange-font actionCol">
-  					<a wicket:id="editLink" href="#" class="icon icon-large icon-pencil"></a>
-  					<a href="#" class="icon icon-large icon-remove"></a>
-  				</td>
-  			</tr>
-  		</tbody>
-  	</table>
-</wicket:extend>
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+		<link rel="stylesheet" type="text/css" href="/css/kendo/kendo.common.min.css"/>
+		<link rel="stylesheet" type="text/css" href="/css/kendo/kendo.default.min.css"/>
+		<link rel="stylesheet" type="text/css" href="/css/offer.css"/>
+	</wicket:head>
+	<wicket:extend>
+	  	<table wicket:id="container">
+	  		<thead>
+	  			<tr>
+	  				<th>Title</th>
+	  				<th>Summary</th>
+	  				<th>Price</th>
+	  				<th>Book Type</th>
+	  				<th>Is Active</th>
+	  				<th class="actionCol">Actions</th>
+	  			</tr>
+	  		</thead>
+	  		<tbody>
+	  			<tr wicket:id="offerRptr">
+	  				<td><a wicket:id="titleLink"></a></td>
+	  				<td wicket:id="summary"></td>
+	  				<td wicket:id="price"></td>
+	  				<td wicket:id="dealType"></td>
+	  				<td wicket:id="isActive"></td>
+	  				<td class="orange-font actionCol">
+	  					<a wicket:id="editLink" href="#" class="icon icon-large icon-pencil"></a>
+	  					<a href="#" class="icon icon-large icon-remove"></a>
+	  				</td>
+	  			</tr>
+	  		</tbody>
+	  	</table>
+	  	<div wicket:id="wiz" class="wiz merchantWiz"/>
+	  	
+	</wicket:extend>
+</html>

@@ -1,12 +1,15 @@
 package com.talool.website.panel.merchant.definition;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.datetime.DateConverter;
-import org.apache.wicket.datetime.PatternDateConverter;
-import org.apache.wicket.datetime.markup.html.form.DateTextField;
-import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -15,6 +18,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.googlecode.wicket.kendo.ui.form.datetime.DateTimePicker;
 import com.talool.core.DealOffer;
 import com.talool.core.DealType;
 import com.talool.core.MediaType;
@@ -25,11 +29,14 @@ import com.talool.core.service.ServiceException;
 import com.talool.website.component.DealTypeDropDownChoice;
 import com.talool.website.component.MerchantIdentitySelect;
 import com.talool.website.component.MerchantMediaWizardPanel;
+import com.talool.website.component.TimeZoneDropDown;
 import com.talool.website.models.AvailableMerchantsListModel;
 import com.talool.website.models.DealOfferModel;
 import com.talool.website.panel.BaseDefinitionPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.util.CssClassToggle;
 import com.talool.website.util.SessionUtils;
+import com.talool.website.validators.StartEndDateFormValidator;
 
 /**
  * 
@@ -48,6 +55,9 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 	private MerchantMediaWizardPanel mediaPanelPublisherLogo;
 	private MerchantMediaWizardPanel mediaPanelPublisherIcon;
 	private MerchantMediaWizardPanel mediaPanelPublisherBackgroundImage;
+	
+	private String selectedTimeZoneId, lastTimeZoneId;
+	private DateTimePicker start, end;
 
 	public MerchantDealOfferPanel(final String id, final MerchantIdentity merchantIdentity,
 			final SubmitCallBack callback)
@@ -105,11 +115,6 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 		form.add(new TextField<String>("summary"));
 		form.add(new TextField<String>("price"));
 
-		DateConverter converter = new PatternDateConverter("MM/dd/yyyy", false);
-		form.add(new DateTextField("expires", converter));
-
-		form.add(new CheckBox("isActive"));
-
 		DealOffer dealOffer = (DealOffer) getDefaultModelObject();
 
 		publisherLogo = dealOffer.getDealOfferLogo();
@@ -157,6 +162,67 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 
 				};
 		form.add(mediaPanelPublisherBackgroundImage);
+		
+		
+		
+		
+		TimeZone bestGuessTimeZone = SessionUtils.getSession().getBestGuessTimeZone();
+		selectedTimeZoneId = TimeZoneDropDown.getBestSupportedTimeZone(bestGuessTimeZone).getID();
+		lastTimeZoneId = selectedTimeZoneId;
+		LOG.debug("init with timezone: " + selectedTimeZoneId);
+
+		// convert the start/end dates to merchant_account timezone, for display
+		Date endDate = convertTimeZone(dealOffer.getScheduledEndDate(), TimeZone.getTimeZone(selectedTimeZoneId), TimeZone.getDefault());
+		Date startDate = convertTimeZone(dealOffer.getScheduledStartDate(), TimeZone.getTimeZone(selectedTimeZoneId), TimeZone.getDefault());
+		end = new DateTimePicker("scheduledEndDate", Model.of(endDate));
+		start = new DateTimePicker("scheduledStartDate", Model.of(startDate));
+		form.addOrReplace(end.setOutputMarkupId(true));
+		form.addOrReplace(start.setOutputMarkupId(true));
+
+		// start date must be at least today
+		form.add(new StartEndDateFormValidator(start, end));
+
+		final TimeZoneDropDown timeZoneDropDown = new TimeZoneDropDown("timeZoneSelect", new PropertyModel<String>(this, "selectedTimeZoneId"));
+		timeZoneDropDown.add(new AjaxFormComponentUpdatingBehavior("onchange")
+		{
+			private static final long serialVersionUID = 8587109070528314926L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target)
+			{
+				SessionUtils.getSession().setAndPersistTimeZone(selectedTimeZoneId);
+
+				// adjust from old TZ to new TZ
+				Date endDate = convertTimeZone(end.getModelObject(), TimeZone.getTimeZone(selectedTimeZoneId), TimeZone.getTimeZone(lastTimeZoneId));
+				Date startDate = convertTimeZone(start.getModelObject(), TimeZone.getTimeZone(selectedTimeZoneId), TimeZone.getTimeZone(lastTimeZoneId));
+				lastTimeZoneId = selectedTimeZoneId;
+				end.setModelObject(endDate);
+				start.setModelObject(startDate);
+				target.add(start);
+				target.add(end);
+			}
+
+		});
+		form.addOrReplace(timeZoneDropDown.setOutputMarkupId(true));
+
+		final WebMarkupContainer currentTimeZone = new WebMarkupContainer("currentTimeZone");
+		addOrReplace(currentTimeZone.setOutputMarkupId(true));
+		currentTimeZone.add(new Label("currentTimeZoneLabel", selectedTimeZoneId));
+		currentTimeZone.add(new AjaxLink<Void>("changeTimeZone")
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				timeZoneDropDown.add(new CssClassToggle("hide", "show"));
+				target.add(timeZoneDropDown);
+				currentTimeZone.setVisible(false);
+				target.add(currentTimeZone);
+			}
+
+		});
 
 	}
 
@@ -229,6 +295,23 @@ public class MerchantDealOfferPanel extends BaseDefinitionPanel
 
 		}
 		return owningMerchant;
+	}
+	
+	private Date convertTimeZone(Date date, TimeZone toTimeZone, TimeZone fromTimeZone)
+	{
+		// get the offset
+		int millisInHour = (1000 * 60 * 60);
+		int fromOffset = fromTimeZone.getOffset(date.getTime()) / millisInHour;
+		LOG.info("From Offset of " + fromTimeZone + " is " + fromOffset);
+		int toOffset = toTimeZone.getOffset(date.getTime()) / millisInHour;
+		LOG.info("To Offset of " + toTimeZone + " is " + toOffset);
+		int offset = toOffset - fromOffset;
+
+		// convert the date
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(Calendar.HOUR_OF_DAY, offset);
+		return c.getTime();
 	}
 
 }

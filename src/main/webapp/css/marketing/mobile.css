@@ -110,6 +110,18 @@ td.label
 	padding-bottom: 15px;
 }
 
+.mobile .registration table
+{
+	padding-top: 25px;
+	width: 100%;
+}
+.mobile .registration .consent,
+.mobile .registration .formButtons
+{
+	padding-top: 25px;
+}
+
+
 /* FEEDBACK PANEL */
 
 .feedbackPanel {                          

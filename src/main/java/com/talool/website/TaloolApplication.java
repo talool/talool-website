@@ -64,6 +64,7 @@ import com.talool.website.marketing.pages.mobile.MobileMerchantAgreementPage;
 import com.talool.website.marketing.pages.mobile.MobilePasswordPage;
 import com.talool.website.marketing.pages.mobile.MobilePasswordResetPage;
 import com.talool.website.marketing.pages.mobile.MobilePrivacyPage;
+import com.talool.website.marketing.pages.mobile.MobileRegistrationPage;
 import com.talool.website.marketing.pages.mobile.MobileTermsPage;
 import com.talool.website.marketing.pages.mobile.MobileWhiteLabelPage;
 import com.talool.website.pages.AdminLoginPage;
@@ -214,6 +215,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/m/gift-returned", MobileGiftReturnedPage.class);
 		mountPage("/m/landing", MobileEmailLandingPage.class);
 		mountPage("/m/faq", MobileFaqPage.class);
+		mountPage("/m/getstarted", MobileRegistrationPage.class);
 
 		mountPage("/404", PageNotFound.class);
 

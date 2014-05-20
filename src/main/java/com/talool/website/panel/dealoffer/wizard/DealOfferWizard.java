@@ -72,7 +72,7 @@ public class DealOfferWizard extends AbstractWizard<DealOffer> {
 		DealOffer offer  = (DealOffer) getModelObject();
 
 		// if this book belongs to a fundraising publisher, ensure it is set as a fundraising_book
-		if (PermissionUtils.isFundraisingPublisher(offer.getMerchant()))
+		if (offer.getId() == null && PermissionUtils.isFundraisingPublisher(offer.getMerchant()))
 		{
 			offer.getProperties().createOrReplace(KeyValue.fundraisingBook, true);
 		}
@@ -81,7 +81,6 @@ public class DealOfferWizard extends AbstractWizard<DealOffer> {
 		TaloolService taloolService = FactoryManager.get().getServiceFactory().getTaloolService();
 		try {
 			taloolService.merge(offer);
-			
 			StringBuilder sb = new StringBuilder("Saved Book: ");
 			this.info(sb.append(getModelObject().getTitle()).toString());
 			

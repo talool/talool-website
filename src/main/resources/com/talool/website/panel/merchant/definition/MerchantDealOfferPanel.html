@@ -1,57 +1,56 @@
-<wicket:extend>
-	<script>
-	  $(function() {
-	    $( "#datepicker_do" ).datepicker();
-	  });
-	</script>
-	<div class="panel right dealOfferLogoSelectContainer">
-		<div wicket:id="dealOfferIcon"></div>
-		<div wicket:id="dealOfferBackground"></div>
-	</div>
-	<div class="panel left">
-		<h3>Deal Offer</h3>
-		<fieldset>
-			<div>
-	    		<label><i class="hint-font icon-asterisk"></i> Merchant</label>
-	    		<select  wicket:id="owningMerchant"><option>Default Merchant</option></select>
-	    	</div>
-			<div>
-		    	<label><i class="hint-font icon-asterisk"></i> Book Type</label><select id="dt" wicket:id="dealType"></select>
-		    </div>
-		    <div>
-		    	<label><i class="hint-font icon-asterisk"></i> Price</label><input id="price" wicket:id="price" type="text"/>
-			</div>
-			<div>
-		    	<label><i class="hint-font icon-asterisk"></i> Title</label><input wicket:id="title" type="text"/>
-		    </div>
-		    <div>
-		    	<label><i class="hint-font icon-asterisk"></i> Summary</label><input wicket:id="summary" type="text"/>
-		    </div>
-		  
-			<div>
-		    	<label><i class="optional-font icon-asterisk"></i>Expires</label><input id="datepicker_do" wicket:id="expires" type="text"/>
-		    </div>
-		    <div>
-	    		<label></label>
-	    		<input wicket:id="isActive" class="chbx" type="checkbox">Is Active</input>
-	    	</div>
-	    </fieldset>
-	    
-	    <div wicket:id="dealOfferLogo"></div>
-	    
-	   <script>
-	    $("#dt").change(function () {
-			var str = "";
-			$("select option:selected").each(function () {
-			   if( $(this).text()=='FREE_BOOK' || $(this).text()=='FREE_DEAL' )
-			   {
-			     $('#price').val("0.0").attr("disabled", "disabled");
-			   }
-			   else {   $('#price').val("").removeAttr("disabled");  }
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+		<link rel="stylesheet" type="text/css" href="/css/kendo/kendo.common.min.css"/>
+		<link rel="stylesheet" type="text/css" href="/css/kendo/kendo.default.min.css"/>
+	</wicket:head>
+	<wicket:extend>
+
+		<div class="panel right dealOfferLogoSelectContainer">
+			<div wicket:id="dealOfferIcon"></div>
+			<div wicket:id="dealOfferBackground"></div>
+		</div>
+		<div class="panel left">
+			<h3>Deal Offer</h3>
+			<fieldset>
+				<div>
+		    		<label><i class="hint-font icon-asterisk"></i> Merchant</label>
+		    		<select  wicket:id="owningMerchant"><option>Default Merchant</option></select>
+		    	</div>
+				<div>
+			    	<label><i class="hint-font icon-asterisk"></i> Book Type</label><select id="dt" wicket:id="dealType"></select>
+			    </div>
+			    <div>
+			    	<label><i class="hint-font icon-asterisk"></i> Price</label><input id="price" wicket:id="price" type="text"/>
+				</div>
+				<div>
+			    	<label><i class="hint-font icon-asterisk"></i> Title</label><input wicket:id="title" type="text"/>
+			    </div>
+			    <div>
+			    	<label><i class="hint-font icon-asterisk"></i> Summary</label><input wicket:id="summary" type="text"/>
+			    </div>
 			  
-			});
-			
-		})
-</script>
-	</div>
-</wicket:extend>
+	   
+				<div>
+			    	<label><i class="hint-font icon-asterisk"></i> Start Date</label>
+			        <span class="datetime" wicket:id="scheduledStartDate"></span>
+			    </div>
+			    <div>
+			    	<label><i class="hint-font icon-asterisk"></i> End Date</label>
+			        <span class="datetime" wicket:id="scheduledEndDate"></span>
+			    </div>
+			    
+			    <div>
+			    	<label><i class="optional-font icon-asterisk"></i> Time Zone</label>
+			        <span wicket:id="currentTimeZone" class="readOnlyValue">
+			        	<span wicket:id="currentTimeZoneLabel">XXX</span> 
+			        	(<a wicket:id="changeTimeZone">change</a>)
+			        </span>
+			        <select wicket:id="timeZoneSelect" class="hide"></select>
+			    </div>
+		    </fieldset>
+		    
+		    <div wicket:id="dealOfferLogo"></div>
+		    
+		</div>
+	</wicket:extend>
+</html>

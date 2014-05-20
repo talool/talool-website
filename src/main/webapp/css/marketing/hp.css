@@ -333,8 +333,9 @@
 .hp .registration .formButtons
 {
 	clear: left;
-	padding: 10px;
+	padding: 25px 10px 10px;
 	text-align: center;
+	border-top: 1px solid #ddd;
 }
 
 .hp .appDesc dl

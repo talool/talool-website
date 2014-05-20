@@ -11,6 +11,11 @@ public class MobilePage extends WebPage {
 	{
 		super(parameters);
 	}
+	
+	public MobilePage()
+	{
+		super();
+	}
 
 	@Override
 	protected void onInitialize()
