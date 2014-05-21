@@ -5,13 +5,9 @@ import java.util.UUID;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.talool.core.Merchant;
-import com.talool.core.MerchantIdentity;
-import com.talool.domain.MerchantIdentityImpl;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.MerchantDealsPanel;
-import com.talool.website.panel.merchant.definition.MerchantDealOfferPanel;
 import com.talool.website.util.SecuredPage;
 import com.talool.website.util.SessionUtils;
 
@@ -48,9 +44,7 @@ public class MerchantDealsPage extends BasePage
 	@Override
 	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
 	{
-		Merchant m = SessionUtils.getSession().getMerchantAccount().getMerchant();
-		MerchantIdentity mi = new MerchantIdentityImpl(m.getId(), m.getName());
-		return new MerchantDealOfferPanel(contentId, mi, callback);
+		return null;
 	}
 
 	@Override

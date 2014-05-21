@@ -93,7 +93,7 @@ table.meta td .iphone
 
 .borderedBox .warnings li
 {
-	margin-bottom: 10px;
+	margin-bottom: 30px;
 }
 
 .borderedBox .warnings li ul
@@ -104,6 +104,7 @@ table.meta td .iphone
 .borderedBox .warnings li li
 {
 	list-style-type: disc;
+	margin-bottom: 10px;
 }
 
 .borderedBox h3
@@ -145,3 +146,13 @@ table.meta .borderedBox td
 	margin-bottom: 30px;
 }
 
+/* next steps */
+.nextSteps h3
+{
+	font-size: 26px;
+	text-shadow: 1px 1px 2px rgba(100,100,100,.5) ;
+}
+.nextSteps .warnings
+{
+	font-size: 16px;
+}

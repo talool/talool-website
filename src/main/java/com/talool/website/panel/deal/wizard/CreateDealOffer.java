@@ -36,7 +36,6 @@ import com.talool.core.service.TaloolService;
 import com.talool.website.component.TimeZoneDropDown;
 import com.talool.website.panel.deal.DealPreview;
 import com.talool.website.panel.image.selection.MediaSelectionPanel;
-import com.talool.website.panel.merchant.definition.MerchantDealOfferPanel;
 import com.talool.website.util.CssClassToggle;
 import com.talool.website.util.SessionUtils;
 import com.talool.website.validators.StartEndDateFormValidator;
@@ -44,7 +43,7 @@ import com.talool.website.validators.StartEndDateFormValidator;
 public class CreateDealOffer extends DynamicWizardStep {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOG = LoggerFactory.getLogger(MerchantDealOfferPanel.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CreateDealOffer.class);
 	private final IDynamicWizardStep nextStep;
 	private final DealOffer dealOffer;
 	private DealWizard wizard;

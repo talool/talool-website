@@ -328,6 +328,10 @@ public class MerchantSummaryPanel extends BaseTabPanel
 				dealWarnings.add("One of your deals is missing an image.");
 			}
 		}
+		if (model.getObject().isEmpty())
+		{
+			dealWarnings.add("Create some deals, so you can attract new customers.");
+		}
 
 		keyValues = KeyValue.getKeyValues(merchant.getProperties());
 

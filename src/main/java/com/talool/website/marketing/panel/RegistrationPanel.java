@@ -29,6 +29,7 @@ import com.talool.utils.HttpUtils;
 import com.talool.utils.KeyValue;
 import com.talool.website.component.StateOption;
 import com.talool.website.component.StateSelect;
+import com.talool.website.pages.dashboard.MerchantDashboard;
 import com.talool.website.panel.NiceFeedbackPanel;
 import com.talool.website.util.SessionUtils;
 import com.talool.website.validators.EmailValidator;
@@ -259,7 +260,23 @@ public class RegistrationPanel extends Panel {
 		// send email
 		emailService.sendMerchantAccountEmail(new EmailRequestParams<MerchantAccount>(account));
 		
-		SessionUtils.successMessage("Your account has been created.  You will receive an email shortly with more information.");
+		SessionUtils.successMessage("Your account has been created.  You will receive an email shortly with more information.  Please review the next steps below.");
+		
+		// authenticate user and redirect to admin
+		try
+		{
+			MerchantAccount mAccnt = taloolService.authenticateMerchantAccount(email, password);
+			if (mAccnt != null)
+			{
+				SessionUtils.getSession().setMerchantAccount(mAccnt);
+				setResponsePage(MerchantDashboard.class);
+			}
+		}
+		catch (ServiceException e)
+		{
+			LOG.error(String.format("Problem authenticating %s", email), e);
+		}
+		
 	}
 	
 	private Point getGeometry(MerchantLocation mloc)
