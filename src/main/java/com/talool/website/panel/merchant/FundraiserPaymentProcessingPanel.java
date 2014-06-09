@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.Session;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -242,6 +241,8 @@ public class FundraiserPaymentProcessingPanel extends BaseTabPanel
 
 			form.add(new SubmitLink("submitLink")
 			{
+				private static final long serialVersionUID = 8842918221454890363L;
+
 				@Override
 				public void onSubmit()
 				{
@@ -249,22 +250,22 @@ public class FundraiserPaymentProcessingPanel extends BaseTabPanel
 					// target.add(((BasePage) this.getPage()).getFeedback());
 					String masterMerchantAccountId = ServiceConfig.get().getBraintreeMasterMerchantId();
 
+					MerchantAccountRequest request = new MerchantAccountRequest().individual().firstName(individualDetails.firstName)
+							.lastName(individualDetails.lastName).email(individualDetails.email).phone(individualDetails.phone)
+							.dateOfBirth(bdayFormat.format(individualDetails.birthDay)).ssn(individualDetails.ssn).address()
+							.streetAddress(individualDetails.streetAddress).locality(individualDetails.city)
+							.region(individualDetails.state.getCode()).postalCode(individualDetails.zip).done().done().business()
+							.legalName(fundraiser.getName()).dbaName(businessDetails.dbaName).taxId(businessDetails.taxId).address()
+							.streetAddress(fundraiser.getPrimaryLocation().getNiceStreetAddress())
+							.locality(fundraiser.getPrimaryLocation().getCity()).region(fundraiser.getPrimaryLocation().getStateProvinceCounty())
+							.postalCode(fundraiser.getPrimaryLocation().getZip()).done().done().funding()
+							.destination(MerchantAccount.FundingDestination.BANK).email(fundingDetails.emailAddr)
+							.mobilePhone(fundingDetails.mobilePhone).accountNumber(fundingDetails.accountNumber)
+							.routingNumber(fundingDetails.routingNumber).done().tosAccepted(true).masterMerchantAccountId(masterMerchantAccountId);
+
 					if (fundraiser.getProperties().getAsString(KeyValue.braintreeSubmerchantStatus) == null)
 					{
 						// we are onboarding the sub merchant
-						MerchantAccountRequest request = new MerchantAccountRequest().individual().firstName(individualDetails.firstName)
-								.lastName(individualDetails.lastName).email(individualDetails.email).phone(individualDetails.phone)
-								.dateOfBirth(bdayFormat.format(individualDetails.birthDay)).ssn(individualDetails.ssn).address()
-								.streetAddress(individualDetails.streetAddress).locality(individualDetails.city)
-								.region(individualDetails.state.getCode()).postalCode(individualDetails.zip).done().done().business()
-								.legalName(fundraiser.getName()).dbaName(businessDetails.dbaName).taxId(businessDetails.taxId).address()
-								.streetAddress(fundraiser.getPrimaryLocation().getNiceStreetAddress())
-								.locality(fundraiser.getPrimaryLocation().getCity()).region(fundraiser.getPrimaryLocation().getStateProvinceCounty())
-								.postalCode(fundraiser.getPrimaryLocation().getZip()).done().done().funding()
-								.destination(MerchantAccount.FundingDestination.BANK).email(fundingDetails.emailAddr)
-								.mobilePhone(fundingDetails.mobilePhone).accountNumber(fundingDetails.accountNumber)
-								.routingNumber(fundingDetails.routingNumber).done().tosAccepted(true).masterMerchantAccountId(masterMerchantAccountId);
-
 						Result<MerchantAccount> result = BraintreeUtil.get().onboardSubMerchant(request);
 						if (result.isSuccess())
 						{
@@ -300,18 +301,9 @@ public class FundraiserPaymentProcessingPanel extends BaseTabPanel
 					else
 					{
 						// we are editing an already onboarded sub merchant
-						MerchantAccountRequest request = new MerchantAccountRequest().individual().firstName(individualDetails.firstName)
-								.lastName(individualDetails.lastName).email(individualDetails.email).phone(individualDetails.phone)
-								.dateOfBirth(bdayFormat.format(individualDetails.birthDay)).ssn(individualDetails.ssn).address()
-								.streetAddress(individualDetails.streetAddress).locality(individualDetails.city)
-								.region(individualDetails.state.getCode()).postalCode(individualDetails.zip).done().done().business()
-								.legalName(fundraiser.getName()).dbaName(businessDetails.dbaName).taxId(businessDetails.taxId).address()
-								.streetAddress(fundraiser.getPrimaryLocation().getNiceStreetAddress())
-								.locality(fundraiser.getPrimaryLocation().getCity()).region(fundraiser.getPrimaryLocation().getStateProvinceCounty())
-								.postalCode(fundraiser.getPrimaryLocation().getZip()).done().done().funding()
-								.destination(MerchantAccount.FundingDestination.BANK).email(fundingDetails.emailAddr)
-								.mobilePhone(fundingDetails.mobilePhone).accountNumber(fundingDetails.accountNumber)
-								.routingNumber(fundingDetails.routingNumber).done().tosAccepted(true).masterMerchantAccountId(masterMerchantAccountId);
+
+						// TODO optimize this by a Momento or other pattern (only sending
+						// changed data)
 
 						Result<MerchantAccount> result = BraintreeUtil.get().updateMerchantAccount(
 								fundraiser.getProperties().getAsString(KeyValue.braintreeSubmerchantId), request);
@@ -325,13 +317,6 @@ public class FundraiserPaymentProcessingPanel extends BaseTabPanel
 							SessionUtils.infoMessage("There was a problem updating: ", result.getMessage());
 						}
 					}
-
-				}
-
-				private static final long serialVersionUID = 8842918221454890363L;
-
-				protected void onSubmit(AjaxRequestTarget target, Form<?> form)
-				{
 
 				}
 
