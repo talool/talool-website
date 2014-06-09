@@ -19,11 +19,9 @@ public abstract class BaseTabPanel extends Panel
 {
 	private static final long serialVersionUID = -2584158965295658902L;
 
-	protected transient static final TaloolService taloolService = FactoryManager.get()
-			.getServiceFactory().getTaloolService();
+	protected transient static final TaloolService taloolService = FactoryManager.get().getServiceFactory().getTaloolService();
 
-	protected transient static final DomainFactory domainFactory = FactoryManager.get()
-			.getDomainFactory();
+	protected transient static final DomainFactory domainFactory = FactoryManager.get().getDomainFactory();
 
 	public BaseTabPanel(String id)
 	{
@@ -37,26 +35,26 @@ public abstract class BaseTabPanel extends Panel
 		super.onInitialize();
 
 		final BasePage page = (BasePage) this.getPage();
-		
+
 		// hook into the action link and update it for this panel
-		if (page.hasActionLink())
+		if (hasActionLink())
 		{
 			Label actionLabel = new Label("actionLabel", getActionLabel());
 			actionLabel.setOutputMarkupId(true);
-	
+
 			final AdminModalWindow definitionModal = page.getModal();
 			final SubmitCallBack callback = page.getCallback(definitionModal);
 			AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")
 			{
-	
+
 				private static final long serialVersionUID = 7891264295227523725L;
-	
+
 				@Override
 				public void onClick(AjaxRequestTarget target)
 				{
 					getSession().getFeedbackMessages().clear();
 					definitionModal.setTitle(getActionLabel());
-	
+
 					definitionModal.setContent(getNewDefinitionPanel(definitionModal.getContentId(), callback));
 					definitionModal.show(target);
 				}
@@ -66,6 +64,12 @@ public abstract class BaseTabPanel extends Panel
 			page.setActionLink(actionLink);
 		}
 
+	}
+
+	public boolean hasActionLink()
+	{
+		final BasePage page = (BasePage) this.getPage();
+		return page.hasActionLink();
 	}
 
 	abstract public String getActionLabel();

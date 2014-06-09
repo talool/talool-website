@@ -16,41 +16,44 @@ import com.talool.website.panel.analytics.CubismPanel;
 import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SessionUtils;
 
-public class FundraiserAnalyticsPanel extends BaseTabPanel {
+public class FundraiserAnalyticsPanel extends BaseTabPanel
+{
 
 	private static final long serialVersionUID = 522375793977325630L;
 
 	private UUID _fundraiserId;
 	private UUID _publisherId;
-	
-	public FundraiserAnalyticsPanel(String id, PageParameters parameters) {
+
+	public FundraiserAnalyticsPanel(String id, PageParameters parameters)
+	{
 		super(id);
 		_fundraiserId = UUID.fromString(parameters.get("id").toString());
 		_publisherId = UUID.fromString(parameters.get("pid").toString());
 	}
-	
+
 	@Override
-	protected void onInitialize() {
+	protected void onInitialize()
+	{
 		super.onInitialize();
-		
+
 		List<CubismHorizon> metrics = CubismHorizonFactory.getFundraiserPurchaseMetricsByFundraiserId(_fundraiserId);
 		CubismPanel chart = new CubismPanel("chart", "Purchase Activity", metrics);
 		add(chart.setVisible(PermissionUtils.canViewAnalytics(SessionUtils.getSession().getMerchantAccount())));
-		
+
 		// hide the action button
 		final BasePage page = (BasePage) this.getPage();
-		page.getActionLink().add(new AttributeModifier("class","hide"));
+		page.getActionLink().add(new AttributeModifier("class", "hide"));
 	}
 
 	@Override
-	public String getActionLabel() {
-		// TODO Auto-generated method stub
+	public String getActionLabel()
+	{
 		return null;
 	}
 
 	@Override
-	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback) {
-		// TODO Auto-generated method stub
+	public Panel getNewDefinitionPanel(String contentId, SubmitCallBack callback)
+	{
 		return null;
 	}
 

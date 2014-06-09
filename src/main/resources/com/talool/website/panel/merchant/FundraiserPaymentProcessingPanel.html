@@ -1,0 +1,120 @@
+<wicket:extend>
+	<p wicket:id="statusMessage">Create/Edit Braintree sub-merchant
+		account below</p>
+	<form wicket:id="form">
+		<div class="borderedBox gray5-font">
+			<table>
+				<tbody>
+					<tr>
+						<th><i class="hint-font icon-asterisk"></i> Transaction Fee
+							Percent</th>
+						<td><input wicket:id="transactionFeePercent" type="text"></td>
+					</tr>
+					<tr>
+						<td colspan="2"><h3 style="border-bottom:0px">Business
+								Details</h3></td>
+					</tr>
+					<tr>
+						<th><i class="hint-font icon-asterisk"></i> Legal Name</th>
+						<td><input wicket:id="name" type="text"></td>
+					</tr>
+					<tr>
+						<th><i class="hint-font icon-asterisk"></i> DBA Name</th>
+						<td><input wicket:id="dbaName" type="text" /></td>
+					</tr>
+					<tr>
+						<th><i class="hint-font icon-asterisk"></i> Tax ID</th>
+						<td><input wicket:id="taxId" type="text" /></td>
+					</tr>
+					<tr>
+						<th><i class="hint-font icon-asterisk"></i> Street Address</th>
+						<td><input  wicket:id="address" type="text" /></td>
+					</tr>
+					<tr>
+						<th><i class="hint-font icon-asterisk"></i> City</th>
+						<td><input  wicket:id="city" type="text" /></td>
+					</tr>
+					<tr>
+						<th><i class="hint-font icon-asterisk"></i> State</th>
+						<td><select  wicket:id="state" ></select></td>
+					</tr>
+					<tr>
+						<th><i class="hint-font icon-asterisk"></i> Zip Code</th>
+						<td><input  wicket:id="zip" type="text" /></td>
+					</tr>
+					<wicket:container wicket:id="individualDetails">
+						<tr>
+							<td colspan="2"><h3 style="border-bottom:0px">Individual
+									Details</h3></td>
+						</tr>
+						<tr>
+							<th><i class="hint-font icon-asterisk"></i> First Name</th>
+							<td><input wicket:id="firstName" type="text" /></td>
+						</tr>
+						<tr>
+							<th><i class="hint-font icon-asterisk"></i> Last Name</th>
+							<td><input wicket:id="lastName" type="text" /></td>
+						</tr>
+						<tr>
+							<th><i class="hint-font icon-asterisk"></i> Email</th>
+							<td><input wicket:id="email" type="text" /></td>
+						</tr>
+						<tr>
+							<th>Phone (all numeric)</th>
+							<td><input wicket:id="phone" type="text" /></td>
+						</tr>
+						<tr>
+							<th><i class="hint-font icon-asterisk"></i> Birth Day (yyyy-mm-dd)</th>
+							<td><input wicket:id="birthDay" type="text" /></td>
+						</tr>
+						<tr>
+							<th>SSN</th>
+							<td><input wicket:id="ssn" type="text" /></td>
+						</tr>
+						<tr>
+							<th><i class="hint-font icon-asterisk"></i> Street Address</th>
+							<td><input wicket:id="streetAddress" type="text" /></td>
+						</tr>
+						<tr>
+							<th><i class="hint-font icon-asterisk"></i> City</th>
+							<td><input wicket:id="city" type="text" /></td>
+						</tr>
+						<tr>
+							<th><i class="hint-font icon-asterisk"></i> State</th>
+							<td><select wicket:id="state"></select></td>
+						</tr>
+						<tr>
+							<th><i class="hint-font icon-asterisk"></i> Zip Code</th>
+							<td><input wicket:id="zip" type="text" /></td>
+						</tr>
+					</wicket:container>
+					<wicket:container wicket:id="accountFunding">
+						<tr>
+							<td colspan="2"><h3 style="border-bottom:0px">Account
+									Funding</h3></td>
+						</tr>
+						<tr>
+							<th><i class="hint-font icon-asterisk"></i> Email</th>
+							<td><input wicket:id="emailAddr" type="text" /></td>
+						</tr>
+						<tr>
+							<th><i class="hint-font icon-asterisk"></i> Mobile Phone</th>
+							<td><input wicket:id="mobilePhone" type="text" /></td>
+						</tr>
+						<tr>
+							<th><i class="hint-font icon-asterisk"></i> Account Number</th>
+							<td><input wicket:id="accountNumber" type="text" /></td>
+						</tr>
+						<tr>
+							<th><i class="hint-font icon-asterisk"></i> Routing Number</th>
+							<td><input wicket:id="routingNumber" type="text" /></td>
+						</tr>
+					</wicket:container>
+				</tbody>
+			</table>
+			<div style="text-align:center">
+				<a wicket:id="submitLink" href="#" class="btn">Submit To Braintree</a>
+			</div>
+		</div>
+	</form>
+</wicket:extend>
