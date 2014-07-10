@@ -14,6 +14,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.FundraiserAnalyticsPanel;
+import com.talool.website.panel.merchant.FundraiserPaymentProcessingPanel;
 import com.talool.website.panel.merchant.FundraiserSummaryPanel;
 import com.talool.website.panel.merchant.MerchantAccountsPanel;
 import com.talool.website.util.PermissionUtils;
@@ -30,7 +31,7 @@ public class FundraiserManagementPage extends BaseManagementPage
 {
 	private static final long serialVersionUID = -6214364791355264043L;
 	private UUID _merchantId;
-	
+
 	public FundraiserManagementPage(PageParameters parameters)
 	{
 		super(parameters);
@@ -47,13 +48,13 @@ public class FundraiserManagementPage extends BaseManagementPage
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		
-		//final Merchant merchant = new MerchantModel(_merchantId, true).getObject();
+
+		// final Merchant merchant = new MerchantModel(_merchantId,
+		// true).getObject();
 
 		List<ITab> tabs = new ArrayList<ITab>();
-		
 
-		tabs.add(new AbstractTab(new Model<String>("Summary"))
+		tabs.add(new AbstractTab(Model.of("Summary"))
 		{
 			private static final long serialVersionUID = 6405610365875810783L;
 
@@ -63,8 +64,8 @@ public class FundraiserManagementPage extends BaseManagementPage
 				return new FundraiserSummaryPanel(panelId, getPageParameters());
 			}
 		});
-		
-		tabs.add(new AbstractTab(new Model<String>("Accounts"))
+
+		tabs.add(new AbstractTab(Model.of("Accounts"))
 		{
 
 			private static final long serialVersionUID = 5853871222415506440L;
@@ -75,10 +76,10 @@ public class FundraiserManagementPage extends BaseManagementPage
 				return new MerchantAccountsPanel(panelId, getPageParameters());
 			}
 		});
-		
+
 		if (PermissionUtils.canViewAnalytics(SessionUtils.getSession().getMerchantAccount()))
 		{
-			tabs.add(new AbstractTab(new Model<String>("Analytics"))
+			tabs.add(new AbstractTab(Model.of("Analytics"))
 			{
 
 				private static final long serialVersionUID = 5853871222415506440L;
@@ -88,11 +89,25 @@ public class FundraiserManagementPage extends BaseManagementPage
 				{
 					return new FundraiserAnalyticsPanel(panelId, getPageParameters());
 				}
-				
-				
+
 			});
 		}
 
+		if (PermissionUtils.canViewAnalytics(SessionUtils.getSession().getMerchantAccount()))
+		{
+			tabs.add(new AbstractTab(Model.of("Payment Processing"))
+			{
+
+				private static final long serialVersionUID = 5853871222415506440L;
+
+				@Override
+				public Panel getPanel(String panelId)
+				{
+					return new FundraiserPaymentProcessingPanel(panelId, getPageParameters());
+				}
+
+			});
+		}
 
 		final AjaxTabbedPanel<ITab> tabbedPanel = new AjaxTabbedPanel<ITab>("tabs", tabs)
 		{

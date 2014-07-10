@@ -2,7 +2,6 @@ package com.talool.website.panel.merchant;
 
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -13,6 +12,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.talool.core.MerchantAccount;
 import com.talool.core.service.ServiceException;
@@ -29,7 +30,7 @@ import com.talool.website.panel.merchant.definition.MerchantAccountResetPassword
 
 public class MerchantAccountsPanel extends BaseTabPanel
 {
-	private static final Logger LOG = Logger.getLogger(MerchantAccountsPanel.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MerchantAccountsPanel.class);
 	private static final long serialVersionUID = 3634980968241854373L;
 	private UUID _merchantId;
 
@@ -86,8 +87,7 @@ public class MerchantAccountsPanel extends BaseTabPanel
 					public void onClick(AjaxRequestTarget target)
 					{
 						getSession().getFeedbackMessages().clear();
-						MerchantAccountPanel panel = new MerchantAccountPanel(modal.getContentId(), callback,
-								merchantaccountId);
+						MerchantAccountPanel panel = new MerchantAccountPanel(modal.getContentId(), callback, merchantaccountId);
 						modal.setContent(panel);
 						modal.setTitle("Edit Merchant Account");
 						modal.show(target);

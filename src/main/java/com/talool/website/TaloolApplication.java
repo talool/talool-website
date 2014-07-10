@@ -72,6 +72,7 @@ import com.talool.website.pages.AnalyticsPage;
 import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.pages.CustomerSearchPage;
 import com.talool.website.pages.CustomerSettingsPage;
+import com.talool.website.pages.FundraiserManagementPage;
 import com.talool.website.pages.HealthCheckPage;
 import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.pages.UploadPage;
@@ -83,6 +84,7 @@ import com.talool.website.pages.error.PageNotFound;
 import com.talool.website.pages.lists.CustomersPage;
 import com.talool.website.pages.lists.DealHistoryPage;
 import com.talool.website.pages.lists.DealOffersPage;
+import com.talool.website.pages.lists.FundraisersPage;
 import com.talool.website.pages.lists.MerchantAccountsPage;
 import com.talool.website.pages.lists.MerchantDealOffersPage;
 import com.talool.website.pages.lists.MerchantLocationsPage;
@@ -133,19 +135,16 @@ public class TaloolApplication extends WebApplication implements Serializable
 	{
 		getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
 
-		final IPackageResourceGuard packageResourceGuard = getResourceSettings()
-				.getPackageResourceGuard();
+		final IPackageResourceGuard packageResourceGuard = getResourceSettings().getPackageResourceGuard();
 		if (packageResourceGuard instanceof SecurePackageResourceGuard)
 		{
 			final SecurePackageResourceGuard guard = (SecurePackageResourceGuard) packageResourceGuard;
 			guard.addPattern("+*.*");
 		}
 
-		getComponentInstantiationListeners().add(
-				new SpringComponentInjector(this, getApplicationContext(), false));
+		getComponentInstantiationListeners().add(new SpringComponentInjector(this, getApplicationContext(), false));
 
-		final ResourceReference faviconRef = new PackageResourceReference(this.getClass(),
-				"favicon.ico");
+		final ResourceReference faviconRef = new PackageResourceReference(this.getClass(), "favicon.ico");
 		mountResource("/favicon.ico", faviconRef);
 
 		mountResource("fileManager", new FileManageResourceReference(Config.get().getUploadDir()));
@@ -218,6 +217,9 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/m/getstarted", MobileRegistrationPage.class);
 
 		mountPage("/404", PageNotFound.class);
+
+		mountPage("/admin/fundraisers", FundraisersPage.class);
+		mountPage("/admin/fundraisers/fm", FundraiserManagementPage.class);
 
 		/*
 		 * We need a ONE_PASS_RENDER strategy because pages like search need
