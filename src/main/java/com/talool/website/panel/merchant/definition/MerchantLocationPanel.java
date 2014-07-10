@@ -91,7 +91,7 @@ public class MerchantLocationPanel extends BaseDefinitionPanel
 
 		locationPanel.add(new TextField<String>("address2"));
 		locationPanel.add(new TextField<String>("city").setRequired(true));
-		locationPanel.add(new TextField<String>("zip").setRequired(true));
+		locationPanel.add(new TextField<String>("zip"));
 		locationPanel.add(new TextField<String>("locationName"));
 		locationPanel.add(new TextField<String>("phone").setRequired(true));
 		locationPanel.add(new TextField<String>("websiteUrl"));
