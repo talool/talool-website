@@ -81,8 +81,8 @@ abstract public class EditableImage extends Panel {
 
 		};
 		
-		iframe.add(new AttributeAppender("height", new Model<Integer>(iframeHeight)));
-		iframe.add(new AttributeAppender("width", new Model<Integer>(iframeWidth)));
+		iframe.add(new AttributeAppender("height", new Model<Integer>(getIframeHeight())));
+		iframe.add(new AttributeAppender("width", new Model<Integer>(getIframeWidth())));
 		
 		add(iframe.setOutputMarkupId(true));
 		
@@ -134,6 +134,15 @@ abstract public class EditableImage extends Panel {
 		{
 			LOG.error("random-ass-exception saving new merchant media:", e);
 		}
+	}
+	
+	public int getIframeWidth()
+	{
+		return iframeWidth;
+	}
+	public int getIframeHeight()
+	{
+		return iframeHeight;
 	}
 	
 	abstract public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media);

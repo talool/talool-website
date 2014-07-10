@@ -267,6 +267,50 @@ public class MerchantsPage extends BasePage
 					}
 					
 				});
+				
+				item.add(new EditableImage("editableLogo",Model.of(merchant.getLogoUrl()), merchantId, MediaType.MERCHANT_LOGO)
+				{
+
+					private static final long serialVersionUID = -7677598504543286741L;
+					private int iframeWidth = 100;
+
+					@Override
+					public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media) 
+					{
+						try
+						{
+							// update the current locations
+							Merchant m = taloolService.getMerchantById(merchantId);
+							m.getCurrentLocation().setLogo(media);
+							taloolService.merge(m.getCurrentLocation());
+							
+							// check for other locations that have no logo and update them too
+							for (MerchantLocation loc:m.getLocations())
+							{
+								if (loc.getLogo() == null)
+								{
+									loc.setLogo(media);
+									taloolService.merge(loc);
+								}
+							}
+							
+							target.add(this);
+						}
+						catch (ServiceException se)
+						{
+							LOG.error("Failed to save new logo with merchant",se);
+						}
+						
+					}
+
+					@Override
+					public int getIframeWidth() {
+						return iframeWidth;
+					}
+					
+					
+					
+				});
 
 				StringBuilder hasMultiple = new StringBuilder();
 				hasMultiple.append(merchant.getLocationCount());
