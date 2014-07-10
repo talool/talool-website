@@ -83,7 +83,7 @@ public class MerchantLocationStep extends WizardStep
 		locationPanel.add(state.setRequired(true));
 		state.add(previewController.getBehaviorForComponent(MapComponent.STATE, "onChange"));
 
-		locationPanel.add(new TextField<String>("currentLocation.zip").setRequired(true));
+		locationPanel.add(new TextField<String>("currentLocation.zip"));
 
 		locationPanel.add(new TextField<String>("currentLocation.locationName"));
 

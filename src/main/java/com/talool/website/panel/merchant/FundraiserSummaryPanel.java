@@ -285,7 +285,7 @@ public class FundraiserSummaryPanel extends BaseTabPanel
 				super.updateAjaxAttributes(attributes);
 
 				List<CharSequence> urlArgumentMethods = attributes.getDynamicExtraParameters();
-				urlArgumentMethods.add("return {'codeCount': prompt('How many access codes would you like to generate?')};");
+				urlArgumentMethods.add("return {'codeCount': prompt('How many tracking codes would you like to generate?')};");
 
 			}
 

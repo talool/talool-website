@@ -11,6 +11,7 @@ import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
 import com.talool.core.MediaType;
 import com.talool.core.Merchant;
+import com.talool.core.MerchantAccount;
 import com.talool.core.MerchantLocation;
 import com.talool.core.MerchantMedia;
 import com.talool.website.panel.deal.DealPreview;
@@ -64,11 +65,18 @@ public class DealOfferLogo extends WizardStep
 	
 	private Deal getDummyDeal()
 	{
-		Deal deal = domainFactory.newDeal(null, SessionUtils.getSession().getMerchantAccount(), true);
-		deal.setMerchant(getDummyMerchant());
+		MerchantAccount ma = SessionUtils.getSession().getMerchantAccount();
+		Deal deal = domainFactory.newDeal(null, ma, true);
+		
+		Merchant m = getDummyMerchant();
+		deal.setMerchant(m);
+		
 		deal.setTitle("Buy 1, Get 1 Free");
 		deal.setSummary("Buy 1 Widget, get a Second Widget of Equal or Lesser Value Free.");
 		deal.setDetails("May not be combined with any other offer, discount or promotion. Not valid on holidays, and subject to rules of use.");
+		
+		DealOffer offer = domainFactory.newDealOffer(m, ma);
+		deal.setDealOffer(offer);
 		
 		MerchantMedia dealImage = domainFactory.newMedia(null, "/img/dummyMerchantImage.png", MediaType.DEAL_IMAGE);
 		deal.setImage(dealImage);
