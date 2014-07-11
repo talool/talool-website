@@ -307,9 +307,6 @@ public class MerchantsPage extends BasePage
 					public int getIframeWidth() {
 						return iframeWidth;
 					}
-					
-					
-					
 				});
 
 				StringBuilder hasMultiple = new StringBuilder();

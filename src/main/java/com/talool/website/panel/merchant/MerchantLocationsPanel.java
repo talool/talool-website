@@ -128,16 +128,48 @@ public class MerchantLocationsPanel extends BaseTabPanel
 					}
 					
 				});
+				
+				String logoUrl = (managedLocation.getLogo() != null)?managedLocation.getLogo().getMediaUrl():null;
+				item.add(new EditableImage("editableLogo",Model.of(logoUrl), _merchantId, MediaType.MERCHANT_LOGO)
+				{
 
-				MerchantMedia logo = managedLocation.getLogo();
-				if (logo == null)
-				{
-					item.add(new StaticImage("mylogo", false, "/img/000.png"));
-				}
-				else
-				{
-					item.add(new StaticImage("mylogo", false, logo.getMediaUrl()));
-				}
+					private static final long serialVersionUID = -7677598504543286741L;
+					private int iframeWidth = 100;
+
+					@Override
+					public void onMediaUploadComplete(AjaxRequestTarget target, MerchantMedia media) 
+					{
+						try
+						{
+							// update the current locations
+							Merchant m = taloolService.getMerchantById(_merchantId);
+							m.getCurrentLocation().setLogo(media);
+							taloolService.merge(m.getCurrentLocation());
+							
+							// check for other locations that have no logo and update them too
+							for (MerchantLocation loc:m.getLocations())
+							{
+								if (loc.getLogo() == null)
+								{
+									loc.setLogo(media);
+									taloolService.merge(loc);
+								}
+							}
+							
+							target.add(this);
+						}
+						catch (ServiceException se)
+						{
+							LOG.error("Failed to save new logo with merchant",se);
+						}
+						
+					}
+
+					@Override
+					public int getIframeWidth() {
+						return iframeWidth;
+					}
+				});
 
 				item.add(new Label("locationName"));
 				item.add(new Label("phone"));

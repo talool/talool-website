@@ -57,4 +57,9 @@ public class PermissionUtils {
 		DealOffer offer = new DealOfferModel(offerId).getObject();
 		return isFundraiser(offer);
 	}
+	
+	public static boolean canMoveDeals(MerchantAccount account)
+	{
+		return (account.getProperties().getAsBool(KeyValue.canMoveDeals) || isSuperUser(account));
+	}
 }

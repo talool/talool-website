@@ -69,8 +69,7 @@ public class DealOfferDealsPanel extends BaseTabPanel {
 		super(id);
 		_dealOfferId = UUID.fromString(parameters.get("id").toString());
 		
-		// TODO what rules should determine if bulk move is enabled?
-		bulkMoveEnabled = PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount());
+		bulkMoveEnabled = PermissionUtils.canMoveDeals(SessionUtils.getSession().getMerchantAccount());
 	}
 	
 	@Override
