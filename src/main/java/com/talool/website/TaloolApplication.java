@@ -90,6 +90,7 @@ import com.talool.website.pages.lists.MerchantDealOffersPage;
 import com.talool.website.pages.lists.MerchantLocationsPage;
 import com.talool.website.pages.lists.MerchantRedemptionCodePage;
 import com.talool.website.pages.lists.MerchantsPage;
+import com.talool.website.pages.lists.PublishersPage;
 import com.talool.website.panel.image.upload.FileManageResourceReference;
 import com.talool.website.panel.image.upload.FileUploadResourceReference;
 import com.talool.website.service.BrowserException;
@@ -220,6 +221,8 @@ public class TaloolApplication extends WebApplication implements Serializable
 
 		mountPage("/admin/fundraisers", FundraisersPage.class);
 		mountPage("/admin/fundraisers/fm", FundraiserManagementPage.class);
+
+		mountPage("/admin/publishers", PublishersPage.class);
 
 		/*
 		 * We need a ONE_PASS_RENDER strategy because pages like search need

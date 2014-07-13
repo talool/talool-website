@@ -47,7 +47,7 @@ import com.talool.website.util.SessionUtils;
 public class FundraiserPaymentProcessingPanel extends BaseTabPanel
 {
 	private static final Logger LOG = LoggerFactory.getLogger(FundraiserPaymentProcessingPanel.class);
-	private static final String BIRTH_DAY_FORMAT = "YYYY-MM-dd";
+	private static final String BIRTH_DAY_FORMAT = "yyyy-MM-dd";
 	private static final String SECURE_PREFIX_TEXT = "******";
 	private static final SafeSimpleDateFormat bdayFormat = new SafeSimpleDateFormat(BIRTH_DAY_FORMAT);
 	private static final SafeSimpleDateFormat STATUS_TIME_FORMAT = new SafeSimpleDateFormat(BIRTH_DAY_FORMAT + " HH:mm:ss Z");
