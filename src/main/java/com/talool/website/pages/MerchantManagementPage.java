@@ -17,6 +17,7 @@ import com.talool.core.Merchant;
 import com.talool.utils.KeyValue;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.merchant.PaymentProcessingPanel;
 import com.talool.website.panel.merchant.MerchantAccountsPanel;
 import com.talool.website.panel.merchant.MerchantAnalyticsPanel;
 import com.talool.website.panel.merchant.MerchantDealOffersPanel;
@@ -58,7 +59,7 @@ public class MerchantManagementPage extends BaseManagementPage
 		{
 			return "Merchants > " + getPageParameters().get("name");
 		}
-		
+
 	}
 
 	@Override
@@ -67,7 +68,7 @@ public class MerchantManagementPage extends BaseManagementPage
 		super.onInitialize();
 
 		List<ITab> tabs = new ArrayList<ITab>();
-		
+
 		tabs.add(new AbstractTab(new Model<String>("Summary"))
 		{
 
@@ -103,7 +104,23 @@ public class MerchantManagementPage extends BaseManagementPage
 				return new MerchantAccountsPanel(panelId, getPageParameters());
 			}
 		});
-		
+
+		if (PermissionUtils.isPublisher(_merchantId))
+		{
+			tabs.add(new AbstractTab(Model.of("Payment Processing"))
+			{
+
+				private static final long serialVersionUID = 5853871222415506440L;
+
+				@Override
+				public Panel getPanel(String panelId)
+				{
+					return new PaymentProcessingPanel(panelId, getPageParameters());
+				}
+
+			});
+		}
+
 		if (PermissionUtils.isPublisher(_merchantId))
 		{
 			tabs.add(new AbstractTab(new Model<String>("Books"))
@@ -123,7 +140,7 @@ public class MerchantManagementPage extends BaseManagementPage
 			tabs.add(new AbstractTab(new Model<String>("Deals"))
 			{
 				private static final long serialVersionUID = 6405610365875810783L;
-	
+
 				@Override
 				public Panel getPanel(String panelId)
 				{
@@ -131,9 +148,9 @@ public class MerchantManagementPage extends BaseManagementPage
 				}
 			});
 		}
-		
+
 		if (isSuperUser)
-		{	
+		{
 			tabs.add(new AbstractTab(new Model<String>("Messages"))
 			{
 
@@ -166,8 +183,7 @@ public class MerchantManagementPage extends BaseManagementPage
 						return new MerchantAnalyticsPanel(panelId, getPageParameters());
 					}
 				}
-				
-				
+
 			});
 		}
 
@@ -181,7 +197,7 @@ public class MerchantManagementPage extends BaseManagementPage
 			{
 				super.onAjaxUpdate(target);
 				getSession().getFeedbackMessages().clear();
-				
+
 				MerchantManagementPage page = (MerchantManagementPage) this.getPage();
 				target.add(page.getFeedback());
 				target.add(page.getActionLink());
@@ -190,7 +206,7 @@ public class MerchantManagementPage extends BaseManagementPage
 		};
 		tabbedPanel.setSelectedTab(0);
 		add(tabbedPanel);
-		
+
 		// preload the map to avoid a race condition with the loading of js
 		// dependencies
 		GMap map = new GMap("preloadMap");

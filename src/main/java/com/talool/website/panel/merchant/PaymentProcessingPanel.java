@@ -44,9 +44,9 @@ import com.talool.website.util.SessionUtils;
  * @author clintz
  * 
  */
-public class FundraiserPaymentProcessingPanel extends BaseTabPanel
+public class PaymentProcessingPanel extends BaseTabPanel
 {
-	private static final Logger LOG = LoggerFactory.getLogger(FundraiserPaymentProcessingPanel.class);
+	private static final Logger LOG = LoggerFactory.getLogger(PaymentProcessingPanel.class);
 	private static final String BIRTH_DAY_FORMAT = "yyyy-MM-dd";
 	private static final String SECURE_PREFIX_TEXT = "******";
 	private static final SafeSimpleDateFormat bdayFormat = new SafeSimpleDateFormat(BIRTH_DAY_FORMAT);
@@ -95,7 +95,7 @@ public class FundraiserPaymentProcessingPanel extends BaseTabPanel
 		String routingNumber;
 	}
 
-	public FundraiserPaymentProcessingPanel(String id, PageParameters parameters)
+	public PaymentProcessingPanel(String id, PageParameters parameters)
 	{
 		super(id);
 		fundraiserId = UUID.fromString(parameters.get("id").toString());

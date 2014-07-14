@@ -14,7 +14,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.FundraiserAnalyticsPanel;
-import com.talool.website.panel.merchant.FundraiserPaymentProcessingPanel;
 import com.talool.website.panel.merchant.FundraiserSummaryPanel;
 import com.talool.website.panel.merchant.MerchantAccountsPanel;
 import com.talool.website.util.PermissionUtils;
@@ -88,22 +87,6 @@ public class FundraiserManagementPage extends BaseManagementPage
 				public Panel getPanel(String panelId)
 				{
 					return new FundraiserAnalyticsPanel(panelId, getPageParameters());
-				}
-
-			});
-		}
-
-		if (PermissionUtils.canViewAnalytics(SessionUtils.getSession().getMerchantAccount()))
-		{
-			tabs.add(new AbstractTab(Model.of("Payment Processing"))
-			{
-
-				private static final long serialVersionUID = 5853871222415506440L;
-
-				@Override
-				public Panel getPanel(String panelId)
-				{
-					return new FundraiserPaymentProcessingPanel(panelId, getPageParameters());
 				}
 
 			});
