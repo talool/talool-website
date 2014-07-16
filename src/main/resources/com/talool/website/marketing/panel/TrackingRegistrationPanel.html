@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="appDesc fundraising" wicket:id="container">
+		<div class="phone"></div>
+		
+		<h2>You Could Win Prizes!</h2>
+		<p>
+			Thank you for participating in a Payback Book fundraiser.  We'd like to 
+			track your sales so we can give you a prize.  Please complete the form
+			below to generate you tracking code.
+		</p>
+		<p>
+		<div wicket:id="feedback"></div>
+		<form wicket:id="form">
+			<table>
+				<tr>
+					<td class="label">School or Organization</td>
+					<td><select class="large" wicket:id="fundraiser"></select></td>
+				</tr>
+				<tr>
+					<td class="label">Your Full Name</td>
+					<td><input class="large" wicket:id="fullName"/></td>
+				</tr>
+			</table>
+			<div class="formButtons">
+				<button class="btn" wicket:id="submitButton">Generate My Code</button>
+			</div>
+		</form>
+		</p>
+	</div>
+</wicket:panel>
