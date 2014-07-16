@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.hibernate.LazyInitializationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,10 +58,36 @@ public class StockMediaListModel extends LoadableDetachableModel<List<MerchantMe
 		
 		SearchOptions searchOptions = new SearchOptions.Builder().maxResults(500).page(0).sortProperty("merchantMedia.mediaUrl")
 				.ascending(true).build();
+		
+		Set<Tag> tags = null;
+		try
+		{
+			if (!_tags.isEmpty())
+			{
+				tags = (Set<Tag>)_tags;
+			}
+		}
+		catch(LazyInitializationException lazy)
+		{
+			LOG.debug("didn't have the tags yet, so will need to fetch the merchant");
+		}
+		
+		if (tags==null)
+		{
+			try
+			{
+				Merchant m = taloolService.getMerchantById(_taloolMerchantId);
+				tags = m.getTags();
+			}
+			catch (ServiceException e)
+			{
+				LOG.error("problem loading stock media", e);
+			}
+		}
 
 		try
 		{
-			media = taloolService.getStockMedias(_taloolMerchantId, (Set<Tag>)_tags, searchOptions);
+			media = taloolService.getStockMedias(_taloolMerchantId, tags, searchOptions);
 		}
 		catch (ServiceException e)
 		{

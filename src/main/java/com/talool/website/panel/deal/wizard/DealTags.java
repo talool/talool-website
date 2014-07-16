@@ -1,6 +1,8 @@
 package com.talool.website.panel.deal.wizard;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -60,6 +62,7 @@ public class DealTags extends DynamicWizardStep
 		Category cat = ModelUtil.getCategory(deal.getMerchant());
 
 		List<Tag> choices = TagCache.get().getTagsByCategoryName(cat.getName());
+		Collections.sort(choices, TagNameComparator);
 		ListMultipleChoice<Tag> tagChoices = new ListMultipleChoice<Tag>("tags", new PropertyModel<List<Tag>>(
 				this, "tags"), choices, choiceRender);
 		tagChoices.setMaxRows(25);
@@ -67,6 +70,19 @@ public class DealTags extends DynamicWizardStep
 		addOrReplace(tagChoices.setRequired(true));
 
 	}
+	
+	public static Comparator<Tag> TagNameComparator  = new Comparator<Tag>() {
+
+		public int compare(Tag tag1, Tag tag2) {
+		
+			String tagName1 = tag1.getName().toUpperCase();
+			String tagName2 = tag2.getName().toUpperCase();
+			
+			//ascending order
+			return tagName1.compareTo(tagName2);
+		}
+	
+	};
 
 	// TODO consider watching for a change on the tag list to decide if the merge
 	// needs to happen
