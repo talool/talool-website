@@ -297,7 +297,10 @@
 {
 	width: 150px;
 }
-
+.hp .fundraising.registration .label
+{
+	width: 200px;
+}
 .hp .registration .feedbackPanel
 {
 	margin:  10px 0 0;
@@ -309,6 +312,10 @@
 	border-spacing: 0;
 	width: 400px;
 	float: left;
+}
+.hp .fundraising.registration table
+{
+	width: 100%;
 }
 .hp .registration td
 {

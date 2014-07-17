@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
-	<div class="appDesc fundraising" wicket:id="container">
+	<div class="appDesc fundraising registration" wicket:id="container" style="min-height: 600px">
 		<div class="phone"></div>
-		
-		<h2>You Could Win Prizes!</h2>
+		<h2><span wicket:id="p1"></span> Prizes!</h2>
 		<p>
-			Thank you for participating in a Payback Book fundraiser.  We'd like to 
-			track your sales so we can give you a prize.  Please complete the form
-			below to generate you tracking code.
+			There are many great prizes being offered to the people who
+			sell the <span wicket:id="p2"></span>.  In order to get credit
+			for your sales in the Talool app, you will need to generate your
+			own tracking code by completing the form below. 
 		</p>
+		<p>
+			When you click on "Generate My Code", we will send you an email 
+			with your tracking code and all the details you will need to get started raising
+			money and earning credit toward the prizes.
+		</p>
+		
 		<p>
 		<div wicket:id="feedback"></div>
 		<form wicket:id="form">
@@ -19,13 +25,16 @@
 				</tr>
 				<tr>
 					<td class="label">Your Full Name</td>
-					<td><input class="large" wicket:id="fullName"/></td>
+					<td><input class="large" wicket:id="fullName" maxlength="128"/></td>
+				</tr>
+				<tr>
+					<td class="label">Email</td>
+					<td><input class="large" wicket:id="email" maxlength="128"/></td>
 				</tr>
 			</table>
 			<div class="formButtons">
 				<button class="btn" wicket:id="submitButton">Generate My Code</button>
 			</div>
 		</form>
-		</p>
 	</div>
 </wicket:panel>

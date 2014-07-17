@@ -1,12 +1,14 @@
 package com.talool.website.marketing.panel;
 
-import java.util.List;
+import java.util.Date;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -19,19 +21,18 @@ import com.talool.core.MerchantCodeGroup;
 import com.talool.core.service.EmailService;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
-import com.talool.service.ServiceFactory;
 import com.talool.stats.MerchantSummary;
 import com.talool.website.component.FundraiserSelect;
 import com.talool.website.models.FundraiserListModel;
 import com.talool.website.panel.NiceFeedbackPanel;
+import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SessionUtils;
+import com.talool.website.validators.EmailValidator;
 
 public class TrackingRegistrationPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = Logger.getLogger(TrackingRegistrationPanel.class);
-
-	private static final String payback = "Payback Book";
 	
 	protected transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
@@ -48,22 +49,14 @@ public class TrackingRegistrationPanel extends Panel {
 	
 	private UUID publisherId;
 	private long merchantAccountId;
+	private String publisherName;
 	
-	public TrackingRegistrationPanel(String id) {
+	public TrackingRegistrationPanel(String id, Merchant publisher, long maId) {
 		super(id);
 		
-		try
-		{
-			// get the payback id
-			List<Merchant> teds = ServiceFactory.get().getTaloolService().getMerchantByName(payback);
-			Merchant ted = teds.get(0);
-			publisherId = ted.getId();
-			merchantAccountId = ted.getMerchantAccounts().iterator().next().getId();
-		}
-		catch (ServiceException se)
-		{
-			LOG.error("Failed to find payback", se);
-		}
+		publisherId = publisher.getId();
+		merchantAccountId = maId;
+		publisherName = publisher.getName();
 	}
 	
 	@Override
@@ -96,21 +89,30 @@ public class TrackingRegistrationPanel extends Panel {
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form)
 			{
 
-				try
-				{
-					generateCode();
-					fundraiser = null;
-					fullName = "";
-					email="";
-					target.add(container);
+				if (PermissionUtils.isTrackingOpen(publisherId)){
+					try
+					{
+						generateCode();
+						fundraiser = null;
+						fullName = "";
+						email="";
+						target.add(container);
+					}
+					catch (Exception e)
+					{
+						SessionUtils.errorMessage("There was a problem generating your code.  Please contact support@talool.com for assistance.");
+						LOG.error(e.getLocalizedMessage(), e);
+					}
+					
+					target.add(feedback);
 				}
-				catch (Exception e)
+				else
 				{
-					SessionUtils.errorMessage("There was a problem generating your code.  Please contact support@talool.com for assistance.");
-					LOG.error(e.getLocalizedMessage(), e);
+					// reload the page to show the error message
+					long ts = (new Date()).getTime();
+					target.appendJavaScript("document.location.href = document.location.href + '?' +"+ts);
 				}
 				
-				target.add(feedback);
 			}
 
 		};
@@ -119,24 +121,33 @@ public class TrackingRegistrationPanel extends Panel {
 		TextField<String> mn = new TextField<String>("fullName",new PropertyModel<String>(this,"fullName"));
 		form.add(mn.setRequired(true).setOutputMarkupId(true));
 		
+		TextField<String> em = new TextField<String>("email",new PropertyModel<String>(this,"email"));
+		em.add(new EmailValidator());
+		form.add(em.setRequired(true).setOutputMarkupId(true));
+		
 		FundraiserListModel choices = new FundraiserListModel();
 		choices.setPublisherId(publisherId);
 		FundraiserSelect fs = new FundraiserSelect("fundraiser", new PropertyModel<MerchantSummary>(this, "fundraiser"), choices);
 		form.add(fs.setRequired(true));
+		
+		container.add(new Label("p1",publisherName));
+		container.add(new Label("p2",publisherName));
 	}
 	
 	private void generateCode() throws ServiceException
 	{
 		// generate the code
-		StringBuilder title = new StringBuilder();
-		title.append(fundraiser.getName()).append(" Tracking Codes");
-		String notes = fullName; // TODO add email to this?
 		Merchant school = taloolService.getMerchantById(fundraiser.getMerchantId());
 		MerchantCodeGroup merchantCodeGrp = taloolService.createMerchantCodeGroup(school,
-				merchantAccountId, publisherId, title.toString(), notes, (short) 1);
+				merchantAccountId, publisherId, fullName, email, (short) 1);
+		String code = merchantCodeGrp.getCodes().iterator().next().getCode();
 		
-		String code = merchantCodeGrp.getCodes().iterator().next().getCode();;
-		success("Your tracking code is "+code);
+		StringBuilder message = new StringBuilder("Your tracking code is ");
+		message.append(code).append(". An email will be sent to you shortly.");
+		
+		// TODO send email
+		
+		success(message.toString());
 	}
 
 }

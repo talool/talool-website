@@ -1,0 +1,21 @@
+
+.cobrand .header .nav a
+{
+	display:none;
+}
+
+.cobrand .header .nav
+{
+	width: 300px;
+}
+
+.cobrand.colorado .header .nav
+{
+	background: url(/img/homepage/LogoPaybackBoulder.png) no-repeat right top;
+}
+
+.cobrand.washington .header .nav
+{
+	background: url(/img/homepage/LogoPaybackBookVancouver.png) no-repeat right top;
+	height: 95px;
+}
