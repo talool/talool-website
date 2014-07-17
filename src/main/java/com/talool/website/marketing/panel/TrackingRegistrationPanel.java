@@ -3,7 +3,6 @@ package com.talool.website.marketing.panel;
 import java.util.Date;
 import java.util.UUID;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -21,6 +20,8 @@ import com.talool.core.MerchantCodeGroup;
 import com.talool.core.service.EmailService;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
+import com.talool.service.mail.EmailRequestParams;
+import com.talool.service.mail.EmailTrackingCodeEntity;
 import com.talool.stats.MerchantSummary;
 import com.talool.website.component.FundraiserSelect;
 import com.talool.website.models.FundraiserListModel;
@@ -145,7 +146,10 @@ public class TrackingRegistrationPanel extends Panel {
 		StringBuilder message = new StringBuilder("Your tracking code is ");
 		message.append(code).append(". An email will be sent to you shortly.");
 		
-		// TODO send email
+		// send email
+		Merchant publisher = taloolService.getMerchantById(publisherId);
+		EmailTrackingCodeEntity entity = new EmailTrackingCodeEntity(merchantCodeGrp, publisher);
+		emailService.sendTrackingCodeEmail(new EmailRequestParams<EmailTrackingCodeEntity>(entity));
 		
 		success(message.toString());
 	}
