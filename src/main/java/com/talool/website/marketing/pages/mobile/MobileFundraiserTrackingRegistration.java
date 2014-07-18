@@ -13,14 +13,14 @@ import com.talool.website.marketing.panel.TrackingRegistrationClosedPanel;
 import com.talool.website.marketing.panel.TrackingRegistrationPanel;
 import com.talool.website.util.PermissionUtils;
 
-public class MobileFundraiserTrackingPage extends MobilePage {
+public class MobileFundraiserTrackingRegistration extends MobilePage {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOG = Logger.getLogger(MobileFundraiserTrackingPage.class);
+	private static final Logger LOG = Logger.getLogger(MobileFundraiserTrackingRegistration.class);
 	private static final String payback = "Payback Book";
 	private static final String panelName = "trackme";
 
-	public MobileFundraiserTrackingPage(PageParameters parameters)
+	public MobileFundraiserTrackingRegistration(PageParameters parameters)
 	{
 		super(parameters);
 		

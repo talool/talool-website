@@ -59,7 +59,8 @@ import com.talool.website.marketing.pages.mobile.MobileAnalyticsPage;
 import com.talool.website.marketing.pages.mobile.MobileContactPage;
 import com.talool.website.marketing.pages.mobile.MobileEmailLandingPage;
 import com.talool.website.marketing.pages.mobile.MobileFaqPage;
-import com.talool.website.marketing.pages.mobile.MobileFundraiserTrackingPage;
+import com.talool.website.marketing.pages.mobile.MobileFundraiserTracking;
+import com.talool.website.marketing.pages.mobile.MobileFundraiserTrackingRegistration;
 import com.talool.website.marketing.pages.mobile.MobileFundraisingPage;
 import com.talool.website.marketing.pages.mobile.MobileGiftReturnedPage;
 import com.talool.website.marketing.pages.mobile.MobileHomePage;
@@ -222,7 +223,8 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/m/landing", MobileEmailLandingPage.class);
 		mountPage("/m/faq", MobileFaqPage.class);
 		mountPage("/m/getstarted", MobileRegistrationPage.class);
-		mountPage("/m/prizes", MobileFundraiserTrackingPage.class);
+		mountPage("/m/prizes", MobileFundraiserTrackingRegistration.class);
+		mountPage("/m/tracking", MobileFundraiserTracking.class);
 
 		mountPage("/404", PageNotFound.class);
 

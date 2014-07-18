@@ -66,6 +66,9 @@ public class TrackingPanel extends Panel {
 		final WebMarkupContainer container = new WebMarkupContainer("container");
 		add(container.setOutputMarkupId(true));
 		
+		final WebMarkupContainer results = new WebMarkupContainer("results");
+		container.add(results.setOutputMarkupId(true));
+		
 		final NiceFeedbackPanel feedback = new NiceFeedbackPanel("feedback");
 		container.add(feedback.setOutputMarkupId(true));
 		
@@ -93,7 +96,7 @@ public class TrackingPanel extends Panel {
 			}
 
 		};
-		container.add(sales.setOutputMarkupId(true));
+		results.add(sales.setOutputMarkupId(true));
 		
 		final Form<Void> form = new Form<Void>("form");
 		container.add(form);
@@ -123,7 +126,7 @@ public class TrackingPanel extends Panel {
 					SessionUtils.errorMessage("There was a problem searching for your sales.  Please contact support@talool.com for assistance.");
 					LOG.error(e.getLocalizedMessage(), e);
 				}
-				target.add(container);
+				target.add(results);
 				target.add(feedback);
 
 			}

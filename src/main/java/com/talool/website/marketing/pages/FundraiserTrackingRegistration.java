@@ -13,7 +13,7 @@ import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.service.ServiceFactory;
 import com.talool.website.behaviors.CoBrandBehavior;
-import com.talool.website.marketing.pages.mobile.MobileFundraiserTrackingPage;
+import com.talool.website.marketing.pages.mobile.MobileFundraiserTrackingRegistration;
 import com.talool.website.marketing.panel.TrackingRegistrationClosedPanel;
 import com.talool.website.marketing.panel.TrackingRegistrationPanel;
 import com.talool.website.util.PermissionUtils;
@@ -71,7 +71,7 @@ public class FundraiserTrackingRegistration extends BaseMarketingPage
 	@Override
 	public void handleMobile() {
 		// redirect to mobile web (doing it late, so subclasses can redirect in the constructor)
-		throw new RestartResponseException(MobileFundraiserTrackingPage.class, this.parameters);
+		throw new RestartResponseException(MobileFundraiserTrackingRegistration.class, this.parameters);
 	}
 
 }

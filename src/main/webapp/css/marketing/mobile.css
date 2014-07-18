@@ -154,3 +154,34 @@ div.info ul.feedbackPanel {
 	margin: 0 400px 0 15px;
 	min-height: 690px;
 }
+
+/* sales repeater */
+.mobile .fundraising .searchResults
+{
+	padding: 10px 0;
+}
+.mobile .fundraising .searchResults table
+{
+	margin-top: 10px;
+	padding-top:0;
+}
+.mobile .fundraising .searchResults thead tr
+{
+	border-bottom: 1px solid #ccc;
+	
+	
+}
+.mobile .fundraising .searchResults th,
+.mobile .fundraising .searchResults td
+{
+	text-align: left;
+	padding: 5px;
+}
+.mobile .fundraising .searchResults tbody tr
+{
+	border-bottom: 1px solid #ddd;
+}
+.mobile .fundraising .searchResults tbody tr.odd-row-bg
+{
+	background-color: rgba(200, 200, 200, .1);
+}
