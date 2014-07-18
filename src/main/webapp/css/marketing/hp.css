@@ -364,6 +364,37 @@
 	margin-bottom: 15px;
 }
 
+/* sales repeater */
+.fundraising .searchResults
+{
+	padding: 30px 0;
+}
+.fundraising .searchResults table
+{
+	margin-top: 10px;
+	font-size: 12px;
+}
+.fundraising .searchResults thead tr
+{
+	border-bottom: 1px solid #ccc;
+	
+	
+}
+.fundraising .searchResults th,
+.fundraising .searchResults td
+{
+	text-align: left;
+	padding: 5px;
+}
+.fundraising .searchResults tbody tr
+{
+	border-bottom: 1px solid #ddd;
+}
+.fundraising .searchResults tbody tr.odd-row-bg
+{
+	background-color: rgba(200, 200, 200, .1);
+}
+
 /* landing pages */
 span.highlight
 {

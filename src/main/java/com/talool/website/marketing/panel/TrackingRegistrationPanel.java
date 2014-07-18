@@ -12,6 +12,9 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
@@ -24,6 +27,7 @@ import com.talool.service.mail.EmailRequestParams;
 import com.talool.service.mail.EmailTrackingCodeEntity;
 import com.talool.stats.MerchantSummary;
 import com.talool.website.component.FundraiserSelect;
+import com.talool.website.marketing.pages.FundraiserTracking;
 import com.talool.website.models.FundraiserListModel;
 import com.talool.website.panel.NiceFeedbackPanel;
 import com.talool.website.util.PermissionUtils;
@@ -148,10 +152,34 @@ public class TrackingRegistrationPanel extends Panel {
 		
 		// send email
 		Merchant publisher = taloolService.getMerchantById(publisherId);
-		EmailTrackingCodeEntity entity = new EmailTrackingCodeEntity(merchantCodeGrp, publisher);
+		String url = getTrackingUrl(code);
+		EmailTrackingCodeEntity entity = new EmailTrackingCodeEntity(merchantCodeGrp, publisher, url);
 		emailService.sendTrackingCodeEmail(new EmailRequestParams<EmailTrackingCodeEntity>(entity));
 		
 		success(message.toString());
+	}
+	
+	private String getTrackingUrl(String code)
+	{
+		PageParameters pageParameters = getPage().getPageParameters();
+		pageParameters.set(1, code);
+		
+		Url url = RequestCycle.get().getRequest().getUrl();
+		StringBuilder u = new StringBuilder();
+		u.append(url.getProtocol()).append("://").append(url.getHost());
+		if (url.getPort() != 80)
+		{
+			u.append(":").append(url.getPort());
+		}
+		
+		String path = RequestCycle.get().urlFor(FundraiserTracking.class, pageParameters).toString();
+		if (path.indexOf("..")==0)
+		{
+			path = path.substring(2);
+		}
+		u.append(path);
+		
+		return u.toString();
 	}
 
 }
