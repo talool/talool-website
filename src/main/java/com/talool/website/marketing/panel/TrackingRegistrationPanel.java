@@ -162,6 +162,10 @@ public class TrackingRegistrationPanel extends Panel {
 	private String getTrackingUrl(String code)
 	{
 		PageParameters pageParameters = getPage().getPageParameters();
+		if (pageParameters.getIndexedCount()<1)
+		{
+			pageParameters.set(0, "talool");// bogus co-brand
+		}
 		pageParameters.set(1, code);
 		
 		Url url = RequestCycle.get().getRequest().getUrl();
