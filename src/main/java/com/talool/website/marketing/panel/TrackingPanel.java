@@ -146,7 +146,7 @@ public class TrackingPanel extends Panel {
 		purchases = new ArrayList<DealOfferPurchase>();
 		try
 		{
-			purchases = taloolService.getDealOfferPurchasesByTrackingCode(code);
+			purchases = taloolService.getDealOfferPurchasesByTrackingCode(code.toUpperCase());
 			StringBuilder message = new StringBuilder("We recorded ");
 			message.append(purchases.size()).append(" purchase(s) with tracking code: ").append(code).append(".");
 			success(message.toString());

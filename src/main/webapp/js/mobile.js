@@ -9,7 +9,7 @@ $(function() {
 			// add a class for mobile web
 			var isIOS = navigator.userAgent.match(/(iPhone|iPad)/);
 			var isAndroid = navigator.userAgent.match(/(Android)/);
-			
+			var that = this;
 			if (isIOS) 
 			{
 				$('body').addClass("apple");
@@ -41,11 +41,11 @@ $(function() {
 			$("#download").click(function(){
 				if (isIOS)
 				{
-					document.location = this.appStoreLink;
+					document.location = that.appStoreLink;
 				}
 				else if (isAndroid)
 				{
-					document.location = this.playStoreLink;
+					document.location = that.playStoreLink;
 				}
 				
 			});

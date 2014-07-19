@@ -8,6 +8,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -101,7 +102,8 @@ public class TrackingRegistrationPanel extends Panel {
 						fundraiser = null;
 						fullName = "";
 						email="";
-						target.add(container);
+						//target.add(container); // this jacks up jquery mobile.
+						target.appendJavaScript("$('form')[0].reset();");
 					}
 					catch (Exception e)
 					{
@@ -126,7 +128,7 @@ public class TrackingRegistrationPanel extends Panel {
 		TextField<String> mn = new TextField<String>("fullName",new PropertyModel<String>(this,"fullName"));
 		form.add(mn.setRequired(true).setOutputMarkupId(true));
 		
-		TextField<String> em = new TextField<String>("email",new PropertyModel<String>(this,"email"));
+		EmailTextField em = new EmailTextField("email",new PropertyModel<String>(this,"email"));
 		em.add(new EmailValidator());
 		form.add(em.setRequired(true).setOutputMarkupId(true));
 		
