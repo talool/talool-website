@@ -35,7 +35,7 @@ public class FundraiserTrackingRegistration extends BaseMarketingPage
 		super(parameters);	
 
 		// js behavior to change the body class and inject a co-brand
-		cobrandName = parameters.get(0).toString();
+		cobrandName = (parameters.isEmpty())?"":parameters.get(0).toString();
 		add(new CoBrandBehavior(cobrandName));
 	}
 	

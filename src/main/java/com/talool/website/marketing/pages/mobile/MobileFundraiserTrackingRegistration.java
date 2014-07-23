@@ -19,13 +19,14 @@ public class MobileFundraiserTrackingRegistration extends MobilePage {
 	private static final Logger LOG = Logger.getLogger(MobileFundraiserTrackingRegistration.class);
 	private static final String payback = "Payback Book";
 	private static final String panelName = "trackme";
+	private String cobrandName;
 
 	public MobileFundraiserTrackingRegistration(PageParameters parameters)
 	{
 		super(parameters);
 		
 		// js behavior to change the body class and inject a co-brand
-		//String cobrandName = parameters.get(0).toString();
+		cobrandName = (parameters.isEmpty())?"":parameters.get(0).toString();
 		//add(new CoBrandBehavior(cobrandName));
 	}
 	
@@ -44,7 +45,7 @@ public class MobileFundraiserTrackingRegistration extends MobilePage {
 			
 			if (PermissionUtils.isTrackingOpen(publisherId))
 			{
-				add(new TrackingRegistrationPanel(panelName, ted, merchantAccountId, ""));
+				add(new TrackingRegistrationPanel(panelName, ted, merchantAccountId, cobrandName));
 			}
 			else
 			{
