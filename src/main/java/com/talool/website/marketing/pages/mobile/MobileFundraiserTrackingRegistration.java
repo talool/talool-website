@@ -44,7 +44,7 @@ public class MobileFundraiserTrackingRegistration extends MobilePage {
 			
 			if (PermissionUtils.isTrackingOpen(publisherId))
 			{
-				add(new TrackingRegistrationPanel(panelName, ted, merchantAccountId));
+				add(new TrackingRegistrationPanel(panelName, ted, merchantAccountId, ""));
 			}
 			else
 			{

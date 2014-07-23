@@ -25,6 +25,8 @@ public class FundraiserTrackingRegistration extends BaseMarketingPage
 	private static final String payback = "Payback Book";
 	private static final String panelName = "trackme";
 	
+	private String cobrandName;
+	
 	protected transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
 
@@ -33,7 +35,7 @@ public class FundraiserTrackingRegistration extends BaseMarketingPage
 		super(parameters);	
 
 		// js behavior to change the body class and inject a co-brand
-		String cobrandName = parameters.get(0).toString();
+		cobrandName = parameters.get(0).toString();
 		add(new CoBrandBehavior(cobrandName));
 	}
 	
@@ -52,7 +54,7 @@ public class FundraiserTrackingRegistration extends BaseMarketingPage
 			
 			if (PermissionUtils.isTrackingOpen(publisherId))
 			{
-				add(new TrackingRegistrationPanel(panelName, ted, merchantAccountId));
+				add(new TrackingRegistrationPanel(panelName, ted, merchantAccountId,cobrandName));
 			}
 			else
 			{

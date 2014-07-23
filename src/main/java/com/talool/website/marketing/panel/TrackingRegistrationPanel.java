@@ -56,13 +56,23 @@ public class TrackingRegistrationPanel extends Panel {
 	private UUID publisherId;
 	private long merchantAccountId;
 	private String publisherName;
+	private String cobrand;
 	
-	public TrackingRegistrationPanel(String id, Merchant publisher, long maId) {
+	public TrackingRegistrationPanel(String id, Merchant publisher, long maId, String cobrand) {
 		super(id);
 		
 		publisherId = publisher.getId();
 		merchantAccountId = maId;
 		publisherName = publisher.getName();
+		
+		if (cobrand == null)
+		{
+			this.cobrand = "";
+		}
+		else
+		{
+			this.cobrand = cobrand;
+		}
 	}
 	
 	@Override
@@ -88,7 +98,7 @@ public class TrackingRegistrationPanel extends Panel {
 			protected void onError(AjaxRequestTarget target, Form<?> form)
 			{
 				target.add(feedback);
-				SessionUtils.errorMessage("There was a problem saving your account");
+				SessionUtils.errorMessage("There was a problem generating your code.");
 			}
 
 			@Override
@@ -155,7 +165,7 @@ public class TrackingRegistrationPanel extends Panel {
 		// send email
 		Merchant publisher = taloolService.getMerchantById(publisherId);
 		String url = getTrackingUrl(code);
-		EmailTrackingCodeEntity entity = new EmailTrackingCodeEntity(merchantCodeGrp, publisher, url);
+		EmailTrackingCodeEntity entity = new EmailTrackingCodeEntity(merchantCodeGrp, publisher, url, cobrand);
 		emailService.sendTrackingCodeEmail(new EmailRequestParams<EmailTrackingCodeEntity>(entity));
 		
 		success(message.toString());
