@@ -149,6 +149,7 @@ public class TrackingRegistrationPanel extends Panel {
 		
 		container.add(new Label("p1",publisherName));
 		container.add(new Label("p2",publisherName));
+		container.add(new Label("p3",publisherName));
 	}
 	
 	private void generateCode() throws ServiceException
