@@ -201,7 +201,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/rpw", PasswordResetPage.class);
 		mountPage("/landing", EmailLandingPage.class);
 		
-		mountPage("/prizes", FundraiserTrackingRegistration.class);
+		mountPage("/fundraiser", FundraiserTrackingRegistration.class);
 		mountPage("/tracking", FundraiserTracking.class);
 
 		// Mobile Web Pages
@@ -223,7 +223,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/m/landing", MobileEmailLandingPage.class);
 		mountPage("/m/faq", MobileFaqPage.class);
 		mountPage("/m/getstarted", MobileRegistrationPage.class);
-		mountPage("/m/prizes", MobileFundraiserTrackingRegistration.class);
+		mountPage("/m/fundraiser", MobileFundraiserTrackingRegistration.class);
 		mountPage("/m/tracking", MobileFundraiserTracking.class);
 
 		mountPage("/404", PageNotFound.class);

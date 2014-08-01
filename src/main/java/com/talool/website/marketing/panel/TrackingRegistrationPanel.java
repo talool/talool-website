@@ -32,6 +32,7 @@ import com.talool.website.marketing.pages.FundraiserTracking;
 import com.talool.website.models.FundraiserListModel;
 import com.talool.website.panel.NiceFeedbackPanel;
 import com.talool.website.util.PermissionUtils;
+import com.talool.website.util.PublisherCobrand;
 import com.talool.website.util.SessionUtils;
 import com.talool.website.validators.EmailValidator;
 
@@ -58,21 +59,15 @@ public class TrackingRegistrationPanel extends Panel {
 	private String publisherName;
 	private String cobrand;
 	
-	public TrackingRegistrationPanel(String id, Merchant publisher, long maId, String cobrand) {
+	public TrackingRegistrationPanel(String id, PublisherCobrand cobrand) {
 		super(id);
 		
-		publisherId = publisher.getId();
-		merchantAccountId = maId;
-		publisherName = publisher.getName();
+		publisherId = cobrand.publisher.getId();
+		merchantAccountId = cobrand.merchantAccountId;
+		publisherName = cobrand.publisher.getName();
 		
-		if (cobrand == null)
-		{
-			this.cobrand = "";
-		}
-		else
-		{
-			this.cobrand = cobrand;
-		}
+		this.cobrand = cobrand.cobrandClassName;
+	
 	}
 	
 	@Override
