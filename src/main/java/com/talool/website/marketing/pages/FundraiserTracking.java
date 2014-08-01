@@ -22,12 +22,15 @@ public class FundraiserTracking extends BaseMarketingPage
 	{
 		super(parameters);	
 
-		// js behavior to change the body class and inject a co-brand
-		String cobrandName = parameters.get(0).toString();
-		add(new CoBrandBehavior(cobrandName));
+		String cobrandMerchantName = parameters.get(0).toString();
+		String cobrandClassName = parameters.get(1).toString();
+		//PublisherCobrand cobrand = new PublisherCobrand(cobrandClassName, cobrandMerchantName);
 		
-		if (parameters.getIndexedCount()==2){
-			code = parameters.get(1).toString();
+		// js behavior to change the body class and inject a co-brand
+		add(new CoBrandBehavior(cobrandClassName));
+		
+		if (parameters.getIndexedCount()==3){
+			code = parameters.get(2).toString();
 		}
 		
 	}

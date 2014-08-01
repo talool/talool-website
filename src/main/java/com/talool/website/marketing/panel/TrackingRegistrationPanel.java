@@ -170,11 +170,12 @@ public class TrackingRegistrationPanel extends Panel {
 	private String getTrackingUrl(String code)
 	{
 		PageParameters pageParameters = getPage().getPageParameters();
-		if (pageParameters.getIndexedCount()<1)
+		if (pageParameters.getIndexedCount()<2)
 		{
-			pageParameters.set(0, "talool");// bogus co-brand
+			pageParameters.set(0, "sales");// bogus co-brand
+			pageParameters.set(1, "awesome");// bogus co-brand
 		}
-		pageParameters.set(1, code);
+		pageParameters.set(2, code);
 		
 		Url url = RequestCycle.get().getRequest().getUrl();
 		StringBuilder u = new StringBuilder();
