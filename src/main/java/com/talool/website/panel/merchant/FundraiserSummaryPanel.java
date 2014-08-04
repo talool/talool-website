@@ -257,11 +257,13 @@ public class FundraiserSummaryPanel extends BaseTabPanel
 					{
 						MerchantAccount merchantAccount = SessionUtils.getSession().getMerchantAccount();
 						StringBuilder title = new StringBuilder();
-						title.append(fundraiser.getName()).append(" Tracking Codes");
-						String notes = "";
+						//title.append(fundraiser.getName()).append(" Tracking Codes");
+						title.append("a student"); // changed title so it works with email activities
+						StringBuilder notes = new StringBuilder();
+						notes.append(fundraiser.getName()).append(" Tracking Codes");
 						merchantCodeGrp = taloolService.createMerchantCodeGroup(fundraiser,
 								merchantAccount.getId(), _publisherId,
-								title.toString(), notes, (short) downloadCodeCount);
+								title.toString(), notes.toString(), (short) downloadCodeCount);
 
 						download.initiate(target);
 						Session.get().success("Codes created and download started.");
