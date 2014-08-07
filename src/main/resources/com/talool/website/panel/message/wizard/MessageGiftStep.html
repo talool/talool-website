@@ -1,0 +1,28 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+     <div class="newMerchant">
+		<div class="panel right iPhonePanel">
+			<div wicket:id="dealBuilder"></div>
+		</div>
+		<div class="panel left" wicket:id="descriptionPanel">
+			<div class="wicketExtensionsWizardHeaderTitle">
+				<wicket:message key="getstarted.title"></wicket:message>
+			</div>
+			<div class="wicketExtensionsWizardHeaderSummary">
+				<wicket:message key="getstarted.summary"></wicket:message>
+			</div>
+			
+			<input type="hidden" wicket:id="dealId"/>
+			
+			<div class="deal_list">
+				<div class="deal_list_for_gifts">
+					<div wicket:id="dealRepeater" class="deal_for_gift">
+						<div><b wicket:id="title"></b></div>
+						<div wicket:id="summary"></div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<div class="clear"></div>
+	</div>
+</wicket:panel>

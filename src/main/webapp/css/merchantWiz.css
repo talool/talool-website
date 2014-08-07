@@ -95,3 +95,47 @@ body.talool .merchantWiz .panel.iPhonePanel {
 .merchantWiz .teaser.discover img {
 	max-width: 320px;
 }
+
+.deal_list
+{
+	border-top: 1px solid #ddd;
+}
+.deal_list_for_gifts
+{
+	max-height: 475px;
+	overflow:auto;
+	border-bottom: 1px solid #ddd;
+}
+.deal_list_for_gifts .deal_for_gift
+{
+	padding: 10px;
+	border-bottom: 1px solid rgba(100,100,100, .2);
+}
+.deal_list_for_gifts .deal_for_gift:hover
+{
+	background-color: rgba(25, 188, 185, .05);
+}
+.deal_list_for_gifts .deal_for_gift.selected
+{
+	background-color: rgba(25, 188, 185, .2);
+}
+
+.customer_count
+{
+	font-size: 50px;
+	font-weight:bold;
+	color: rgba(100,100,100, .5);
+}
+.criteria
+{
+	margin: 10px 0;
+}
+.slider
+{
+	width: 200px;
+}
+.range_slider_container
+{
+	display:inline-block;
+}
+	

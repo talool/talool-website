@@ -1,0 +1,43 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+     <div class="newMerchant">
+		<div class="panel right iPhonePanel">
+			<div wicket:id="dealBuilder"></div>
+		</div>
+		<div class="panel left" wicket:id="descriptionPanel">
+			<div class="wicketExtensionsWizardHeaderTitle">
+				<wicket:message key="getstarted.title"></wicket:message>
+			</div>
+			<div class="wicketExtensionsWizardHeaderSummary">
+				<wicket:message key="getstarted.summary"></wicket:message>
+			</div>
+			<div class="criteria">
+				<label><i class="hint-font icon-asterisk"></i> Purchased: </label>
+				<select wicket:id="availableDealOffers"><option>Default Deal Offer</option></select>
+			</div>
+	    	<div class="criteria">
+	    		<label><i class="optional-font icon-asterisk"></i> Gender: </label>
+	    		<select wicket:id="sex"></select>
+	    	</div>
+	    	<div class="criteria">
+	    		<label><i class="optional-font icon-asterisk"></i> Age Range: </label>
+	    		<div wicket:id="ageSlider" class="range_slider_container"></div>
+	    	</div>
+	    	<br/><br/>
+	    	<div class="wicketExtensionsWizardHeaderTitle">
+				<wicket:message key="result.title"></wicket:message>
+			</div>
+			<div class="wicketExtensionsWizardHeaderSummary">
+				<wicket:message key="result.summary"></wicket:message>
+			</div>
+	    	<div class="customer_count_container">
+				<div>
+					<input type="hidden" wicket:id="count"/>
+					<div wicket:id="customerCount" class="customer_count"></div>
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class="clear"></div>
+	</div>
+</wicket:panel>
