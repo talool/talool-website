@@ -3,6 +3,7 @@ package com.talool.website.panel.merchant;
 import java.util.UUID;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
@@ -23,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Merchant;
+import com.talool.core.service.ServiceException;
 import com.talool.stats.MerchantSummary;
 import com.talool.website.component.ConfirmationIndicatingAjaxLink;
 import com.talool.website.models.MerchantModel;
@@ -196,23 +198,25 @@ public class FundraisersPanel extends BaseTabPanel {
 					@Override
 					public void onClick(AjaxRequestTarget target)
 					{
-						getSession().getFeedbackMessages().clear();
-						/*
+						
+						
 						try 
 						{
-							// TODO "remove" just drops this schools connection to the book.  it doesn't delete the school.
-							
+							getSession().getFeedbackMessages().clear();
+							Merchant fundraiser = taloolService.getMerchantById(fundraiserId);
+							fundraiser.setIsDiscoverable(false);
+							taloolService.save(fundraiser);
 							resetPage(target);
 							
-							Session.get().success(school.getName() + " has been sent back to Talool.  Contact us if you want it back.");
+							Session.get().success(school.getName() + " has been hidden from your customers.  Contact us if you want it back.");
 						} 
 						catch (ServiceException se)
 						{
-							LOG.error("problem fetcing the talool merchant id", se);
-							Session.get().error("There was a problem removing this deal.  Contact us if you want it removed manually.");
+							LOG.error("problem hiding merchant", se);
+							Session.get().error("There was a problem removing this fundraiser.  Contact us if you want it removed manually.");
 						}
 						target.add(((BasePage)getPage()).feedback);
-						*/
+						
 					}
 				};
 				item.add(deleteLink);
