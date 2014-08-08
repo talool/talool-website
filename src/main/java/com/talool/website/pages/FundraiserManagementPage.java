@@ -15,6 +15,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.FundraiserAnalyticsPanel;
 import com.talool.website.panel.merchant.FundraiserSummaryPanel;
+import com.talool.website.panel.merchant.FundraiserTrackingPanel;
 import com.talool.website.panel.merchant.MerchantAccountsPanel;
 import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SecuredPage;
@@ -91,6 +92,19 @@ public class FundraiserManagementPage extends BaseManagementPage
 
 			});
 		}
+		
+		tabs.add(new AbstractTab(Model.of("Tracking Codes"))
+		{
+
+			private static final long serialVersionUID = -4979242834259234951L;
+
+			@Override
+			public Panel getPanel(String panelId)
+			{
+				return new FundraiserTrackingPanel(panelId, getPageParameters());
+			}
+
+		});
 
 		final AjaxTabbedPanel<ITab> tabbedPanel = new AjaxTabbedPanel<ITab>("tabs", tabs)
 		{

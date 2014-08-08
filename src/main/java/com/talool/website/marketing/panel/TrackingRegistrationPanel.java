@@ -152,7 +152,7 @@ public class TrackingRegistrationPanel extends Panel {
 		// generate the code
 		Merchant school = taloolService.getMerchantById(fundraiser.getMerchantId());
 		MerchantCodeGroup merchantCodeGrp = taloolService.createMerchantCodeGroup(school,
-				merchantAccountId, publisherId, fullName, email, (short) 1);
+				merchantAccountId, school.getId(), fullName, email, (short) 1);
 		String code = merchantCodeGrp.getCodes().iterator().next().getCode();
 		
 		StringBuilder message = new StringBuilder("Your tracking code is ");
