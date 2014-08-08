@@ -65,6 +65,7 @@ public class FundraiserManagementPage extends BaseManagementPage
 			}
 		});
 
+		/*
 		tabs.add(new AbstractTab(Model.of("Accounts"))
 		{
 
@@ -76,6 +77,7 @@ public class FundraiserManagementPage extends BaseManagementPage
 				return new MerchantAccountsPanel(panelId, getPageParameters());
 			}
 		});
+		*/
 
 		if (PermissionUtils.canViewAnalytics(SessionUtils.getSession().getMerchantAccount()))
 		{
