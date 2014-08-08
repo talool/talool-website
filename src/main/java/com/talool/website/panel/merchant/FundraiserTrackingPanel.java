@@ -3,17 +3,22 @@ package com.talool.website.panel.merchant;
 import java.util.UUID;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.stats.MerchantCodeSummary;
-import com.talool.website.models.MerchantCodeSummaryListModel;
 import com.talool.website.pages.BasePage;
+import com.talool.website.pages.lists.MerchantCodeSummaryDataProvider;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 
@@ -24,6 +29,15 @@ public class FundraiserTrackingPanel extends BaseTabPanel
 
 	private UUID _fundraiserId;
 	private UUID _publisherId;
+	
+	private static final String CONTAINER_ID = "list";
+	private static final String REPEATER_ID = "codeRepeater";
+	private static final String NAVIGATOR_ID = "navigator";
+	
+	private String sortParameter = "name";
+	private boolean isAscending = true;
+	private int itemsPerPage = 50;
+	private long itemCount;
 
 	public FundraiserTrackingPanel(String id, PageParameters parameters)
 	{
@@ -36,27 +50,86 @@ public class FundraiserTrackingPanel extends BaseTabPanel
 	protected void onInitialize()
 	{
 		super.onInitialize();
-
-		// add a repeater
-		MerchantCodeSummaryListModel model = new MerchantCodeSummaryListModel();
-		model.setMerchantId(_fundraiserId);
 		
-		final WebMarkupContainer container = new WebMarkupContainer("list");
+		final WebMarkupContainer container = new WebMarkupContainer(CONTAINER_ID);
 		container.setOutputMarkupId(true);
 		add(container);
+		
+		final MerchantCodeSummaryDataProvider dataProvider = new MerchantCodeSummaryDataProvider(_fundraiserId, sortParameter, isAscending);
+		final DataView<MerchantCodeSummary> deals = getDataView(dataProvider);
+		container.add(deals);
+		
+		// Set the labels above the pagination
+		itemCount = deals.getItemCount();
+		Label totalCount = new Label("totalCount",new PropertyModel<Long>(this, "itemCount"));
+		container.add(totalCount.setOutputMarkupId(true));
+				
+		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, deals);
+		container.add(pagingNavigator.setOutputMarkupId(true));
+		pagingNavigator.setVisible(dataProvider.size() > itemsPerPage);
+		pagingNavigator.getPagingNavigation().setViewSize(5);
 
-		final ListView<MerchantCodeSummary> codes = new ListView<MerchantCodeSummary>(
-				"codeRepeater", model)
+		container.add(new AjaxLink<Void>("nameSortLink")
 		{
-
-			private static final long serialVersionUID = 1L;
+			private static final long serialVersionUID = -4528179721619677443L;
 
 			@Override
-			protected void populateItem(ListItem<MerchantCodeSummary> item)
+			public void onClick(AjaxRequestTarget target)
 			{
-				final MerchantCodeSummary codeGroup = item.getModelObject();
+				doAjaxSearchRefresh("name", target);
+			}
+		});
+		
+		container.add(new AjaxLink<Void>("codeSortLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
 
-				item.setModel(new CompoundPropertyModel<MerchantCodeSummary>(codeGroup));
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("code", target);
+			}
+		});
+		
+		container.add(new AjaxLink<Void>("emailSortLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("email", target);
+			}
+		});
+		
+		container.add(new AjaxLink<Void>("countSortLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("purchaseCount", target);
+			}
+		});
+
+		// hide the action button
+		final BasePage page = (BasePage) this.getPage();
+		page.getActionLink().add(new AttributeModifier("class", "hide"));
+	}
+	
+	private DataView<MerchantCodeSummary> getDataView(IDataProvider<MerchantCodeSummary> dataProvider)
+	{
+		final DataView<MerchantCodeSummary> codes = new DataView<MerchantCodeSummary>(REPEATER_ID,dataProvider)
+		{
+
+			private static final long serialVersionUID = 2705519558987278333L;
+
+			@Override
+			protected void populateItem(Item<MerchantCodeSummary> item)
+			{
+				final MerchantCodeSummary code = item.getModelObject();
+				item.setModel(new CompoundPropertyModel<MerchantCodeSummary>(code));
 
 				if (item.getIndex() % 2 == 0)
 				{
@@ -67,14 +140,39 @@ public class FundraiserTrackingPanel extends BaseTabPanel
 				item.add(new Label("code"));
 				item.add(new Label("email"));
 				item.add(new Label("purchaseCount"));
+
 			}
 
 		};
-		container.add(codes);
+		codes.setItemsPerPage(itemsPerPage);
+		return codes;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void doAjaxSearchRefresh(final String sortParam, final AjaxRequestTarget target)
+	{
+		WebMarkupContainer container = (WebMarkupContainer) get(CONTAINER_ID);
 
-		// hide the action button
-		final BasePage page = (BasePage) this.getPage();
-		page.getActionLink().add(new AttributeModifier("class", "hide"));
+		final DataView<MerchantCodeSummary> dataView = ((DataView<MerchantCodeSummary>) container.get(REPEATER_ID));
+		final MerchantCodeSummaryDataProvider provider = (MerchantCodeSummaryDataProvider) dataView.getDataProvider();
+
+		// toggle asc/desc
+		if (sortParam.equals(sortParameter))
+		{
+			isAscending = isAscending == true ? false : true;
+			provider.setAscending(isAscending);
+		}
+
+		this.sortParameter = sortParam;
+
+		provider.setSortParameter(sortParam);
+
+		final AjaxPagingNavigator pagingNavigator = (AjaxPagingNavigator) container.get(NAVIGATOR_ID);
+		pagingNavigator.getPageable().setCurrentPage(0);
+
+		target.add(container);
+		target.add(pagingNavigator);
+
 	}
 
 	@Override

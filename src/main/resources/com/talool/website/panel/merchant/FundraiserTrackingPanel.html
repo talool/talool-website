@@ -2,12 +2,22 @@
 	<wicket:extend>
 	
 		<div wicket:id="list" class="tracking_codes">
+		
+			<table class="listNav">
+				<tr>
+					<td class="pagination">
+						<div class="count"><span wicket:id="totalCount"></span> Code(s)</div>
+						<div wicket:id="navigator" class="navigator"></div>
+					</td>
+				</tr>
+			</table>
+			
 			<table class="left">
 				<tr>
-					<th>Code</th>
-					<th>Name</th>
-					<th>Email</th>
-					<th>Count</th>
+					<th><a wicket:id="codeSortLink">Code</a></th>
+					<th><a wicket:id="nameSortLink">Name</a></th>
+					<th><a wicket:id="emailSortLink">Email</a></th>
+					<th><a wicket:id="countSortLink">Purchase Count</a></th>
 				</tr>
 				<tr wicket:id="codeRepeater">
 					<td wicket:id="code"></td>
