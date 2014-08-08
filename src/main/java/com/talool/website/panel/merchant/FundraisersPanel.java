@@ -148,6 +148,7 @@ public class FundraisersPanel extends BaseTabPanel {
 	
 	private DataView<MerchantSummary> getDataView(IDataProvider<MerchantSummary> dataProvider)
 	{
+		final BasePage page = (BasePage)getPage();
 		final DataView<MerchantSummary> schools = new DataView<MerchantSummary>(REPEATER_ID,dataProvider)
 		{
 
@@ -215,7 +216,7 @@ public class FundraisersPanel extends BaseTabPanel {
 							LOG.error("problem hiding merchant", se);
 							Session.get().error("There was a problem removing this fundraiser.  Contact us if you want it removed manually.");
 						}
-						target.add(((BasePage)getPage()).feedback);
+						target.add(page.feedback);
 						
 					}
 				};
