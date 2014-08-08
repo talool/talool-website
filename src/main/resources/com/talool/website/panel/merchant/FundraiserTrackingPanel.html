@@ -1,32 +1,7 @@
 <html xmlns:wicket="http://wicket.apache.org">
 	<wicket:extend>
-	
-		<div wicket:id="list" class="tracking_codes">
-		
-			<table class="listNav">
-				<tr>
-					<td class="pagination">
-						<div class="count"><span wicket:id="totalCount"></span> Code(s)</div>
-						<div wicket:id="navigator" class="navigator"></div>
-					</td>
-				</tr>
-			</table>
-			
-			<table class="left">
-				<tr>
-					<th><a wicket:id="codeSortLink">Code</a></th>
-					<th><a wicket:id="nameSortLink">Name</a></th>
-					<th><a wicket:id="emailSortLink">Email</a></th>
-					<th><a wicket:id="countSortLink">Purchase Count</a></th>
-				</tr>
-				<tr wicket:id="codeRepeater">
-					<td wicket:id="code"></td>
-					<td wicket:id="name"></td>
-					<td wicket:id="email"></td>
-					<td wicket:id="purchaseCount"></td>
-				</tr>
-			</table>
-		</div>
-		
+		<a wicket:id="externalLink" target="tracking" class="btn" 
+			style="position:absolute; top: 20px; right: 10px">Public Tracking Page</a>
+		<div wicket:id="container"></div>
 	</wicket:extend>
 </html>
