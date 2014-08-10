@@ -57,6 +57,12 @@ public class PermissionUtils {
 		return offer.getProperties().getAsBool(KeyValue.fundraisingBook);
 	}
 	
+	public static boolean isFundraisingOrganization(UUID merchantId)
+	{
+		Merchant merchant = new MerchantModel(merchantId, true).getObject();
+		return merchant.getProperties().getAsBool(KeyValue.fundraiser);
+	}
+	
 	public static boolean isFundraiser(UUID offerId)
 	{
 		DealOffer offer = new DealOfferModel(offerId).getObject();

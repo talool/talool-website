@@ -94,6 +94,40 @@ $(function() {
 	
 			});
 		};
+		
+		this.toggleSelected = function(elementsSelector, selectedSelector)
+		{
+			var cn = "selected";
+			$(elementsSelector).removeClass(cn);
+			$(selectedSelector).addClass(cn);
+		};
+		
+		this.initSliders = function(cn)
+		{
+			$("."+cn).each(function(i){
+				var s = $(this);
+				s.removeClass(cn); // make sure we don't init this one again
+				var amtFldSelector = "#"+s.data('amt-fld-id');
+				var sliderSelector = "#"+s.data('slider-id');
+				var callback = s.data('callback');
+				$( sliderSelector ).slider({
+				  range: true,
+				  min: s.data('min'),
+				  max: s.data('max'),
+				  values: [ s.data('low'), s.data('high') ],
+				  slide: function( event, ui ) {
+				    $( amtFldSelector ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+				  },
+				  change: function(event, ui) {
+				  	var url = callback + "&min="+ui.values[ 0 ] + "&max=" + ui.values[ 1 ];
+				  	Wicket.Ajax.get({ u: url });
+				  }
+				});
+				$( amtFldSelector ).val( $( sliderSelector ).slider( "values", 0 ) +
+				  " - " + $( sliderSelector ).slider( "values", 1 ) );
+			});
+		};
+		
 
 		this.init();
 

@@ -9,6 +9,10 @@ body {
 p {
 	line-height: 21px;
 }
+table.left th 
+{
+	text-align: left;
+}
 
 td
 {

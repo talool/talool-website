@@ -40,6 +40,7 @@ import com.talool.website.marketing.pages.EmailLandingPage;
 import com.talool.website.marketing.pages.FAQ;
 import com.talool.website.marketing.pages.FundraiserTracking;
 import com.talool.website.marketing.pages.FundraiserTrackingRegistration;
+import com.talool.website.marketing.pages.FundraiserTrackingRollup;
 import com.talool.website.marketing.pages.Fundraising;
 import com.talool.website.marketing.pages.HomePage;
 import com.talool.website.marketing.pages.MerchantAgreementPage;
@@ -203,6 +204,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		
 		mountPage("/fundraiser", FundraiserTrackingRegistration.class);
 		mountPage("/tracking", FundraiserTracking.class);
+		mountPage("/trackingrollup", FundraiserTrackingRollup.class);
 
 		// Mobile Web Pages
 		mountPage("/m", MobileHomePage.class);

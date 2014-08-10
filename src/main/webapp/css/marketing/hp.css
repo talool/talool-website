@@ -429,3 +429,23 @@ span.highlight
 	line-height: 18px;
 	font-size: 13px;
 }
+
+.tracking_codes .pagination .count
+{
+	float: left;
+}
+.tracking_codes .pagination .navigator
+{
+	float: right;
+}
+.tracking_codes .pagination .navigator a,
+.tracking_codes .pagination .navigator em
+{
+	border: 1px solid;
+	padding: 5px;
+	border-radius: 3px;
+}
+.tracking_codes .listNav td
+{
+	height: 25px;
+}
