@@ -218,7 +218,7 @@ public class DealOfferDealsPanel extends BaseTabPanel {
 				
 				PageParameters booksParams = new PageParameters();
 				booksParams.set("id", deal.getMerchantId());
-				booksParams.set("name", deal.getMerchantId());
+				booksParams.set("name", deal.getMerchantName());
 				String url = (String) urlFor(MerchantManagementPage.class, booksParams);
 				ExternalLink namelLink = new ExternalLink("merchantLink", Model.of(url),
 						new PropertyModel<String>(deal, "merchantName"));
