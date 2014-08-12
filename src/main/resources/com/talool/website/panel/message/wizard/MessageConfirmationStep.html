@@ -1,0 +1,39 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+     <div class="newMerchant">
+		<div class="panel right iPhonePanel">
+			<div wicket:id="dealBuilder"></div>
+		</div>
+		<div class="panel left" wicket:id="descriptionPanel">
+			<div class="wicketExtensionsWizardHeaderTitle">
+				<wicket:message key="getstarted.title"></wicket:message>
+			</div>
+			<div class="wicketExtensionsWizardHeaderSummary">
+				<wicket:message key="getstarted.summary"></wicket:message>
+			</div>
+			
+			<table>
+				<tr>
+					<td><b>Purchased Book: </b></td> 
+					<td wicket:id="book"></td>
+				</tr>
+				<tr>
+					<td><b>Gender: </b> </td> 
+					<td wicket:id="gender"></td>
+				</tr>
+				<tr>
+					<td><b>Minimum Age: </b> </td> 
+					<td wicket:id="minAge"></td>
+				</tr>
+				<tr>
+					<td><b>Maximum Age: </b> </td> 
+					<td wicket:id="maxAge"></td>
+				</tr>
+				<tr>
+					<td><b>Target Audience Size: </b> </td> 
+					<td><span wicket:id="count"></span> customers</td>
+				</tr>
+			</table>
+		</div>
+		<div class="clear"></div>
+	</div>
+</wicket:panel>

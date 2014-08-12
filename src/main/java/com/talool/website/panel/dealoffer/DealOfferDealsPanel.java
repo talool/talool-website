@@ -14,6 +14,7 @@ import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
@@ -36,6 +37,7 @@ import com.talool.website.component.ConfirmationIndicatingAjaxLink;
 import com.talool.website.component.DealMover;
 import com.talool.website.models.DealModel;
 import com.talool.website.pages.BasePage;
+import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.pages.lists.DealSummaryDataProvider;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
@@ -214,7 +216,14 @@ public class DealOfferDealsPanel extends BaseTabPanel {
 				};
 				item.add(cb.setVisible(bulkMoveEnabled));
 				
-				item.add(new Label("merchantName"));
+				PageParameters booksParams = new PageParameters();
+				booksParams.set("id", deal.getMerchantId());
+				booksParams.set("name", deal.getMerchantName());
+				String url = (String) urlFor(MerchantManagementPage.class, booksParams);
+				ExternalLink namelLink = new ExternalLink("merchantLink", Model.of(url),
+						new PropertyModel<String>(deal, "merchantName"));
+				item.add(namelLink);
+				
 				item.add(new Label("merchantCity"));
 				item.add(new Label("merchantState"));
 				item.add(new Label("title"));
