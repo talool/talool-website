@@ -92,6 +92,7 @@ public class TrackingRegistrationPanel extends Panel {
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form)
 			{
+				target.appendJavaScript("window.oo.stopSpinner()");
 				target.add(feedback);
 				SessionUtils.errorMessage("There was a problem generating your code.");
 			}
@@ -108,14 +109,16 @@ public class TrackingRegistrationPanel extends Panel {
 						fullName = "";
 						email="";
 						//target.add(container); // this jacks up jquery mobile.
-						target.appendJavaScript("$('form')[0].reset();");
+						String feedbackId = feedback.getMarkupId();
+						target.appendJavaScript("window.oo.finishRegistration('"+feedbackId+"')");
+						
 					}
 					catch (Exception e)
 					{
 						SessionUtils.errorMessage("There was a problem generating your code.  Please contact support@talool.com for assistance.");
 						LOG.error(e.getLocalizedMessage(), e);
+						target.appendJavaScript("window.oo.stopSpinner()");
 					}
-					
 					target.add(feedback);
 				}
 				else

@@ -37,8 +37,13 @@
 					</td>
 				</tr>
 			</table>
-			<div class="formButtons">
-				<button class="btn" wicket:id="submitButton">Generate My Code</button>
+			<div class="formButtons" style="position:relative">
+				<button class="btn show-loading-msg" 
+						data-msgtext="generating tracking code" 
+						data-textvisible="true"
+						data-textonly="false"
+						data-theme="b"
+						wicket:id="submitButton">Generate My Code</button>
 			</div>
 		</form>
 	</div>
