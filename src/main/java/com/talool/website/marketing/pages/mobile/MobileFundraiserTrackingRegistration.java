@@ -16,6 +16,7 @@ public class MobileFundraiserTrackingRegistration extends MobilePage {
 	private static final Logger LOG = Logger.getLogger(MobileFundraiserTrackingRegistration.class);
 	private static final String panelName = "trackme";
 	private PublisherCobrand cobrand;
+	private String fundraiserName;
 
 	public MobileFundraiserTrackingRegistration(PageParameters parameters)
 	{
@@ -26,6 +27,10 @@ public class MobileFundraiserTrackingRegistration extends MobilePage {
 		{
 			String cobrandMerchantName = parameters.get(0).toString();
 			String cobrandClassName = parameters.get(1).toString();
+			if (parameters.getIndexedCount()==3)
+			{
+				fundraiserName = parameters.get(2).toString();
+			}
 			cobrand = new PublisherCobrand(cobrandClassName, cobrandMerchantName);
 			try
 			{
@@ -50,7 +55,9 @@ public class MobileFundraiserTrackingRegistration extends MobilePage {
 		
 		if (PermissionUtils.isTrackingOpen(cobrand.publisher.getId()))
 		{
-			add(new TrackingRegistrationPanel(panelName, cobrand));
+			TrackingRegistrationPanel panel = new TrackingRegistrationPanel(panelName, cobrand);
+			if (fundraiserName != null) panel.setFundraiserName(fundraiserName);
+			add(panel);
 		}
 		else
 		{
