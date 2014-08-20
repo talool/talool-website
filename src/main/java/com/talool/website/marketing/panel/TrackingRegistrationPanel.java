@@ -1,8 +1,10 @@
 package com.talool.website.marketing.panel;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -67,7 +69,7 @@ public class TrackingRegistrationPanel extends Panel {
 		publisherName = cobrand.publisher.getName();
 		
 		this.cobrand = cobrand.cobrandClassName;
-	
+
 	}
 	
 	@Override
@@ -92,6 +94,7 @@ public class TrackingRegistrationPanel extends Panel {
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form)
 			{
+				target.appendJavaScript("window.oo.stopSpinner()");
 				target.add(feedback);
 				SessionUtils.errorMessage("There was a problem generating your code.");
 			}
@@ -108,14 +111,16 @@ public class TrackingRegistrationPanel extends Panel {
 						fullName = "";
 						email="";
 						//target.add(container); // this jacks up jquery mobile.
-						target.appendJavaScript("$('form')[0].reset();");
+						String feedbackId = feedback.getMarkupId();
+						target.appendJavaScript("window.oo.finishRegistration('"+feedbackId+"')");
+						
 					}
 					catch (Exception e)
 					{
 						SessionUtils.errorMessage("There was a problem generating your code.  Please contact support@talool.com for assistance.");
 						LOG.error(e.getLocalizedMessage(), e);
+						target.appendJavaScript("window.oo.stopSpinner()");
 					}
-					
 					target.add(feedback);
 				}
 				else
@@ -137,10 +142,25 @@ public class TrackingRegistrationPanel extends Panel {
 		em.add(new EmailValidator());
 		form.add(em.setRequired(true).setOutputMarkupId(true));
 		
+		
+		WebMarkupContainer schoolContainer = new WebMarkupContainer("schoolContainer");
+		form.add(schoolContainer);
+		if (fundraiser==null)
+		{
+			form.add(new WebMarkupContainer("preselectedSchool").setVisible(false));
+		}
+		else
+		{
+			schoolContainer.setVisible(false);
+			Label preselectedSchool = new Label("preselectedSchool",fundraiser.getName());
+			form.add(preselectedSchool);
+		}
+		
+		
 		FundraiserListModel choices = new FundraiserListModel();
 		choices.setPublisherId(publisherId);
 		FundraiserSelect fs = new FundraiserSelect("fundraiser", new PropertyModel<MerchantSummary>(this, "fundraiser"), choices);
-		form.add(fs.setRequired(true));
+		schoolContainer.add(fs.setRequired(true));
 		
 		container.add(new Label("p1",publisherName));
 		container.add(new Label("p2",publisherName));
@@ -193,6 +213,22 @@ public class TrackingRegistrationPanel extends Panel {
 		u.append(path);
 		
 		return u.toString();
+	}
+	
+	public void setFundraiserName(String name)
+	{
+		FundraiserListModel choices = new FundraiserListModel();
+		choices.setPublisherId(publisherId);
+		List<MerchantSummary> fundraisers = choices.getObject();
+		for (MerchantSummary f:fundraisers)
+		{
+			String fn = StringUtils.deleteWhitespace(f.getName());
+			if (fn.equalsIgnoreCase(name))
+			{
+				fundraiser = f;
+				break;
+			}
+		}
 	}
 
 }

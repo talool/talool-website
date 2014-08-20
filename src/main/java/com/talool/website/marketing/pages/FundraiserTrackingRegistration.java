@@ -21,6 +21,7 @@ public class FundraiserTrackingRegistration extends BaseMarketingPage
 	private static final String panelName = "trackme";
 	
 	private PublisherCobrand cobrand;
+	private String fundraiserName;
 	
 	protected transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
@@ -34,6 +35,12 @@ public class FundraiserTrackingRegistration extends BaseMarketingPage
 		{
 			String cobrandMerchantName = parameters.get(0).toString();
 			String cobrandClassName = parameters.get(1).toString();
+			
+			if (parameters.getIndexedCount()==3)
+			{
+				fundraiserName = parameters.get(2).toString();
+			}
+			
 			cobrand = new PublisherCobrand(cobrandClassName, cobrandMerchantName);
 			try
 			{
@@ -60,7 +67,9 @@ public class FundraiserTrackingRegistration extends BaseMarketingPage
 
 		if (PermissionUtils.isTrackingOpen(cobrand.publisher.getId()))
 		{
-			add(new TrackingRegistrationPanel(panelName, cobrand));
+			TrackingRegistrationPanel panel = new TrackingRegistrationPanel(panelName, cobrand);
+			if (fundraiserName != null) panel.setFundraiserName(fundraiserName);
+			add(panel);
 		}
 		else
 		{

@@ -59,6 +59,22 @@ $(function() {
 				$('body').addClass("tablet");
 			}  
 			
+			$('.show-loading-msg').click(function() {
+				  var $this = $( this ),
+				  theme = $this.jqmData( "theme" ) || $.mobile.loader.prototype.options.theme,
+				  msgText = $this.jqmData( "msgtext" ) || $.mobile.loader.prototype.options.text,
+				  textVisible = $this.jqmData( "textvisible" ) || $.mobile.loader.prototype.options.textVisible,
+				  textonly = !!$this.jqmData( "textonly" );
+				  html = $this.jqmData( "html" ) || "";
+				$.mobile.loading( 'show', {
+				  text: msgText,
+				  textVisible: textVisible,
+				  theme: theme,
+				  textonly: textonly,
+				  html: html
+				  });
+				});
+			
 		};
 		
 		this.iOSDeepLink = function(link, fallback) {
@@ -66,6 +82,21 @@ $(function() {
 				window.location = fallback;
 			}, 25);
 			window.location = link;
+		};
+		this.stopSpinner = function() {
+			// stop the spinner
+			$.mobile.loading( "hide" );
+		};
+		
+		this.finishRegistration = function(feedbackId) {
+			// stop the spinner
+			this.stopSpinner();
+			// clear the form
+			$('form')[0].reset();
+			// set the focus on the feedback panel
+			$('html, body').animate({
+		        scrollTop: ($("#"+feedbackId).offset().top - 100)
+		    }, 200);
 		};
 
 		this.init();

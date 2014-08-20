@@ -155,6 +155,13 @@ div.info ul.feedbackPanel {
 	min-height: 690px;
 }
 
+.mobile .preselectedOption
+{
+	font-weight: bold;
+	display: block;
+	font-size: larger;
+	padding-top: 10px;
+}
 /* sales repeater */
 .mobile .fundraising .searchResults
 {
