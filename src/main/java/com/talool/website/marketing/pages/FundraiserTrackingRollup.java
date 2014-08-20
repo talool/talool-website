@@ -4,6 +4,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.FactoryManager;
 import com.talool.core.service.TaloolService;
+import com.talool.website.behaviors.CoBrandBehavior;
 import com.talool.website.panel.merchant.FundraiserTrackingRollupPanel;
 
 public class FundraiserTrackingRollup extends BaseMarketingPage
@@ -20,6 +21,14 @@ public class FundraiserTrackingRollup extends BaseMarketingPage
 		super(parameters);	
 
 		this.parameters = parameters;
+		
+		// js behavior to change the body class and inject a co-brand
+		if (parameters.getIndexedCount() > 0)
+		{
+			String cobrandClassName = parameters.get(0).toString();
+			add(new CoBrandBehavior(cobrandClassName));
+		}
+		
 		
 	}
 	
