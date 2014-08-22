@@ -1,0 +1,184 @@
+/*
+ * Globals
+ */
+.hide {display:none}
+.cover .left {
+	text-align: left;
+}
+.appicons {
+	margin: 20px 0;
+}
+.appicons a {
+	margin: 0px 10px;
+	display: inline-block;
+}
+/* Links */
+a,
+a:focus,
+a:hover {
+  color: #fff;
+}
+
+/* Custom default button */
+.btn-default,
+.btn-default:hover,
+.btn-default:focus {
+  color: #fff;
+  text-shadow: none; /* Prevent inheritence from `body` */
+  background-color: #208896;
+  border: 1px solid #208896;
+}
+
+
+/*
+ * Base structure
+ */
+
+html,
+body {
+  height: 100%;
+  background-color: #ebebeb;
+  color: #fff;
+  text-align: center;
+}
+
+
+/* Padding for spacing */
+.inner {
+  padding: 30px;
+}
+
+
+/*
+ * Header
+ */
+.masthead {
+	background: #208896; 
+	padding-bottom: 20px;
+	color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,.75);
+ }
+ .masthead .inner {
+ 	margin: 0 auto;
+ 	padding: 15px 0;
+ }
+.masthead-brand {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-family: 'Roboto Slab', serif;
+  font-weight: 700;
+  font-size: 36px;
+}
+
+.masthead-nav
+{
+	margin-top: 10px;
+}
+
+.masthead-nav > li {
+  display: inline-block;
+}
+.masthead-nav > li + li {
+  margin-left: 20px;
+}
+.masthead-nav > li > a {
+  padding-right: 0;
+  padding-left: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff; /* IE8 proofing */
+  color: rgba(255,255,255,.55);
+  text-shadow: none;
+  border-bottom: 2px solid transparent;
+}
+.masthead-nav > li > a:hover,
+.masthead-nav > li > a:focus {
+  background-color: transparent;
+  border-bottom-color: #a9a9a9;
+  border-bottom-color: rgba(255,255,255,.25);
+}
+.masthead-nav > .active > a,
+.masthead-nav > .active > a:hover,
+.masthead-nav > .active > a:focus {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+
+@media (min-width: 768px) {
+  .masthead-brand {
+    float: left;
+  }
+  .masthead-nav {
+    float: right;
+  }
+}
+
+
+.page-container {
+	color: #222;
+	text-shadow: none;
+	background-color: #fff;
+}
+
+.cover-heading {
+	margin-bottom: 20px;
+}
+.button-container {
+	margin-top: 50px;
+}
+.button-container .btn {
+	margin: 0 2px;
+}
+.page-container .inner.phone {
+	background: url(/payback/img/DealMock_vancouver3.png) no-repeat 565px 45px;
+	padding-right: 300px;
+}
+.page-container .inner {
+	padding: 40px 0;
+	margin: 0 auto;
+	text-align: left;
+}
+.page-container .inner.center {
+	text-align: center;
+}
+
+.page-container .inner.center .cover-heading {
+	text-align: center;
+}
+
+.page-container .lead
+{
+	font-size: 20px;
+}
+/*
+ * Footer
+ */
+
+.mastfoot {
+	padding: 0 0 30px;
+	background: #ebebeb;
+  color: #999; /* IE8 proofing */
+  color: rgba(100,100,100,.5);
+  text-shadow: none;
+}
+.mastfoot a {
+	color: rgb(18, 141, 139);
+}
+
+/*
+ * Affix and center
+ */
+
+@media (min-width: 768px) {
+  /* Handle the widths */
+  .cover-container {
+    width: 100%; /* Must be percentage or pixels for horizontal alignment */
+  }
+}
+
+@media (min-width: 992px) {
+  .masthead .inner,
+  .page-container .inner {
+    width: 800px;
+  }
+}
