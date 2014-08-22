@@ -12,3 +12,4 @@ target*
 *.mymetadata
 *.DS_Store
 /target
+/target/
