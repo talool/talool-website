@@ -41,7 +41,7 @@ public class FundraiserListModel extends LoadableDetachableModel<List<MerchantSu
 			criteria.setFilters(Filter.equal(KeyValue.fundraiser, true));
 			
 			final SearchOptions searchOpts = new SearchOptions.Builder().
-					sortProperty("name").ascending(true).maxResults(100).build();
+					sortProperty("name").ascending(true).maxResults(300).build();
 			
 			PaginatedResult<MerchantSummary> results = ServiceFactory.get().getTaloolService().getPublisherMerchantSummary(
 					publisherId, searchOpts, criteria, true);

@@ -1,0 +1,61 @@
+.logo {
+	color: #fff;
+	text-shadow: 0 1px 0 #3e3e3e;
+	font-family: 'Roboto Slab', serif;
+}
+body.payback h2,
+.logo {
+	font-size: 1.25em;
+}
+body.payback .ui-header .ui-btn
+{
+	border: none;
+	background-color: transparent;
+	margin: 6px;
+	color: #fff;
+	text-shadow: 0 1px 0 #3e3e3e;
+}
+
+body.payback .ui-bar-c
+{
+	background-image: linear-gradient(rgba(200, 200, 200, 0), #208896);
+	background-color: lightblue;
+}
+body.payback #menu
+{
+	background-color: #fff;
+	background-image: linear-gradient(rgba(200, 200, 200, .1), rgba(200, 200, 200, 1));
+}
+
+body.payback div.ui-body-c
+{
+	background-color: #fff;
+	background-image: linear-gradient(rgba(200, 200, 200, 0), rgba(200, 200, 200, .5));
+}
+
+body.payback div.ui-body-c.ui-input-text
+{
+	background-color: #fff;
+	background-image: none;
+}
+
+body.payback .logo
+{
+	height: 20px;
+	display: block;
+	margin: 5px auto 15px;
+	text-align: center;
+}
+
+body.apple .android,
+body.android .apple
+{
+	display:none;
+}
+
+.appicons
+{
+	margin-top: 30px;
+	text-align: center;
+}
+
