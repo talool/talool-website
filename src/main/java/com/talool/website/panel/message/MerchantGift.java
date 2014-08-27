@@ -1,6 +1,7 @@
 package com.talool.website.panel.message;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.talool.core.Deal;
 import com.talool.core.Merchant;
@@ -13,6 +14,8 @@ public class MerchantGift implements Serializable {
 	private Deal deal;
 	private CustomerCriteria criteria;
 	private Merchant merchant;
+	private String title;
+	private Date startDate;
 	
 	public MerchantGift(Merchant merchant) {
 		super();
@@ -34,6 +37,19 @@ public class MerchantGift implements Serializable {
 	public Merchant getMerchant()
 	{
 		return merchant;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public Date getStartDate() {
+		if (this.startDate==null) startDate = new Date();
+		return startDate;
+	}
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 	
 

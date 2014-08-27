@@ -1,6 +1,9 @@
 package com.talool.website.panel.message.wizard;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.wizard.IWizardStep;
@@ -12,12 +15,19 @@ import org.slf4j.LoggerFactory;
 
 import com.googlecode.wicket.jquery.ui.widget.wizard.AbstractWizard;
 import com.talool.core.Customer;
+import com.talool.core.Deal;
 import com.talool.core.FactoryManager;
+import com.talool.core.MerchantAccount;
 import com.talool.core.service.CustomerService;
+import com.talool.core.service.InvalidInputException;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
+import com.talool.messaging.MessagingFactory;
+import com.talool.messaging.job.MerchantGiftJob;
+import com.talool.service.ServiceFactory;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.message.MerchantGift;
+import com.talool.website.util.SessionUtils;
 import com.talool.website.util.TaloolWizardModel;
 
 public class MessageWizard extends AbstractWizard<MerchantGift> {
@@ -36,6 +46,7 @@ public class MessageWizard extends AbstractWizard<MerchantGift> {
 		WizardModel wizardModel = new TaloolWizardModel();
 		wizardModel.add(new MessageGiftStep());
 		wizardModel.add(new MessageCriteriaStep());
+		wizardModel.add(new JobScheduleStep());
 		wizardModel.add(new MessageConfirmationStep());
 		
 		wizardModel.setLastVisible(false);
@@ -74,11 +85,21 @@ public class MessageWizard extends AbstractWizard<MerchantGift> {
 		final MerchantGift mg = (MerchantGift) getDefaultModelObject();
 
 		try {
+			MerchantAccount merchantAccount = SessionUtils.getSession().getMerchantAccount();
 			Customer fromCustomer = taloolService.getCustomerForMerchant(mg.getMerchant());
-			List<Customer> list = customerService.getCustomers(mg.getCriteria());
-			customerService.giftToEmails(fromCustomer, list, mg.getDeal());
+			
+			// TODO remvove the Test List
+			//List<Customer> targetedCustomers = customerService.getCustomers(mg.getCriteria());
+			List<Customer> targetedCustomers = new ArrayList<Customer>();
+			targetedCustomers.add(customerService.getCustomerByEmail("doug@talool.com"));
+			
+			MerchantGiftJob job = MessagingFactory.newMerchantGiftJob(merchantAccount, fromCustomer, mg.getDeal(), mg.getStartDate(), mg.getTitle());
+			ServiceFactory.get().getMessagingService().scheduleMessagingJob(job, targetedCustomers);
+			
 			LOG.debug("message sent");
 		} catch (ServiceException e) {
+			LOG.error("Failed to send message",e);
+		} catch (InvalidInputException e) {
 			LOG.error("Failed to send message",e);
 		}
 		

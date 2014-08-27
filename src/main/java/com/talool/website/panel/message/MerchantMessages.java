@@ -1,23 +1,39 @@
 package com.talool.website.panel.message;
 
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.UUID;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Merchant;
+import com.talool.messaging.job.MessagingJob;
+import com.talool.website.component.TimeZoneDropDown;
 import com.talool.website.models.MerchantModel;
+import com.talool.website.models.MessagingJobListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.definition.MerchantPanel;
 import com.talool.website.panel.message.wizard.MessageWizard;
+import com.talool.website.util.SessionUtils;
+import com.talool.website.util.TaloolDateUtil;
 
 public class MerchantMessages extends BaseTabPanel {
 
@@ -43,6 +59,47 @@ public class MerchantMessages extends BaseTabPanel {
 		final WebMarkupContainer container = new WebMarkupContainer("list");
 		container.setOutputMarkupId(true);
 		add(container);
+		
+		MessagingJobListModel model = new MessagingJobListModel();
+		int jobCount = model.getObject().size();
+		container.add(new Label("totalCount",jobCount));
+		container.add(new Label("navigator",""));
+		
+		final ListView<MessagingJob> locations = new ListView<MessagingJob>(
+				"jobRptr", model)
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<MessagingJob> item)
+			{
+				final MessagingJob job = item.getModelObject();
+
+				item.setModel(new CompoundPropertyModel<MessagingJob>(job));
+
+				if (item.getIndex() % 2 == 0)
+				{
+					item.add(new AttributeModifier("class", "odd-row-bg"));
+				}
+				
+				item.add(new Label("jobNotes"));
+				item.add(new Label("jobState"));
+				item.add(new Label("usersTargeted"));
+				item.add(new Label("sends"));
+				item.add(new Label("emailOpens"));
+				item.add(new Label("giftOpens"));
+
+				DateTimeZone tz = DateTimeZone.forTimeZone(SessionUtils.getSession().getBestGuessTimeZone());
+				DateTime localDate = new DateTime(job.getScheduledStartDate().getTime(), tz);
+				DateTimeFormatter formatter = DateTimeFormat.forPattern("MMM d, yyyy h:mm a z");
+				String startDate = formatter.print(localDate);
+				item.add(new Label("date",startDate));
+
+			}
+
+		};
+		container.add(locations);
 		
 		// override the action button
 		AjaxLink<Void> actionLink = new AjaxLink<Void>("actionLink")

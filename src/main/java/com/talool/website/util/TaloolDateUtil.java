@@ -1,5 +1,6 @@
 package com.talool.website.util;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -70,6 +71,21 @@ public class TaloolDateUtil
 		}
 
 		return sb.toString();
+	}
+	
+	public static Date convertTimeZone(Date date, TimeZone toTimeZone, TimeZone fromTimeZone)
+	{
+		// get the offset
+		int millisInHour = (1000 * 60 * 60);
+		int fromOffset = fromTimeZone.getOffset(date.getTime()) / millisInHour;
+		int toOffset = toTimeZone.getOffset(date.getTime()) / millisInHour;
+		int offset = toOffset - fromOffset;
+
+		// convert the date
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(Calendar.HOUR_OF_DAY, offset);
+		return c.getTime();
 	}
 
 }
