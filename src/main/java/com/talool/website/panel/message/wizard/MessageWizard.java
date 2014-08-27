@@ -92,6 +92,7 @@ public class MessageWizard extends AbstractWizard<MerchantGift> {
 			//List<Customer> targetedCustomers = customerService.getCustomers(mg.getCriteria());
 			List<Customer> targetedCustomers = new ArrayList<Customer>();
 			targetedCustomers.add(customerService.getCustomerByEmail("doug@talool.com"));
+			targetedCustomers.add(customerService.getCustomerByEmail("chris@talool.com"));
 			
 			MerchantGiftJob job = MessagingFactory.newMerchantGiftJob(merchantAccount, fromCustomer, mg.getDeal(), mg.getStartDate(), mg.getTitle());
 			ServiceFactory.get().getMessagingService().scheduleMessagingJob(job, targetedCustomers);
