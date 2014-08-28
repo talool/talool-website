@@ -15,7 +15,7 @@ $(function() {
 
 		this.isMobile = function()
 		{
-			return navigator.userAgent.match(/(Android|iPhone|iPod|iPad)/);
+			return navigator.userAgent.match(/(Android|iPhone|iPod)/);
 		};
 
 		this.stopSpinner = function() {

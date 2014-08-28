@@ -64,7 +64,7 @@ public class MerchantsPage extends BasePage
 	
 	private String sortParameter = "name";
 	private boolean isAscending = true;
-	private int itemsPerPage = 50;
+	private int itemsPerPage = 20;
 	private long itemCount;
 	
 	private UUID searchMerchantId;
