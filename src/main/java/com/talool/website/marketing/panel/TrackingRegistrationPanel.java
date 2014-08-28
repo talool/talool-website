@@ -107,7 +107,6 @@ public class TrackingRegistrationPanel extends Panel {
 					try
 					{
 						generateCode();
-						fundraiser = null;
 						fullName = "";
 						email="";
 						//target.add(container); // this jacks up jquery mobile.
@@ -176,7 +175,9 @@ public class TrackingRegistrationPanel extends Panel {
 		String code = merchantCodeGrp.getCodes().iterator().next().getCode();
 		
 		StringBuilder message = new StringBuilder("Your tracking code is ");
-		message.append(code).append(". An email will be sent to you shortly.");
+		message.append(code)
+			.append(". An email will be sent to you shortly.  ")
+			.append("If you don't receive your instructional email in 10 minutes, please email support@talool.com so we can get you up and running quickly." );
 		
 		// send email
 		Merchant publisher = taloolService.getMerchantById(publisherId);

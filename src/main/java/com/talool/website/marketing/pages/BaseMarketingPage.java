@@ -9,7 +9,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.website.marketing.pages.mobile.MobileHomePage;
-import com.talool.website.marketing.panel.ResetPasswordPanel;
 
 /**
  * @author clintz
@@ -48,8 +47,7 @@ public class BaseMarketingPage extends WebPage
 		String ua = request.getHeader("User-Agent");
 		
 		return (StringUtils.contains(ua, "Android") ||
-			StringUtils.contains(ua, "iPhone") ||
-			StringUtils.contains(ua, "iPad"));
+			StringUtils.contains(ua, "iPhone"));
 	}
 	
 	public void handleMobile()
