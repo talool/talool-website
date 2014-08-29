@@ -1,9 +1,9 @@
 package com.talool.website.panel.message.wizard;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.wizard.IWizardStep;
@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import com.googlecode.wicket.jquery.ui.widget.wizard.AbstractWizard;
 import com.talool.core.Customer;
-import com.talool.core.Deal;
 import com.talool.core.FactoryManager;
+import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
 import com.talool.core.service.CustomerService;
 import com.talool.core.service.InvalidInputException;
@@ -27,6 +27,7 @@ import com.talool.messaging.job.MerchantGiftJob;
 import com.talool.service.ServiceFactory;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.message.MerchantGift;
+import com.talool.website.util.MerchantAccountComparator;
 import com.talool.website.util.SessionUtils;
 import com.talool.website.util.TaloolWizardModel;
 
@@ -85,7 +86,28 @@ public class MessageWizard extends AbstractWizard<MerchantGift> {
 		final MerchantGift mg = (MerchantGift) getDefaultModelObject();
 
 		try {
-			MerchantAccount merchantAccount = SessionUtils.getSession().getMerchantAccount();
+			MerchantAccount merchantAccount = null;
+			// TODO fix this MerchantAccount selection hack
+			// If the merchant has no merchant accounts, the message will be associated with the logged in user
+			try 
+			{
+				Merchant m = taloolService.getMerchantById(mg.getMerchant().getId());
+				Set<MerchantAccount> mas = m.getMerchantAccounts();
+				if (mas.isEmpty() == false)
+				{
+					List<MerchantAccount> mal = new ArrayList<MerchantAccount>();
+					mal.addAll(mas);
+					MerchantAccountComparator mac = new MerchantAccountComparator(MerchantAccountComparator.ComparatorType.CreateDate);
+					Collections.sort(mal,mac);
+					merchantAccount = mal.get(0);
+				}
+			} 
+			catch (ServiceException se)
+			{
+				LOG.error("Failed to get merchant account", se);
+			}
+			if (merchantAccount == null) merchantAccount = SessionUtils.getSession().getMerchantAccount();
+			
 			Customer fromCustomer = taloolService.getCustomerForMerchant(mg.getMerchant());
 			
 			// TODO remvove the Test List

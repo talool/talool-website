@@ -23,6 +23,7 @@ public class MessagingJobListModel extends
 
 	private static final long serialVersionUID = -6377845043575682681L;
 	private static final Logger LOG = LoggerFactory.getLogger(MessagingJobListModel.class);
+	private MerchantAccount ma;
 
 	@Override
 	protected List<MessagingJob> load()
@@ -31,8 +32,8 @@ public class MessagingJobListModel extends
 
 		try
 		{
-			MerchantAccount merchantAccount = SessionUtils.getSession().getMerchantAccount();
-			jobs = ServiceFactory.get().getMessagingService().getMessagingJobsByMerchantAccount(merchantAccount.getId());
+			if (ma == null) ma = SessionUtils.getSession().getMerchantAccount();
+			jobs = ServiceFactory.get().getMessagingService().getMessagingJobsByMerchantAccount(ma.getId());
 			
 		}
 		catch (ServiceException e)
@@ -41,6 +42,14 @@ public class MessagingJobListModel extends
 		}
 
 		return jobs;
+	}
+
+	public MerchantAccount getMerchantAccount() {
+		return ma;
+	}
+
+	public void setMerchantAccount(MerchantAccount ma) {
+		this.ma = ma;
 	}
 
 }

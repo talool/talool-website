@@ -1,7 +1,9 @@
 package com.talool.website.panel.message;
 
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.wicket.AttributeModifier;
@@ -9,7 +11,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -23,8 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Merchant;
+import com.talool.core.MerchantAccount;
+import com.talool.core.service.ServiceException;
 import com.talool.messaging.job.MessagingJob;
-import com.talool.website.component.TimeZoneDropDown;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.models.MessagingJobListModel;
 import com.talool.website.pages.BasePage;
@@ -32,8 +34,8 @@ import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.definition.MerchantPanel;
 import com.talool.website.panel.message.wizard.MessageWizard;
+import com.talool.website.util.MerchantAccountComparator;
 import com.talool.website.util.SessionUtils;
-import com.talool.website.util.TaloolDateUtil;
 
 public class MerchantMessages extends BaseTabPanel {
 
@@ -61,6 +63,27 @@ public class MerchantMessages extends BaseTabPanel {
 		add(container);
 		
 		MessagingJobListModel model = new MessagingJobListModel();
+		// TODO fix this MerchantAccount selection hack
+		// If the merchant has no merchant accounts, the message will be associated with the logged in user
+		try 
+		{
+			Merchant m = taloolService.getMerchantById(_merchantId);
+			Set<MerchantAccount> mas = m.getMerchantAccounts();
+			if (mas.isEmpty() == false)
+			{
+				List<MerchantAccount> mal = new ArrayList<MerchantAccount>();
+				mal.addAll(mas);
+				MerchantAccountComparator mac = new MerchantAccountComparator(MerchantAccountComparator.ComparatorType.CreateDate);
+				Collections.sort(mal,mac);
+				MerchantAccount ma = mal.get(0);
+				model.setMerchantAccount(ma);
+			}
+		} 
+		catch (ServiceException se)
+		{
+			LOG.error("Failed to get merchant account", se);
+		}
+		
 		int jobCount = model.getObject().size();
 		container.add(new Label("totalCount",jobCount));
 		container.add(new Label("navigator",""));
