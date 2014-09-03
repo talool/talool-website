@@ -36,6 +36,9 @@ import com.talool.website.panel.NiceFeedbackPanel;
 import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.PublisherCobrand;
 import com.talool.website.util.SessionUtils;
+import com.talool.website.util.WebsiteStatsDClient;
+import com.talool.website.util.WebsiteStatsDClient.Action;
+import com.talool.website.util.WebsiteStatsDClient.SubAction;
 import com.talool.website.validators.EmailValidator;
 
 public class TrackingRegistrationPanel extends Panel {
@@ -186,6 +189,7 @@ public class TrackingRegistrationPanel extends Panel {
 		emailService.sendTrackingCodeEmail(new EmailRequestParams<EmailTrackingCodeEntity>(entity));
 		
 		success(message.toString());
+		WebsiteStatsDClient.get().count(Action.merchant_code_group, SubAction.create, fundraiser.getMerchantId());
 	}
 	
 	private String getTrackingUrl(String code)

@@ -42,12 +42,8 @@ import com.talool.website.models.MerchantModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.analytics.CubismHorizon;
-import com.talool.website.panel.analytics.CubismHorizonFactory;
-import com.talool.website.panel.analytics.CubismPanel;
 import com.talool.website.panel.merchant.wizard.MerchantWizard;
 import com.talool.website.panel.merchant.wizard.MerchantWizard.MerchantWizardMode;
-import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SessionUtils;
 
 public class FundraiserSummaryPanel extends BaseTabPanel
@@ -62,7 +58,6 @@ public class FundraiserSummaryPanel extends BaseTabPanel
 	private Merchant fundraiser;
 
 	private MerchantWizard wizard;
-	private int percentage;
 	private List<KeyValue> keyValues;
 
 	private List<String> warnings;
@@ -117,8 +112,6 @@ public class FundraiserSummaryPanel extends BaseTabPanel
 				wizard.open(target);
 			}
 		});
-
-		container.add(new Label("percentage", new PropertyModel<Integer>(this, "percentage")));
 
 		final ListView<KeyValue> propteryList = new ListView<KeyValue>("propertyRptr", new PropertyModel<List<KeyValue>>(this, "keyValues"))
 		{
@@ -342,7 +335,6 @@ public class FundraiserSummaryPanel extends BaseTabPanel
 		}
 
 		keyValues = KeyValue.getKeyValues(fundraiser.getProperties());
-		percentage = fundraiser.getProperties().getAsInt(KeyValue.percentage);
 
 	}
 

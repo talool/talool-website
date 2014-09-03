@@ -13,8 +13,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.website.pages.BaseManagementPage;
-import com.talool.website.pages.MerchantManagementPage;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.dashboard.MerchantRecentRedemptionsPanel;
 import com.talool.website.panel.merchant.RecentRedemptionsPanel;
 import com.talool.website.panel.merchant.RedemptionCodeLookupPanel;
 import com.talool.website.util.SecuredPage;
@@ -48,7 +48,28 @@ public class MerchantRedemptionCodePage extends BaseManagementPage
 		
 		List<ITab> tabs = new ArrayList<ITab>();
 		
-		tabs.add(new AbstractTab(new Model<String>("Summary"))
+		tabs.add(new AbstractTab(new Model<String>("Recent Redemptions"))
+		{
+
+			private static final long serialVersionUID = 5853871222415506440L;
+
+			@Override
+			public Panel getPanel(String panelId)
+			{
+				if (isSuperUser)
+				{
+					return new RecentRedemptionsPanel(panelId, getPageParameters());
+				}
+				else
+				{
+					return new MerchantRecentRedemptionsPanel(panelId, _merchantId);
+				}
+			}
+			
+			
+		});
+		
+		tabs.add(new AbstractTab(new Model<String>("Search"))
 		{
 
 			private static final long serialVersionUID = 5853871222415506440L;
@@ -61,24 +82,6 @@ public class MerchantRedemptionCodePage extends BaseManagementPage
 				return new RedemptionCodeLookupPanel(panelId, params);
 			}
 		});
-
-
-		if (isSuperUser)
-		{
-			tabs.add(new AbstractTab(new Model<String>("Recent Redemptions"))
-			{
-
-				private static final long serialVersionUID = 5853871222415506440L;
-
-				@Override
-				public Panel getPanel(String panelId)
-				{
-					return new RecentRedemptionsPanel(panelId, getPageParameters());
-				}
-				
-				
-			});
-		}
 
 		final AjaxTabbedPanel<ITab> tabbedPanel = new AjaxTabbedPanel<ITab>("tabs", tabs)
 		{
