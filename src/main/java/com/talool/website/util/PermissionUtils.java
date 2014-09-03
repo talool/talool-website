@@ -52,6 +52,13 @@ public class PermissionUtils {
 		return merchantAccount.getProperties().getAsBool(KeyValue.analytics);
 	}
 	
+	public static boolean canViewMessaging(MerchantAccount merchantAccount)
+	{
+		if (isSuperUser(merchantAccount)) return true;
+		// TODO move this to KeyValue.messaging
+		return merchantAccount.getProperties().getAsBool("messaging");
+	}
+	
 	public static boolean isFundraiser(DealOffer offer)
 	{
 		return offer.getProperties().getAsBool(KeyValue.fundraisingBook);
