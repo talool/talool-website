@@ -16,6 +16,7 @@ import com.talool.core.service.TaloolService;
 import com.talool.utils.GraphiteConstants.Action;
 import com.talool.utils.GraphiteConstants.DeviceType;
 import com.talool.utils.GraphiteConstants.SubAction;
+import com.talool.website.util.WebsiteStatsDClient;
 
 
 public class GraphiteMetricFactory {
@@ -69,7 +70,9 @@ public class GraphiteMetricFactory {
 		list.add(new GraphiteMetric("iPhone Purchases", DeviceType.iphone, Action.fundraiser_purchase, null, fundraiserIds));
 		list.add(new GraphiteMetric("Android Purchases", DeviceType.android, Action.fundraiser_purchase, null, fundraiserIds));
 		list.add(new GraphiteMetric("CC Purchases", null, Action.fundraiser_purchase, SubAction.credit_wildcard, fundraiserIds));
-		list.add(new GraphiteMetric("Activation Code Purchases", null, Action.fundraiser_purchase, SubAction.activate_code, fundraiserIds));
+		list.add(new GraphiteMetric("Tracking Codes Created", 
+				WebsiteStatsDClient.Action.merchant_code_group, 
+				WebsiteStatsDClient.SubAction.create, fundraiserIds));
 		return list;
 	}
 	
@@ -165,6 +168,11 @@ public class GraphiteMetricFactory {
 			list.add(new GraphiteMetric("Purchases", null, Action.purchase, null, null));
 			list.add(new GraphiteMetric("Redemptions", null, Action.redemption, null, null));
 			list.add(new GraphiteMetric("Gifts", null, Action.gift, null, null));
+			list.add(new GraphiteMetric("Tracking Codes Created", 
+					WebsiteStatsDClient.Action.merchant_code_group, 
+					WebsiteStatsDClient.SubAction.create, null));
+			
+			//sumSeries(stats.talool.development.apps.website.*.*.actions.merchant_code_group.create.*.users.*)
 		}
 		else
 		{
