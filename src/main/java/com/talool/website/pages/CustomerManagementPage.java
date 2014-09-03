@@ -56,29 +56,33 @@ public class CustomerManagementPage extends BaseManagementPage
 			}
 		});
 		
-		tabs.add(new AbstractTab(new Model<String>("Acquired Deals"))
+		if (isSuperUser)
 		{
-
-			private static final long serialVersionUID = -6020689518505770059L;
-
-			@Override
-			public Panel getPanel(String panelId)
+			tabs.add(new AbstractTab(new Model<String>("Acquired Deals"))
 			{
-				return new CustomerDealAcquiresPanel(panelId, getPageParameters());
-			}
-		});
+
+				private static final long serialVersionUID = -6020689518505770059L;
+
+				@Override
+				public Panel getPanel(String panelId)
+				{
+					return new CustomerDealAcquiresPanel(panelId, getPageParameters());
+				}
+			});
+			
+			tabs.add(new AbstractTab(new Model<String>("Purchased Books"))
+			{
+
+				private static final long serialVersionUID = 6987956481004749921L;
+
+				@Override
+				public Panel getPanel(String panelId)
+				{
+					return new CustomerDealOfferPurchasesPanel(panelId, getPageParameters());
+				}
+			});
+		}
 		
-		tabs.add(new AbstractTab(new Model<String>("Purchased Books"))
-		{
-
-			private static final long serialVersionUID = 6987956481004749921L;
-
-			@Override
-			public Panel getPanel(String panelId)
-			{
-				return new CustomerDealOfferPurchasesPanel(panelId, getPageParameters());
-			}
-		});
 
 		final AjaxTabbedPanel<ITab> tabbedPanel = new AjaxTabbedPanel<ITab>("tabs", tabs);
 		tabbedPanel.setSelectedTab(0);

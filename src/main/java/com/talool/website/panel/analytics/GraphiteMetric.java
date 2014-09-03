@@ -10,6 +10,7 @@ import com.talool.utils.GraphiteConstants.Apps;
 import com.talool.utils.GraphiteConstants.DeviceType;
 import com.talool.utils.GraphiteConstants.Environment;
 import com.talool.utils.GraphiteConstants.SubAction;
+import com.talool.website.util.WebsiteStatsDClient;
 
 public class GraphiteMetric implements Serializable
 {
@@ -33,13 +34,24 @@ public class GraphiteMetric implements Serializable
 	public GraphiteMetric(String title, DeviceType device, Action action, SubAction subaction, List<UUID> ids)
 	{
 		this.title = title;
-		String appString = Apps.mobile.toString();
-		String deviceString = (device==null) ? wildcard:device.toString();
 		String actionString =  (action==null) ? wildcard:action.toString();
-		
 		String subactionString =  (subaction==null) ? wildcard:subaction.toString();
 		if (subaction != null && subaction.equals(SubAction.credit_wildcard)) subactionString = "credit*";
-		
+		this.definition = getDefinition(Apps.mobile.toString(), device, actionString, subactionString, ids);
+	}
+	
+	public GraphiteMetric(String title, WebsiteStatsDClient.Action action, WebsiteStatsDClient.SubAction subaction, List<UUID> ids)
+	{
+		this.title = title;
+		String actionString =  (action==null) ? wildcard:action.toString();
+		String subactionString =  (subaction==null) ? wildcard:subaction.toString();
+		if (subaction != null && subaction.equals(SubAction.credit_wildcard)) subactionString = "credit*";
+		this.definition = getDefinition(WebsiteStatsDClient.Apps.website.toString(), null, actionString, subactionString, ids);
+	}
+	
+	private String getDefinition(String appString, DeviceType device, String actionString, String subactionString, List<UUID> ids)
+	{
+		String deviceString = (device==null) ? wildcard:device.toString();
 		String objectString =  (ids==null) ? wildcard:getObjectString(ids);
 		
 		StringBuilder sb = new StringBuilder("sumSeries(stats.talool.");
@@ -50,7 +62,7 @@ public class GraphiteMetric implements Serializable
 		  .append(actionString).append(".").append(subactionString).append(".").append(objectString)
 		  .append(".users.*)");
 		
-		this.definition = sb.toString();
+		return sb.toString();
 	}
 
 	public String getTitle() 
