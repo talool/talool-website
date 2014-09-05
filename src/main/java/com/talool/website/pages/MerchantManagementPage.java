@@ -149,7 +149,7 @@ public class MerchantManagementPage extends BaseManagementPage
 			});
 		}
 
-		if (isSuperUser)
+		if (PermissionUtils.canViewMessaging(SessionUtils.getSession().getMerchantAccount()))
 		{
 			tabs.add(new AbstractTab(new Model<String>("Messages"))
 			{
