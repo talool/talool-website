@@ -5,6 +5,11 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 public class TaloolDateUtil
 {
 
@@ -86,6 +91,14 @@ public class TaloolDateUtil
 		c.setTime(date);
 		c.add(Calendar.HOUR_OF_DAY, offset);
 		return c.getTime();
+	}
+	
+	public static String getFormattedDate(Date date, TimeZone tz)
+	{
+		DateTimeZone dtz = DateTimeZone.forTimeZone(tz);
+		DateTime localDate = new DateTime(date.getTime(), dtz);
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("MMM d, yyyy h:mm a z");
+		return formatter.print(localDate);
 	}
 
 }
