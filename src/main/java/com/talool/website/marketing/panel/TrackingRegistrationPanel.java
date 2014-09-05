@@ -30,6 +30,7 @@ import com.talool.service.mail.EmailRequestParams;
 import com.talool.service.mail.EmailTrackingCodeEntity;
 import com.talool.stats.MerchantSummary;
 import com.talool.website.component.FundraiserSelect;
+import com.talool.website.marketing.pages.FundraiserInstructions;
 import com.talool.website.marketing.pages.FundraiserTracking;
 import com.talool.website.models.FundraiserListModel;
 import com.talool.website.panel.NiceFeedbackPanel;
@@ -60,6 +61,7 @@ public class TrackingRegistrationPanel extends Panel {
 	private long merchantAccountId;
 	private String publisherName;
 	private String cobrand;
+	private String cobrandParamName;
 	
 	public TrackingRegistrationPanel(String id, PublisherCobrand cobrand) {
 		super(id);
@@ -67,7 +69,7 @@ public class TrackingRegistrationPanel extends Panel {
 		publisherId = cobrand.publisher.getId();
 		merchantAccountId = cobrand.merchantAccountId;
 		publisherName = cobrand.publisher.getName();
-		
+		cobrandParamName = cobrand.cobrandParamName;
 		this.cobrand = cobrand.cobrandClassName;
 
 	}
@@ -106,14 +108,16 @@ public class TrackingRegistrationPanel extends Panel {
 				if (PermissionUtils.isTrackingOpen(publisherId)){
 					try
 					{
-						generateCode();
-						fundraiser = null;
-						fullName = "";
-						email="";
-						//target.add(container); // this jacks up jquery mobile.
-						String feedbackId = feedback.getMarkupId();
-						target.appendJavaScript("window.oo.finishRegistration('"+feedbackId+"')");
+						Merchant school = taloolService.getMerchantById(fundraiser.getMerchantId());
+						String code = generateCode(school);
 						
+						SessionUtils.getSession().success("Success!  You should receive an email shortly.");
+						
+						PageParameters pageParameters = new PageParameters();
+						pageParameters.set("merchant",cobrandParamName);
+						pageParameters.set("cobrand",cobrand);
+						pageParameters.set("code",code);
+						setResponsePage(FundraiserInstructions.class, pageParameters);
 					}
 					catch (Exception e)
 					{
@@ -167,16 +171,12 @@ public class TrackingRegistrationPanel extends Panel {
 		container.add(new Label("p3",publisherName));
 	}
 	
-	private void generateCode() throws ServiceException
+	private String generateCode(Merchant school) throws ServiceException
 	{
 		// generate the code
-		Merchant school = taloolService.getMerchantById(fundraiser.getMerchantId());
 		MerchantCodeGroup merchantCodeGrp = taloolService.createMerchantCodeGroup(school,
 				merchantAccountId, publisherId, fullName, email, (short) 1);
 		String code = merchantCodeGrp.getCodes().iterator().next().getCode();
-		
-		StringBuilder message = new StringBuilder("Your tracking code is ");
-		message.append(code).append(". An email will be sent to you shortly.");
 		
 		// send email
 		Merchant publisher = taloolService.getMerchantById(publisherId);
@@ -184,7 +184,7 @@ public class TrackingRegistrationPanel extends Panel {
 		EmailTrackingCodeEntity entity = new EmailTrackingCodeEntity(merchantCodeGrp, publisher, url, cobrand);
 		emailService.sendTrackingCodeEmail(new EmailRequestParams<EmailTrackingCodeEntity>(entity));
 		
-		success(message.toString());
+		return code;
 	}
 	
 	private String getTrackingUrl(String code)

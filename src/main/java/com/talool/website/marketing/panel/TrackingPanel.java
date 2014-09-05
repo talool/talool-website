@@ -119,7 +119,6 @@ public class TrackingPanel extends Panel {
 				try
 				{
 					lookupCode();
-					code = null;
 				}
 				catch (Exception e)
 				{

@@ -55,8 +55,8 @@ public class PermissionUtils {
 	public static boolean canViewMessaging(MerchantAccount merchantAccount)
 	{
 		if (isSuperUser(merchantAccount)) return true;
-		// TODO move this to KeyValue.messaging
-		return merchantAccount.getProperties().getAsBool("messaging");
+		
+		return merchantAccount.getProperties().getAsBool(KeyValue.messaging);
 	}
 	
 	public static boolean isFundraiser(DealOffer offer)
