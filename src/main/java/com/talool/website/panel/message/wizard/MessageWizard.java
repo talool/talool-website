@@ -31,14 +31,13 @@ import com.talool.website.util.MerchantAccountComparator;
 import com.talool.website.util.SessionUtils;
 import com.talool.website.util.TaloolWizardModel;
 
-public class MessageWizard extends AbstractWizard<MerchantGift> {
-	
+public class MessageWizard extends AbstractWizard<MerchantGift>
+{
+
 	private static final long serialVersionUID = 5336259325674186395L;
 	private static final Logger LOG = LoggerFactory.getLogger(MessageWizard.class);
-	protected transient static final CustomerService customerService = FactoryManager.get()
-			.getServiceFactory().getCustomerService();
-	protected transient static final TaloolService taloolService = FactoryManager.get()
-			.getServiceFactory().getTaloolService();
+	protected transient static final CustomerService customerService = FactoryManager.get().getServiceFactory().getCustomerService();
+	protected transient static final TaloolService taloolService = FactoryManager.get().getServiceFactory().getTaloolService();
 
 	public MessageWizard(String id, String title)
 	{
@@ -49,19 +48,18 @@ public class MessageWizard extends AbstractWizard<MerchantGift> {
 		wizardModel.add(new MessageCriteriaStep());
 		wizardModel.add(new JobScheduleStep());
 		wizardModel.add(new MessageConfirmationStep());
-		
+
 		wizardModel.setLastVisible(false);
 
 		this.init(wizardModel);
 	}
-	
+
 	@Override
 	public void setModelObject(MerchantGift message)
 	{
 		/*
-		 * Considered setting the model on the form rather than the Wizard so that
-		 * it would filter down to the steps directly. However, that didn't work,
-		 * hence pass off via onActiveStepChanged
+		 * Considered setting the model on the form rather than the Wizard so that it would filter down to the steps
+		 * directly. However, that didn't work, hence pass off via onActiveStepChanged
 		 */
 		this.setDefaultModel(new CompoundPropertyModel<MerchantGift>(message));
 	}
@@ -71,8 +69,8 @@ public class MessageWizard extends AbstractWizard<MerchantGift> {
 	{
 		super.onActiveStepChanged(step);
 		/*
-		 * Set the model on the active set. The steps can't share the wizard's model
-		 * directly. This call happens after onInitialize, and before onConfigure.
+		 * Set the model on the active set. The steps can't share the wizard's model directly. This call happens after
+		 * onInitialize, and before onConfigure.
 		 */
 		((WizardStep) step).setDefaultModel(getDefaultModel());
 	}
@@ -85,47 +83,55 @@ public class MessageWizard extends AbstractWizard<MerchantGift> {
 		 */
 		final MerchantGift mg = (MerchantGift) getDefaultModelObject();
 
-		try {
+		try
+		{
 			MerchantAccount merchantAccount = null;
+			Merchant merchant = null;
 			// TODO fix this MerchantAccount selection hack
 			// If the merchant has no merchant accounts, the message will be associated with the logged in user
-			try 
+			try
 			{
-				Merchant m = taloolService.getMerchantById(mg.getMerchant().getId());
-				Set<MerchantAccount> mas = m.getMerchantAccounts();
+				merchant = taloolService.getMerchantById(mg.getMerchant().getId());
+				Set<MerchantAccount> mas = merchant.getMerchantAccounts();
 				if (mas.isEmpty() == false)
 				{
 					List<MerchantAccount> mal = new ArrayList<MerchantAccount>();
 					mal.addAll(mas);
 					MerchantAccountComparator mac = new MerchantAccountComparator(MerchantAccountComparator.ComparatorType.CreateDate);
-					Collections.sort(mal,mac);
+					Collections.sort(mal, mac);
 					merchantAccount = mal.get(0);
 				}
-			} 
+			}
 			catch (ServiceException se)
 			{
 				LOG.error("Failed to get merchant account", se);
 			}
-			if (merchantAccount == null) merchantAccount = SessionUtils.getSession().getMerchantAccount();
-			
+			if (merchantAccount == null)
+				merchantAccount = SessionUtils.getSession().getMerchantAccount();
+
 			Customer fromCustomer = taloolService.getCustomerForMerchant(mg.getMerchant());
-			
+
 			// TODO remvove the Test List
-			//List<Customer> targetedCustomers = customerService.getCustomers(mg.getCriteria());
+			// List<Customer> targetedCustomers = customerService.getCustomers(mg.getCriteria());
 			List<Customer> targetedCustomers = new ArrayList<Customer>();
 			targetedCustomers.add(customerService.getCustomerByEmail("doug@talool.com"));
 			targetedCustomers.add(customerService.getCustomerByEmail("chris@talool.com"));
-			
-			MerchantGiftJob job = MessagingFactory.newMerchantGiftJob(merchantAccount, fromCustomer, mg.getDeal(), mg.getStartDate(), mg.getTitle());
+
+			MerchantGiftJob job = MessagingFactory.newMerchantGiftJob(merchant, merchantAccount, fromCustomer, mg.getDeal(),
+					mg.getStartDate(), mg.getTitle());
 			ServiceFactory.get().getMessagingService().scheduleMessagingJob(job, targetedCustomers);
-			
+
 			LOG.debug("message sent");
-		} catch (ServiceException e) {
-			LOG.error("Failed to send message",e);
-		} catch (InvalidInputException e) {
-			LOG.error("Failed to send message",e);
 		}
-		
+		catch (ServiceException e)
+		{
+			LOG.error("Failed to send message", e);
+		}
+		catch (InvalidInputException e)
+		{
+			LOG.error("Failed to send message", e);
+		}
+
 		target.add(((BasePage) getPage()).feedback.setEscapeModelStrings(false));
 	}
 
@@ -142,7 +148,8 @@ public class MessageWizard extends AbstractWizard<MerchantGift> {
 	}
 
 	@Override
-	protected void onSubmit(AjaxRequestTarget target) {
+	protected void onSubmit(AjaxRequestTarget target)
+	{
 		super.onSubmit(target);
 		target.add(this.getFeedbackPanel());
 	}
