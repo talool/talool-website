@@ -1,18 +1,12 @@
 package com.talool.website.panel.merchant;
 
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -20,35 +14,22 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
-import org.apache.wicket.util.resource.IResourceStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Merchant;
-import com.talool.core.MerchantAccount;
-import com.talool.core.MerchantCode;
-import com.talool.core.MerchantCodeGroup;
 import com.talool.core.service.ServiceException;
 import com.talool.domain.Properties;
 import com.talool.service.ServiceFactory;
 import com.talool.utils.KeyValue;
-import com.talool.website.behaviors.AJAXDownload;
 import com.talool.website.component.PropertyComboBox;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.analytics.CubismHorizon;
-import com.talool.website.panel.analytics.CubismHorizonFactory;
-import com.talool.website.panel.analytics.CubismPanel;
 import com.talool.website.panel.merchant.wizard.MerchantWizard;
 import com.talool.website.panel.merchant.wizard.MerchantWizard.MerchantWizardMode;
-import com.talool.website.util.PermissionUtils;
-import com.talool.website.util.SessionUtils;
 
 public class FundraiserSummaryPanel extends BaseTabPanel
 {
@@ -67,8 +48,8 @@ public class FundraiserSummaryPanel extends BaseTabPanel
 
 	private List<String> warnings;
 
-	private int downloadCodeCount;
-	private MerchantCodeGroup merchantCodeGrp;
+	//private int downloadCodeCount;
+	//private MerchantCodeGroup merchantCodeGrp;
 
 	public FundraiserSummaryPanel(String id, PageParameters parameters)
 	{
@@ -167,6 +148,7 @@ public class FundraiserSummaryPanel extends BaseTabPanel
 		};
 		container.add(comboBox.setVisible(page.isSuperUser));
 
+		/*
 		final AJAXDownload download = new AJAXDownload()
 		{
 
@@ -220,6 +202,7 @@ public class FundraiserSummaryPanel extends BaseTabPanel
 		};
 		container.add(download);
 
+		
 		final IndicatingAjaxLink<Void> codesLink = new IndicatingAjaxLink<Void>("codeLink")
 		{
 			private static final long serialVersionUID = 268692101349122303L;
@@ -293,6 +276,7 @@ public class FundraiserSummaryPanel extends BaseTabPanel
 
 		};
 		container.add(codesLink.setOutputMarkupId(true));
+		*/
 
 		// Wizard
 		wizard = new MerchantWizard("wiz", "Merchant Wizard", MerchantWizardMode.FUNDRAISER)
@@ -342,7 +326,12 @@ public class FundraiserSummaryPanel extends BaseTabPanel
 		}
 
 		keyValues = KeyValue.getKeyValues(fundraiser.getProperties());
-		percentage = fundraiser.getProperties().getAsInt(KeyValue.percentage);
+		try {
+			percentage = fundraiser.getProperties().getAsInt(KeyValue.percentage);
+		} catch (NullPointerException e)
+		{
+			percentage = 50;
+		}
 
 	}
 
