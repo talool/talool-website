@@ -37,7 +37,7 @@ public class FundraiserTrackingRollup extends BaseMarketingPage
 	{
 		super.onInitialize();
 
-		FundraiserTrackingRollupPanel panel = new FundraiserTrackingRollupPanel(panelName, parameters);
+		FundraiserTrackingRollupPanel panel = new FundraiserTrackingRollupPanel(panelName, parameters, false);
 		panel.setItemsPerPage(25);
 		add(panel);
 		

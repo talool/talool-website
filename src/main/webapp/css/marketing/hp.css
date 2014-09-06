@@ -452,10 +452,6 @@ span.highlight
 	font-size: 13px;
 }
 
-.tracking_codes .pagination .count
-{
-	float: left;
-}
 .tracking_codes .pagination .navigator
 {
 	float: right;
