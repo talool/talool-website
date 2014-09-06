@@ -65,9 +65,7 @@ public class OpenGraphDealOffer extends OpenGraphRepeator {
 			{
 				
 				// create a custom title and description for the fundraiser
-				StringBuilder title = new StringBuilder("I Supported ");
-				title.append(fundraiser.getName()).append("!");
-				setOgTitle(title.toString());
+				setOgTitle(offer.getTitle());
 				
 				StringBuilder description = new StringBuilder("I purchased the ");
 				description.append(offer.getTitle())

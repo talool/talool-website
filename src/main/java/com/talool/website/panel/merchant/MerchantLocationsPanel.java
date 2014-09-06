@@ -1,6 +1,5 @@
 package com.talool.website.panel.merchant;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
@@ -19,7 +18,6 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.talool.core.Deal;
 import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
@@ -28,7 +26,6 @@ import com.talool.core.service.ServiceException;
 import com.talool.domain.Properties;
 import com.talool.service.ServiceFactory;
 import com.talool.website.component.ConfirmationIndicatingAjaxLink;
-import com.talool.website.component.StaticImage;
 import com.talool.website.models.MerchantLocationListModel;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.pages.BasePage;

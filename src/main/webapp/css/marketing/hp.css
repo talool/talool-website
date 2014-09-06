@@ -132,7 +132,15 @@
 	position: relative;
 	overflow: hidden;
 }
-
+.hp .appDesc.help
+{
+	background-image: none;
+}
+.hp .appDesc.fundraising h3 span
+{
+	margin-right: 10px;
+	display:inline-block;
+}
 .hp .appDesc .phone
 {
 	position: absolute;
@@ -149,9 +157,18 @@
 	padding-right: 380px;
 }
 
-.hp .appDesc.fundraising .phone
+.hp .appDesc.fundraising .phone,
+.hp .appDesc .phone.emailactivity
 {
-	background: url(/img/homepage/Homepage_Phone_EmailActivity.png) no-repeat right top;
+	background: url(/img/homepage/EmailActivityMockBoulder.png) no-repeat right top;
+}
+.hp .appDesc .phone.salestracker
+{
+	background: url(/img/homepage/SalesTrackerMock.png) no-repeat right top;
+}
+.hp .appDesc .phone.trackingcode
+{
+	background: url(/img/homepage/TrackingCodeMock.png) no-repeat right top;
 }
 
 .hp .appDesc.whiteLabel
@@ -165,6 +182,11 @@
 .hp .appDesc.tools .phone
 {
 	
+}
+
+.hp .fundraising li
+{
+	margin-bottom: 10px;
 }
 
 .hp .header .nav {

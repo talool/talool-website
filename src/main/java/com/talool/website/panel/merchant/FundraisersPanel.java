@@ -25,16 +25,17 @@ import org.slf4j.LoggerFactory;
 
 import com.talool.core.Merchant;
 import com.talool.core.service.ServiceException;
-import com.talool.stats.MerchantSummary;
+import com.talool.stats.FundraiserSummary;
 import com.talool.website.component.ConfirmationIndicatingAjaxLink;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.FundraiserManagementPage;
-import com.talool.website.pages.lists.MerchantSummaryDataProvider;
+import com.talool.website.pages.lists.FundraiserSummaryDataProvider;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.wizard.MerchantWizard;
 import com.talool.website.panel.merchant.wizard.MerchantWizard.MerchantWizardMode;
+import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SessionUtils;
 
 public class FundraisersPanel extends BaseTabPanel {
@@ -69,17 +70,21 @@ public class FundraisersPanel extends BaseTabPanel {
 		container.setOutputMarkupId(true);
 		add(container);
 		
-		final MerchantSummaryDataProvider dataProvider = new MerchantSummaryDataProvider(sortParameter, isAscending);
-		dataProvider.setFilterFundraiser(true);
-		final DataView<MerchantSummary> deals = getDataView(dataProvider);
-		container.add(deals);
+		final FundraiserSummaryDataProvider dataProvider = new FundraiserSummaryDataProvider(sortParameter, isAscending);
+		if (PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount()) == false) 
+		{
+			dataProvider.setMerchantId(_merchantId);
+		}
+		
+		final DataView<FundraiserSummary> fundraisers = getDataView(dataProvider);
+		container.add(fundraisers);
 		
 		// Set the labels above the pagination
-		itemCount = deals.getItemCount();
+		itemCount = fundraisers.getItemCount();
 		Label totalCount = new Label("totalCount",new PropertyModel<Long>(this, "itemCount"));
 		container.add(totalCount.setOutputMarkupId(true));
 				
-		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, deals);
+		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, fundraisers);
 		container.add(pagingNavigator.setOutputMarkupId(true));
 		pagingNavigator.setVisible(dataProvider.size() > itemsPerPage);
 		pagingNavigator.getPagingNavigation().setViewSize(5);
@@ -92,6 +97,28 @@ public class FundraisersPanel extends BaseTabPanel {
 			public void onClick(AjaxRequestTarget target)
 			{
 				doAjaxSearchRefresh("name", target);
+			}
+		});
+		
+		container.add(new AjaxLink<Void>("codeLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("merchantCodeCount", target);
+			}
+		});
+		
+		container.add(new AjaxLink<Void>("soldLink")
+		{
+			private static final long serialVersionUID = -4528179721619677443L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				doAjaxSearchRefresh("dealOffersSoldCount", target);
 			}
 		});
 		
@@ -138,7 +165,7 @@ public class FundraisersPanel extends BaseTabPanel {
 		
 	}
 	
-	private AjaxPagingNavigator getPagination(final DataView<MerchantSummary> schools)
+	private AjaxPagingNavigator getPagination(final DataView<FundraiserSummary> schools)
 	{
 		AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, schools);
 		pagingNavigator.setOutputMarkupId(true);
@@ -146,21 +173,21 @@ public class FundraisersPanel extends BaseTabPanel {
 		return pagingNavigator;
 	}
 	
-	private DataView<MerchantSummary> getDataView(IDataProvider<MerchantSummary> dataProvider)
+	private DataView<FundraiserSummary> getDataView(IDataProvider<FundraiserSummary> dataProvider)
 	{
 		final BasePage page = (BasePage)getPage();
-		final DataView<MerchantSummary> schools = new DataView<MerchantSummary>(REPEATER_ID,dataProvider)
+		final DataView<FundraiserSummary> schools = new DataView<FundraiserSummary>(REPEATER_ID,dataProvider)
 		{
 
 			private static final long serialVersionUID = 2705519558987278333L;
 
 			@Override
-			protected void populateItem(Item<MerchantSummary> item)
+			protected void populateItem(Item<FundraiserSummary> item)
 			{
-				final MerchantSummary school = item.getModelObject();
+				final FundraiserSummary school = item.getModelObject();
 				final UUID fundraiserId = school.getMerchantId();
 
-				item.setModel(new CompoundPropertyModel<MerchantSummary>(school));
+				item.setModel(new CompoundPropertyModel<FundraiserSummary>(school));
 
 				if (item.getIndex() % 2 == 0)
 				{
@@ -175,6 +202,9 @@ public class FundraisersPanel extends BaseTabPanel {
 				ExternalLink nameLink = new ExternalLink("name", Model.of(url),
 						new PropertyModel<String>(school, "name"));
 				item.add(nameLink);
+				
+				item.add(new Label("merchantCodeCount"));
+				item.add(new Label("dealOffersSoldCount"));
 
 				item.add(new AjaxLink<Void>("editLink")
 				{
@@ -234,8 +264,8 @@ public class FundraisersPanel extends BaseTabPanel {
 	{
 		WebMarkupContainer container = (WebMarkupContainer) get(CONTAINER_ID);
 
-		final DataView<MerchantSummary> dataView = ((DataView<MerchantSummary>) container.get(REPEATER_ID));
-		final MerchantSummaryDataProvider provider = (MerchantSummaryDataProvider) dataView.getDataProvider();
+		final DataView<FundraiserSummary> dataView = ((DataView<FundraiserSummary>) container.get(REPEATER_ID));
+		final FundraiserSummaryDataProvider provider = (FundraiserSummaryDataProvider) dataView.getDataProvider();
 
 		// toggle asc/desc
 		if (sortParam.equals(sortParameter))
@@ -260,8 +290,8 @@ public class FundraisersPanel extends BaseTabPanel {
 	{
 		// refresh the list after a book is edited
 		final WebMarkupContainer container = (WebMarkupContainer) get(CONTAINER_ID);
-		final MerchantSummaryDataProvider provider = new MerchantSummaryDataProvider(sortParameter, isAscending);
-		final DataView<MerchantSummary> dataView = getDataView(provider);
+		final FundraiserSummaryDataProvider provider = new FundraiserSummaryDataProvider(sortParameter, isAscending);
+		final DataView<FundraiserSummary> dataView = getDataView(provider);
 		container.replace(dataView);
 		itemCount = provider.size();
 		target.add(container);

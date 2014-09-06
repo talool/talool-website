@@ -2,6 +2,7 @@ package com.talool.website.marketing.panel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
@@ -25,6 +26,7 @@ import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.website.panel.NiceFeedbackPanel;
 import com.talool.website.util.SessionUtils;
+import com.talool.website.util.TaloolDateUtil;
 
 public class TrackingPanel extends Panel {
 
@@ -91,7 +93,9 @@ public class TrackingPanel extends Panel {
 				}
 
 				item.add(new Label("customer.fullName"));
-				item.add(new Label("created"));
+				
+				TimeZone tz = TimeZone.getTimeZone("America/Denver");
+				item.add(new Label("createdDate",TaloolDateUtil.getFormattedDate(purchase.getCreated(),tz)));
 				
 			}
 
@@ -119,7 +123,6 @@ public class TrackingPanel extends Panel {
 				try
 				{
 					lookupCode();
-					code = null;
 				}
 				catch (Exception e)
 				{

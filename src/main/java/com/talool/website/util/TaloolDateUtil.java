@@ -1,8 +1,14 @@
 package com.talool.website.util;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public class TaloolDateUtil
 {
@@ -70,6 +76,29 @@ public class TaloolDateUtil
 		}
 
 		return sb.toString();
+	}
+	
+	public static Date convertTimeZone(Date date, TimeZone toTimeZone, TimeZone fromTimeZone)
+	{
+		// get the offset
+		int millisInHour = (1000 * 60 * 60);
+		int fromOffset = fromTimeZone.getOffset(date.getTime()) / millisInHour;
+		int toOffset = toTimeZone.getOffset(date.getTime()) / millisInHour;
+		int offset = toOffset - fromOffset;
+
+		// convert the date
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(Calendar.HOUR_OF_DAY, offset);
+		return c.getTime();
+	}
+	
+	public static String getFormattedDate(Date date, TimeZone tz)
+	{
+		DateTimeZone dtz = DateTimeZone.forTimeZone(tz);
+		DateTime localDate = new DateTime(date.getTime(), dtz);
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("MMM d, yyyy h:mm a z");
+		return formatter.print(localDate);
 	}
 
 }
