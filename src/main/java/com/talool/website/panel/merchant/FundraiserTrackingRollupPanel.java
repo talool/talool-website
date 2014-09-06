@@ -2,12 +2,15 @@ package com.talool.website.panel.merchant;
 
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
@@ -18,13 +21,25 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.talool.core.Merchant;
+import com.talool.core.MerchantAccount;
+import com.talool.core.MerchantCodeGroup;
+import com.talool.core.service.ServiceException;
+import com.talool.service.ServiceFactory;
 import com.talool.stats.MerchantCodeSummary;
+import com.talool.website.marketing.pages.FundraiserInstructions;
 import com.talool.website.marketing.pages.FundraiserTracking;
+import com.talool.website.models.MerchantModel;
+import com.talool.website.pages.BasePage;
 import com.talool.website.pages.lists.MerchantCodeSummaryDataProvider;
+import com.talool.website.panel.AdminModalWindow;
+import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.merchant.definition.TrackingCodeMetaPanel;
+import com.talool.website.util.SessionUtils;
 
 public class FundraiserTrackingRollupPanel extends Panel
 {
-
+	private static final Logger LOG = Logger.getLogger(FundraiserTrackingRollupPanel.class);
 	private static final long serialVersionUID = -2904803042012425085L;
 	private UUID _fundraiserId;
 	private UUID _publisherId;
@@ -49,6 +64,7 @@ public class FundraiserTrackingRollupPanel extends Panel
 	protected void onInitialize()
 	{
 		super.onInitialize();
+		final BasePage page = (BasePage)getPage();
 		
 		final WebMarkupContainer container = new WebMarkupContainer(CONTAINER_ID);
 		container.setOutputMarkupId(true);
@@ -62,6 +78,43 @@ public class FundraiserTrackingRollupPanel extends Panel
 		itemCount = deals.getItemCount();
 		Label totalCount = new Label("totalCount",new PropertyModel<Long>(this, "itemCount"));
 		container.add(totalCount.setOutputMarkupId(true));
+		
+		container.add(new AjaxLink<Void>("genericCode")
+		{
+
+			private static final long serialVersionUID = 8250052316939936932L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				// generate the code
+				try
+				{
+					MerchantAccount merchantAccount = SessionUtils.getSession().getMerchantAccount();
+					String title = " ";
+					String notes = "Generic Tracking Code";
+					Merchant f = (new MerchantModel(_fundraiserId, true)).getObject();
+					ServiceFactory.get().getTaloolService().createMerchantCodeGroup(f,
+							merchantAccount.getId(), _publisherId, title, notes, (short)1);
+
+					Session.get().success("Generic tracking code created.");
+					
+					target.add(page.feedback);
+					
+					target.add(container);
+					MerchantCodeSummaryDataProvider dataProvider = 
+							new MerchantCodeSummaryDataProvider(_fundraiserId, sortParameter, isAscending);
+					DataView<MerchantCodeSummary> deals = getDataView(dataProvider);
+					itemCount = deals.getItemCount();
+					container.addOrReplace(deals);
+				}
+				catch (ServiceException e)
+				{
+					Session.get().error("Problem creating codes");
+					LOG.error("Problem creating codes: " + e.getLocalizedMessage());
+				}
+			}
+		});
 				
 		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, deals);
 		container.add(pagingNavigator.setOutputMarkupId(true));
@@ -116,6 +169,10 @@ public class FundraiserTrackingRollupPanel extends Panel
 	
 	private DataView<MerchantCodeSummary> getDataView(IDataProvider<MerchantCodeSummary> dataProvider)
 	{
+		BasePage page = (BasePage)getPage();
+		final AdminModalWindow definitionModal = page.getModal();
+		final SubmitCallBack callback = page.getCallback(definitionModal);
+		
 		final DataView<MerchantCodeSummary> codes = new DataView<MerchantCodeSummary>(REPEATER_ID,dataProvider)
 		{
 
@@ -134,9 +191,13 @@ public class FundraiserTrackingRollupPanel extends Panel
 
 				item.add(new Label("name"));
 				
+				// TODO make the cobrand params flexible
+				String cobrandMerchantName = "payback";
+				String cobrandMerchantLocation = "colorado";
+				
 				PageParameters codeParams = new PageParameters();
-				codeParams.set(0, "sales");
-				codeParams.set(1, "awesome");
+				codeParams.set(0, cobrandMerchantName);
+				codeParams.set(1, cobrandMerchantLocation);
 				codeParams.set(2, code.getCode());
 				String url = (String) urlFor(FundraiserTracking.class, codeParams);
 				ExternalLink codeLink = new ExternalLink("codeLink", Model.of(url),
@@ -145,6 +206,30 @@ public class FundraiserTrackingRollupPanel extends Panel
 				
 				item.add(new Label("email"));
 				item.add(new Label("purchaseCount"));
+				
+				PageParameters pageParameters = new PageParameters();
+				pageParameters.set("merchant",cobrandMerchantName);
+				pageParameters.set("cobrand",cobrandMerchantLocation);
+				pageParameters.set("code",code.getCode());
+				item.add(new BookmarkablePageLink<String>("helpLink",FundraiserInstructions.class, pageParameters));
+
+				item.add(new AjaxLink<Void>("editProps")
+				{
+					private static final long serialVersionUID = 268692101349122303L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target)
+					{
+						getSession().getFeedbackMessages().clear();
+						
+						TrackingCodeMetaPanel panel = new TrackingCodeMetaPanel(
+								definitionModal.getContentId(), callback, code.getCode());
+						definitionModal.setContent(panel);
+						definitionModal.setTitle("Tracking Code: "+code.getCode());
+						definitionModal.show(target);
+					}
+
+				});
 
 			}
 

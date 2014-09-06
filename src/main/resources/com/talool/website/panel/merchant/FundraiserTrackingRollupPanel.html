@@ -5,6 +5,9 @@
 		
 			<table class="listNav">
 				<tr>
+					<td>
+						<a wicket:id="genericCode" class="btn">Create Generic Tracking Code</a>
+					</td>
 					<td class="pagination">
 						<div class="count"><span wicket:id="totalCount"></span> Code(s)</div>
 						<div wicket:id="navigator" class="navigator"></div>
@@ -18,12 +21,17 @@
 					<th><a wicket:id="nameSortLink">Name</a></th>
 					<th><a wicket:id="emailSortLink">Email</a></th>
 					<th><a wicket:id="countSortLink">Purchase Count</a></th>
+					<th class="actionCol">Actions</th>
 				</tr>
 				<tr wicket:id="codeRepeater">
 					<td><a wicket:id="codeLink" target="tracking"></a></td>
 					<td wicket:id="name"></td>
 					<td wicket:id="email"></td>
 					<td wicket:id="purchaseCount"></td>
+					<td>
+						<a wicket:id="helpLink" title="custom help page" target="external" class="icon icon-large icon-question"></a>
+		  				<a wicket:id="editProps" title="edit" class="icon icon-large icon-pencil"></a>
+					</td>
 				</tr>
 			</table>
 		</div>

@@ -1,8 +1,42 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
 
-	<div wicket:id="list"></div>
+	<div wicket:id="list">
+		<table class="listNav">
+			<tr>
+				<td id="searchPanel" class="search"></td>
+				<td class="pagination">
+					<div class="count"><span wicket:id="totalCount"></span> Job(s)</div>
+					<div wicket:id="navigator" class="navigator"></div>
+				</td>
+			</tr>
+		</table>
+	  	<table>
+	  		<thead>
+	  			<tr>
+	  				<th>Start Date</th>
+	  				<th >Notes</th>
+	  				<th>Job State</th>
+	  				<th>Users Targeted</th>
+	  				<th>Gifts Sent</th>
+	  				<th>Opened Emails</th>
+	  				<th>Opened Gifts</th>
+	  			</tr>
+	  		</thead>
+	  		<tbody>
+	  			<tr class="odd" wicket:id="jobRptr">
+	  				<td wicket:id="date"></td>
+	  				<td wicket:id="jobNotes"></td>
+	  				<td wicket:id="jobState"></td>
+	  				<td wicket:id="usersTargeted"></td>
+	  				<td wicket:id="sends"></td>
+	  				<td wicket:id="emailOpens"></td>
+	  				<td wicket:id="giftOpens"></td>
+	  			</tr>
+	  		</tbody>
+	  	</table>
+	</div>
 	
-	<div wicket:id="messageWiz" class="wiz merchantWiz"></div>
+	<div wicket:id="messageWiz" class="wiz merchantWiz offerWiz"></div>
 	
 </wicket:panel>
 
