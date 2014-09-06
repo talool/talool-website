@@ -32,7 +32,7 @@ public class FundraiserTrackingPanel extends BaseTabPanel
 		String url = (String) urlFor(FundraiserTrackingRollup.class, parameters);
 		add(new ExternalLink("externalLink", Model.of(url)));
 		
-		add(new FundraiserTrackingRollupPanel("container", parameters));
+		add(new FundraiserTrackingRollupPanel("container", parameters, true));
 
 		// hide the action button
 		final BasePage page = (BasePage) this.getPage();

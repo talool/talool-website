@@ -23,7 +23,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
-import com.talool.core.MerchantCodeGroup;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 import com.talool.stats.MerchantCodeSummary;
@@ -52,19 +51,20 @@ public class FundraiserTrackingRollupPanel extends Panel
 	private boolean isAscending = true;
 	private int itemsPerPage = 50;
 	private long itemCount;
+	private boolean isAdmin = false;
 
-	public FundraiserTrackingRollupPanel(String id, PageParameters parameters)
+	public FundraiserTrackingRollupPanel(String id, PageParameters parameters, boolean isAdmin)
 	{
 		super(id);
 		_fundraiserId = UUID.fromString(parameters.get("id").toString());
 		_publisherId = UUID.fromString(parameters.get("pid").toString());
+		this.isAdmin = isAdmin;
 	}
 
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		final BasePage page = (BasePage)getPage();
 		
 		final WebMarkupContainer container = new WebMarkupContainer(CONTAINER_ID);
 		container.setOutputMarkupId(true);
@@ -79,7 +79,7 @@ public class FundraiserTrackingRollupPanel extends Panel
 		Label totalCount = new Label("totalCount",new PropertyModel<Long>(this, "itemCount"));
 		container.add(totalCount.setOutputMarkupId(true));
 		
-		container.add(new AjaxLink<Void>("genericCode")
+		AjaxLink<Void> createCode = new AjaxLink<Void>("genericCode")
 		{
 
 			private static final long serialVersionUID = 8250052316939936932L;
@@ -99,7 +99,11 @@ public class FundraiserTrackingRollupPanel extends Panel
 
 					Session.get().success("Generic tracking code created.");
 					
-					target.add(page.feedback);
+					if (isAdmin)
+					{
+						BasePage page = (BasePage)getPage();
+						target.add(page.feedback);
+					}
 					
 					target.add(container);
 					MerchantCodeSummaryDataProvider dataProvider = 
@@ -114,7 +118,8 @@ public class FundraiserTrackingRollupPanel extends Panel
 					LOG.error("Problem creating codes: " + e.getLocalizedMessage());
 				}
 			}
-		});
+		};
+		container.add(createCode.setVisible(isAdmin));
 				
 		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, deals);
 		container.add(pagingNavigator.setOutputMarkupId(true));
