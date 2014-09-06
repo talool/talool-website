@@ -98,7 +98,7 @@ public class FundraiserInstructions extends BaseMarketingPage
 		add(new Label("c1",code));
 		
 		StringBuilder sb = new StringBuilder();
-		if (StringUtils.isEmpty(name))
+		if (StringUtils.isEmpty(name.trim()))
 		{
 			sb.append("that ").append(fundraiserName).append(" gets");
 		}
