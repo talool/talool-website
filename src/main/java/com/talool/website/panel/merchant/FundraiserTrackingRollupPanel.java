@@ -23,7 +23,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
-import com.talool.core.MerchantCodeGroup;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 import com.talool.stats.MerchantCodeSummary;
@@ -52,19 +51,20 @@ public class FundraiserTrackingRollupPanel extends Panel
 	private boolean isAscending = true;
 	private int itemsPerPage = 50;
 	private long itemCount;
+	private boolean isAdmin = false;
 
-	public FundraiserTrackingRollupPanel(String id, PageParameters parameters)
+	public FundraiserTrackingRollupPanel(String id, PageParameters parameters, boolean isAdmin)
 	{
 		super(id);
 		_fundraiserId = UUID.fromString(parameters.get("id").toString());
 		_publisherId = UUID.fromString(parameters.get("pid").toString());
+		this.isAdmin = isAdmin;
 	}
 
 	@Override
 	protected void onInitialize()
 	{
 		super.onInitialize();
-		final BasePage page = (BasePage)getPage();
 		
 		final WebMarkupContainer container = new WebMarkupContainer(CONTAINER_ID);
 		container.setOutputMarkupId(true);
@@ -79,7 +79,7 @@ public class FundraiserTrackingRollupPanel extends Panel
 		Label totalCount = new Label("totalCount",new PropertyModel<Long>(this, "itemCount"));
 		container.add(totalCount.setOutputMarkupId(true));
 		
-		container.add(new AjaxLink<Void>("genericCode")
+		AjaxLink<Void> createCode = new AjaxLink<Void>("genericCode")
 		{
 
 			private static final long serialVersionUID = 8250052316939936932L;
@@ -99,7 +99,11 @@ public class FundraiserTrackingRollupPanel extends Panel
 
 					Session.get().success("Generic tracking code created.");
 					
-					target.add(page.feedback);
+					if (isAdmin)
+					{
+						BasePage page = (BasePage)getPage();
+						target.add(page.feedback);
+					}
 					
 					target.add(container);
 					MerchantCodeSummaryDataProvider dataProvider = 
@@ -114,7 +118,11 @@ public class FundraiserTrackingRollupPanel extends Panel
 					LOG.error("Problem creating codes: " + e.getLocalizedMessage());
 				}
 			}
-		});
+		};
+		container.add(createCode.setVisible(isAdmin));
+		
+		String actionsLabel = (isAdmin)?"Actions":"";
+		container.add(new Label("actionsContainer",actionsLabel));
 				
 		final AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, deals);
 		container.add(pagingNavigator.setOutputMarkupId(true));
@@ -169,9 +177,6 @@ public class FundraiserTrackingRollupPanel extends Panel
 	
 	private DataView<MerchantCodeSummary> getDataView(IDataProvider<MerchantCodeSummary> dataProvider)
 	{
-		BasePage page = (BasePage)getPage();
-		final AdminModalWindow definitionModal = page.getModal();
-		final SubmitCallBack callback = page.getCallback(definitionModal);
 		
 		final DataView<MerchantCodeSummary> codes = new DataView<MerchantCodeSummary>(REPEATER_ID,dataProvider)
 		{
@@ -211,7 +216,7 @@ public class FundraiserTrackingRollupPanel extends Panel
 				pageParameters.set("merchant",cobrandMerchantName);
 				pageParameters.set("cobrand",cobrandMerchantLocation);
 				pageParameters.set("code",code.getCode());
-				item.add(new BookmarkablePageLink<String>("helpLink",FundraiserInstructions.class, pageParameters));
+				item.add(new BookmarkablePageLink<String>("helpLink",FundraiserInstructions.class, pageParameters).setVisible(isAdmin));
 
 				item.add(new AjaxLink<Void>("editProps")
 				{
@@ -222,20 +227,30 @@ public class FundraiserTrackingRollupPanel extends Panel
 					{
 						getSession().getFeedbackMessages().clear();
 						
-						TrackingCodeMetaPanel panel = new TrackingCodeMetaPanel(
-								definitionModal.getContentId(), callback, code.getCode());
-						definitionModal.setContent(panel);
-						definitionModal.setTitle("Tracking Code: "+code.getCode());
-						definitionModal.show(target);
+						showModal(target, code.getCode());
 					}
 
-				});
+				}.setVisible(isAdmin));
 
 			}
 
 		};
 		codes.setItemsPerPage(itemsPerPage);
 		return codes;
+	}
+	
+	private void showModal(AjaxRequestTarget target, String code)
+	{
+		BasePage page = (BasePage)getPage();
+		final AdminModalWindow definitionModal = page.getModal();
+		final SubmitCallBack callback = page.getCallback(definitionModal);
+		
+		TrackingCodeMetaPanel panel = new TrackingCodeMetaPanel(
+				definitionModal.getContentId(), callback, code);
+		definitionModal.setContent(panel);
+		definitionModal.setTitle("Tracking Code: "+code);
+		definitionModal.show(target);
+		
 	}
 	
 	@SuppressWarnings("unchecked")
