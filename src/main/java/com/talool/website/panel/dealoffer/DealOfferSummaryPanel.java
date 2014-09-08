@@ -17,6 +17,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -41,6 +42,7 @@ import com.talool.stats.DealOfferMetrics.MetricType;
 import com.talool.utils.KeyValue;
 import com.talool.website.behaviors.AJAXDownload;
 import com.talool.website.component.PropertyComboBox;
+import com.talool.website.marketing.pages.seo.DealOfferDealsSummaryPage;
 import com.talool.website.models.DealOfferModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminModalWindow;
@@ -115,6 +117,12 @@ public class DealOfferSummaryPanel extends BaseTabPanel
 		container.add(new Label("exp", new PropertyModel<String>(this, "expiresLabel")));
 		container.add(new Label("merchantCount", new PropertyModel<Long>(this, "merchantCount")));
 		container.add(new Label("dealCount", new PropertyModel<Long>(this, "dealCount")));
+		
+		PageParameters params = new PageParameters();
+		params.set("merchant","payback");
+		params.set("cobrand","colorado");
+		params.set("id",_dealOfferId.toString());
+		container.add(new BookmarkablePageLink<String>("salesLink",DealOfferDealsSummaryPage.class, params));
 
 		final ListView<KeyValue> propteryList = new ListView<KeyValue>("propertyRptr", new PropertyModel<List<KeyValue>>(this, "keyValues"))
 		{

@@ -6,7 +6,9 @@
 		<p>
 			In order to get credit for your <span wicket:id="p2"></span> sales in the Talool app
 			(to track prizes earned or money raised toward individual accounts),
-			you will need to generate your own tracking code by completing the form below. 
+			you will need to generate your own tracking code by completing the form below.  
+			You can generate as many of these tracking codes as you like (e.g. if you have multiple children selling 
+			<span wicket:id="p4"></span> for a school fundraiser, you would want one tracking code for each child). 
 		</p>
 		<p>
 			When you click on "Generate My Code", we will send you an email 
@@ -29,12 +31,14 @@
 				</tr>
 				<tr>
 					<td>
+						<div>Who do you want to get credit for the sales of <span wicket:id="p5"></span>?</div>
 						<label>Full Name</label>
 						<input class="large" wicket:id="fullName" maxlength="128"/>
 					</td>
 				</tr>
 				<tr>
 					<td>
+						<div>Where can we send your instructional email?</div>
 						<label>Email</label>
 						<input type="email" class="large" wicket:id="email" maxlength="128"/>
 					</td>

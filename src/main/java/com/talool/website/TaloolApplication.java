@@ -73,6 +73,7 @@ import com.talool.website.marketing.pages.mobile.MobilePrivacyPage;
 import com.talool.website.marketing.pages.mobile.MobileRegistrationPage;
 import com.talool.website.marketing.pages.mobile.MobileTermsPage;
 import com.talool.website.marketing.pages.mobile.MobileWhiteLabelPage;
+import com.talool.website.marketing.pages.seo.DealOfferDealsSummaryPage;
 import com.talool.website.pages.AdminLoginPage;
 import com.talool.website.pages.AnalyticsPage;
 import com.talool.website.pages.CustomerManagementPage;
@@ -205,6 +206,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		
 		mountPage("/fundraiser", FundraiserTrackingRegistration.class);
 		mountPage("/fundraiser/help/${merchant}/${cobrand}/${code}", FundraiserInstructions.class);
+		mountPage("/couponbook/summary/${merchant}/${cobrand}/${id}", DealOfferDealsSummaryPage.class);
 		mountPage("/tracking", FundraiserTracking.class);
 		mountPage("/trackingrollup", FundraiserTrackingRollup.class);
 
