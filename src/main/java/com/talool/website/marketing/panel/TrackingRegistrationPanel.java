@@ -172,6 +172,7 @@ public class TrackingRegistrationPanel extends Panel {
 		container.add(new Label("p1",publisherName));
 		container.add(new Label("p2",publisherName));
 		container.add(new Label("p3",publisherName));
+		form.add(new Label("p5",publisherName));
 	}
 	
 	private String generateCode(Merchant school) throws ServiceException

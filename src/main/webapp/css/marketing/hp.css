@@ -412,9 +412,14 @@
 {
 	border-bottom: 1px solid #ddd;
 }
-.fundraising .searchResults tbody tr.odd-row-bg
+.fundraising .searchResults tbody tr.odd-row-bg,
+.seo tbody tr.odd-row-bg
 {
 	background-color: rgba(200, 200, 200, .1);
+}
+.seo tbody tr.odd-row-bg .tags
+{
+	color: rgba(200, 200, 200, 0);
 }
 
 /* landing pages */
@@ -451,19 +456,62 @@ span.highlight
 	line-height: 18px;
 	font-size: 13px;
 }
+.offerSummary h1
+{
+	font-size: 32px;
+}
+.seo h2
+{
+	font-size: 16px;
+	font-weight: bold;
+	margin: 0 0 10px;
+}
+.seo .details
+{
+	font-size: 12px;
+	padding: 5px 0 0;
+}
+.seo .details.tags
+{
+	color: white;
+}
+.seo tr
+{
+	border-bottom: 1px solid #ebebeb;
+}
+.seo td
+{
+	padding: 5px;
+}
+.seo, .offerSummary
+{
+	padding: 10px 45px;
+}
 
+.seo .listNav {
+	width: 100%;
+	margin: 10px 0;
+	border-bottom: 1px solid #ddd;
+}
+.seo .pagination .navigator
+{
+	text-align: right;
+}
 .tracking_codes .pagination .navigator
 {
 	float: right;
 }
 .tracking_codes .pagination .navigator a,
-.tracking_codes .pagination .navigator em
+.tracking_codes .pagination .navigator em,
+.seo .pagination .navigator a,
+.seo .pagination .navigator em
 {
 	border: 1px solid;
 	padding: 5px;
 	border-radius: 3px;
 }
-.tracking_codes .listNav td
+.tracking_codes .listNav td,
+.seo .listNav td
 {
 	height: 25px;
 }
