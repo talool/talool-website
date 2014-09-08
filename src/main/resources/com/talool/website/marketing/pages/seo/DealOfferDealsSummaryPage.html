@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+		<style>
+			
+		</style>
+	</wicket:head>
+	<wicket:extend>
+		<div class="offerSummary">
+			<h1 wicket:id="offerTitle">offer title</h1>
+			<div wicket:id="offerSummary"></div>
+		</div>
+		<div wicket:id="dealList" class="seo">
+		
+			<table class="listNav">
+				<tr>
+					<td class="bulkAction"><div class="count"><span wicket:id="totalCount"></span> Deal(s)</div></td>
+					<td class="pagination">
+						<div wicket:id="navigator" class="navigator"></div>
+					</td>
+				</tr>
+			</table>
+			
+			<table>
+		  		<tbody>
+		  			<tr class="odd" wicket:id="dealRptr">
+		  				
+		  				<td><img wicket:id="imageUrl" width="320" height="100"/></td>
+		  				
+		  				<td class="dealListItem">
+		  					<h2 class="title">
+		  						<span wicket:id="title"></span> at 
+		  						<span wicket:id="merchantName"></span> in 
+		  						<span wicket:id="merchantCity"></span>, <span wicket:id="merchantState"></span>
+		  					</h2>
+		  					<div class="summary" wicket:id="summary"></div>
+		  					<div class="details" wicket:id="details"></div>
+		  					<div class="details">
+		  						Expires: <span wicket:id="expires"></span>
+		  					</div>
+		  					<div class="details tags">
+		  						Tags: <span wicket:id="tags"></span>
+		  					</div>
+		  				</td>
+		  				
+		  			</tr>
+		  		</tbody>
+		  	</table>
+	  	</div>
+	  	
+	</wicket:extend>
+</html>
