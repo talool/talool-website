@@ -110,12 +110,7 @@ public class MessageWizard extends AbstractWizard<MerchantGift>
 				merchantAccount = SessionUtils.getSession().getMerchantAccount();
 
 			Customer fromCustomer = taloolService.getCustomerForMerchant(mg.getMerchant());
-
-			// TODO remvove the Test List
-			// List<Customer> targetedCustomers = customerService.getCustomers(mg.getCriteria());
-			List<Customer> targetedCustomers = new ArrayList<Customer>();
-			targetedCustomers.add(customerService.getCustomerByEmail("doug@talool.com"));
-			targetedCustomers.add(customerService.getCustomerByEmail("chris@talool.com"));
+			List<Customer> targetedCustomers = customerService.getCustomers(mg.getCriteria());
 
 			MerchantGiftJob job = MessagingFactory.newMerchantGiftJob(merchant, merchantAccount, fromCustomer, mg.getDeal(),
 					mg.getStartDate(), mg.getTitle());
@@ -124,10 +119,6 @@ public class MessageWizard extends AbstractWizard<MerchantGift>
 			LOG.debug("message sent");
 		}
 		catch (ServiceException e)
-		{
-			LOG.error("Failed to send message", e);
-		}
-		catch (InvalidInputException e)
 		{
 			LOG.error("Failed to send message", e);
 		}
