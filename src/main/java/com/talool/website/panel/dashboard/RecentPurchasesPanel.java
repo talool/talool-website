@@ -1,62 +1,50 @@
-package com.talool.website.panel.customer;
+package com.talool.website.panel.dashboard;
 
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.talool.core.Customer;
 import com.talool.core.DealOfferPurchase;
-import com.talool.core.service.ServiceException;
 import com.talool.domain.Properties;
-import com.talool.service.ServiceFactory;
 import com.talool.utils.KeyValue;
 import com.talool.website.marketing.pages.FundraiserInstructions;
 import com.talool.website.models.DealOfferPurchaseListModel;
-import com.talool.website.pages.BasePage;
-import com.talool.website.panel.AdminModalWindow;
-import com.talool.website.panel.PropertiesPanel;
+import com.talool.website.pages.CustomerManagementPage;
+import com.talool.website.panel.customer.CustomerDealOfferPurchasesPanel;
 import com.talool.website.util.ReceiptParser;
+public class RecentPurchasesPanel extends Panel {
 
-public class CustomerDealOfferPurchasesPanel extends Panel
-{
-	private static final long serialVersionUID = -1572792713158372783L;
+	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = Logger.getLogger(CustomerDealOfferPurchasesPanel.class);
-	private UUID _customerId;
+	private DealOfferPurchaseListModel model;
 
-	public CustomerDealOfferPurchasesPanel(String id, PageParameters parameters)
+	public RecentPurchasesPanel(String id, DealOfferPurchaseListModel model)
 	{
 		super(id);
-		_customerId = UUID.fromString(parameters.get("id").toString());
+		this.model = model;
 	}
 
 	@Override
-	protected void onInitialize()
-	{
+	protected void onInitialize() {
 		super.onInitialize();
-		
-		final BasePage page = (BasePage) getPage();
 		
 		final WebMarkupContainer container = new WebMarkupContainer("container");
 		add(container.setOutputMarkupId(true));
 		
-		final AdminModalWindow modalProps = new AdminModalWindow("modalProps");
-		modalProps.setInitialWidth(650);
-		container.add(modalProps.setOutputMarkupId(true));
 
-		DealOfferPurchaseListModel model = new DealOfferPurchaseListModel();
-		model.setCustomerId(_customerId);
 		final ListView<DealOfferPurchase> dops = new ListView<DealOfferPurchase>("rptr", model)
 		{
 
@@ -119,44 +107,15 @@ public class CustomerDealOfferPurchasesPanel extends Panel
 				item.add(codeLink.setVisible(trackingCode!=null));
 				codeLink.add(new Label("trackingCode",trackingCode));
 				
-				item.add(new AjaxLink<Void>("editProps")
-				{
-					private static final long serialVersionUID = 268692101349122303L;
+				Customer customer = dop.getCustomer();
+				PageParameters customerParams = new PageParameters();
+				customerParams.set("id", customer.getId());
+				customerParams.set("email", customer.getEmail());
+				String url = (String) urlFor(CustomerManagementPage.class, customerParams);
+				ExternalLink emailLink = new ExternalLink("customerLink", Model.of(url),
+						new PropertyModel<String>(customer, "email"));
+				item.add(emailLink);
 
-					@Override
-					public void onClick(AjaxRequestTarget target)
-					{
-						getSession().getFeedbackMessages().clear();
-
-						PropertiesPanel panel = new PropertiesPanel(modalProps.getContentId(), Model.of(dop.getProperties()),
-								DealOfferPurchase.class)
-						{
-
-							private static final long serialVersionUID = -6061721033345142501L;
-
-							@Override
-							public void saveEntityProperties(Properties props, AjaxRequestTarget target)
-							{
-								try
-								{
-									ServiceFactory.get().getTaloolService().merge(dop);
-								}
-								catch (ServiceException e)
-								{
-									LOG.error("Failed to merge purchase after editing properties", e);
-								}
-								target.appendJavaScript("window.parent.Wicket.Window.current.autoSizeWindow();");
-								target.add(container);
-							}
-							
-						};
-
-						modalProps.setContent(panel);
-						modalProps.setTitle("Manage Purchase Properties");
-						modalProps.show(target);
-					}
-
-				}.setVisible(page.isSuperUser));
 			}
 
 		};
@@ -164,5 +123,4 @@ public class CustomerDealOfferPurchasesPanel extends Panel
 		container.add(dops);
 	}
 	
-
 }
