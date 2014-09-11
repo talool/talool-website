@@ -11,7 +11,7 @@
 	  				<th>Fundraiser Distribution</th>
 	  				<th>Transaction Id</th>
 	  				<th>Tracking Code</th>
-	  				<th class="actionCol">Actions</th>
+	  				<th>Customer</th>
 	  			</tr>
 	  		</thead>
 	  		<tbody>
@@ -24,12 +24,9 @@
 	  				<td wicket:id="fundraiserDistribution">the receipt</td>
 	  				<td wicket:id="processorTransactionId"></td>
 	  				<td><a wicket:id="codeLink" target="external"><span wicket:id="trackingCode"></span></a></td>
-	  				<td class="orange-font actionCol">
-	  					<a wicket:id="editProps" title="edit properties" class="icon icon-large icon-list"></a>
-	  				</td>
+	  				<td><a wicket:id="customerLink"></a></td>
 	  			</tr>
 	  		</tbody>
 	  	</table>
-	  	<div wicket:id="modalProps"></div>
 	</div>
 </wicket:panel>

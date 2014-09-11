@@ -8,14 +8,14 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.website.models.DealOfferModel;
+import com.talool.website.models.DealOfferPurchaseListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.analytics.CubismHorizon;
 import com.talool.website.panel.analytics.CubismHorizonFactory;
 import com.talool.website.panel.analytics.CubismPanel;
-import com.talool.website.panel.dashboard.ActiveUsersPanel;
-import com.talool.website.panel.dashboard.MerchantRecentRedemptionsPanel;
+import com.talool.website.panel.dashboard.RecentPurchasesPanel;
 
 public class DealOfferAnalyticsPanel extends BaseTabPanel {
 

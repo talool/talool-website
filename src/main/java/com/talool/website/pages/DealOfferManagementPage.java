@@ -8,6 +8,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -15,7 +16,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import com.talool.core.DealOffer;
 import com.talool.core.DealType;
 import com.talool.website.models.DealOfferModel;
+import com.talool.website.models.DealOfferPurchaseListModel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.dashboard.RecentPurchasesPanel;
 import com.talool.website.panel.dealoffer.DealOfferAnalyticsPanel;
 import com.talool.website.panel.dealoffer.DealOfferDealsPanel;
 import com.talool.website.panel.dealoffer.DealOfferSummaryPanel;
@@ -78,6 +81,21 @@ public class DealOfferManagementPage extends BaseManagementPage
 			{
 				return new DealOfferDealsPanel(panelId, getPageParameters());
 			}
+		});
+		
+		tabs.add(new AbstractTab(new Model<String>("Recent Purchases"))
+		{
+
+			private static final long serialVersionUID = 507212833843022818L;
+
+			@Override
+			public WebMarkupContainer getPanel(String panelId) {
+				
+				DealOfferPurchaseListModel dopModel = new DealOfferPurchaseListModel();
+				dopModel.setDealOfferId(_dealOfferId);
+				return new RecentPurchasesPanel(panelId, dopModel);
+			}
+			
 		});
 		
 		// TODO should not be dependent on isActive, but rather if there have been purchases or activations

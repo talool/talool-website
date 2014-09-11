@@ -15,8 +15,10 @@ import org.wicketstuff.gmap.GMap;
 
 import com.talool.core.Merchant;
 import com.talool.utils.KeyValue;
+import com.talool.website.models.DealOfferPurchaseListModel;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.dashboard.RecentPurchasesPanel;
 import com.talool.website.panel.merchant.MerchantAccountsPanel;
 import com.talool.website.panel.merchant.MerchantAnalyticsPanel;
 import com.talool.website.panel.merchant.MerchantDealOffersPanel;
@@ -134,6 +136,19 @@ public class MerchantManagementPage extends BaseManagementPage
 					return new MerchantDealOffersPanel(panelId, getPageParameters());
 				}
 			});
+//			tabs.add(new AbstractTab(new Model<String>("Recent Purchases"))
+//			{
+//
+//				private static final long serialVersionUID = 5853871222415506440L;
+//
+//				@Override
+//				public Panel getPanel(String panelId)
+//				{
+//					DealOfferPurchaseListModel dopModel = new DealOfferPurchaseListModel();
+//					dopModel.setMerchantId(_merchantId);
+//					return new RecentPurchasesPanel(panelId, dopModel);
+//				}
+//			});
 		}
 		else
 		{
