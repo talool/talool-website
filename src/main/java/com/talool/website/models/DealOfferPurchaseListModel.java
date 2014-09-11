@@ -1,5 +1,7 @@
 package com.talool.website.models;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,7 +17,11 @@ public class DealOfferPurchaseListModel extends LoadableDetachableModel<List<Dea
 {
 	private static final long serialVersionUID = -2313633510574402378L;
 	private static final Logger LOG = LoggerFactory.getLogger(DealOfferPurchaseListModel.class);
-	private UUID _customerId;
+	private UUID _customerId = null;
+	private UUID _merchantId = null;
+	private UUID _dealOfferId = null;
+	private Integer maxResults = 50;
+	//private String _trackingCode;
 
 	@Override
 	protected List<DealOfferPurchase> load()
@@ -25,20 +31,58 @@ public class DealOfferPurchaseListModel extends LoadableDetachableModel<List<Dea
 
 		try
 		{
-			books = ServiceFactory.get().getCustomerService()
-					.getDealOfferPurchasesByCustomerId(_customerId);
+			if (_customerId != null)
+			{
+				books = ServiceFactory.get().getCustomerService()
+						.getDealOfferPurchasesByCustomerId(_customerId);
+			}
+			else if (_merchantId != null)
+			{
+				books = ServiceFactory.get().getTaloolService()
+							.getDealOfferPurchasesByMerchantId(_merchantId);
+			}
+			else if (_dealOfferId != null)
+			{
+				books = ServiceFactory.get().getTaloolService()
+						.getDealOfferPurchasesByDealOfferId(_dealOfferId);
+			}
 		}
 		catch (ServiceException e)
 		{
 			LOG.error("problem loading DealOfferPurchase list", e);
 		}
 
+		Collections.sort(books, new PurchaseComparator());
+		if (books.size() > maxResults)
+		{
+			books = books.subList(0, maxResults);
+		}
 		return books;
 	}
 
 	public void setCustomerId(final UUID id)
 	{
 		_customerId = id;
+	}
+	
+	public class PurchaseComparator implements Comparator<DealOfferPurchase> {
+	    @Override
+	    public int compare(DealOfferPurchase object1, DealOfferPurchase object2) {
+	        return object1.getCreated().compareTo(object2.getCreated());
+	    }
+	}
+
+	public void setMerchantId(UUID merchantId) {
+		_merchantId = merchantId;
+	}
+
+	public void setDealOfferId(UUID dealOfferId) {
+		_dealOfferId = dealOfferId;
+	}
+	
+	public void setMaxResults(int max)
+	{
+		maxResults = max;
 	}
 
 }
