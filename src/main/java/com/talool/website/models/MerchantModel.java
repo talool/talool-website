@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Merchant;
+import com.talool.core.MerchantCodeGroup;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
 
@@ -50,7 +51,11 @@ public class MerchantModel extends LoadableDetachableModel<Merchant>
 			}
 			else
 			{
-				merchant = ServiceFactory.get().getTaloolService().getMerchantCodeGroupForCode(merchantCode).getMerchant();
+				MerchantCodeGroup mcg = ServiceFactory.get().getTaloolService().getMerchantCodeGroupForCode(merchantCode);
+				if (mcg!=null)
+				{
+					merchant = mcg.getMerchant();
+				}
 			}
 			
 			if (initColletions)
@@ -62,6 +67,10 @@ public class MerchantModel extends LoadableDetachableModel<Merchant>
 		catch (ServiceException e)
 		{
 			LOG.error("problem loading merchant", e);
+		}
+		catch (NullPointerException e)
+		{
+			//LOG.error("problem loading merchant", e);
 		}
 
 		return merchant;

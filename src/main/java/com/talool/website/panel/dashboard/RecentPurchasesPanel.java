@@ -3,6 +3,7 @@ package com.talool.website.panel.dashboard;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -76,11 +77,14 @@ public class RecentPurchasesPanel extends Panel {
 					{
 						trackingCode = props.getAsString(KeyValue.merchantCode);
 						String receipt = props.getAsString(KeyValue.paymentReceipt);
-						Map<String,String> rMap = ReceiptParser.parse(receipt);
-						price = rMap.get(ReceiptParser.KEY_COST);
-						processingFee = rMap.get(ReceiptParser.KEY_PROCESSING_FEE);
-						taloolFee = rMap.get(ReceiptParser.KEY_TALOOL_FEE);
-						fundraiserDistribution = rMap.get(ReceiptParser.KEY_FUNDRAISER_DISTRIBUTION);
+						if (!StringUtils.isEmpty(receipt))
+						{
+							Map<String,String> rMap = ReceiptParser.parse(receipt);
+							price = rMap.get(ReceiptParser.KEY_COST);
+							processingFee = rMap.get(ReceiptParser.KEY_PROCESSING_FEE);
+							taloolFee = rMap.get(ReceiptParser.KEY_TALOOL_FEE);
+							fundraiserDistribution = rMap.get(ReceiptParser.KEY_FUNDRAISER_DISTRIBUTION);
+						}
 						
 					}
 					catch(Exception e)
@@ -98,7 +102,8 @@ public class RecentPurchasesPanel extends Panel {
 				item.add(new Label("created"));
 				item.add(new Label("processorTransactionId"));
 				
-				PageParameters pageParameters = CobrandUtil.getCobrandedPageParameters(trackingCode);
+				// TODO too slow to pass a tracking code get the params
+				PageParameters pageParameters = CobrandUtil.getCobrandedPageParameters();
 				pageParameters.set("code",trackingCode);
 				BookmarkablePageLink<String> codeLink = new BookmarkablePageLink<String>("codeLink",FundraiserInstructions.class, pageParameters);
 				item.add(codeLink.setVisible(trackingCode!=null));

@@ -19,6 +19,13 @@ public class CobrandUtil {
 	private static final String KEY_COBRAND_MERCHANT = "cobrand_merchant";
 	private static final String KEY_COBRAND_NAME = "cobrand_name";
 	
+	public static PageParameters getCobrandedPageParameters()
+	{
+		Merchant fundraiser = null;
+		Map<String, String> map = getCobrandMap(fundraiser);
+		return getCobrandedPageParameters(map);
+	}
+	
 	public static PageParameters getCobrandedPageParameters(UUID fundraiserId)
 	{
 		Map<String, String> map = getCobrandMap(fundraiserId);
