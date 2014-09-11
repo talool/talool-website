@@ -1,6 +1,7 @@
 package com.talool.website.panel.dashboard;
 
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
@@ -24,6 +25,7 @@ import com.talool.website.marketing.pages.FundraiserInstructions;
 import com.talool.website.models.DealOfferPurchaseListModel;
 import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.panel.customer.CustomerDealOfferPurchasesPanel;
+import com.talool.website.util.CobrandUtil;
 import com.talool.website.util.ReceiptParser;
 public class RecentPurchasesPanel extends Panel {
 
@@ -96,12 +98,7 @@ public class RecentPurchasesPanel extends Panel {
 				item.add(new Label("created"));
 				item.add(new Label("processorTransactionId"));
 				
-				// TODO make the cobrand params flexible
-				String cobrandMerchantName = "payback";
-				String cobrandMerchantLocation = "colorado";
-				PageParameters pageParameters = new PageParameters();
-				pageParameters.set("merchant",cobrandMerchantName);
-				pageParameters.set("cobrand",cobrandMerchantLocation);
+				PageParameters pageParameters = CobrandUtil.getCobrandedPageParameters(trackingCode);
 				pageParameters.set("code",trackingCode);
 				BookmarkablePageLink<String> codeLink = new BookmarkablePageLink<String>("codeLink",FundraiserInstructions.class, pageParameters);
 				item.add(codeLink.setVisible(trackingCode!=null));

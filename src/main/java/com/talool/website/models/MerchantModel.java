@@ -22,11 +22,18 @@ public class MerchantModel extends LoadableDetachableModel<Merchant>
 	private static final long serialVersionUID = -1571731014724589519L;
 
 	private UUID merchantId;
+	private String merchantCode;
 	private boolean initColletions = false;
 
 	public MerchantModel(final UUID merchantId, boolean initializeCollections)
 	{
 		this.merchantId = merchantId;
+		this.initColletions = initializeCollections;
+	}
+	
+	public MerchantModel(final String merchantCode, boolean initializeCollections)
+	{
+		this.merchantCode = merchantCode;
 		this.initColletions = initializeCollections;
 	}
 
@@ -37,7 +44,15 @@ public class MerchantModel extends LoadableDetachableModel<Merchant>
 
 		try
 		{
-			merchant = ServiceFactory.get().getTaloolService().getMerchantById(merchantId);
+			if (merchantId != null)
+			{
+				merchant = ServiceFactory.get().getTaloolService().getMerchantById(merchantId);
+			}
+			else
+			{
+				merchant = ServiceFactory.get().getTaloolService().getMerchantCodeGroupForCode(merchantCode).getMerchant();
+			}
+			
 			if (initColletions)
 			{
 				ServiceFactory.get().getTaloolService().initialize(merchant.getLocations());
