@@ -7,7 +7,6 @@
 	  				<th>Date</th>
 	  				<th>Price</th>
 	  				<th>Processing Fee</th>
-	  				<th>Talool Fee</th>
 	  				<th>Fundraiser Distribution</th>
 	  				<th>Transaction Id</th>
 	  				<th>Tracking Code</th>
@@ -19,12 +18,14 @@
 	  				<td wicket:id="dealOffer.title"></td>
 	  				<td wicket:id="created"></td>
 	  				<td wicket:id="price"></td>
-	  				<td wicket:id="processingFee">the receipt</td>
-	  				<td wicket:id="taloolFee">the receipt</td>
+	  				<td wicket:id="fee">the receipt</td>
 	  				<td wicket:id="fundraiserDistribution">the receipt</td>
 	  				<td wicket:id="processorTransactionId"></td>
 	  				<td><a wicket:id="codeLink" target="external"><span wicket:id="trackingCode"></span></a></td>
-	  				<td><a wicket:id="customerLink"></a></td>
+	  				<td>
+	  					<a wicket:id="customerLink"></a>
+	  					<div wicket:id="fullName"></div>
+	  				</td>
 	  			</tr>
 	  		</tbody>
 	  	</table>
