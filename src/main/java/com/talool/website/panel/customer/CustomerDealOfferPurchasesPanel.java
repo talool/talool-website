@@ -27,6 +27,7 @@ import com.talool.website.models.DealOfferPurchaseListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.PropertiesPanel;
+import com.talool.website.util.CobrandUtil;
 import com.talool.website.util.ReceiptParser;
 
 public class CustomerDealOfferPurchasesPanel extends Panel
@@ -108,12 +109,7 @@ public class CustomerDealOfferPurchasesPanel extends Panel
 				item.add(new Label("created"));
 				item.add(new Label("processorTransactionId"));
 				
-				// TODO make the cobrand params flexible
-				String cobrandMerchantName = "payback";
-				String cobrandMerchantLocation = "colorado";
-				PageParameters pageParameters = new PageParameters();
-				pageParameters.set("merchant",cobrandMerchantName);
-				pageParameters.set("cobrand",cobrandMerchantLocation);
+				PageParameters pageParameters = CobrandUtil.getCobrandedPageParameters(trackingCode);
 				pageParameters.set("code",trackingCode);
 				BookmarkablePageLink<String> codeLink = new BookmarkablePageLink<String>("codeLink",FundraiserInstructions.class, pageParameters);
 				item.add(codeLink.setVisible(trackingCode!=null));

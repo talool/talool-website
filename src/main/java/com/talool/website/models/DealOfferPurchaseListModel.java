@@ -68,7 +68,7 @@ public class DealOfferPurchaseListModel extends LoadableDetachableModel<List<Dea
 	public class PurchaseComparator implements Comparator<DealOfferPurchase> {
 	    @Override
 	    public int compare(DealOfferPurchase object1, DealOfferPurchase object2) {
-	        return object1.getCreated().compareTo(object2.getCreated());
+	        return object2.getCreated().compareTo(object1.getCreated());
 	    }
 	}
 
