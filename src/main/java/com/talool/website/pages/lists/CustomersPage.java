@@ -50,11 +50,9 @@ public class CustomersPage extends BasePage
 
 	private static final long serialVersionUID = 2102415289760762365L;
 
-	protected transient static final CustomerService customerService = FactoryManager.get()
-			.getServiceFactory().getCustomerService();
+	protected transient static final CustomerService customerService = FactoryManager.get().getServiceFactory().getCustomerService();
 
-	protected transient static final AnalyticService analyticService = FactoryManager.get()
-			.getServiceFactory().getAnalyticService();
+	protected transient static final AnalyticService analyticService = FactoryManager.get().getServiceFactory().getAnalyticService();
 
 	private String sortParameter = "redemptions";
 	private boolean isAscending = false;
@@ -65,10 +63,7 @@ public class CustomersPage extends BasePage
 		super();
 		if (!PermissionUtils.isSuperUser(SessionUtils.getSession().getMerchantAccount()))
 		{
-			throw new RestartResponseException(
-					new PageProvider(
-							CustomerSearchPage.class, null),
-					RedirectPolicy.NEVER_REDIRECT);
+			throw new RestartResponseException(new PageProvider(CustomerSearchPage.class, null), RedirectPolicy.NEVER_REDIRECT);
 		}
 	}
 
@@ -91,8 +86,8 @@ public class CustomersPage extends BasePage
 		final WebMarkupContainer customerContainer = new WebMarkupContainer(CUST_CONTAINER_ID);
 		add(customerContainer.setOutputMarkupId(true));
 
-		final DataView<CustomerSummary> customers = new DataView<CustomerSummary>("customerRptr",
-				new CustomerSummaryDataProvider(sortParameter, isAscending))
+		final DataView<CustomerSummary> customers = new DataView<CustomerSummary>("customerRptr", new CustomerSummaryDataProvider(
+				sortParameter, isAscending))
 		{
 
 			private static final long serialVersionUID = 4104816505968727445L;
@@ -126,15 +121,13 @@ public class CustomersPage extends BasePage
 				customerParams.set("id", customer.getCustomerId());
 				customerParams.set("email", customer.getEmail());
 				String url = (String) urlFor(CustomerManagementPage.class, customerParams);
-				ExternalLink emailLink = new ExternalLink("emailLink", Model.of(url),
-						new PropertyModel<String>(customer, "email"));
+				ExternalLink emailLink = new ExternalLink("emailLink", Model.of(url), new PropertyModel<String>(customer, "email"));
 				item.add(emailLink);
 
 				final AdminModalWindow definitionModal = getModal();
 				final SubmitCallBack callback = getCallback(definitionModal);
 
-				if (PermissionService.get().canDeleteCustomer(
-						SessionUtils.getSession().getMerchantAccount().getEmail()))
+				if (PermissionService.get().canDeleteCustomer(SessionUtils.getSession().getMerchantAccount().getEmail()))
 				{
 					sb.append("Are you sure you want to delete ").append(email).append(" ?");
 					item.add(new ConfirmationAjaxLink<Void>("deleteCustomer", sb.toString())
@@ -149,7 +142,7 @@ public class CustomersPage extends BasePage
 							try
 							{
 								taloolService.deleteCustomer(customerId);
-								setResponsePage(CustomersPage.class);
+								setResponsePage(CustomerSearchPage.class);
 							}
 							catch (ServiceException e)
 							{
@@ -169,8 +162,7 @@ public class CustomersPage extends BasePage
 						public void onClick(AjaxRequestTarget target)
 						{
 							getSession().getFeedbackMessages().clear();
-							CustomerPanel panel = new CustomerPanel(definitionModal.getContentId(), callback,
-									customerId);
+							CustomerPanel panel = new CustomerPanel(definitionModal.getContentId(), callback, customerId);
 							definitionModal.setContent(panel);
 							definitionModal.setTitle("Edit Customer");
 							definitionModal.show(target);
@@ -186,8 +178,7 @@ public class CustomersPage extends BasePage
 						public void onClick(AjaxRequestTarget target)
 						{
 							getSession().getFeedbackMessages().clear();
-							CustomerResetPasswordPanel panel = new CustomerResetPasswordPanel(definitionModal
-									.getContentId(), callback, customerId);
+							CustomerResetPasswordPanel panel = new CustomerResetPasswordPanel(definitionModal.getContentId(), callback, customerId);
 							definitionModal.setContent(panel);
 							definitionModal.setTitle("Reset Password");
 							definitionModal.show(target);
@@ -203,8 +194,8 @@ public class CustomersPage extends BasePage
 						public void onClick(AjaxRequestTarget target)
 						{
 							getSession().getFeedbackMessages().clear();
-							CustomerPurchaseDealOfferPanel panel = new CustomerPurchaseDealOfferPanel(
-									definitionModal.getContentId(), callback, customerId);
+							CustomerPurchaseDealOfferPanel panel = new CustomerPurchaseDealOfferPanel(definitionModal.getContentId(), callback,
+									customerId);
 							definitionModal.setContent(panel);
 							definitionModal.setTitle("Purchase Deal Offer");
 							definitionModal.show(target);
