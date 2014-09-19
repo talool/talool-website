@@ -13,8 +13,8 @@ public class MobileFundraiserTracking extends MobilePage {
 	public MobileFundraiserTracking(PageParameters parameters)
 	{
 		super(parameters);
-		if (parameters.getIndexedCount()>=2){
-			code = parameters.get(1).toString();
+		if (parameters.getIndexedCount()>=3){
+			code = parameters.get(2).toString();
 		}
 	}
 	
