@@ -1,7 +1,6 @@
 package com.talool.website.panel.dashboard;
 
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -94,9 +93,8 @@ public class RecentPurchasesPanel extends Panel {
 				}
 				
 				item.add(new Label("price",price));
-				item.add(new Label("processingFee",processingFee));
 				item.add(new Label("fundraiserDistribution",fundraiserDistribution));
-				item.add(new Label("taloolFee",taloolFee));
+				item.add(new Label("fee",taloolFee));
 				
 				item.add(new Label("dealOffer.title"));
 				item.add(new Label("created"));
@@ -117,6 +115,8 @@ public class RecentPurchasesPanel extends Panel {
 				ExternalLink emailLink = new ExternalLink("customerLink", Model.of(url),
 						new PropertyModel<String>(customer, "email"));
 				item.add(emailLink);
+				
+				item.add(new Label("fullName",customer.getFullName()));
 
 			}
 
