@@ -20,7 +20,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.DealOfferPurchase;
-import com.talool.core.RefundResult;
 import com.talool.core.service.ServiceException;
 import com.talool.domain.Properties;
 import com.talool.service.ServiceFactory;
@@ -148,9 +147,8 @@ public class CustomerDealOfferPurchasesPanel extends Panel
 				}
 
 				item.add(new Label("price", price));
-				item.add(new Label("processingFee", processingFee));
 				item.add(new Label("fundraiserDistribution", fundraiserDistribution));
-				item.add(new Label("taloolFee", taloolFee));
+				item.add(new Label("fee", taloolFee));
 
 				item.add(new Label("dealOffer.title"));
 				item.add(new Label("created", Model.of(DATE_FORMAT.format(dop.getCreated()))));
