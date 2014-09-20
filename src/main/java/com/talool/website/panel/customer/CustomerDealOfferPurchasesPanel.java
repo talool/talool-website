@@ -20,6 +20,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.talool.core.DealOfferPurchase;
+import com.talool.core.RefundResult;
 import com.talool.core.service.ServiceException;
 import com.talool.domain.Properties;
 import com.talool.service.ServiceFactory;
