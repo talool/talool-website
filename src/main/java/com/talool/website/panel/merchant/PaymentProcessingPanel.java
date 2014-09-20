@@ -32,6 +32,7 @@ import com.talool.payment.braintree.BraintreeUtil;
 import com.talool.service.ServiceConfig;
 import com.talool.utils.KeyValue;
 import com.talool.utils.SafeSimpleDateFormat;
+import com.talool.website.Constants;
 import com.talool.website.component.StateOption;
 import com.talool.website.component.StateSelect;
 import com.talool.website.panel.BaseTabPanel;
@@ -50,7 +51,7 @@ public class PaymentProcessingPanel extends BaseTabPanel
 	private static final String BIRTH_DAY_FORMAT = "yyyy-MM-dd";
 	private static final String SECURE_PREFIX_TEXT = "******";
 	private static final SafeSimpleDateFormat bdayFormat = new SafeSimpleDateFormat(BIRTH_DAY_FORMAT);
-	private static final SafeSimpleDateFormat STATUS_TIME_FORMAT = new SafeSimpleDateFormat(BIRTH_DAY_FORMAT + " HH:mm:ss Z");
+	private static final SafeSimpleDateFormat STATUS_TIME_FORMAT = new SafeSimpleDateFormat(Constants.DEFAULT_DATE_TIME_FORMAT);
 
 	private static final long serialVersionUID = 9088580249227461453L;
 

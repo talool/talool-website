@@ -29,7 +29,6 @@ import com.talool.website.component.ConfirmationAjaxLink;
 import com.talool.website.component.CustomerSearchPanel;
 import com.talool.website.pages.CustomerSearchDataProvider.CustomerSearchOpts;
 import com.talool.website.pages.CustomerSearchDataProvider.CustomerSearchOpts.CustomerSearchType;
-import com.talool.website.pages.lists.CustomersPage;
 import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.customer.definition.CustomerPanel;
@@ -40,15 +39,13 @@ import com.talool.website.util.SecuredPage;
 import com.talool.website.util.SessionUtils;
 
 /**
- * History page. Keep in mind a DealAcquire object only has history records when
- * updates occur. In other words, if a DealAcquire record is created, that
- * record represent the current state.
+ * History page. Keep in mind a DealAcquire object only has history records when updates occur. In other words, if a
+ * DealAcquire record is created, that record represent the current state.
  * 
- * It isn't until a state change, gift, etc take place (an update) which forms a
- * DealAcquireHistory record. This saves persistence space by not forming
- * duplicate records until updates occur. Therefore special cases occur when
- * looking into the history: either a DealAcquire record exists (current state)
- * or a DealAcquire record + any DealAcquireHistory formed from updates.
+ * It isn't until a state change, gift, etc take place (an update) which forms a DealAcquireHistory record. This saves
+ * persistence space by not forming duplicate records until updates occur. Therefore special cases occur when looking
+ * into the history: either a DealAcquire record exists (current state) or a DealAcquire record + any DealAcquireHistory
+ * formed from updates.
  * 
  * 
  * @author clintz
@@ -65,7 +62,7 @@ public class CustomerSearchPage extends BasePage
 	private static final String REPEATER_ID = "customerRptr";
 	private static final String NAVIGATOR_ID = "navigator";
 	private static final String VISIBLE_COUNT_ID = "visibleCount";
-	
+
 	private CustomerSearchPanel searchPanel;
 	private long itemCount;
 	private long visibleCount;
@@ -94,13 +91,15 @@ public class CustomerSearchPage extends BasePage
 		CustomerSearchDataProvider provider = getProvider("");
 		final DataView<CustomerSummary> customers = getDataView(provider);
 		customerContainer.add(customers);
-		
-		searchPanel = new CustomerSearchPanel("searchForm"){
+
+		searchPanel = new CustomerSearchPanel("searchForm")
+		{
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onSearch(AjaxRequestTarget target, String customerEmail) {
+			public void onSearch(AjaxRequestTarget target, String customerEmail)
+			{
 				WebMarkupContainer container = (WebMarkupContainer) getPage().get(CUST_CONTAINER_ID);
 
 				// replace the data view
@@ -108,7 +107,7 @@ public class CustomerSearchPage extends BasePage
 				final DataView<CustomerSummary> dataView = getDataView(provider);
 				container.replace(dataView);
 				target.add(container);
-				
+
 				// replace the pagination
 				final AjaxPagingNavigator pagingNavigator = getPagination(dataView);
 				container.replace(pagingNavigator);
@@ -118,76 +117,79 @@ public class CustomerSearchPage extends BasePage
 				{
 					nav.setViewSize(5);
 				}
-				
+
 				// update the labels above the pagination
 				itemCount = provider.getTrueSize();
 				visibleCount = Math.min(ITEMS_PER_PAGE, itemCount);
 				pagingNavigator.setVisible(itemCount > ITEMS_PER_PAGE);
-				if (itemCount==0)
+				if (itemCount == 0)
 				{
 					SessionUtils.errorMessage("There are no customers matching '" + searchPanel.getCustomerEmail() + "'");
 				}
 				target.add(feedback);
 			}
-			
+
 		};
 		customerContainer.add(searchPanel);
-		
+
 		// Set the labels above the pagination
 		itemCount = provider.getTrueSize();
 		visibleCount = Math.min(ITEMS_PER_PAGE, itemCount);
-		customerContainer.add(new Label("customerCount",new PropertyModel<Long>(this, "itemCount")).setOutputMarkupId(true));
-		customerContainer.add(new Label("visibleCount",new PropertyModel<Long>(this, VISIBLE_COUNT_ID)).setOutputMarkupId(true));
+		customerContainer.add(new Label("customerCount", new PropertyModel<Long>(this, "itemCount")).setOutputMarkupId(true));
+		customerContainer.add(new Label("visibleCount", new PropertyModel<Long>(this, VISIBLE_COUNT_ID)).setOutputMarkupId(true));
 		// Set the pagination
 		customerContainer.add(getPagination(customers));
 
 	}
-	
+
 	private AjaxPagingNavigator getPagination(final DataView<CustomerSummary> customers)
 	{
-		AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, customers){
+		AjaxPagingNavigator pagingNavigator = new AjaxPagingNavigator(NAVIGATOR_ID, customers)
+		{
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onAjaxEvent(AjaxRequestTarget target) {
+			protected void onAjaxEvent(AjaxRequestTarget target)
+			{
 				super.onAjaxEvent(target);
-				
+
 				// update the label showing the current number of items on the page
 				long pageNum = customers.getCurrentPage();
 				long itemCount = customers.getItemCount();
-				long itemsRemaining = itemCount - pageNum*ITEMS_PER_PAGE;
+				long itemsRemaining = itemCount - pageNum * ITEMS_PER_PAGE;
 				visibleCount = Math.min(ITEMS_PER_PAGE, itemsRemaining);
 				WebMarkupContainer container = (WebMarkupContainer) getPage().get(CUST_CONTAINER_ID);
 				Label visibleCount = (Label) container.get(VISIBLE_COUNT_ID);
 				target.add(visibleCount);
 			}
-			
+
 		};
 		pagingNavigator.setOutputMarkupId(true);
 		pagingNavigator.setVisible(itemCount > ITEMS_PER_PAGE);
-		
+
 		return pagingNavigator;
 	}
-	
+
 	private CustomerSearchDataProvider getProvider(String customerEmail)
 	{
 		CustomerSearchDataProvider provider = null;
 		if (StringUtils.isEmpty(customerEmail))
 		{
-			provider = new CustomerSearchDataProvider(new CustomerSearchOpts(
-					CustomerSearchType.RecentRegistrations, sortParameter, isAscending).setCappedResultCount(MOS_RECENT_MAX_RESULTS));
-			SessionUtils.infoMessage("Showing up to "+MOS_RECENT_MAX_RESULTS+" of the most recent registrations.  Search by email to find specific customers.");
+			provider = new CustomerSearchDataProvider(new CustomerSearchOpts(CustomerSearchType.RecentRegistrations, sortParameter,
+					isAscending).setCappedResultCount(MOS_RECENT_MAX_RESULTS));
+			SessionUtils.infoMessage("Showing up to " + MOS_RECENT_MAX_RESULTS
+					+ " of the most recent registrations.  Search by email to find specific customers.");
 		}
 		else
 		{
-			provider = new CustomerSearchDataProvider(new CustomerSearchOpts(
-					CustomerSearchType.PublisherCustomerSummaryByEmail, sortParameter, isAscending).setEmail(customerEmail));
+			provider = new CustomerSearchDataProvider(new CustomerSearchOpts(CustomerSearchType.PublisherCustomerSummaryByEmail,
+					sortParameter, isAscending).setEmail(customerEmail));
 		}
-		
+
 		return provider;
 	}
-	
+
 	private DataView<CustomerSummary> getDataView(IDataProvider<CustomerSummary> provider)
 	{
 		DataView<CustomerSummary> customers = new DataView<CustomerSummary>(REPEATER_ID, provider)
@@ -223,15 +225,13 @@ public class CustomerSearchPage extends BasePage
 				customerParams.set("id", customer.getCustomerId());
 				customerParams.set("email", customer.getEmail());
 				String url = (String) urlFor(CustomerManagementPage.class, customerParams);
-				ExternalLink emailLink = new ExternalLink("emailLink", Model.of(url),
-						new PropertyModel<String>(customer, "email"));
+				ExternalLink emailLink = new ExternalLink("emailLink", Model.of(url), new PropertyModel<String>(customer, "email"));
 				item.add(emailLink);
 
 				final AdminModalWindow definitionModal = getModal();
 				final SubmitCallBack callback = getCallback(definitionModal);
 
-				if (PermissionService.get().canDeleteCustomer(
-						SessionUtils.getSession().getMerchantAccount().getEmail()))
+				if (PermissionService.get().canDeleteCustomer(SessionUtils.getSession().getMerchantAccount().getEmail()))
 				{
 
 					item.add(new ConfirmationAjaxLink<Void>("deleteCustomer", "Are you sure you want to delete " + email + " ?")
@@ -246,7 +246,7 @@ public class CustomerSearchPage extends BasePage
 							try
 							{
 								taloolService.deleteCustomer(customerId);
-								setResponsePage(CustomersPage.class);
+								setResponsePage(CustomerSearchPage.class);
 							}
 							catch (ServiceException e)
 							{
@@ -266,8 +266,7 @@ public class CustomerSearchPage extends BasePage
 						public void onClick(AjaxRequestTarget target)
 						{
 							getSession().getFeedbackMessages().clear();
-							CustomerPanel panel = new CustomerPanel(definitionModal.getContentId(), callback,
-									customerId);
+							CustomerPanel panel = new CustomerPanel(definitionModal.getContentId(), callback, customerId);
 							definitionModal.setContent(panel);
 							definitionModal.setTitle("Edit Customer");
 							definitionModal.show(target);
@@ -283,8 +282,7 @@ public class CustomerSearchPage extends BasePage
 						public void onClick(AjaxRequestTarget target)
 						{
 							getSession().getFeedbackMessages().clear();
-							CustomerResetPasswordPanel panel = new CustomerResetPasswordPanel(definitionModal
-									.getContentId(), callback, customerId);
+							CustomerResetPasswordPanel panel = new CustomerResetPasswordPanel(definitionModal.getContentId(), callback, customerId);
 							definitionModal.setContent(panel);
 							definitionModal.setTitle("Reset Password");
 							definitionModal.show(target);
@@ -300,8 +298,8 @@ public class CustomerSearchPage extends BasePage
 						public void onClick(AjaxRequestTarget target)
 						{
 							getSession().getFeedbackMessages().clear();
-							CustomerPurchaseDealOfferPanel panel = new CustomerPurchaseDealOfferPanel(
-									definitionModal.getContentId(), callback, customerId);
+							CustomerPurchaseDealOfferPanel panel = new CustomerPurchaseDealOfferPanel(definitionModal.getContentId(), callback,
+									customerId);
 							definitionModal.setContent(panel);
 							definitionModal.setTitle("Purchase Deal Offer");
 							definitionModal.show(target);
