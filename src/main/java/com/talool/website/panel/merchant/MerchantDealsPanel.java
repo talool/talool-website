@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
+import com.talool.core.DealOffer;
 import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
@@ -170,6 +171,14 @@ public class MerchantDealsPanel extends BaseTabPanel
 							Merchant _talool = merchants.get(0);
 							deal.setActive(false);
 							deal.setMerchant(_talool);
+							
+							List<DealOffer> offers = taloolService.getDealOffersByMerchantId(_talool.getId());
+							if (offers.isEmpty() == false)
+							{
+								// TODO be smarter about moving this deal to a Talool offer
+								deal.setDealOffer(offers.get(0));
+							}
+							
 							taloolService.merge(deal);
 							target.add(container);
 							Session.get().success(deal.getTitle() + " has been sent back to Talool.  Contact us if you want it back.");
