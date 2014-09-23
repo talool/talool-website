@@ -42,5 +42,10 @@ public class FundraiserTrackingRollup extends BaseMarketingPage
 		add(panel);
 		
 	}
+	
+	@Override
+	public void handleMobile() {
+		// Don't redirect
+	}
 
 }
