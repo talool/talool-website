@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
+import com.talool.core.DealOffer;
 import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantMedia;
@@ -290,9 +291,17 @@ public class DealOfferDealsPanel extends BaseTabPanel {
 							Deal deal = taloolService.getDeal(dealId);
 							List<Merchant> merchants = taloolService.getMerchantByName(talool);
 							Merchant _talool = merchants.get(0);
+							
 							deal.setActive(false);
 							deal.setMerchant(_talool);
-							// TODO move it to a different Offer
+							
+							List<DealOffer> offers = taloolService.getDealOffersByMerchantId(_talool.getId());
+							if (offers.isEmpty() == false)
+							{
+								// TODO be smarter about moving this deal to a Talool offer
+								deal.setDealOffer(offers.get(0));
+							}
+							
 							taloolService.merge(deal);
 							
 							resetPage(target);

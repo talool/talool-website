@@ -67,6 +67,7 @@ public class DealOfferDetails extends WizardStep
 		addOrReplace(summary.setRequired(true));
 		summary.add(new DealOfferPreviewUpdatingBehavior(offerPreview, DealOfferComponent.SUMMARY, "onChange"));
 
+		// TODO add a validator for the price
 		TextField<String> price = new TextField<String>("price");
 		addOrReplace(price.setRequired(true));
 		price.add(new DealOfferPreviewUpdatingBehavior(offerPreview, DealOfferComponent.PRICE, "onChange"));
