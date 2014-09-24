@@ -4,11 +4,12 @@
 	  		<thead>
 	  			<tr>
 	  				<th>Book</th>
-	  				<th>Date</th>
+	  				<th>Purchase Date</th>
 	  				<th>Price</th>
 	  				<th>Processing Fee</th>
 	  				<th>Fundraiser Distribution</th>
 	  				<th>Transaction Id</th>
+	  				<th>Refund/Void</th>
 	  				<th>Tracking Code</th>
 	  				<th class="actionCol">Actions</th>
 	  			</tr>
@@ -21,8 +22,10 @@
 	  				<td wicket:id="fee">the receipt</td>
 	  				<td wicket:id="fundraiserDistribution">the receipt</td>
 	  				<td wicket:id="processorTransactionId"></td>
+	  				<td wicket:id="refundDate"></td>
 	  				<td><a wicket:id="codeLink" target="external"><span wicket:id="trackingCode"></span></a></td>
 	  				<td class="orange-font actionCol">
+	  				<a wicket:id="refund" href="#" title="Refund/VOID" class="icon icon-large icon-money"></a>
 	  					<a wicket:id="editProps" title="edit properties" class="icon icon-large icon-list"></a>
 	  				</td>
 	  			</tr>
