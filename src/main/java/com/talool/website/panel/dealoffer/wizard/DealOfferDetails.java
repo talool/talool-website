@@ -26,6 +26,7 @@ import com.talool.website.panel.dealoffer.DealOfferPreviewUpdatingBehavior;
 import com.talool.website.panel.dealoffer.DealOfferPreviewUpdatingBehavior.DealOfferComponent;
 import com.talool.website.util.CssClassToggle;
 import com.talool.website.util.SessionUtils;
+import com.talool.website.validators.PriceValidator;
 import com.talool.website.validators.StartEndDateFormValidator;
 
 /**
@@ -67,7 +68,9 @@ public class DealOfferDetails extends WizardStep
 		addOrReplace(summary.setRequired(true));
 		summary.add(new DealOfferPreviewUpdatingBehavior(offerPreview, DealOfferComponent.SUMMARY, "onChange"));
 
-		TextField<String> price = new TextField<String>("price");
+		// add a validator for the price
+		TextField<Float> price = new TextField<Float>("price");
+		price.add(PriceValidator.getInstance());
 		addOrReplace(price.setRequired(true));
 		price.add(new DealOfferPreviewUpdatingBehavior(offerPreview, DealOfferComponent.PRICE, "onChange"));
 

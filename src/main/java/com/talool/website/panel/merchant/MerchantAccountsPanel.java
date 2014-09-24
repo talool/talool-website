@@ -15,7 +15,10 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.talool.core.Customer;
+import com.talool.core.FactoryManager;
 import com.talool.core.MerchantAccount;
+import com.talool.core.service.InvalidInputException;
 import com.talool.core.service.ServiceException;
 import com.talool.domain.Properties;
 import com.talool.service.ServiceFactory;
@@ -25,6 +28,7 @@ import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.PropertiesPanel;
 import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.customer.definition.CustomerPurchaseDealOfferPanel;
 import com.talool.website.panel.merchant.definition.MerchantAccountPanel;
 import com.talool.website.panel.merchant.definition.MerchantAccountResetPasswordPanel;
 
@@ -93,6 +97,25 @@ public class MerchantAccountsPanel extends BaseTabPanel
 						modal.show(target);
 					}
 				});
+				
+				
+				final UUID customerId = getCustomerId(account);
+				item.add(new AjaxLink<Void>("dealOfferLink")
+				{
+
+					private static final long serialVersionUID = 7381871678482983865L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target)
+					{
+						getSession().getFeedbackMessages().clear();
+						CustomerPurchaseDealOfferPanel panel = new CustomerPurchaseDealOfferPanel(
+						modal.getContentId(), callback, customerId);
+						modal.setContent(panel);
+						modal.setTitle("Purchase Deal Offer");
+						modal.show(target);
+					}
+				}.setVisible(customerId!=null));
 
 				item.add(new AjaxLink<Void>("pwLink")
 				{
@@ -157,6 +180,28 @@ public class MerchantAccountsPanel extends BaseTabPanel
 		};
 
 		add(customers);
+	}
+	
+	private UUID getCustomerId(MerchantAccount account)
+	{
+		UUID customerId = null;
+		try
+		{
+			Customer c = FactoryManager.get()
+					.getServiceFactory().getCustomerService().getCustomerByEmail(account.getEmail());
+			if (c != null)
+			{
+				customerId = c.getId();
+			}
+		}
+		catch (ServiceException se)
+		{
+			LOG.info("no user for merchant account with email: "+account.getEmail());
+		} 
+		catch (InvalidInputException e) {
+			LOG.info("no user for merchant account with email: "+account.getEmail());
+		}
+		return customerId;
 	}
 
 	@Override

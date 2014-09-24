@@ -1,7 +1,6 @@
 package com.talool.website.panel.message;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -34,7 +33,6 @@ import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.panel.merchant.definition.MerchantPanel;
 import com.talool.website.panel.message.wizard.MessageWizard;
-import com.talool.website.util.MerchantAccountComparator;
 import com.talool.website.util.SessionUtils;
 
 public class MerchantMessages extends BaseTabPanel {
@@ -73,10 +71,7 @@ public class MerchantMessages extends BaseTabPanel {
 			{
 				List<MerchantAccount> mal = new ArrayList<MerchantAccount>();
 				mal.addAll(mas);
-				MerchantAccountComparator mac = new MerchantAccountComparator(MerchantAccountComparator.ComparatorType.CreateDate);
-				Collections.sort(mal,mac);
-				MerchantAccount ma = mal.get(0);
-				model.setMerchantAccount(ma);
+				model.setMerchantAccounts(mal);
 			}
 		} 
 		catch (ServiceException se)
