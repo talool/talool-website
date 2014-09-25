@@ -622,3 +622,8 @@ td.toggleContainer
 	vertical-align: middle;
 }
 
+.map
+{
+	width: 400px;
+	height: 400px;
+}

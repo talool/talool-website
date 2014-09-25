@@ -1,0 +1,31 @@
+<html xmlns:wicket="http://wicket.apache.org">
+	
+	<wicket:panel>
+		<div class="map" wicket:id="map"></div>
+		<script>
+			$(function() {
+				// This fixes the issues with the map not rendering 
+				// correctly when the wizard opens
+				setTimeout(function() {
+				    for (var m in Wicket.maps)
+					{
+						try
+						{
+							var map = Wicket.maps[m];
+							map.triggerResize();
+							var pin = null;
+							for (var o in map.overlays)
+							{
+								pin = map.overlays[o];
+								break;
+							}
+							if (pin) map.setCenter(pin.position);
+						}
+						catch(e) {}
+					}
+				}, 100 );
+			});
+		</script>
+		
+	</wicket:panel>
+</html>

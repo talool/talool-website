@@ -3,9 +3,13 @@ package com.talool.website.panel.merchant;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -15,17 +19,21 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.wicketstuff.gmap.api.GLatLng;
 
 import com.talool.core.DealAcquire;
 import com.talool.core.MerchantLocation;
+import com.talool.website.component.MapPanel;
 import com.talool.website.models.DealAcquireListModel;
 import com.talool.website.pages.BasePage;
 import com.talool.website.pages.CustomerManagementPage;
 import com.talool.website.pages.MerchantManagementPage;
+import com.talool.website.panel.AdminModalWindow;
 import com.talool.website.panel.BaseTabPanel;
 import com.talool.website.panel.SubmitCallBack;
 import com.talool.website.util.DistanceUtils;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.Point;
 
 public class RecentRedemptionsPanel extends BaseTabPanel {
 	private static final long serialVersionUID = 1L;
@@ -44,6 +52,10 @@ public class RecentRedemptionsPanel extends BaseTabPanel {
 	{
 		super.onInitialize();
 		
+		BasePage page = (BasePage)getPage();
+		final AdminModalWindow modal = page.getModal();
+		final SubmitCallBack callback = page.getCallback(modal);
+		
 		add(new ListView<DealAcquire>("redeemedRptr", listModel)
 		{
 			private static final long serialVersionUID = 1L;
@@ -51,7 +63,7 @@ public class RecentRedemptionsPanel extends BaseTabPanel {
 			@Override
 			protected void populateItem(final ListItem<DealAcquire> item)
 			{
-				DealAcquire dac = item.getModelObject();
+				final DealAcquire dac = item.getModelObject();
 				
 				DateFormat formatter = new SimpleDateFormat("EEE, MMM d, yyyy 'at' h:mm:ss a z");
 				formatter.setTimeZone(getTimeZone());
@@ -88,15 +100,37 @@ public class RecentRedemptionsPanel extends BaseTabPanel {
 						sb.append("WARNING: ");
 						sb.append(distanceFormater.format(distanceInMiles)).append(" miles from the closest location");
 						item.add(new Label("distance", sb.toString()));
-						item.add(new Label("location", ""));
+						
+						item.add(new AjaxLink<Void>("location"){
+
+							private static final long serialVersionUID = 1L;
+
+							@Override
+							public void onClick(AjaxRequestTarget target) {
+								getSession().getFeedbackMessages().clear();
+								
+								List<GLatLng> markersToShow = new ArrayList<GLatLng>();
+								Point pin = (Point) dac.getRedeemedAtGeometry();
+								if (pin != null)
+								{
+									markersToShow.add(new GLatLng(pin.getY(), pin.getX()));
+								}
+								MapPanel mp = new MapPanel(modal.getContentId(),dac.getDeal().getMerchant(),markersToShow);
+								
+								modal.setContent(mp);
+								modal.setTitle("Redemption Location");
+								modal.show(target);
+							}
+							
+						});
 					}
 					
 					
 				}
 				else
 				{
-					item.add(new Label("distance", ""));
-					item.add(new Label("location", "Unknown"));
+					item.add(new Label("distance", "Unknown"));
+					item.add(new Label("location", ""));
 				}
 
 				PageParameters dealParams = new PageParameters();
@@ -123,7 +157,6 @@ public class RecentRedemptionsPanel extends BaseTabPanel {
 		});
 		
 		// hide the action button
-	    final BasePage page = (BasePage) getPage();
 	    page.getActionLink().add(new AttributeModifier("class", "hide"));
 	}
 	
