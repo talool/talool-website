@@ -230,6 +230,7 @@ public class DealOfferDealsPanel extends BaseTabPanel {
 				item.add(new Label("title"));
 				item.add(new Label("summary"));
 				item.add(new Label("details"));
+				item.add(new Label("expires"));
 				
 				item.add(new EditableImage("editableImage",Model.of(deal.getImageUrl()), deal.getMerchantId(), MediaType.DEAL_IMAGE)
 				{

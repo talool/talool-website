@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -195,7 +196,7 @@ public class CustomerDealOfferPurchasesPanel extends Panel
 						}
 
 					}
-				});
+				}.setVisible(!StringUtils.isEmpty(dop.getProcessorTransactionId())));
 				item.add(new AjaxLink<Void>("editProps")
 				{
 					private static final long serialVersionUID = 268692101349122303L;

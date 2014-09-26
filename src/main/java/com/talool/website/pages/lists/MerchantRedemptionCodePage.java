@@ -11,6 +11,7 @@ import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.wicketstuff.gmap.GMap;
 
 import com.talool.website.pages.BaseManagementPage;
 import com.talool.website.panel.SubmitCallBack;
@@ -102,6 +103,11 @@ public class MerchantRedemptionCodePage extends BaseManagementPage
 		};
 		tabbedPanel.setSelectedTab(0);
 		add(tabbedPanel);
+		
+		// preload the map to avoid a race condition with the loading of js
+		// dependencies
+		GMap map = new GMap("preloadMap");
+		add(map);
 
 	}
 
