@@ -8,7 +8,7 @@
 		<relativePath />
 	</parent>
 	<artifactId>talool-website</artifactId>
-	<version>1.0.24-SNAPSHOT</version>
+	<version>1.0.24</version>
 	<packaging>war</packaging>
 
 	<name>Talool Website</name>
@@ -18,7 +18,7 @@
 		<connection>scm:git:git@github.com:talool/talool-website.git</connection>
 		<url>scm:git:git@github.com:talool/talool-website.git</url>
 		<developerConnection>scm:git:git@github.com:talool/talool-website.git</developerConnection>
-		<tag>talool-website-1.0.3</tag>
+		<tag>v1.0.24</tag>
 	</scm>
 	<repositories>
 		<repository>
