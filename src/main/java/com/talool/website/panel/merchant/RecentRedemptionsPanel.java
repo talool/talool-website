@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -84,7 +85,10 @@ public class RecentRedemptionsPanel extends BaseTabPanel {
 					{
 						// pretty close, so we'll say they redeemed at this location
 						sb = new StringBuilder(loc.getAddress1());
-						sb.append(", ").append(loc.getCity()).append(", ").append(loc.getStateProvinceCounty()).append(" ").append(loc.getZip());
+						sb.append(", ").append(loc.getCity()).append(", ").append(loc.getStateProvinceCounty());
+						if (!StringUtils.isEmpty(loc.getZip())){
+							sb.append(" ").append(loc.getZip());
+						}
 						PageParameters locParams = new PageParameters();
 						locParams.set("id", dac.getDeal().getMerchant().getId());
 						String locUrl = (String) urlFor(MerchantManagementPage.class, locParams);
