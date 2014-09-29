@@ -24,6 +24,7 @@ import org.apache.wicket.util.lang.Exceptions;
 import org.apache.wicket.util.lang.PackageName;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.wicketstuff.rest.utils.mounting.PackageScanner;
 
 import com.talool.website.converter.UUIDConverter;
 import com.talool.website.facebook.pages.OpenGraphDeal;
@@ -238,6 +239,8 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/admin/fundraisers/fm", FundraiserManagementPage.class);
 
 		mountPage("/admin/publishers", PublishersPage.class);
+		
+		PackageScanner.scanPackage("com.talool.rest.resource");
 
 		/*
 		 * We need a ONE_PASS_RENDER strategy because pages like search need
