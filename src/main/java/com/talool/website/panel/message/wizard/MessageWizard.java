@@ -15,15 +15,15 @@ import org.slf4j.LoggerFactory;
 
 import com.googlecode.wicket.jquery.ui.widget.wizard.AbstractWizard;
 import com.talool.core.Customer;
+import com.talool.core.DealOffer;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
 import com.talool.core.service.CustomerService;
-import com.talool.core.service.InvalidInputException;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.messaging.MessagingFactory;
-import com.talool.messaging.job.MerchantGiftJob;
+import com.talool.messaging.job.DealOfferPurchaseJob;
 import com.talool.service.ServiceFactory;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.message.MerchantGift;
@@ -112,8 +112,12 @@ public class MessageWizard extends AbstractWizard<MerchantGift>
 			Customer fromCustomer = taloolService.getCustomerForMerchant(mg.getMerchant());
 			List<Customer> targetedCustomers = customerService.getCustomers(mg.getCriteria());
 
-			MerchantGiftJob job = MessagingFactory.newMerchantGiftJob(merchant, merchantAccount, fromCustomer, mg.getDeal(),
-					mg.getStartDate(), mg.getTitle());
+			//MerchantGiftJob job = MessagingFactory.newMerchantGiftJob(merchant, merchantAccount, fromCustomer, mg.getDeal(),
+			//		mg.getStartDate(), mg.getTitle());
+			
+			DealOffer offer = taloolService.getDealOffers().get(0);
+			DealOfferPurchaseJob job = MessagingFactory.newDealOfferPurchaseJob(merchant, merchantAccount, fromCustomer, offer, mg.getStartDate(), "Testing");
+			
 			ServiceFactory.get().getMessagingService().scheduleMessagingJob(job, targetedCustomers);
 
 			LOG.debug("message sent");
