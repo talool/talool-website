@@ -1,14 +1,11 @@
 package com.talool.website.panel.merchant;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -24,13 +21,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.core.Deal;
-import com.talool.core.DealOffer;
 import com.talool.core.MediaType;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
 import com.talool.core.MerchantMedia;
 import com.talool.core.service.ServiceException;
-import com.talool.website.component.ConfirmationIndicatingAjaxLink;
+import com.talool.website.component.DealDeleteLink;
 import com.talool.website.models.DealListModel;
 import com.talool.website.models.DealModel;
 import com.talool.website.pages.BasePage;
@@ -66,6 +62,7 @@ public class MerchantDealsPanel extends BaseTabPanel
 		container.setOutputMarkupId(true);
 		add(container);
 
+		// TODO make this a paginated list with DealSummary objects
 		final ListView<Deal> customers = new ListView<Deal>("dealRptr", model)
 		{
 
@@ -149,47 +146,16 @@ public class MerchantDealsPanel extends BaseTabPanel
 					}
 				});
 				
-				StringBuilder confirm = new StringBuilder();
-				confirm.append("Are you sure you want to remove \"").append(deal.getTitle()).append("\"?");
-				ConfirmationIndicatingAjaxLink<Void> deleteLink = new ConfirmationIndicatingAjaxLink<Void>("deleteLink", JavaScriptUtils.escapeQuotes(confirm.toString()).toString())
+				final BasePage page = (BasePage)getPage();
+				DealDeleteLink deleteLink = new DealDeleteLink("deleteLink", deal)
 				{
 					private static final long serialVersionUID = 268692101349122303L;
 
 					@Override
-					public void onClick(AjaxRequestTarget target)
-					{
-						getSession().getFeedbackMessages().clear();
-						try 
-						{
-							// Assign it to Talool and make it not active. 
-							// This will hide it from the publisher/merchant without deleting it.
-							// If it has ever had active deal acquires, we don't want to delete it because 
-							// we want to preserve the history.
-							// TODO detected if there are deal acquires, and delete if possible
-							Deal deal = taloolService.getDeal(dealId);
-							List<Merchant> merchants = taloolService.getMerchantByName(talool);
-							Merchant _talool = merchants.get(0);
-							deal.setActive(false);
-							deal.setMerchant(_talool);
-							
-							List<DealOffer> offers = taloolService.getDealOffersByMerchantId(_talool.getId());
-							if (offers.isEmpty() == false)
-							{
-								// TODO be smarter about moving this deal to a Talool offer
-								deal.setDealOffer(offers.get(0));
-							}
-							
-							taloolService.merge(deal);
-							target.add(container);
-							Session.get().success(deal.getTitle() + " has been sent back to Talool.  Contact us if you want it back.");
-						} 
-						catch (ServiceException se)
-						{
-							LOG.error("problem fetcing the talool merchant id", se);
-							Session.get().error("There was a problem removing this deal.  Contact us if you want it removed manually.");
-						}
-						target.add(((BasePage)getPage()).feedback);
-						
+					public void onDeleteComplete(boolean success,
+							AjaxRequestTarget target) {
+						if (success) target.add(container);
+						target.add(page.feedback);
 					}
 				};
 				item.add(deleteLink);
