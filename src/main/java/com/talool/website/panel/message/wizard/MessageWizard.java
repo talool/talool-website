@@ -25,6 +25,7 @@ import com.talool.core.service.TaloolService;
 import com.talool.messaging.MessagingFactory;
 import com.talool.messaging.job.DealOfferPurchaseJob;
 import com.talool.service.ServiceFactory;
+import com.talool.utils.KeyValue;
 import com.talool.website.pages.BasePage;
 import com.talool.website.panel.message.MerchantGift;
 import com.talool.website.util.MerchantAccountComparator;
@@ -117,6 +118,7 @@ public class MessageWizard extends AbstractWizard<MerchantGift>
 			
 			DealOffer offer = taloolService.getDealOffers().get(0);
 			DealOfferPurchaseJob job = MessagingFactory.newDealOfferPurchaseJob(merchant, merchantAccount, fromCustomer, offer, mg.getStartDate(), "Testing");
+			job.getProperties().createOrReplace(KeyValue.dealOfferPurchaseJobNotesKey, "TODO: get a custom string from the publisher");
 			
 			ServiceFactory.get().getMessagingService().scheduleMessagingJob(job, targetedCustomers);
 
