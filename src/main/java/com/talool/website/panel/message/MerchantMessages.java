@@ -2,7 +2,6 @@ package com.talool.website.panel.message;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.apache.wicket.AttributeModifier;
@@ -14,7 +13,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
@@ -25,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantAccount;
 import com.talool.core.service.ServiceException;
+import com.talool.messaging.job.MerchantGiftJob;
 import com.talool.messaging.job.MessagingJob;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.models.MessagingJobListModel;
@@ -41,12 +40,25 @@ public class MerchantMessages extends BaseTabPanel {
 	private static final Logger LOG = LoggerFactory.getLogger(MerchantPanel.class);
 	private static final long serialVersionUID = 1177862345946906145L;
 	private UUID _merchantId;
+	private List<MerchantAccount> mal;
 	private MessageWizard wizard;
 	
-	public MerchantMessages(String id, PageParameters parameters)
+	public MerchantMessages(String id)
 	{
 		super(id);
-		_merchantId = UUID.fromString(parameters.get("id").toString());
+		Merchant m = SessionUtils.getSession().getMerchantAccount().getMerchant();
+		_merchantId = m.getId();
+		mal = new ArrayList<MerchantAccount>();
+		try
+		{
+			taloolService.reattach(m);
+			mal.addAll(m.getMerchantAccounts());
+		}
+		catch(ServiceException e)
+		{
+			LOG.error("failed to reattach merchant",e);
+		}
+		
 	}
 	
 	@Override
@@ -61,23 +73,7 @@ public class MerchantMessages extends BaseTabPanel {
 		add(container);
 		
 		MessagingJobListModel model = new MessagingJobListModel();
-		// TODO fix this MerchantAccount selection hack
-		// If the merchant has no merchant accounts, the message will be associated with the logged in user
-		try 
-		{
-			Merchant m = taloolService.getMerchantById(_merchantId);
-			Set<MerchantAccount> mas = m.getMerchantAccounts();
-			if (mas.isEmpty() == false)
-			{
-				List<MerchantAccount> mal = new ArrayList<MerchantAccount>();
-				mal.addAll(mas);
-				model.setMerchantAccounts(mal);
-			}
-		} 
-		catch (ServiceException se)
-		{
-			LOG.error("Failed to get merchant account", se);
-		}
+		model.setMerchantAccounts(mal);
 		
 		int jobCount = model.getObject().size();
 		container.add(new Label("totalCount",jobCount));
@@ -107,6 +103,17 @@ public class MerchantMessages extends BaseTabPanel {
 				item.add(new Label("sends"));
 				item.add(new Label("emailOpens"));
 				item.add(new Label("giftOpens"));
+				
+				String jobType = "";
+				if (job instanceof MerchantGiftJob)
+				{
+					jobType = "Gift";
+				}
+				else
+				{
+					jobType = "Book";
+				}
+				item.add(new Label("jobType",jobType));
 
 				DateTimeZone tz = DateTimeZone.forTimeZone(SessionUtils.getSession().getBestGuessTimeZone());
 				DateTime localDate = new DateTime(job.getScheduledStartDate().getTime(), tz);
@@ -131,7 +138,7 @@ public class MerchantMessages extends BaseTabPanel {
 				getSession().getFeedbackMessages().clear();
 
 				Merchant merchant = new MerchantModel(_merchantId, true).getObject();
-				MerchantGift mg = new MerchantGift(merchant);
+				MessageJobPojo mg = new MessageJobPojo(merchant);
 				wizard.setModelObject(mg);
 				wizard.open(target);
 			}

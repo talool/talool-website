@@ -6,7 +6,8 @@ import java.util.TimeZone;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.extensions.wizard.WizardStep;
+import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardStep;
+import org.apache.wicket.extensions.wizard.dynamic.IDynamicWizardStep;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
@@ -20,13 +21,12 @@ import com.googlecode.wicket.kendo.ui.form.datetime.DateTimePicker;
 import com.talool.core.FactoryManager;
 import com.talool.core.service.CustomerService;
 import com.talool.website.component.TimeZoneDropDown;
-import com.talool.website.panel.deal.DealPreview;
-import com.talool.website.panel.message.MerchantGift;
+import com.talool.website.panel.message.MessageJobPojo;
 import com.talool.website.util.CssClassToggle;
 import com.talool.website.util.SessionUtils;
 import com.talool.website.util.TaloolDateUtil;
 
-public class JobScheduleStep extends WizardStep
+public class JobScheduleStep extends DynamicWizardStep
 {
 
 	private static final long serialVersionUID = 1L;
@@ -36,19 +36,19 @@ public class JobScheduleStep extends WizardStep
 	
 	private String selectedTimeZoneId, lastTimeZoneId;
 	private DateTimePicker start;
-
+	
 	public Date date = new Date();
 
-	public JobScheduleStep()
+	public JobScheduleStep(IDynamicWizardStep previousStep)
 	{
-		super(new ResourceModel("title"), new ResourceModel("summary"));
+		super(previousStep, new ResourceModel("title"), new ResourceModel("summary"));
 	}
 
 	@Override
 	protected void onConfigure()
 	{
 		super.onConfigure();
-		final MerchantGift mg = (MerchantGift) getDefaultModelObject();
+		final MessageJobPojo mg = (MessageJobPojo) getDefaultModelObject();
 		
 		WebMarkupContainer descriptionPanel = new WebMarkupContainer("descriptionPanel");
 		addOrReplace(descriptionPanel.setOutputMarkupId(true));
@@ -65,11 +65,6 @@ public class JobScheduleStep extends WizardStep
 		Date startDate = TaloolDateUtil.convertTimeZone(mg.getStartDate(), TimeZone.getTimeZone(selectedTimeZoneId), TimeZone.getDefault());
 		start = new DateTimePicker("scheduledStartDate", Model.of(startDate));
 		descriptionPanel.addOrReplace(start.setOutputMarkupId(true));
-		
-		// display a deal/gift preview and update it on selection
-		final DealPreview dealPreview = new DealPreview("dealBuilder", mg.getDeal());
-		dealPreview.setOutputMarkupId(true);
-		addOrReplace(dealPreview);
 		
 		final TimeZoneDropDown timeZoneDropDown = new TimeZoneDropDown("timeZoneSelect", new PropertyModel<String>(this, "selectedTimeZoneId"));
 		timeZoneDropDown.add(new AjaxFormComponentUpdatingBehavior("onchange")
@@ -116,11 +111,27 @@ public class JobScheduleStep extends WizardStep
 	{
 		super.applyState();
 
-		final MerchantGift mg = (MerchantGift) getDefaultModelObject();
+		final MessageJobPojo mg = (MessageJobPojo) getDefaultModelObject();
 
 		// get start/end dates from pickers and convert back to UTC
 		Date startDate = TaloolDateUtil.convertTimeZone(start.getModelObject(), TimeZone.getDefault(), TimeZone.getTimeZone(selectedTimeZoneId));
 		mg.setStartDate(startDate);
+	}
+
+	@Override
+	public boolean isLastStep() {
+		return false;
+	}
+
+	@Override
+	public IDynamicWizardStep next() {
+		return new MessageConfirmationStep(this);
+	}
+	
+	@Override
+	public IDynamicWizardStep last()
+	{
+		return new MessageConfirmationStep(this);
 	}
 
 }

@@ -7,7 +7,8 @@ import java.util.UUID;
 import org.apache.commons.validator.GenericValidator;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.extensions.wizard.WizardStep;
+import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardStep;
+import org.apache.wicket.extensions.wizard.dynamic.IDynamicWizardStep;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.HiddenField;
@@ -26,10 +27,9 @@ import com.talool.website.component.DealOfferSelect;
 import com.talool.website.component.RangeSlider;
 import com.talool.website.component.SexSelect;
 import com.talool.website.models.DealOfferListModel;
-import com.talool.website.panel.deal.DealPreview;
-import com.talool.website.panel.message.MerchantGift;
+import com.talool.website.panel.message.MessageJobPojo;
 
-public class MessageCriteriaStep extends WizardStep
+public class MessageCriteriaStep extends DynamicWizardStep
 {
 
 	private static final long serialVersionUID = 1L;
@@ -42,9 +42,9 @@ public class MessageCriteriaStep extends WizardStep
 	private Sex sex;
 	private static final Integer[] ageRange = new Integer[] {18,100,18,100};
 
-	public MessageCriteriaStep()
+	public MessageCriteriaStep(IDynamicWizardStep previousStep)
 	{
-		super(new ResourceModel("title"), new ResourceModel("summary"));
+		super(previousStep, new ResourceModel("title"), new ResourceModel("summary"));
 	}
 
 	@Override
@@ -52,12 +52,8 @@ public class MessageCriteriaStep extends WizardStep
 	{
 		super.onConfigure();
 		
-		final MerchantGift mg = (MerchantGift) getDefaultModelObject();
+		final MessageJobPojo mg = (MessageJobPojo) getDefaultModelObject();
 		sex = Sex.Unknown;
-		
-		final DealPreview dealPreview = new DealPreview("dealBuilder", mg.getDeal());
-		dealPreview.setOutputMarkupId(true);
-		addOrReplace(dealPreview);
 		
 		WebMarkupContainer descriptionPanel = new WebMarkupContainer("descriptionPanel");
 		addOrReplace(descriptionPanel.setOutputMarkupId(true));
@@ -142,7 +138,7 @@ public class MessageCriteriaStep extends WizardStep
 		// call service to get the list of customers
 		try
 		{
-			final MerchantGift mg = (MerchantGift) getDefaultModelObject();
+			final MessageJobPojo mg = (MessageJobPojo) getDefaultModelObject();
 			customerCount = customerService.getCustomerCount(mg.getCriteria());
 		}
 		catch (ServiceException se)
@@ -195,6 +191,22 @@ public class MessageCriteriaStep extends WizardStep
 		int currentYr = c.get(Calendar.YEAR);
 		c.set(Calendar.YEAR,currentYr-age);
 		return c.getTime();
+	}
+
+	@Override
+	public boolean isLastStep() {
+		return false;
+	}
+
+	@Override
+	public IDynamicWizardStep next() {
+		return new JobScheduleStep(this);
+	}
+	
+	@Override
+	public IDynamicWizardStep last()
+	{
+		return new MessageConfirmationStep(this);
 	}
 
 }

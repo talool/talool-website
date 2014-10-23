@@ -4,20 +4,43 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.talool.core.Deal;
+import com.talool.core.DealOffer;
 import com.talool.core.Merchant;
 import com.talool.domain.CustomerCriteria;
 
-public class MerchantGift implements Serializable {
+public class MessageJobPojo implements Serializable {
 
 	private static final long serialVersionUID = 7850987146885189914L;
 	
 	private Deal deal;
+	private DealOffer offer;
 	private CustomerCriteria criteria;
 	private Merchant merchant;
 	private String title;
+	private String notes;
+	private String message;
 	private Date startDate;
 	
-	public MerchantGift(Merchant merchant) {
+	private MessageJobType jobType;
+	
+	public enum MessageJobType
+	{
+		MerchantGiftJob("Gift"), DealOfferPurchaseJob("Book");
+
+		private String name;
+
+		private MessageJobType(String name)
+		{
+			this.name = name;
+		}
+
+		public String getName()
+		{
+			return name;
+		}
+	}
+	
+	public MessageJobPojo(Merchant merchant) {
 		super();
 		this.merchant = merchant;
 		this.criteria = new CustomerCriteria();
@@ -50,6 +73,33 @@ public class MerchantGift implements Serializable {
 	}
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
+	}
+	public DealOffer getOffer() {
+		return offer;
+	}
+	public void setOffer(DealOffer offer) {
+		this.offer = offer;
+	}
+	public String getNotes() {
+		return notes;
+	}
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	public MessageJobType getJobType() {
+		return jobType;
+	}
+	public void setJobType(MessageJobType jobType) {
+		this.jobType = jobType;
+	}
+	public void setMerchant(Merchant merchant) {
+		this.merchant = merchant;
 	}
 	
 

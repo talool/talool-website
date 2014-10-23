@@ -112,6 +112,10 @@ public abstract class BasePage extends WebPage
 		add(analyticsMenuItem);
 		analyticsMenuItem.setVisible(PermissionUtils.canViewAnalytics(SessionUtils.getSession().getMerchantAccount()));
 		
+		WebMarkupContainer messagingMenuItem = new WebMarkupContainer("messaging");
+		add(messagingMenuItem);
+		messagingMenuItem.setVisible(PermissionUtils.canViewMessaging(SessionUtils.getSession().getMerchantAccount()));
+		
 		WebMarkupContainer adminMenu = new WebMarkupContainer("superuser");
 		add(adminMenu.setVisible(isSuperUser));
 		
