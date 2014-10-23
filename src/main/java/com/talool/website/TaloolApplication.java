@@ -83,6 +83,7 @@ import com.talool.website.pages.CustomerSettingsPage;
 import com.talool.website.pages.FundraiserManagementPage;
 import com.talool.website.pages.HealthCheckPage;
 import com.talool.website.pages.MerchantManagementPage;
+import com.talool.website.pages.MessagingPage;
 import com.talool.website.pages.UploadPage;
 import com.talool.website.pages.dashboard.MerchantDashboard;
 import com.talool.website.pages.error.AccessDeniedPage;
@@ -167,6 +168,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/admin/dh", DealHistoryPage.class);
 		mountPage("/admin/customers", CustomersPage.class);
 		mountPage("/admin/analytics", AnalyticsPage.class);
+		mountPage("/admin/messaging", MessagingPage.class);
 		mountPage("/admin/customer/settings", CustomerSettingsPage.class);
 		mountPage("/admin/customer-management", CustomerManagementPage.class);
 		mountPage("/admin/merchants", MerchantsPage.class);

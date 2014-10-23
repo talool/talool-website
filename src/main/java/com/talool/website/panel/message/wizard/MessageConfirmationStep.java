@@ -2,9 +2,9 @@ package com.talool.website.panel.message.wizard;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 
-import org.apache.wicket.extensions.wizard.WizardStep;
+import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardStep;
+import org.apache.wicket.extensions.wizard.dynamic.IDynamicWizardStep;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
@@ -16,14 +16,11 @@ import org.joda.time.format.DateTimeFormatter;
 import com.talool.core.FactoryManager;
 import com.talool.core.service.CustomerService;
 import com.talool.core.service.ServiceException;
-import com.talool.website.component.TimeZoneDropDown;
 import com.talool.website.models.DealOfferModel;
-import com.talool.website.panel.deal.DealPreview;
-import com.talool.website.panel.message.MerchantGift;
+import com.talool.website.panel.message.MessageJobPojo;
 import com.talool.website.util.SessionUtils;
-import com.talool.website.util.TaloolDateUtil;
 
-public class MessageConfirmationStep extends WizardStep
+public class MessageConfirmationStep extends DynamicWizardStep
 {
 
 	private static final long serialVersionUID = 1L;
@@ -31,16 +28,16 @@ public class MessageConfirmationStep extends WizardStep
 	protected transient static final CustomerService customerService = FactoryManager.get()
 			.getServiceFactory().getCustomerService();
 
-	public MessageConfirmationStep()
+	public MessageConfirmationStep(IDynamicWizardStep previousStep)
 	{
-		super(new ResourceModel("title"), new ResourceModel("summary"));
+		super(previousStep, new ResourceModel("title"), new ResourceModel("summary"));
 	}
 
 	@Override
 	protected void onConfigure()
 	{
 		super.onConfigure();
-		final MerchantGift mg = (MerchantGift) getDefaultModelObject();
+		final MessageJobPojo mg = (MessageJobPojo) getDefaultModelObject();
 		
 		WebMarkupContainer descriptionPanel = new WebMarkupContainer("descriptionPanel");
 		addOrReplace(descriptionPanel.setOutputMarkupId(true));
@@ -61,11 +58,6 @@ public class MessageConfirmationStep extends WizardStep
 		String startDate = formatter.print(localDate);
 		descriptionPanel.add(new Label("date",startDate));
 		
-		// display a deal/gift preview and update it on selection
-		final DealPreview dealPreview = new DealPreview("dealBuilder", mg.getDeal());
-		dealPreview.setOutputMarkupId(true);
-		addOrReplace(dealPreview);
-		
 	}
 	
 	private long getCustomerCount()
@@ -74,7 +66,7 @@ public class MessageConfirmationStep extends WizardStep
 		// call service to get the list of customers
 		try
 		{
-			final MerchantGift mg = (MerchantGift) getDefaultModelObject();
+			final MessageJobPojo mg = (MessageJobPojo) getDefaultModelObject();
 			customerCount = customerService.getCustomerCount(mg.getCriteria());
 		}
 		catch (ServiceException se)
@@ -100,6 +92,16 @@ public class MessageConfirmationStep extends WizardStep
 			return age.toString();
 		}
 		
+	}
+
+	@Override
+	public boolean isLastStep() {
+		return true;
+	}
+
+	@Override
+	public IDynamicWizardStep next() {
+		return null;
 	}
 
 }

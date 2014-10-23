@@ -1,6 +1,8 @@
 package com.talool.website.models;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -52,6 +54,8 @@ public class MessagingJobListModel extends
 			LOG.error("problem loading merchant locations", e);
 		}
 
+		Collections.sort(jobs, new JobComparator());
+		
 		return jobs;
 	}
 
@@ -61,6 +65,13 @@ public class MessagingJobListModel extends
 
 	public void setMerchantAccounts(List<MerchantAccount> ma) {
 		this.maList = ma;
+	}
+	
+	public class JobComparator implements Comparator<MessagingJob> {
+	    @Override
+	    public int compare(MessagingJob object1, MessagingJob object2) {
+	        return object2.getScheduledStartDate().compareTo(object1.getScheduledStartDate());
+	    }
 	}
 
 }

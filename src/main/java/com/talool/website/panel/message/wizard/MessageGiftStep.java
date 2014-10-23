@@ -3,7 +3,8 @@ package com.talool.website.panel.message.wizard;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.extensions.wizard.WizardStep;
+import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardStep;
+import org.apache.wicket.extensions.wizard.dynamic.IDynamicWizardStep;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.HiddenField;
@@ -20,18 +21,18 @@ import com.talool.core.FactoryManager;
 import com.talool.core.service.ServiceException;
 import com.talool.website.models.DealListModel;
 import com.talool.website.panel.deal.DealPreview;
-import com.talool.website.panel.message.MerchantGift;
+import com.talool.website.panel.message.MessageJobPojo;
 
-public class MessageGiftStep extends WizardStep
+public class MessageGiftStep extends DynamicWizardStep
 {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(MessageGiftStep.class);
 	private String dealId;
 
-	public MessageGiftStep()
+	public MessageGiftStep(IDynamicWizardStep previousStep)
 	{
-		super(new ResourceModel("title"), new ResourceModel("summary"));
+		super(previousStep, new ResourceModel("title"), new ResourceModel("summary"));
 	}
 
 	@Override
@@ -39,7 +40,7 @@ public class MessageGiftStep extends WizardStep
 	{
 		super.onConfigure();
 		
-		final MerchantGift mg = (MerchantGift) getDefaultModelObject();
+		final MessageJobPojo mg = (MessageJobPojo) getDefaultModelObject();
 		
 		DealListModel dealsModel = new DealListModel();
 		dealsModel.setMerchantId(mg.getMerchant().getId());
@@ -121,6 +122,22 @@ public class MessageGiftStep extends WizardStep
 			}
 		};
 		descriptionPanel.add(deals);
+	}
+
+	@Override
+	public boolean isLastStep() {
+		return false;
+	}
+
+	@Override
+	public IDynamicWizardStep last()
+	{
+		return new MessageConfirmationStep(this);
+	}
+
+	@Override
+	public IDynamicWizardStep next() {
+		return new MessageCriteriaStep(this);
 	}
 
 }

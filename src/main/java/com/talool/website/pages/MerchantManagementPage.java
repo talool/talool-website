@@ -15,10 +15,8 @@ import org.wicketstuff.gmap.GMap;
 
 import com.talool.core.Merchant;
 import com.talool.utils.KeyValue;
-import com.talool.website.models.DealOfferPurchaseListModel;
 import com.talool.website.models.MerchantModel;
 import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.dashboard.RecentPurchasesPanel;
 import com.talool.website.panel.merchant.MerchantAccountsPanel;
 import com.talool.website.panel.merchant.MerchantAnalyticsPanel;
 import com.talool.website.panel.merchant.MerchantDealOffersPanel;
@@ -27,7 +25,6 @@ import com.talool.website.panel.merchant.MerchantLocationsPanel;
 import com.talool.website.panel.merchant.MerchantSummaryPanel;
 import com.talool.website.panel.merchant.PaymentProcessingPanel;
 import com.talool.website.panel.merchant.PublisherAnalyticsPanel;
-import com.talool.website.panel.message.MerchantMessages;
 import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.SecuredPage;
 import com.talool.website.util.SessionUtils;
@@ -164,20 +161,6 @@ public class MerchantManagementPage extends BaseManagementPage
 			});
 		}
 
-		if (PermissionUtils.canViewMessaging(SessionUtils.getSession().getMerchantAccount()))
-		{
-			tabs.add(new AbstractTab(new Model<String>("Messages"))
-			{
-
-				private static final long serialVersionUID = 5853871222415506440L;
-
-				@Override
-				public Panel getPanel(String panelId)
-				{
-					return new MerchantMessages(panelId, getPageParameters());
-				}
-			});
-		}
 		if (PermissionUtils.canViewAnalytics(SessionUtils.getSession().getMerchantAccount()))
 		{
 			tabs.add(new AbstractTab(new Model<String>("Analytics"))
