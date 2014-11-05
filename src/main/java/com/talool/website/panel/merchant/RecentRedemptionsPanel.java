@@ -72,7 +72,9 @@ public class RecentRedemptionsPanel extends BaseTabPanel {
 				
 				item.add(new Label("redemptionDate", rDate));
 				
-				if (dac.getRedeemedAtGeometry() != null)
+				if (dac.getRedeemedAtGeometry() != null && 
+						dac.getRedeemedAtGeometry().getCoordinate().x != 0 &&
+						dac.getRedeemedAtGeometry().getCoordinate().y != 0)
 				{
 					// lookup the closest merchant location
 					Geometry geo = dac.getRedeemedAtGeometry();

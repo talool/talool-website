@@ -24,6 +24,7 @@ import org.apache.wicket.util.lang.Exceptions;
 import org.apache.wicket.util.lang.PackageName;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.wicketstuff.rest.utils.mounting.PackageScanner;
 
 import com.talool.website.converter.UUIDConverter;
 import com.talool.website.facebook.pages.OpenGraphDeal;
@@ -82,6 +83,7 @@ import com.talool.website.pages.CustomerSettingsPage;
 import com.talool.website.pages.FundraiserManagementPage;
 import com.talool.website.pages.HealthCheckPage;
 import com.talool.website.pages.MerchantManagementPage;
+import com.talool.website.pages.MessagingPage;
 import com.talool.website.pages.UploadPage;
 import com.talool.website.pages.dashboard.MerchantDashboard;
 import com.talool.website.pages.error.AccessDeniedPage;
@@ -166,6 +168,7 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/admin/dh", DealHistoryPage.class);
 		mountPage("/admin/customers", CustomersPage.class);
 		mountPage("/admin/analytics", AnalyticsPage.class);
+		mountPage("/admin/messaging", MessagingPage.class);
 		mountPage("/admin/customer/settings", CustomerSettingsPage.class);
 		mountPage("/admin/customer-management", CustomerManagementPage.class);
 		mountPage("/admin/merchants", MerchantsPage.class);
@@ -238,6 +241,8 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/admin/fundraisers/fm", FundraiserManagementPage.class);
 
 		mountPage("/admin/publishers", PublishersPage.class);
+		
+		PackageScanner.scanPackage("com.talool.rest.resource");
 
 		/*
 		 * We need a ONE_PASS_RENDER strategy because pages like search need

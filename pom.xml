@@ -8,7 +8,7 @@
 		<relativePath />
 	</parent>
 	<artifactId>talool-website</artifactId>
-	<version>1.0.25-SNAPSHOT</version>
+	<version>1.0.26-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>Talool Website</name>
@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>com.talool</groupId>
 			<artifactId>talool-service</artifactId>
-			<version>1.0.21</version>
+			<version>1.0.22</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
@@ -72,6 +72,16 @@
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-objectautocomplete</artifactId>
 			<version>6.9.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.wicketstuff</groupId>
+			<artifactId>wicketstuff-restannotations</artifactId>
+			<version>6.17.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.wicketstuff</groupId>
+			<artifactId>wicketstuff-restannotations-json</artifactId>
+			<version>6.17.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>

@@ -1,27 +1,14 @@
 package com.talool.website.panel.merchant.wizard;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 
-import com.talool.cache.TagCache;
-import com.talool.core.Category;
 import com.talool.core.Merchant;
-import com.talool.core.Tag;
-import com.talool.website.models.CategoryListModel;
-import com.talool.website.models.CategoryTagListModel;
-import com.talool.website.models.ModelUtil;
+import com.talool.website.component.StateOption;
+import com.talool.website.component.StateSelect;
 
 public class FundraiserDetails extends WizardStep
 {
@@ -43,7 +30,30 @@ public class FundraiserDetails extends WizardStep
 
 		// TODO check for duplicate fundraiser names
 		descriptionPanel.add(new TextField<String>("name").setRequired(true));
+		
+		final StateSelect state = new StateSelect("currentLocation.stateProvinceCounty",
+				new PropertyModel<StateOption>(this, "stateOption"));
+		descriptionPanel.add(state.setRequired(true));
 
+	}
+	
+	public StateOption getStateOption()
+	{
+		final Merchant merch = (Merchant) getDefaultModelObject();
+		if (merch.getCurrentLocation().getStateProvinceCounty() == null)
+		{
+			return null;
+		}
+
+		return StateSelect.getStateOptionByCode(merch.getCurrentLocation()
+				.getStateProvinceCounty());
+
+	}
+
+	public void setStateOption(final StateOption stateOption)
+	{
+		final Merchant merch = (Merchant) getDefaultModelObject();
+		merch.getCurrentLocation().setStateProvinceCounty(stateOption.getCode());
 	}
 
 }
