@@ -18,7 +18,7 @@ public class PriceValidator implements IValidator<Float>
 	private static final long serialVersionUID = 4899646225054591622L;
 	private static PriceValidator instance = new PriceValidator();
 	private static FormValidator validator = FormValidator.getInstance();
-	private static final int MIN_PRICE = 1;
+	private static final int MIN_PRICE = 0;
 	private static final int MAX_PRICE = 1000;
 
 	public static PriceValidator getInstance()
