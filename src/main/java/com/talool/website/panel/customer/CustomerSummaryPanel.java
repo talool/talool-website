@@ -11,6 +11,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import com.talool.core.Customer;
 import com.talool.core.Sex;
 import com.talool.website.models.CustomerModel;
+import com.talool.website.models.DevicePresenceListModel;
 
 public class CustomerSummaryPanel extends Panel {
 
@@ -33,6 +34,8 @@ public class CustomerSummaryPanel extends Panel {
 		
 		CustomerModel model = (CustomerModel) getDefaultModel();
 		Customer customer = model.getObject();
+		
+		add(new DevicePresencePanel("devices", new DevicePresenceListModel(_customerId)));
 		
 		add(new Label("name", customer.getFullName()));
 		add(new Label("email", customer.getEmail()));
