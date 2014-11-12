@@ -22,6 +22,7 @@ public class FundraiserTrackingPanel extends BaseTabPanel
 	{
 		super(id);
 		this.parameters = parameters;
+		this.parameters.set(0, "payback");
 	}
 
 	@Override

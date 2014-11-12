@@ -7,19 +7,5 @@
 .cobrand .header .nav
 {
 	width: 300px;
-}
-
-.cobrand.colorado .header .nav
-{
-	background: url(/img/homepage/payback_mobile_logo.png) no-repeat right top;
-}
-
-.cobrand.washington .header .nav
-{
-	background: url(/img/homepage/payback_mobile_logo.png) no-repeat right top;
-}
-
-.cobrand.oregon .header .nav
-{
 	background: url(/img/homepage/payback_mobile_logo.png) no-repeat right top;
 }
