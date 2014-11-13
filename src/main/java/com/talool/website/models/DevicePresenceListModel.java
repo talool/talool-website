@@ -56,7 +56,11 @@ public class DevicePresenceListModel extends LoadableDetachableModel<List<Device
 	public class DevicePresenceComparator implements Comparator<DevicePresence> {
 	    @Override
 	    public int compare(DevicePresence object1, DevicePresence object2) {
-	        return object1.getDeviceType().compareToIgnoreCase(object2.getDeviceType());
+	    	String dt1 = object1.getDeviceType();
+	    	String dt2 = object2.getDeviceType();
+	    	if (dt1==null)dt1="";
+	    	if (dt2==null)dt2="";
+	        return dt1.compareToIgnoreCase(dt2);
 	    }
 	}
 }
