@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.googlecode.wicket.kendo.ui.form.datetime.DateTimePicker;
 import com.talool.core.DealOffer;
+import com.talool.core.DealType;
 import com.talool.utils.KeyValue;
 import com.talool.website.component.TimeZoneDropDown;
 import com.talool.website.panel.dealoffer.DealOfferPreview;
@@ -169,6 +170,15 @@ public class DealOfferDetails extends WizardStep
 		else
 		{
 			offer.getProperties().remove(KeyValue.limitPurchaseInventory);
+		}
+		
+		if (offer.getPrice() > 0f)
+		{
+			offer.setDealType(DealType.PAID_BOOK);
+		}
+		else
+		{
+			offer.setDealType(DealType.FREE_BOOK);
 		}
 		
 	}
