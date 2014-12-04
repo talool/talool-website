@@ -3,6 +3,7 @@ package com.talool.website.pages.lists;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +29,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.json.JSONException;
 
 import com.talool.core.DealOffer;
 import com.talool.core.DealType;
@@ -36,6 +38,7 @@ import com.talool.core.MerchantAccount;
 import com.talool.core.MerchantLocation;
 import com.talool.core.service.ServiceException;
 import com.talool.stats.DealOfferSummary;
+import com.talool.utils.KeyValue;
 import com.talool.website.component.ConfirmationIndicatingAjaxLink;
 import com.talool.website.models.DealOfferModel;
 import com.talool.website.pages.BasePage;
@@ -46,6 +49,7 @@ import com.talool.website.panel.dealoffer.DealOfferPublishToggle;
 import com.talool.website.panel.dealoffer.wizard.DealOfferWizard;
 import com.talool.website.util.SecuredPage;
 import com.talool.website.util.SessionUtils;
+import com.talool.website.util.TaloolPropertiesUtil;
 
 @SecuredPage
 public class DealOffersPage extends BasePage
@@ -251,6 +255,22 @@ public class DealOffersPage extends BasePage
 				{
 					item.add(new AttributeModifier("class", "odd-row-bg"));
 				}
+				
+				
+				String limit = "";
+				String quantity = "";
+				try
+				{
+					Map<String, String> pmap = TaloolPropertiesUtil.getMapFromPropertiesString(dealOffer.getProperties());
+					limit = pmap.get(KeyValue.limitOnePurchasePerCustomer);
+					quantity = pmap.get(KeyValue.limitPurchaseInventory);
+				}
+				catch (JSONException e)
+				{
+					LOG.error("Failed to parse map for properties.", e);
+				}
+				item.add(new Label("limit",limit));
+				item.add(new Label("quantity",quantity));
 
 				PageParameters dealsParams = new PageParameters();
 				dealsParams.set("id", dealOfferId);

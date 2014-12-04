@@ -10,6 +10,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
@@ -20,6 +21,8 @@ import org.slf4j.LoggerFactory;
 
 import com.googlecode.wicket.kendo.ui.form.datetime.DateTimePicker;
 import com.talool.core.DealOffer;
+import com.talool.core.DealType;
+import com.talool.utils.KeyValue;
 import com.talool.website.component.TimeZoneDropDown;
 import com.talool.website.panel.dealoffer.DealOfferPreview;
 import com.talool.website.panel.dealoffer.DealOfferPreviewUpdatingBehavior;
@@ -41,6 +44,9 @@ public class DealOfferDetails extends WizardStep
 
 	private String selectedTimeZoneId, lastTimeZoneId;
 	private DateTimePicker start, end;
+	
+	private boolean limitOnePerCustomer = false;
+	private Integer purchaseLimit;
 
 	public Date date = new Date();
 
@@ -131,6 +137,14 @@ public class DealOfferDetails extends WizardStep
 			}
 
 		});
+		
+		purchaseLimit = offer.getProperties().getAsInt(KeyValue.limitPurchaseInventory);
+		TextField<Integer> maxPurchasesField = new TextField<Integer>("maxPurchasesField", new PropertyModel<Integer>(this,"purchaseLimit"));
+		addOrReplace(maxPurchasesField);
+		
+		limitOnePerCustomer = offer.getProperties().getAsBool(KeyValue.limitOnePurchasePerCustomer);
+		CheckBox customerLimitField = new CheckBox("customerLimitField", new PropertyModel<Boolean>(this,"limitOnePerCustomer"));
+		addOrReplace(customerLimitField);
 
 	}
 
@@ -146,6 +160,27 @@ public class DealOfferDetails extends WizardStep
 		Date startDate = convertTimeZone(start.getModelObject(), TimeZone.getDefault(), TimeZone.getTimeZone(selectedTimeZoneId));
 		offer.setScheduledEndDate(endDate);
 		offer.setScheduledStartDate(startDate);
+		
+		// set the limits if there are any
+		offer.getProperties().createOrReplace(KeyValue.limitOnePurchasePerCustomer, limitOnePerCustomer);
+		if (purchaseLimit != null)
+		{
+			offer.getProperties().createOrReplace(KeyValue.limitPurchaseInventory, purchaseLimit);
+		}
+		else
+		{
+			offer.getProperties().remove(KeyValue.limitPurchaseInventory);
+		}
+		
+		if (offer.getPrice() > 0f)
+		{
+			offer.setDealType(DealType.PAID_BOOK);
+		}
+		else
+		{
+			offer.setDealType(DealType.FREE_BOOK);
+		}
+		
 	}
 
 	private Date convertTimeZone(Date date, TimeZone toTimeZone, TimeZone fromTimeZone)
