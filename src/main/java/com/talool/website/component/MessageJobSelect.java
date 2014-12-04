@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.IModel;
 
+import com.talool.core.Deal;
 import com.talool.core.DealOffer;
 import com.talool.core.service.ServiceException;
 import com.talool.service.ServiceFactory;
@@ -54,21 +55,27 @@ public class MessageJobSelect extends DropDownChoice<MessageJobType>
 	{
 		super(id, model, mjOptions, cr);
 		List<DealOffer> books = new ArrayList<DealOffer>();
+		List<Deal> deals = new ArrayList<Deal>();
 		try
 		{
 			books = ServiceFactory.get().getTaloolService().getDealOffersByMerchantId(merchantId);
+			deals = ServiceFactory.get().getTaloolService().getDealsByMerchantId(merchantId);
 		}
 		catch(ServiceException e)
 		{}
 		
 		// don't show the book option if the merchant doesn't have any books
-		if (books.isEmpty())
+		List<MessageJobType> choices = new ArrayList<MessageJobType>();
+		if (!books.isEmpty())
 		{
-			this.setChoices(Arrays.asList(new MessageJobType[] { 
-					MessageJobType.MerchantGiftJob
-				}));
-			
+			choices.add(MessageJobType.DealOfferPurchaseJob);
 		}
+		// don't show the gift option if the merchant doesn't have any deals
+		if (!deals.isEmpty())
+		{
+			choices.add(MessageJobType.MerchantGiftJob);
+		}
+		this.setChoices(choices);
 		
 	}
 

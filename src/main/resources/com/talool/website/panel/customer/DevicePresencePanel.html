@@ -1,0 +1,29 @@
+<wicket:panel>
+	<div class="tabPanelContainer">
+	  	<table>
+	  		<thead>
+	  			<tr>
+	  				<th>Device</th>
+	  				<th>App Version</th>
+	  				<th>Presence</th>
+	  				<th>Updated</th>
+	  			</tr>
+	  		</thead>
+	  		<tbody>
+	  			<tr wicket:id="deviceRptr">
+	  				<td>
+	  					<div><span wicket:id="deviceType"></span> <span wicket:id="deviceOsVersion"></span></div>
+	  					<div><span wicket:id="deviceToken"></span></div>
+	  					<div class="help"><span wicket:id="userAgent"></span></div>
+	  				</td>
+	  				<td wicket:id="taloolVersion"></td>
+	  				<td>
+	  					<div><span wicket:id="city"></span>, <span wicket:id="stateCode"></span> <span wicket:id="zip"></span></div>
+	  					<div><span wicket:id="ip"></span></div>
+	  				</td>
+	  				<td wicket:id="updated"></td>
+	  			</tr>
+	  		</tbody>
+	  	</table>
+	</div>
+</wicket:panel>
