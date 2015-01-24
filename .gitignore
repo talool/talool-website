@@ -13,3 +13,7 @@ target*
 *.DS_Store
 /target
 /target/
+
+.idea/*
+talool-website.iml
+.tern-project
