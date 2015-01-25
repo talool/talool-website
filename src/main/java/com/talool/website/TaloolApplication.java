@@ -74,6 +74,7 @@ import com.talool.website.marketing.pages.mobile.MobilePrivacyPage;
 import com.talool.website.marketing.pages.mobile.MobileRegistrationPage;
 import com.talool.website.marketing.pages.mobile.MobileTermsPage;
 import com.talool.website.marketing.pages.mobile.MobileWhiteLabelPage;
+import com.talool.website.marketing.pages.partner.CciPage;
 import com.talool.website.marketing.pages.seo.DealOfferDealsSummaryPage;
 import com.talool.website.pages.AdminLoginPage;
 import com.talool.website.pages.AnalyticsPage;
@@ -213,6 +214,9 @@ public class TaloolApplication extends WebApplication implements Serializable
 		mountPage("/tracking", FundraiserTracking.class);
 		mountPage("/trackingrollup", FundraiserTrackingRollup.class);
 
+		mountPage("/cci", CciPage.class);
+		
+		
 		// Mobile Web Pages
 		mountPage("/m", MobileHomePage.class);
 		mountPage("/m/fundraising", MobileFundraisingPage.class);
