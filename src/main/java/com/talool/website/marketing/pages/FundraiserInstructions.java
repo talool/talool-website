@@ -1,12 +1,5 @@
 package com.talool.website.marketing.pages;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantCodeGroup;
@@ -15,6 +8,12 @@ import com.talool.core.service.TaloolService;
 import com.talool.website.behaviors.CoBrandBehavior;
 import com.talool.website.panel.NiceFeedbackPanel;
 import com.talool.website.util.PublisherCobrand;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class FundraiserInstructions extends BaseMarketingPage
 {
@@ -26,8 +25,6 @@ public class FundraiserInstructions extends BaseMarketingPage
 	private String publisherName;
 	private String name;
 	private String code;
-	private String cobrandMerchantName;
-	private String cobrandClassName;
 	
 	protected transient static final TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
@@ -39,9 +36,6 @@ public class FundraiserInstructions extends BaseMarketingPage
 		// This page requires a co-brand (even if it is ours)
 		if (!parameters.isEmpty())
 		{
-			cobrandMerchantName = parameters.get("merchant").toString();
-			cobrandClassName = parameters.get("cobrand").toString();
-			cobrand = new PublisherCobrand(cobrandClassName, cobrandMerchantName);
 			code = parameters.get("code").toString();
 			
 			try
@@ -58,15 +52,14 @@ public class FundraiserInstructions extends BaseMarketingPage
 					Merchant publisher = taloolService.getMerchantById(mcg.getPublisherId());
 					publisherName = publisher.getName();
 					
-					cobrand.init();
 					// js behavior to change the body class and inject a co-brand
-					add(new CoBrandBehavior(cobrand.cobrandClassName));
+					cobrand = new PublisherCobrand(publisher);
+					add(new CoBrandBehavior(cobrand));
 				}
 				
 			}
-			catch(ServiceException se)
-			{
-				LOG.error("Failed to init the cobrand: ", se);
+			catch(ServiceException se) {
+				LOG.debug("Failed to get the publisher: ", se);
 				handleInvalidParams();
 			}
 		}
@@ -109,8 +102,8 @@ public class FundraiserInstructions extends BaseMarketingPage
 		add(new Label("customNamePhrase",sb.toString()));
 		
 		PageParameters pp = new PageParameters();
-		pp.set(0,cobrandMerchantName);
-		pp.set(1,cobrandClassName);
+		pp.set(0,cobrand.getCobrandName());
+		pp.set(1,"fundraiser"); // extra param that isn't being used
 		pp.set(2,code);
 		add(new BookmarkablePageLink<String>("salesTracker",FundraiserTracking.class, pp));
 		

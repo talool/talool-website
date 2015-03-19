@@ -4,7 +4,7 @@
 	display:none;
 }
 
-.cobrand .header .nav
+.cobrand.payback .header .nav
 {
 	width: 300px;
 	background: url(/img/homepage/payback_mobile_logo.png) no-repeat right top;

@@ -1,11 +1,6 @@
 package com.talool.website.marketing.pages;
 
-import org.apache.log4j.Logger;
-import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import com.talool.core.FactoryManager;
-import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.website.behaviors.CoBrandBehavior;
 import com.talool.website.marketing.pages.mobile.MobileFundraiserTrackingRegistration;
@@ -13,6 +8,9 @@ import com.talool.website.marketing.panel.TrackingRegistrationClosedPanel;
 import com.talool.website.marketing.panel.TrackingRegistrationPanel;
 import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.PublisherCobrand;
+import org.apache.log4j.Logger;
+import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class FundraiserTrackingRegistration extends BaseMarketingPage
 {
@@ -33,24 +31,20 @@ public class FundraiserTrackingRegistration extends BaseMarketingPage
 		// This page requires a co-brand (even if it is ours)
 		if (!parameters.isEmpty() && parameters.getIndexedCount()>=2)
 		{
-			String cobrandMerchantName = parameters.get(0).toString();
-			String cobrandClassName = parameters.get(1).toString();
-			
-			if (parameters.getIndexedCount()==3)
+			String cobrandName = parameters.get(0).toString();
+			cobrand = new PublisherCobrand(cobrandName);
+			if (cobrand.hasCobrand())
 			{
-				fundraiserName = parameters.get(2).toString();
-			}
-			
-			cobrand = new PublisherCobrand(cobrandClassName, cobrandMerchantName);
-			try
-			{
-				cobrand.init();
 				// js behavior to change the body class and inject a co-brand
-				add(new CoBrandBehavior(cobrand.cobrandClassName));
+				add(new CoBrandBehavior(cobrand));
+
+				if (parameters.getIndexedCount()==3)
+				{
+					fundraiserName = parameters.get(2).toString();
+				}
 			}
-			catch(ServiceException se)
+			else
 			{
-				LOG.error("Failed to init the cobrand: ", se);
 				handleInvalidParams();
 			}
 		}
@@ -65,7 +59,7 @@ public class FundraiserTrackingRegistration extends BaseMarketingPage
 	{
 		super.onInitialize();
 
-		if (PermissionUtils.isTrackingOpen(cobrand.publisher.getId()))
+		if (PermissionUtils.isTrackingOpen(cobrand.getPublisher().getId()))
 		{
 			TrackingRegistrationPanel panel = new TrackingRegistrationPanel(panelName, cobrand);
 			if (fundraiserName != null) panel.setFundraiserName(fundraiserName);

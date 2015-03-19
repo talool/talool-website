@@ -1,9 +1,6 @@
 package com.talool.website.behaviors;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.talool.website.util.PublisherCobrand;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -12,25 +9,32 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.util.template.PackageTextTemplate;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 public class CoBrandBehavior extends Behavior {
 
 	private static final long serialVersionUID = 2831726536357678771L;
 
-	private String cobrandName;
+	private PublisherCobrand cobrand;
 	
-	public CoBrandBehavior(String name) {
+	public CoBrandBehavior(PublisherCobrand cobrand) {
 		super();
-		cobrandName = name;
+		this.cobrand = cobrand;
 	}
 
 	@Override
 	public void renderHead(Component component, IHeaderResponse response) {
 		super.renderHead(component, response);
-		CoBrandBehavior.setHeadResources(component, response);
-        setUploadConfig(component, response);
+		if (cobrand.hasCobrand())
+		{
+			CoBrandBehavior.setHeadResources(component, response);
+			setConfig(component, response);
+		}
 	}
 	
-	public static void setHeadResources(Component component, IHeaderResponse response)
+	private static void setHeadResources(Component component, IHeaderResponse response)
     {
     	response.render(CssHeaderItem.forReference(
                 new CssResourceReference(CoBrandBehavior.class, "cobrand.css")));
@@ -39,12 +43,12 @@ public class CoBrandBehavior extends Behavior {
                 component.getApplication().getJavaScriptLibrarySettings().getJQueryReference()));
 
     }
-	
-	public void setUploadConfig(Component component, IHeaderResponse response){
+
+	private void setConfig(Component component, IHeaderResponse response){
     	PackageTextTemplate jsTmpl = new PackageTextTemplate(CoBrandBehavior.class, "cobrand.js");
         Map<String, Object> variables = new HashMap<String, Object>();
 
-        variables.put("cobrandName", cobrandName);
+        variables.put("cobrandName", cobrand.getCobrandName());
 
         String s = jsTmpl.asString(variables);
         response.render(JavaScriptHeaderItem.forScript(s, "cobrand"));

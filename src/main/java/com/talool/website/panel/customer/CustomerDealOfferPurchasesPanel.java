@@ -1,9 +1,22 @@
 package com.talool.website.panel.customer;
 
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
-
+import com.talool.core.DealOfferPurchase;
+import com.talool.core.DealType;
+import com.talool.core.RefundResult;
+import com.talool.core.service.ServiceException;
+import com.talool.domain.Properties;
+import com.talool.service.ServiceFactory;
+import com.talool.utils.KeyValue;
+import com.talool.utils.SafeSimpleDateFormat;
+import com.talool.website.Constants;
+import com.talool.website.component.ConfirmationAjaxLink;
+import com.talool.website.marketing.pages.FundraiserInstructions;
+import com.talool.website.models.DealOfferPurchaseListModel;
+import com.talool.website.pages.BasePage;
+import com.talool.website.panel.AdminModalWindow;
+import com.talool.website.panel.PropertiesPanel;
+import com.talool.website.util.ReceiptParser;
+import com.talool.website.util.SessionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
@@ -20,24 +33,9 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.talool.core.DealOfferPurchase;
-import com.talool.core.DealType;
-import com.talool.core.RefundResult;
-import com.talool.core.service.ServiceException;
-import com.talool.domain.Properties;
-import com.talool.service.ServiceFactory;
-import com.talool.utils.KeyValue;
-import com.talool.utils.SafeSimpleDateFormat;
-import com.talool.website.Constants;
-import com.talool.website.component.ConfirmationAjaxLink;
-import com.talool.website.marketing.pages.FundraiserInstructions;
-import com.talool.website.models.DealOfferPurchaseListModel;
-import com.talool.website.pages.BasePage;
-import com.talool.website.panel.AdminModalWindow;
-import com.talool.website.panel.PropertiesPanel;
-import com.talool.website.util.CobrandUtil;
-import com.talool.website.util.ReceiptParser;
-import com.talool.website.util.SessionUtils;
+import java.util.Date;
+import java.util.Map;
+import java.util.UUID;
 
 public class CustomerDealOfferPurchasesPanel extends Panel
 {
@@ -171,7 +169,9 @@ public class CustomerDealOfferPurchasesPanel extends Panel
 
 				item.add(new Label("refundDate", new RefundModel(dop)).setEscapeModelStrings(false));
 
-				PageParameters pageParameters = CobrandUtil.getCobrandedPageParameters(trackingCode);
+				PageParameters pageParameters = new PageParameters();
+				pageParameters.set("merchant","fundraiser");
+				pageParameters.set("cobrand","sales");
 				pageParameters.set("code", trackingCode);
 				BookmarkablePageLink<String> codeLink = new BookmarkablePageLink<String>("codeLink", FundraiserInstructions.class,
 						pageParameters);
