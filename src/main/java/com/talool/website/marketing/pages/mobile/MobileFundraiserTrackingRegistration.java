@@ -1,14 +1,12 @@
 package com.talool.website.marketing.pages.mobile;
 
-import org.apache.log4j.Logger;
-import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-
-import com.talool.core.service.ServiceException;
 import com.talool.website.marketing.panel.TrackingRegistrationClosedPanel;
 import com.talool.website.marketing.panel.TrackingRegistrationPanel;
 import com.talool.website.util.PermissionUtils;
 import com.talool.website.util.PublisherCobrand;
+import org.apache.log4j.Logger;
+import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class MobileFundraiserTrackingRegistration extends MobilePage {
 
@@ -25,20 +23,17 @@ public class MobileFundraiserTrackingRegistration extends MobilePage {
 		// This page requires a co-brand (even if it is ours)
 		if (!parameters.isEmpty() && parameters.getIndexedCount()>=2)
 		{
-			String cobrandMerchantName = parameters.get(0).toString();
-			String cobrandClassName = parameters.get(1).toString();
-			if (parameters.getIndexedCount()==3)
+			String cobrandName = parameters.get(0).toString();
+			cobrand = new PublisherCobrand(cobrandName);
+			if (cobrand.hasCobrand())
 			{
-				fundraiserName = parameters.get(2).toString();
+				if (parameters.getIndexedCount()==3)
+				{
+					fundraiserName = parameters.get(2).toString();
+				}
 			}
-			cobrand = new PublisherCobrand(cobrandClassName, cobrandMerchantName);
-			try
+			else
 			{
-				cobrand.init();
-			}
-			catch(ServiceException se)
-			{
-				LOG.error("Failed to init the cobrand: ", se);
 				handleInvalidParams();
 			}
 		}
@@ -53,7 +48,7 @@ public class MobileFundraiserTrackingRegistration extends MobilePage {
 	{
 		super.onInitialize();
 		
-		if (PermissionUtils.isTrackingOpen(cobrand.publisher.getId()))
+		if (PermissionUtils.isTrackingOpen(cobrand.getPublisher().getId()))
 		{
 			TrackingRegistrationPanel panel = new TrackingRegistrationPanel(panelName, cobrand);
 			if (fundraiserName != null) panel.setFundraiserName(fundraiserName);

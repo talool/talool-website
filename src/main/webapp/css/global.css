@@ -561,8 +561,7 @@ td.toggleContainer
 	padding: 15px;
 	margin-right: 20px;
 }
-.help
-{
+.help {
 	margin-top: 5px;
 	font-size: smaller;
 	color: rgb(190, 190, 190);

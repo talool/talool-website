@@ -1,7 +1,20 @@
 package com.talool.website.panel.merchant;
 
-import java.util.UUID;
-
+import com.talool.core.Merchant;
+import com.talool.core.MerchantAccount;
+import com.talool.core.service.ServiceException;
+import com.talool.service.ServiceFactory;
+import com.talool.stats.MerchantCodeSummary;
+import com.talool.website.marketing.pages.FundraiserInstructions;
+import com.talool.website.marketing.pages.FundraiserTracking;
+import com.talool.website.models.MerchantModel;
+import com.talool.website.pages.BasePage;
+import com.talool.website.pages.lists.MerchantCodeSummaryDataProvider;
+import com.talool.website.panel.AdminModalWindow;
+import com.talool.website.panel.SubmitCallBack;
+import com.talool.website.panel.merchant.definition.TrackingCodeMetaPanel;
+import com.talool.website.util.PublisherCobrand;
+import com.talool.website.util.SessionUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Session;
@@ -21,20 +34,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.talool.core.Merchant;
-import com.talool.core.MerchantAccount;
-import com.talool.core.service.ServiceException;
-import com.talool.service.ServiceFactory;
-import com.talool.stats.MerchantCodeSummary;
-import com.talool.website.marketing.pages.FundraiserInstructions;
-import com.talool.website.marketing.pages.FundraiserTracking;
-import com.talool.website.models.MerchantModel;
-import com.talool.website.pages.BasePage;
-import com.talool.website.pages.lists.MerchantCodeSummaryDataProvider;
-import com.talool.website.panel.AdminModalWindow;
-import com.talool.website.panel.SubmitCallBack;
-import com.talool.website.panel.merchant.definition.TrackingCodeMetaPanel;
-import com.talool.website.util.SessionUtils;
+import java.util.UUID;
 
 public class FundraiserTrackingRollupPanel extends Panel
 {
@@ -48,6 +48,7 @@ public class FundraiserTrackingRollupPanel extends Panel
 	private static final String NAVIGATOR_ID = "navigator";
 	
 	private String sortParameter = "name";
+	private PublisherCobrand cobrand;
 	private boolean isAscending = true;
 	private int itemsPerPage = 50;
 	private long itemCount;
@@ -59,6 +60,7 @@ public class FundraiserTrackingRollupPanel extends Panel
 		_fundraiserId = UUID.fromString(parameters.get("id").toString());
 		_publisherId = UUID.fromString(parameters.get("pid").toString());
 		this.isAdmin = isAdmin;
+		cobrand = new PublisherCobrand(_publisherId);
 	}
 
 	@Override
@@ -195,14 +197,12 @@ public class FundraiserTrackingRollupPanel extends Panel
 				}
 
 				item.add(new Label("name"));
-				
-				// TODO make the cobrand params flexible
-				String cobrandMerchantName = "payback";
-				String cobrandMerchantLocation = "colorado";
+
+				String cobrandFiller = "fundraiser"; // extra param that isn't being used
 				
 				PageParameters codeParams = new PageParameters();
-				codeParams.set(0, cobrandMerchantName);
-				codeParams.set(1, cobrandMerchantLocation);
+				codeParams.set(0, cobrand.getCobrandName());
+				codeParams.set(1, cobrandFiller);
 				codeParams.set(2, code.getCode());
 				String url = (String) urlFor(FundraiserTracking.class, codeParams);
 				ExternalLink codeLink = new ExternalLink("codeLink", Model.of(url),
@@ -213,8 +213,8 @@ public class FundraiserTrackingRollupPanel extends Panel
 				item.add(new Label("purchaseCount"));
 				
 				PageParameters pageParameters = new PageParameters();
-				pageParameters.set("merchant",cobrandMerchantName);
-				pageParameters.set("cobrand",cobrandMerchantLocation);
+				pageParameters.set("merchant",cobrand.getCobrandName());
+				pageParameters.set("cobrand",cobrandFiller);
 				pageParameters.set("code",code.getCode());
 				item.add(new BookmarkablePageLink<String>("helpLink",FundraiserInstructions.class, pageParameters).setVisible(isAdmin));
 

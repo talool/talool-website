@@ -1,13 +1,15 @@
 package com.talool.website.marketing.pages;
 
-import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import com.talool.core.FactoryManager;
+import com.talool.core.MerchantCodeGroup;
+import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.website.behaviors.CoBrandBehavior;
 import com.talool.website.marketing.pages.mobile.MobileFundraiserTracking;
 import com.talool.website.marketing.panel.TrackingPanel;
+import com.talool.website.util.PublisherCobrand;
+import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class FundraiserTracking extends BaseMarketingPage
 {
@@ -22,15 +24,16 @@ public class FundraiserTracking extends BaseMarketingPage
 	{
 		super(parameters);	
 
-		String cobrandMerchantName = parameters.get(0).toString();
-		String cobrandClassName = parameters.get(1).toString();
-		//PublisherCobrand cobrand = new PublisherCobrand(cobrandClassName, cobrandMerchantName);
-		
-		// js behavior to change the body class and inject a co-brand
-		add(new CoBrandBehavior(cobrandClassName));
-		
 		if (parameters.getIndexedCount()==3){
 			code = parameters.get(2).toString();
+			try
+			{
+				MerchantCodeGroup mcg = taloolService.getMerchantCodeGroupForCode(code);
+				// js behavior to change the body class and inject a co-brand
+				add(new CoBrandBehavior(new PublisherCobrand(mcg.getPublisherId())));
+			}
+			catch (ServiceException e) {}
+
 		}
 		
 	}

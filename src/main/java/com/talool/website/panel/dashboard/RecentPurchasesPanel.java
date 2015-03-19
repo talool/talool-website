@@ -1,7 +1,14 @@
 package com.talool.website.panel.dashboard;
 
-import java.util.Map;
-
+import com.talool.core.Customer;
+import com.talool.core.DealOfferPurchase;
+import com.talool.domain.Properties;
+import com.talool.utils.KeyValue;
+import com.talool.website.marketing.pages.FundraiserInstructions;
+import com.talool.website.models.DealOfferPurchaseListModel;
+import com.talool.website.pages.CustomerManagementPage;
+import com.talool.website.panel.customer.CustomerDealOfferPurchasesPanel;
+import com.talool.website.util.ReceiptParser;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
@@ -17,16 +24,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.talool.core.Customer;
-import com.talool.core.DealOfferPurchase;
-import com.talool.domain.Properties;
-import com.talool.utils.KeyValue;
-import com.talool.website.marketing.pages.FundraiserInstructions;
-import com.talool.website.models.DealOfferPurchaseListModel;
-import com.talool.website.pages.CustomerManagementPage;
-import com.talool.website.panel.customer.CustomerDealOfferPurchasesPanel;
-import com.talool.website.util.CobrandUtil;
-import com.talool.website.util.ReceiptParser;
+import java.util.Map;
 public class RecentPurchasesPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
@@ -100,8 +98,9 @@ public class RecentPurchasesPanel extends Panel {
 				item.add(new Label("created"));
 				item.add(new Label("processorTransactionId"));
 				
-				// TODO too slow to pass a tracking code get the params
-				PageParameters pageParameters = CobrandUtil.getCobrandedPageParameters();
+				PageParameters pageParameters = new PageParameters();
+				pageParameters.set("merchant","fundraiser");
+				pageParameters.set("cobrand","sales");
 				pageParameters.set("code",trackingCode);
 				BookmarkablePageLink<String> codeLink = new BookmarkablePageLink<String>("codeLink",FundraiserInstructions.class, pageParameters);
 				item.add(codeLink.setVisible(trackingCode!=null));
