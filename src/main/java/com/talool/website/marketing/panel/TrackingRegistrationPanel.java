@@ -1,24 +1,5 @@
 package com.talool.website.marketing.panel;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.EmailTextField;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.Url;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
@@ -41,6 +22,23 @@ import com.talool.website.util.WebsiteStatsDClient;
 import com.talool.website.util.WebsiteStatsDClient.Action;
 import com.talool.website.util.WebsiteStatsDClient.SubAction;
 import com.talool.website.validators.EmailValidator;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.EmailTextField;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import java.util.Date;
+import java.util.List;
 
 public class TrackingRegistrationPanel extends Panel {
 
@@ -59,21 +57,14 @@ public class TrackingRegistrationPanel extends Panel {
 	private MerchantSummary fundraiser;
 	private String fullName;
 	private String email;
-	
-	private UUID publisherId;
-	private long merchantAccountId;
-	private String publisherName;
+	private Merchant publisher;
 	private String cobrand;
-	private String cobrandParamName;
 	
 	public TrackingRegistrationPanel(String id, PublisherCobrand cobrand) {
 		super(id);
 		
-		publisherId = cobrand.publisher.getId();
-		merchantAccountId = cobrand.merchantAccountId;
-		publisherName = cobrand.publisher.getName();
-		cobrandParamName = cobrand.cobrandParamName;
-		this.cobrand = cobrand.cobrandClassName;
+		publisher = cobrand.getPublisher();
+		this.cobrand = cobrand.getCobrandName();
 
 	}
 	
@@ -108,7 +99,7 @@ public class TrackingRegistrationPanel extends Panel {
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form)
 			{
 
-				if (PermissionUtils.isTrackingOpen(publisherId)){
+				if (PermissionUtils.isTrackingOpen(publisher.getId())){
 					try
 					{
 						Merchant school = taloolService.getMerchantById(fundraiser.getMerchantId());
@@ -117,8 +108,8 @@ public class TrackingRegistrationPanel extends Panel {
 						SessionUtils.getSession().success("Success!  You should receive an email shortly.");
 						
 						PageParameters pageParameters = new PageParameters();
-						pageParameters.set("merchant",cobrandParamName);
-						pageParameters.set("cobrand",cobrand);
+						pageParameters.set("merchant",cobrand);
+						pageParameters.set("cobrand","fundraiser"); // extra param that isn't being used
 						pageParameters.set("code",code);
 						setResponsePage(FundraiserInstructions.class, pageParameters);
 					}
@@ -165,26 +156,26 @@ public class TrackingRegistrationPanel extends Panel {
 		
 		
 		FundraiserListModel choices = new FundraiserListModel();
-		choices.setPublisherId(publisherId);
+		choices.setPublisherId(publisher.getId());
 		FundraiserSelect fs = new FundraiserSelect("fundraiser", new PropertyModel<MerchantSummary>(this, "fundraiser"), choices);
 		schoolContainer.add(fs.setRequired(true));
 		
-		container.add(new Label("p1",publisherName));
-		container.add(new Label("p2",publisherName));
-		container.add(new Label("p3",publisherName));
-		form.add(new Label("p5",publisherName));
+		container.add(new Label("p1",publisher.getName()));
+		container.add(new Label("p2",publisher.getName()));
+		container.add(new Label("p3",publisher.getName()));
+		form.add(new Label("p5",publisher.getName()));
 	}
 	
 	private String generateCode(Merchant school) throws ServiceException
 	{
 		// generate the code
+		Long merchantAccountId = publisher.getMerchantAccounts().iterator().next().getId();
 		MerchantCodeGroup merchantCodeGrp = taloolService.createMerchantCodeGroup(school,
-				merchantAccountId, publisherId, fullName, email, (short) 1);
+				merchantAccountId, publisher.getId(), fullName, email, (short) 1);
 		String code = merchantCodeGrp.getCodes().iterator().next().getCode();
 		
 
 		// send email
-		Merchant publisher = taloolService.getMerchantById(publisherId);
 		String url = getTrackingUrl(code);
 		EmailTrackingCodeEntity entity = new EmailTrackingCodeEntity(merchantCodeGrp, publisher, url, cobrand);
 		emailService.sendTrackingCodeEmail(new EmailRequestParams<EmailTrackingCodeEntity>(entity));
@@ -225,7 +216,7 @@ public class TrackingRegistrationPanel extends Panel {
 	public void setFundraiserName(String name)
 	{
 		FundraiserListModel choices = new FundraiserListModel();
-		choices.setPublisherId(publisherId);
+		choices.setPublisherId(publisher.getId());
 		List<MerchantSummary> fundraisers = choices.getObject();
 		for (MerchantSummary f:fundraisers)
 		{

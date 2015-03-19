@@ -1,7 +1,16 @@
 package com.talool.website.marketing.pages.seo;
 
-import java.util.UUID;
-
+import com.talool.core.DealOffer;
+import com.talool.core.FactoryManager;
+import com.talool.core.service.ServiceException;
+import com.talool.core.service.TaloolService;
+import com.talool.stats.DealSummary;
+import com.talool.website.behaviors.CoBrandBehavior;
+import com.talool.website.component.StaticImage;
+import com.talool.website.marketing.pages.BaseMarketingPage;
+import com.talool.website.marketing.pages.HomePage;
+import com.talool.website.pages.lists.DealSummaryDataProvider;
+import com.talool.website.util.PublisherCobrand;
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
@@ -17,17 +26,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.talool.core.DealOffer;
-import com.talool.core.FactoryManager;
-import com.talool.core.service.ServiceException;
-import com.talool.core.service.TaloolService;
-import com.talool.stats.DealSummary;
-import com.talool.website.behaviors.CoBrandBehavior;
-import com.talool.website.component.StaticImage;
-import com.talool.website.marketing.pages.BaseMarketingPage;
-import com.talool.website.marketing.pages.HomePage;
-import com.talool.website.pages.lists.DealSummaryDataProvider;
-import com.talool.website.util.PublisherCobrand;
+import java.util.UUID;
 
 public class DealOfferDealsSummaryPage extends BaseMarketingPage
 {
@@ -36,10 +35,6 @@ public class DealOfferDealsSummaryPage extends BaseMarketingPage
 	private static final String CONTAINER_ID = "dealList";
 	private static final String REPEATER_ID = "dealRptr";
 	private static final String NAVIGATOR_ID = "navigator";
-	
-	private String cobrandMerchantName;
-	private String cobrandClassName;
-	private PublisherCobrand cobrand;
 	
 	private UUID _dealOfferId;
 	private DealOffer dealOffer;
@@ -59,9 +54,9 @@ public class DealOfferDealsSummaryPage extends BaseMarketingPage
 		// This page requires a co-brand (even if it is ours)
 		if (!parameters.isEmpty())
 		{
-			cobrandMerchantName = parameters.get("merchant").toString();
-			cobrandClassName = parameters.get("cobrand").toString();
-			cobrand = new PublisherCobrand(cobrandClassName, cobrandMerchantName);
+			String cobrandName = parameters.get("merchant").toString();
+			// js behavior to change the body class and inject a co-brand
+			add(new CoBrandBehavior(new PublisherCobrand(cobrandName)));
 			
 			String id = parameters.get("id").toString();
 			_dealOfferId = UUID.fromString(id);
@@ -69,13 +64,10 @@ public class DealOfferDealsSummaryPage extends BaseMarketingPage
 			try
 			{
 				dealOffer = taloolService.getDealOffer(_dealOfferId);
-				cobrand.init();
-				// js behavior to change the body class and inject a co-brand
-				add(new CoBrandBehavior(cobrand.cobrandClassName));
 			}
 			catch(ServiceException se)
 			{
-				LOG.error("Failed to init the cobrand: ", se);
+				LOG.error("Failed to get deal offer: ", se);
 				handleInvalidParams();
 			}
 		}

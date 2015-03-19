@@ -1,15 +1,14 @@
 package com.talool.website.panel.merchant;
 
+import com.talool.website.marketing.pages.FundraiserTrackingRollup;
+import com.talool.website.pages.BasePage;
+import com.talool.website.panel.BaseTabPanel;
+import com.talool.website.panel.SubmitCallBack;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
-import com.talool.website.marketing.pages.FundraiserTrackingRollup;
-import com.talool.website.pages.BasePage;
-import com.talool.website.panel.BaseTabPanel;
-import com.talool.website.panel.SubmitCallBack;
 
 public class FundraiserTrackingPanel extends BaseTabPanel
 {
@@ -22,7 +21,6 @@ public class FundraiserTrackingPanel extends BaseTabPanel
 	{
 		super(id);
 		this.parameters = parameters;
-		this.parameters.set(0, "payback");
 	}
 
 	@Override

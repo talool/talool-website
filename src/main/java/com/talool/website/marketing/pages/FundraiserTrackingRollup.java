@@ -1,11 +1,13 @@
 package com.talool.website.marketing.pages;
 
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import com.talool.core.FactoryManager;
 import com.talool.core.service.TaloolService;
 import com.talool.website.behaviors.CoBrandBehavior;
 import com.talool.website.panel.merchant.FundraiserTrackingRollupPanel;
+import com.talool.website.util.PublisherCobrand;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import java.util.UUID;
 
 public class FundraiserTrackingRollup extends BaseMarketingPage
 {
@@ -21,15 +23,9 @@ public class FundraiserTrackingRollup extends BaseMarketingPage
 		super(parameters);	
 
 		this.parameters = parameters;
-		
+		UUID publisherId = UUID.fromString(parameters.get("pid").toString());
 		// js behavior to change the body class and inject a co-brand
-		if (parameters.getIndexedCount() > 0)
-		{
-			String cobrandClassName = parameters.get(0).toString();
-			add(new CoBrandBehavior(cobrandClassName));
-		}
-		
-		
+		add(new CoBrandBehavior(new PublisherCobrand(publisherId)));
 	}
 	
 	@Override
