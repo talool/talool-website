@@ -1,19 +1,10 @@
 ## Sub-Merchant Distribution
-The following classes should be consulted for details on sub-merchant payment distribution at purchase:t
+The following classes should be consulted for details on sub-merchant payment distribution at purchase:
 
 * com.talool.payment.PaymentCalculator
 * com.talool.website.panel.merchant.PaymentProcessingPanel
 * com.talool.payment.braintree.BraintreeUtil
 
-## Talool Defaults
-Below are the defaults used if properties are not set on the Deal Offer
-
-* Fundraiser Discount Percent = 0
-* Talool Fee Discount Pecent = 0.0
-* Talool Fee Percent = 20.0%
-* Talool Fee Mininum = $2.5
-
-The fundraiser takes precendence on overribable properties for distribution. Currentlty only the "KeyValue.fundraiserDistributionPercent" can be overriden.  If The fundraiser does not set the property "KeyValue.fundraiserDistributionPercent", it will default to the publishers property.
 
 ## Sub-Merchant Distribution Algotithm 
 
@@ -31,9 +22,22 @@ Lets look at an example and discuss how the variables are used to calculate the 
 | (NR) Net Revenue<br/>NR = GR - PPF - FD|$9.12
 | (TPF) Talool Processing Fee <br/>TPF = max(NR * TFP * (100% - TFDP), TFM * (100% - TFDP))|$.63
 | (PD) Publisher Distribution<br/> PD = GR - PPF - FD - TPF|$8.50
-| Talool Fee<br/>(service fee charged to submerchant by braintree) | $1.505000
+| **Talool Fee<br/>(service fee charged to submerchant by braintree)** | **$1.505000**
 
+Notes on rounding mode for monetary values:
 
+* Net Revenue: Rounded Up
+* Talool Fee:  Half Even
+
+## Talool Defaults
+Below are the defaults used if properties are not set:
+
+* (FDP) Fundraiser Distribution Percent = 0
+* (TFDP) Talool Fee Discount Percent = 0
+* (TFP) Talool Fee Percent = 20.0%
+* (TFM) Talool Fee Minimum = $2.5
+
+The fundraiser takes precendence on overribable properties for distribution. Currentlty only the "KeyValue.fundraiserDistributionPercent" can be overriden.  If The fundraiser does not set the property "KeyValue.fundraiserDistributionPercent", it will default to the publishers property.
 
 
 
